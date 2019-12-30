@@ -1,0 +1,25 @@
+#+TITLE: readme
+** 00.引子
+Meta键(键盘上的option/alter键)
+Meta的词源含义是higher, beyond,可以理解为没有最高, 只有更高.
+中文译为"元", 发端出, 源头处; So Meta is source, Meta relates to source code.
+既然Meta关联src-code, function则是code的first-class-citizen; Meta可以直接调用function.
+M-x (x for execucte), 然后可以天马行空的查询要做的事情,
+比如插入当前的时间:
+
+
+
+
+至此, Emacs从战略层面上的所有事情便结束了, 剩下的事情仅仅是战术层面上的高效问题与缝缝补补的实现.
+
+
+第一个策略: 引入Ctrl键
+
+比如help, 可以M-x help, 需要键入六个字符
+Ctrl策略, 可以C-x h. 只需要键入3个字符.
+
+** 01.Synmatic Keybinding
+
+Emacs从最源头处, 用Meta-Execte调用所有的function; 然后定义Ctrl的技术简化Meta的流程.
+正文从语义化快捷键入手, 辅助在5分钟之内永久记忆(Never have a second look), 20多个一级快捷键(高频), 30几个二级绑定键(中频), 闲看三级快捷键(低频); 以及按照功能, 按照目的, 按照插件分类的表格.
+答题区上表格和秒记方法.
