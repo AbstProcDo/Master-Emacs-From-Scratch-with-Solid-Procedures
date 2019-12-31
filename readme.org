@@ -101,3 +101,14 @@ M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏�
 M-<, to the biginning of the buffer
 M->, to the end of the buffer.
 # 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
+
+* 02.Emacs as an Editor
+[[01.semantic keybinding]] 初窥了Emacs简单易用的特性之一便是语义化键绑定,
+语义化包含两个方面:
+1) Character keys的语义化, 这一点明了易懂, n for next, p for previous; 而非j for next, k for previous.
+2) Control keys的语义化, 求根问底Meta的词源, 病以meta的higher(beyond)基石; 不仅可以不费力的记住Cursor操作, 依照同样的逻辑, 可以拆解全部的内置快捷键.
+
+移动Cursor的目的, 一则为浏览阅读, 二则为编辑做准备, 是编辑的前驱步骤.
+当聊起编辑器时候, 一个著名的段子"Emacs不是好的编辑器, 而是一个操作系统"; 如果追问一句"请问, 您对编辑器定义是什么?", 立刻会发现所谓编辑器圣战, 便是茶余饭后的小品或者群口相声, 以"段子", 作为案牍劳累的调剂. (vim作为编辑器, 对用户就如电脑开机键, 难说会不会的问题;  连所有的linux认证, 都只有vim的要求)
+
+"When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.", 编辑器的基本功能曲指可数.
