@@ -1,0 +1,393 @@
+#+TITLE: 08.Minibuffer
+* 8) The Minibuffer
+
+The minibuffer is where Emacs commands read complicated arguments, such as file names, buffer names, Emacs command names, or Lisp expressions. We call it the "minibuffer" because it's a special-purpose buffer with a small amount of screen space. You can use the usual Emacs editing commands in the minibuffer to edit the argument text.
+
+* 8.1 Using the Minibuffer
+    :PROPERTIES:
+    :CUSTOM_ID: using-the-minibuffer
+    :END:
+
+When the minibuffer is in use, it appears in the echo area, with a cursor. The minibuffer starts with a prompt, usually ending with a colon. The prompt states what kind of input is expected, and how it will be used. The prompt is highlighted using the =minibuffer-prompt= face (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Faces][Faces]]).
+
+The simplest way to enter a minibuffer argument is to type the text, then to submit the argument and exit the minibuffer. Alternatively, you can type C-g to exit the minibuffer by canceling the command asking for the argument (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quitting][Quitting]]).
+
+Sometimes, the prompt shows a default argument, inside parentheses before the colon. This default will be used as the argument if you just type . For example, commands that read buffer names usually show a buffer name as the default; you can type to operate on that default buffer.
+
+If you enable Minibuffer Electric Default mode, a global minor mode, Emacs hides the default argument as soon as you modify the contents of the minibuffer (since typing would no longer submit that default). If you ever bring back the original minibuffer text, the prompt again shows the default. Furthermore, if you change the variable =minibuffer-eldef-shorten-default= to a non-=nil= value, the default argument is displayed as '[default-arg]' instead of '(default default-arg)', saving some screen space. To enable this minor mode, type M-x minibuffer-electric-default-mode.
+
+Since the minibuffer appears in the echo area, it can conflict with other uses of the echo area. If an error message or an informative message is emitted while the minibuffer is active, the message hides the minibuffer for a few seconds, or until you type something; then the minibuffer comes back. While the minibuffer is in use, Emacs does not echo keystrokes.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-Edit][Minibuffer Edit]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Minibuffer][Basic Minibuffer]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]
+* 8.2 Minibuffers for File Names
+    :PROPERTIES:
+    :CUSTOM_ID: minibuffers-for-file-names
+    :END:
+
+Commands such as C-x C-f (=find-file=) use the minibuffer to read a file name argument (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Files][Basic Files]]). When the minibuffer is used to read a file name, it typically starts out with some initial text ending in a slash. This is the default directory. For example, it may start out like this:
+
+#+BEGIN_EXAMPLE
+         Find file: /u2/emacs/src/
+#+END_EXAMPLE
+
+Here, 'Find file:' is the prompt and '/u2/emacs/src/' is the default directory. If you now type buffer.c as input, that specifies the file /u2/emacs/src/buffer.c. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]], for information about the default directory.
+
+Alternative defaults for the file name you may want are available by typing M-n, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-History][Minibuffer History]].
+
+You can specify a file in the parent directory with ..: /a/b/../foo.el is equivalent to /a/foo.el. Alternatively, you can use M- to kill directory names backwards (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Words][Words]]).
+
+To specify a file in a completely different directory, you can kill the entire default with C-a C-k (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-Edit][Minibuffer Edit]]). Alternatively, you can ignore the default, and enter an absolute file name starting with a slash or a tilde after the default directory. For example, you can specify /etc/termcap as follows:
+
+#+BEGIN_EXAMPLE
+         Find file: /u2/emacs/src//etc/termcap
+#+END_EXAMPLE
+
+A double slash causes Emacs to ignore everything before the second slash in the pair. In the example above, /u2/emacs/src/ is ignored, so the argument you supplied is /etc/termcap. The ignored part of the file name is dimmed if the terminal allows it. (To disable this dimming, turn off File Name Shadow mode with the command M-x file-name-shadow-mode.)
+
+When completing remote file names (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]]), a double slash behaves slightly differently: it causes Emacs to ignore only the file-name part, leaving the rest (method, host and username, etc.) intact. Typing three slashes in a row ignores everything in remote file names. See [[https://www.gnu.org/software/emacs/manual/html_mono/tramp.html#File-name-completion][File name completion]].
+
+Emacs interprets ~/ as your home directory. Thus, ~/foo/bar.txt specifies a file named bar.txt, inside a directory named foo, which is in turn located in your home directory. In addition, ~user-id/ means the home directory of a user whose login name is user-id. Any leading directory name in front of the ~ is ignored: thus, /u2/emacs/~/foo/bar.txt is equivalent to ~/foo/bar.txt.
+
+On MS-Windows and MS-DOS systems, where a user doesn't always have a home directory, Emacs uses several alternatives. For MS-Windows, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows-HOME][Windows HOME]]; for MS-DOS, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#MS_002dDOS-File-Names][MS-DOS File Names]]. On these systems, the ~user-id/ construct is supported only for the current user, i.e., only if user-id is the current user's login name.
+
+To prevent Emacs from inserting the default directory when reading file names, change the variable =insert-default-directory= to =nil=. In that case, the minibuffer starts out empty. Nonetheless, relative file name arguments are still interpreted based on the same default directory.
+
+You can also enter remote file names in the minibuffer. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-File][Minibuffer File]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]
+* 8.3 Editing in the Minibuffer
+    :PROPERTIES:
+    :CUSTOM_ID: editing-in-the-minibuffer
+    :END:
+
+The minibuffer is an Emacs buffer, albeit a peculiar one, and the usual Emacs commands are available for editing the argument text. (The prompt, however, is read-only, and cannot be changed.)
+
+Since in the minibuffer submits the argument, you can't use it to insert a newline. You can do that with C-q C-j, which inserts a C-j control character, which is formally equivalent to a newline character (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Inserting-Text][Inserting Text]]). Alternatively, you can use the C-o (=open-line=) command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Blank-Lines][Blank Lines]]).
+
+Inside a minibuffer, the keys , , and ? are often bound to completion commands, which allow you to easily fill in the desired text without typing all of it. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]. As with , you can use C-q to insert a , , or '?' character.
+
+For convenience, C-a (=move-beginning-of-line=) in a minibuffer moves point to the beginning of the argument text, not the beginning of the prompt. For example, this allows you to erase the entire argument with C-a C-k.
+
+When the minibuffer is active, the echo area is treated much like an ordinary Emacs window. For instance, you can switch to another window (with C-x o), edit text there, then return to the minibuffer window to finish the argument. You can even kill text in another window, return to the minibuffer window, and yank the text into the argument. There are some restrictions on the minibuffer window, however: for instance, you cannot split it. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]].
+
+Normally, the minibuffer window occupies a single screen line. However, if you add two or more lines' worth of text into the minibuffer, it expands automatically to accommodate the text. The variable =resize-mini-windows= controls the resizing of the minibuffer. The default value is =grow-only=, which means the behavior we have just described. If the value is =t=, the minibuffer window will also shrink automatically if you remove some lines of text from the minibuffer, down to a minimum of one screen line. If the value is =nil=, the minibuffer window never changes size automatically, but you can use the usual window-resizing commands on it (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]).
+
+The variable =max-mini-window-height= controls the maximum height for resizing the minibuffer window. A floating-point number specifies a fraction of the frame's height; an integer specifies the maximum number of lines; =nil= means do not resize the minibuffer window automatically. The default value is 0.25.
+
+The C-M-v command in the minibuffer scrolls the help text from commands that display help text of any sort in another window. You can also scroll the help text with M- and M- (or, equivalently, M- and M-). This is especially useful with long lists of possible completions. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Window][Other Window]].
+
+Emacs normally disallows most commands that use the minibuffer while the minibuffer is active. To allow such commands in the minibuffer, set the variable =enable-recursive-minibuffers= to =t=.
+
+When not active, the minibuffer is in =minibuffer-inactive-mode=, and clicking mouse-1 there shows the /Messages/ buffer. If you use a dedicated frame for minibuffers, Emacs also recognizes certain keys there, for example, n to make a new frame.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-History][Minibuffer History]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-Edit][Minibuffer Edit]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]
+* 8.4 Completion
+    :PROPERTIES:
+    :CUSTOM_ID: completion
+    :END:
+
+You can often use a feature called completion to help enter arguments. This means that after you type part of the argument, Emacs can fill in the rest, or some of it, based on what was typed so far.
+
+When completion is available, certain keys (usually , , and ) are rebound in the minibuffer to special completion commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Commands][Completion Commands]]). These commands attempt to complete the text in the minibuffer, based on a set of completion alternatives provided by the command that requested the argument. You can usually type ? to see a list of completion alternatives.
+
+Although completion is usually done in the minibuffer, the feature is sometimes available in ordinary buffers too. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Symbol-Completion][Symbol Completion]].
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Example][Completion Example]]: Examples of using completion.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Commands][Completion Commands]]: A list of completion commands.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Exit][Completion Exit]]: Completion and minibuffer text submission.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Styles][Completion Styles]]: How completion matches are chosen.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Options][Completion Options]]: Options for completion.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Commands][Completion Commands]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]
+
+** 8.4.1 Completion Example
+     :PROPERTIES:
+     :CUSTOM_ID: completion-example
+     :END:
+
+A simple example may help here. M-x uses the minibuffer to read the name of a command, so completion works by matching the minibuffer text against the names of existing Emacs commands. Suppose you wish to run the command =auto-fill-mode=. You can do that by typing M-x auto-fill-mode , but it is easier to use completion.
+
+If you type M-x a u , the looks for completion alternatives (in this case, command names) that start with 'au'. There are several, including =auto-fill-mode= and =autoconf-mode=, but they all begin with =auto=, so the 'au' in the minibuffer completes to 'auto'. (More commands may be defined in your Emacs session. For example, if a command called =authorize-me= was defined, Emacs could only complete as far as 'aut'.)
+
+If you type again immediately, it cannot determine the next character; it could be '-', 'a', or 'c'. So it does not add any characters; instead, displays a list of all possible completions in another window.
+
+Next, type -f. The minibuffer now contains 'auto-f', and the only command name that starts with this is =auto-fill-mode=. If you now type , completion fills in the rest of the argument 'auto-fill-mode' into the minibuffer.
+
+Hence, typing just a u  - f allows you to enter 'auto-fill-mode'.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Exit][Completion Exit]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Example][Completion Example]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]
+
+** 8.4.2 Completion Commands
+     :PROPERTIES:
+     :CUSTOM_ID: completion-commands
+     :END:
+
+Here is a list of the completion commands defined in the minibuffer when completion is allowed.
+
+-
+
+  Complete the text in the minibuffer as much as possible; if unable to complete, display a list of possible completions (=minibuffer-complete=).
+
+-
+
+  Complete up to one word from the minibuffer text before point (=minibuffer-complete-word=). This command is not available for arguments that often include spaces, such as file names.
+
+-
+
+  Submit the text in the minibuffer as the argument, possibly completing first (=minibuffer-complete-and-exit=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Exit][Completion Exit]].
+
+- ?
+
+  Display a list of completions (=minibuffer-completion-help=).
+
+   (=minibuffer-complete=) is the most fundamental completion command. It searches for all possible completions that match the existing minibuffer text, and attempts to complete as much as it can. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Styles][Completion Styles]], for how completion alternatives are chosen.
+
+   (=minibuffer-complete-word=) completes like , but only up to the next hyphen or space. If you have 'auto-f' in the minibuffer and type , it finds that the completion is 'auto-fill-mode', but it only inserts 'ill-', giving 'auto-fill-'. Another at this point completes all the way to 'auto-fill-mode'.
+
+  If or is unable to complete, it displays a list of matching completion alternatives (if there are any) in another window. You can display the same list with ? (=minibuffer-completion-help=). The following commands can be used with the completion list:
+
+- M-v
+
+-
+
+-
+
+  Typing M-v, while in the minibuffer, selects the window showing the completion list (=switch-to-completions=). This paves the way for using the commands below. or does the same. You can also select the window in other ways (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]).
+
+-
+
+- mouse-1
+
+- mouse-2
+
+  While in the completion list buffer, this chooses the completion at point (=choose-completion=).
+
+-
+
+  While in the completion list buffer, this moves point to the following completion alternative (=next-completion=).
+
+-
+
+  While in the completion list buffer, this moves point to the previous completion alternative (=previous-completion=).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Styles][Completion Styles]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Commands][Completion Commands]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]
+
+** 8.4.3 Completion Exit
+     :PROPERTIES:
+     :CUSTOM_ID: completion-exit
+     :END:
+
+When a command reads an argument using the minibuffer with completion, it also controls what happens when you type (=minibuffer-complete-and-exit=) to submit the argument. There are four types of behavior:
+
+- Strict completion
+
+  accepts only exact completion matches. Typing exits the minibuffer only if the minibuffer text is an exact match, or completes to one. Otherwise, Emacs refuses to exit the minibuffer; instead it tries to complete, and if no completion can be done it momentarily displays ‘
+
+  [No match]
+
+  ' after the minibuffer text. (You can still leave the minibuffer by typing
+
+  C-g
+
+  to cancel the command.)
+
+  An example of a command that uses this behavior is M-x, since it is meaningless for it to accept a non-existent command name.
+
+- Cautious completion
+
+  is like strict completion, except exits only if the text is already an exact match. If the text completes to an exact match, performs that completion but does not exit yet; you must type a second to exit.
+
+  Cautious completion is used for reading file names for files that must already exist, for example.
+
+- Permissive completion
+
+  allows any input; the completion candidates are just suggestions. Typing does not complete, it just submits the argument as you have entered it.
+
+- Permissive completion with confirmation
+
+  is like permissive completion, with an exception: if you typed and this completed the text up to some intermediate state (i.e., one that is not yet an exact completion match), typing right afterward does not submit the argument. Instead, Emacs asks for confirmation by momentarily displaying ‘
+
+  [Confirm]
+
+  ' after the text; type again to confirm and submit the text. This catches a common mistake, in which one types before realizing that did not complete as far as desired.
+
+  You can tweak the confirmation behavior by customizing the variable =confirm-nonexistent-file-or-buffer=. The default value, =after-completion=, gives the behavior we have just described. If you change it to =nil=, Emacs does not ask for confirmation, falling back on permissive completion. If you change it to any other non-=nil= value, Emacs asks for confirmation whether or not the preceding command was .
+
+  This behavior is used by most commands that read file names, like C-x C-f, and commands that read buffer names, like C-x b.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Options][Completion Options]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Exit][Completion Exit]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]
+
+** 8.4.4 How Completion Alternatives Are Chosen
+     :PROPERTIES:
+     :CUSTOM_ID: how-completion-alternatives-are-chosen
+     :END:
+
+Completion commands work by narrowing a large list of possible completion alternatives to a smaller subset that matches what you have typed in the minibuffer. In [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Example][Completion Example]], we gave a simple example of such matching. The procedure of determining what constitutes a match is quite intricate. Emacs attempts to offer plausible completions under most circumstances.
+
+Emacs performs completion using one or more completion styles---sets of criteria for matching minibuffer text to completion alternatives. During completion, Emacs tries each completion style in turn. If a style yields one or more matches, that is used as the list of completion alternatives. If a style produces no matches, Emacs falls back on the next style.
+
+The list variable =completion-styles= specifies the completion styles to use. Each list element is the name of a completion style (a Lisp symbol). The default completion styles are (in order):
+
+- =basic=
+
+  A matching completion alternative must have the same beginning as the text in the minibuffer before point. Furthermore, if there is any text in the minibuffer after point, the rest of the completion alternative must contain that text as a substring.
+
+- =partial-completion=
+
+  This aggressive completion style divides the minibuffer text into words separated by hyphens or spaces, and completes each word separately. (For example, when completing command names, 'em-l-m' completes to 'emacs-lisp-mode'.) Furthermore, a ‘*' in the minibuffer text is treated as a wildcard---it matches any string of characters at the corresponding position in the completion alternative.
+
+- =emacs22=
+
+  This completion style is similar to =basic=, except that it ignores the text in the minibuffer after point. It is so-named because it corresponds to the completion behavior in Emacs 22.
+
+The following additional completion styles are also defined, and you can add them to =completion-styles= if you wish (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customization][Customization]]):
+
+- =substring=
+
+  A matching completion alternative must contain the text in the minibuffer before point, and the text in the minibuffer after point, as substrings (in that same order). Thus, if the text in the minibuffer is 'foobar', with point between 'foo' and 'bar', that matches 'afoobbarc', where a, b, and c can be any string including the empty string.
+
+- =initials=
+
+  This very aggressive completion style attempts to complete acronyms and initialisms. For example, when completing command names, it matches 'lch' to 'list-command-history'.
+
+There is also a very simple completion style called =emacs21=. In this style, if the text in the minibuffer is 'foobar', only matches starting with 'foobar' are considered.
+
+You can use different completion styles in different situations, by setting the variable =completion-category-overrides=. For example, the default setting says to use only =basic= and =substring= completion for buffer names.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Styles][Completion Styles]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]
+
+** 8.4.5 Completion Options
+     :PROPERTIES:
+     :CUSTOM_ID: completion-options
+     :END:
+
+Case is significant when completing case-sensitive arguments, such as command names. For example, when completing command names, 'AU' does not complete to 'auto-fill-mode'. Case differences are ignored when completing arguments in which case does not matter.
+
+When completing file names, case differences are ignored if the variable =read-file-name-completion-ignore-case= is non-=nil=. The default value is =nil= on systems that have case-sensitive file-names, such as GNU/Linux; it is non-=nil= on systems that have case-insensitive file-names, such as Microsoft Windows. When completing buffer names, case differences are ignored if the variable =read-buffer-completion-ignore-case= is non-=nil=; the default is =nil=.
+
+When completing file names, Emacs usually omits certain alternatives that are considered unlikely to be chosen, as determined by the list variable =completion-ignored-extensions=. Each element in the list should be a string; any file name ending in such a string is ignored as a completion alternative. Any element ending in a slash (/) represents a subdirectory name. The standard value of =completion-ignored-extensions= has several elements including =".o"=, =".elc"=, and ="~"=. For example, if a directory contains 'foo.c' and 'foo.elc', 'foo' completes to 'foo.c'. However, if /all/ possible completions end in otherwise-ignored strings, they are not ignored: in the previous example, 'foo.e' completes to 'foo.elc'. Emacs disregards =completion-ignored-extensions= when showing completion alternatives in the completion list.
+
+Shell completion is an extended version of filename completion, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Options][Shell Options]].
+
+If =completion-auto-help= is set to =nil=, the completion commands never display the completion list buffer; you must type ? to display the list. If the value is =lazy=, Emacs only shows the completion list buffer on the second attempt to complete. In other words, if there is nothing to complete, the first echoes 'Next char not unique'; the second shows the completion list buffer.
+
+If =completion-cycle-threshold= is non-=nil=, completion commands can cycle through completion alternatives. Normally, if there is more than one completion alternative for the text in the minibuffer, a completion command completes up to the longest common substring. If you change =completion-cycle-threshold= to =t=, the completion command instead completes to the first of those completion alternatives; each subsequent invocation of the completion command replaces that with the next completion alternative, in a cyclic manner. If you give =completion-cycle-threshold= a numeric value n, completion commands switch to this cycling behavior only when there are n or fewer alternatives.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repetition][Repetition]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]
+* 8.5 Minibuffer History
+    :PROPERTIES:
+    :CUSTOM_ID: minibuffer-history
+    :END:
+
+Every argument that you enter with the minibuffer is saved in a minibuffer history list so you can easily use it again later. You can use the following arguments to quickly fetch an earlier argument into the minibuffer:
+
+- M-p
+
+  Move to the previous item in the minibuffer history, an earlier argument (=previous-history-element=).
+
+- M-n
+
+  Move to the next item in the minibuffer history (=next-history-element=).
+
+-
+
+-
+
+  Like M-p and M-n, but move to the previous or next line of a multi-line item before going to the previous history item (=previous-line-or-history-element= and =next-line-or-history-element=) .
+
+- M-r regexp
+
+  Move to an earlier item in the minibuffer history that matches regexp (=previous-matching-history-element=).
+
+- M-s regexp
+
+  Move to a later item in the minibuffer history that matches regexp (=next-matching-history-element=).
+
+  While in the minibuffer, M-p (=previous-history-element=) moves through the minibuffer history list, one item at a time. Each M-p fetches an earlier item from the history list into the minibuffer, replacing its existing contents. Typing M-n (=next-history-element=) moves through the minibuffer history list in the opposite direction, fetching later entries into the minibuffer.
+
+If you type M-n in the minibuffer when there are no later entries in the minibuffer history (e.g., if you haven't previously typed M-p), Emacs tries fetching from a list of default arguments: values that you are likely to enter. You can think of this as moving through the "future history".
+
+The "future history" for file names includes several possible alternatives you may find useful, such as the file name or the URL at point in the current buffer. The defaults put into the "future history" in this case are controlled by the functions mentioned in the value of the option =file-name-at-point-functions=. By default, its value invokes the =ffap= package (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#FFAP][FFAP]]), which tries to guess the default file or URL from the text around point. To disable this guessing, customize the option to a =nil= value, then the "future history" of file names will include only the file, if any, visited by the current buffer, and the default directory.
+
+The arrow keys and work like M-p and M-n, but if the current history item is longer than a single line, they allow you to move to the previous or next line of the current history item before going to the previous or next history item.
+
+If you edit the text inserted by the M-p or M-n minibuffer history commands, this does not change its entry in the history list. However, the edited argument does go at the end of the history list when you submit it.
+
+You can use M-r (=previous-matching-history-element=) to search through older elements in the history list, and M-s (=next-matching-history-element=) to search through newer entries. Each of these commands asks for a regular expression as an argument, and fetches the first matching entry into the minibuffer. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]], for an explanation of regular expressions. A numeric prefix argument n means to fetch the nth matching entry. These commands are unusual, in that they use the minibuffer to read the regular expression argument, even though they are invoked from the minibuffer. An upper-case letter in the regular expression makes the search case-sensitive (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]]).
+
+You can also search through the history using an incremental search. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Isearch-Minibuffer][Isearch Minibuffer]].
+
+Emacs keeps separate history lists for several different kinds of arguments. For example, there is a list for file names, used by all the commands that read file names. Other history lists include buffer names, command names (used by M-x), and command arguments (used by commands like =query-replace=).
+
+The variable =history-length= specifies the maximum length of a minibuffer history list; adding a new element deletes the oldest element if the list gets too long. If the value is =t=, there is no maximum length.
+
+The variable =history-delete-duplicates= specifies whether to delete duplicates in history. If it is non-=nil=, adding a new element deletes from the list all other elements that are equal to it. The default is =nil=.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Passwords][Passwords]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-History][Minibuffer History]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]
+* 8.6 Repeating Minibuffer Commands
+    :PROPERTIES:
+    :CUSTOM_ID: repeating-minibuffer-commands
+    :END:
+
+Every command that uses the minibuffer once is recorded on a special history list, the command history, together with the values of its arguments, so that you can repeat the entire command. In particular, every use of M-x is recorded there, since M-x uses the minibuffer to read the command name.
+
+​
+
+- C-x
+
+  Re-execute a recent minibuffer command from the command history (=repeat-complex-command=).
+
+- M-x list-command-history
+
+  Display the entire command history, showing all the commands C-x can repeat, most recent first.
+
+  C-x re-executes a recent command that used the minibuffer. With no argument, it repeats the last such command. A numeric argument specifies which command to repeat; 1 means the last one, 2 the previous, and so on.
+
+C-x works by turning the previous command into a Lisp expression and then entering a minibuffer initialized with the text for that expression. Even if you don't know Lisp, it will probably be obvious which command is displayed for repetition. If you type just , that repeats the command unchanged. You can also change the command by editing the Lisp expression before you execute it. The executed command is added to the front of the command history unless it is identical to the most recent item.
+
+Once inside the minibuffer for C-x , you can use the usual minibuffer history commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-History][Minibuffer History]]) to move through the history list. After finding the desired previous command, you can edit its expression as usual and then execute it by typing .
+
+Incremental search does not, strictly speaking, use the minibuffer. Therefore, although it behaves like a complex command, it normally does not appear in the history list for C-x . You can make incremental search commands appear in the history by setting =isearch-resume-in-command-history= to a non-=nil= value. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]].
+
+The list of previous minibuffer-using commands is stored as a Lisp list in the variable =command-history=. Each element is a Lisp expression that describes one command and its arguments. Lisp programs can re-execute a command by calling =eval= with the =command-history= element.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Yes-or-No-Prompts][Yes or No Prompts]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repetition][Repetition]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]
+* 8.7 Entering passwords
+    :PROPERTIES:
+    :CUSTOM_ID: entering-passwords
+    :END:
+
+Sometimes, you may need to enter a password into Emacs. For instance, when you tell Emacs to visit a file on another machine via a network protocol such as FTP, you often need to supply a password to gain access to the machine (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]]).
+
+Entering a password is similar to using a minibuffer. Emacs displays a prompt in the echo area (such as 'Password:'); after you type the required password, press to submit it. To prevent others from seeing your password, every character you type is displayed as a dot ('.') instead of its usual form.
+
+Most of the features and commands associated with the minibuffer /cannot/ be used when entering a password. There is no history or completion, and you cannot change windows or perform any other action with Emacs until you have submitted the password.
+
+While you are typing the password, you may press to delete backwards, removing the last character entered. C-u deletes everything you have typed so far. C-g quits the password prompt (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quitting][Quitting]]). C-y inserts the current kill into the password (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]]). You may type either or to submit the password. Any other self-inserting character key inserts the associated character into the password, and all other input is ignored.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Passwords][Passwords]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]
+* 8.8 Yes or No Prompts
+    :PROPERTIES:
+    :CUSTOM_ID: yes-or-no-prompts
+    :END:
+
+An Emacs command may require you to answer a yes-or-no question during the course of its execution. Such queries come in two main varieties.
+
+For the first type of yes-or-no query, the prompt ends with '(y or n)'. Such a query does not actually use the minibuffer; the prompt appears in the echo area, and you answer by typing either 'y' or 'n', which immediately delivers the response. For example, if you type C-x C-w (write-file) to save a buffer, and enter the name of an existing file, Emacs issues a prompt like this:
+
+#+BEGIN_EXAMPLE
+         File ‘foo.el’ exists; overwrite? (y or n)
+#+END_EXAMPLE
+
+Because this query does not actually use the minibuffer, the usual minibuffer editing commands cannot be used. However, you can perform some window scrolling operations while the query is active: C-l recenters the selected window; C-v (or , or ) scrolls forward; M-v (or , or ) scrolls backward; C-M-v scrolls forward in the next window; and C-M-S-v scrolls backward in the next window. Typing C-g dismisses the query, and quits the command that issued it (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quitting][Quitting]]).
+
+The second type of yes-or-no query is typically employed if giving the wrong answer would have serious consequences; it uses the minibuffer, and features a prompt ending with '(yes or no)'. For example, if you invoke C-x k (=kill-buffer=) on a file-visiting buffer with unsaved changes, Emacs activates the minibuffer with a prompt like this:
+
+#+BEGIN_EXAMPLE
+         Buffer foo.el modified; kill anyway? (yes or no)
+#+END_EXAMPLE
+
+To answer, you must type 'yes' or 'no' into the minibuffer, followed by . The minibuffer behaves as described in the previous sections; you can switch to another window with C-x o, use the history commands M-p and M-n, etc. Type C-g to quit the minibuffer and the querying command.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Help][Help]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Top][Top]]
+macs%20Manual.html#Minibuffer][Minibuffer]], Up: [[file:///home/gaowei/Desktop/GNU%20Emacs%20Manual.html#Top][Top]]

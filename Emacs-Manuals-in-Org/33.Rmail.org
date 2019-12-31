@@ -1,0 +1,865 @@
+#+TITLE: 33.Rmail
+* 33) Reading Mail with Rmail
+
+Rmail is an Emacs subsystem for reading and disposing of mail that you receive. Rmail stores mail messages in files called Rmail files. Reading the messages in an Rmail file is done in a special major mode, Rmail mode, which redefines most letters to run commands for managing mail.
+
+Emacs also comes with a much more sophisticated and flexible subsystem for reading mail, called Gnus. Gnus is a very large package, and is therefore described in its own manual, see [[https://www.gnu.org/software/emacs/manual/html_mono/gnus.html#Top][Top]].
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Basics][Basic]]: Basic concepts of Rmail, and simple use.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Scrolling][Scroll]]: Scrolling through a message.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Motion][Motion]]: Moving to another message.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Deletion][Deletion]]: Deleting and expunging messages.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Inbox][Inbox]]: How mail gets into the Rmail file.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Files][Files]]: Using multiple Rmail files.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Output][Output]]: Copying messages out to files.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Labels][Labels]]: Classifying messages by labeling them.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Attributes][Attrs]]: Certain standard labels, called attributes.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Reply][Reply]]: Sending replies to messages you are viewing.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary][Summary]]: Summaries show brief info on many messages.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Sorting][Sort]]: Sorting messages in Rmail.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Display][Display]]: How Rmail displays a message; customization.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Coding][Coding]]: How Rmail handles decoding character sets.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Editing][Editing]]: Editing message text and headers in Rmail.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Digest][Digest]]: Extracting the messages from a digest message.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Rot13][Roet13]]: Reading messages encoded in the rot13 code.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Movemail][Movemail]]: More details of fetching new mail.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Mailboxes][Remote Mailboxes]]: Retrieving mail from remote mailboxes.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Mailbox-Formats][Other Mailbox Formats]]: Retrieving mail from local mailboxes in various formats.
+
+
+* 33.1 Basic Concepts of Rmail
+    :PROPERTIES:
+    :CUSTOM_ID: basic-concepts-of-rmail
+    :END:
+
+Using Rmail in the simplest fashion, you have one Rmail file ~/RMAIL in which all of your mail is saved. It is called your primary Rmail file. The command M-x rmail reads your primary Rmail file, merges new mail in from your inboxes, displays the first message you haven't read yet, and lets you begin reading. The variable =rmail-file-name= specifies the name of the primary Rmail file.
+
+Rmail displays only one message in the Rmail file at a time. The message that is shown is called the current message. Rmail mode's special commands can do such things as delete the current message, copy it into another file, send a reply, or move to another message. You can also create multiple Rmail files (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]) and use Rmail to move messages between them (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Output][Rmail Output]]).
+
+Within the Rmail file, messages are normally arranged sequentially in order of receipt; you can specify other ways to sort them (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Sorting][Rmail Sorting]]). Messages are identified by consecutive integers which are their message numbers. The number of the current message is displayed in Rmail's mode line, followed by the total number of messages in the file. You can move to a message by specifying its message number with the j key (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Motion][Rmail Motion]]).
+
+Following the usual conventions of Emacs, changes in an Rmail file become permanent only when you save the file. You can save it with s (=rmail-expunge-and-save=), which also expunges deleted messages from the file first (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Deletion][Rmail Deletion]]). To save the file without expunging, use C-x C-s. Rmail automatically saves the Rmail file after merging new mail from an inbox file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Inbox][Rmail Inbox]]).
+
+You can exit Rmail with q (=rmail-quit=); this expunges and saves the Rmail file, then buries the Rmail buffer as well as its summary buffer, if present (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary][Rmail Summary]]). But there is no need to exit formally. If you switch from Rmail to editing in other buffers, and never switch back, you have exited. Just make sure to save the Rmail file eventually (like any other file you have changed). C-x s is a suitable way to do this (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Save-Commands][Save Commands]]). The Rmail command b, =rmail-bury=, buries the Rmail buffer and its summary without expunging and saving the Rmail file.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Motion][Rmail Motion]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Basics][Rmail Basics]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.2 Scrolling Within a Message
+    :PROPERTIES:
+    :CUSTOM_ID: scrolling-within-a-message
+    :END:
+
+When Rmail displays a message that does not fit on the screen, you must scroll through it to read the rest. You could do this with the usual scrolling commands: C-v, M-v and M-< (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Scrolling][Scrolling]]), but in Rmail scrolling is so frequent that it deserves to be easier.
+
+-
+
+  Scroll forward (=scroll-up-command=).
+
+-
+
+  #+BEGIN_HTML
+    <DEL>
+  #+END_HTML
+
+- S-
+
+  Scroll backward (=scroll-down-command=).
+
+- .
+
+  Scroll to start of message (=rmail-beginning-of-message=).
+
+- /
+
+  Scroll to end of message (=rmail-end-of-message=).
+
+  Since the most common thing to do while reading a message is to scroll through it by screenfuls, Rmail makes and (or S-) do the same as C-v (=scroll-up-command=) and M-v (=scroll-down-command=) respectively.
+
+  The command . (=rmail-beginning-of-message=) scrolls back to the beginning of the selected message. This is not quite the same as M-<: for one thing, it does not set the mark; for another, it resets the buffer boundaries of the current message if you have changed them (e.g., by editing, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Editing][Rmail Editing]]). Similarly, the command / (=rmail-end-of-message=) scrolls forward to the end of the selected message.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Deletion][Rmail Deletion]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Scrolling][Rmail Scrolling]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.3 Moving Among Messages
+    :PROPERTIES:
+    :CUSTOM_ID: moving-among-messages
+    :END:
+
+The most basic thing to do with a message is to read it. The way to do this in Rmail is to make the message current. The usual practice is to move sequentially through the file, since this is the order of receipt of messages. When you enter Rmail, you are positioned at the first message that you have not yet made current (that is, the first one that has the 'unseen' attribute; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Attributes][Rmail Attributes]]). Move forward to see the other new messages; move backward to re-examine old messages.
+
+- n
+
+  Move to the next nondeleted message, skipping any intervening deleted messages (=rmail-next-undeleted-message=).
+
+- p
+
+  Move to the previous nondeleted message (=rmail-previous-undeleted-message=).
+
+- M-n
+
+  Move to the next message, including deleted messages (=rmail-next-message=).
+
+- M-p
+
+  Move to the previous message, including deleted messages (=rmail-previous-message=).
+
+- C-c C-n
+
+  Move to the next message with the same subject as the current one (=rmail-next-same-subject=).
+
+- C-c C-p
+
+  Move to the previous message with the same subject as the current one (=rmail-previous-same-subject=).
+
+- j
+
+  Move to the first message. With argument n, move to message number n (=rmail-show-message=).
+
+-
+
+  #+BEGIN_QUOTE
+  #+END_QUOTE
+
+  Move to the last message (=rmail-last-message=).
+
+- <
+
+  Move to the first message (=rmail-first-message=).
+
+- M-s regexp
+
+  Move to the next message containing a match for regexp (=rmail-search=).
+
+-
+
+  - M-s regexp
+
+  Move to the previous message containing a match for regexp. (This is M-s with a negative argument.)
+
+  n and p are the usual way of moving among messages in Rmail. They move through the messages sequentially, but skip over deleted messages, which is usually what you want to do. Their command definitions are named =rmail-next-undeleted-message= and =rmail-previous-undeleted-message=. If you do not want to skip deleted messages---for example, if you want to move to a message to undelete it---use the variants M-n and M-p (=rmail-next-message= and =rmail-previous-message=). A numeric argument to any of these commands serves as a repeat count.
+
+In Rmail, you can specify a numeric argument by typing just the digits. You don't need to type C-u first. You can also specify a negative argument by typing just -.
+
+The M-s (=rmail-search=) command is Rmail's version of search. The usual incremental search command C-s works in Rmail, but it searches only within the current message. The purpose of M-s is to search for another message. It reads a regular expression (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]]) nonincrementally, then searches starting at the beginning of the following message for a match. It then selects that message. If regexp is empty, M-s reuses the regexp used the previous time.
+
+To search backward in the file for another message, give M-s a negative argument. In Rmail you can do this with - M-s. This begins searching from the end of the previous message.
+
+It is also possible to search for a message based on labels. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Labels][Rmail Labels]].
+
+The C-c C-n (=rmail-next-same-subject=) command moves to the next message with the same subject as the current one. A prefix argument serves as a repeat count. With a negative argument, this command moves backward, acting like C-c C-p (=rmail-previous-same-subject=). When comparing subjects, these commands ignore the prefixes typically added to the subjects of replies. These commands are useful for reading all of the messages pertaining to the same subject, a.k.a. thread.
+
+To move to a message specified by absolute message number, use j (=rmail-show-message=) with the message number as argument. With no argument, j selects the first message. < (=rmail-first-message=) also selects the first message. > (=rmail-last-message=) selects the last message.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Inbox][Rmail Inbox]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Motion][Rmail Motion]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.4 Deleting Messages
+    :PROPERTIES:
+    :CUSTOM_ID: deleting-messages
+    :END:
+
+When you no longer need to keep a message, you can delete it. This flags it as ignorable, and some Rmail commands pretend it is no longer present; but it still has its place in the Rmail file, and still has its message number.
+
+Expunging the Rmail file actually removes the deleted messages. The remaining messages are renumbered consecutively.
+
+- d
+
+  Delete the current message, and move to the next nondeleted message (=rmail-delete-forward=).
+
+- C-d
+
+  Delete the current message, and move to the previous nondeleted message (=rmail-delete-backward=).
+
+- u
+
+  Undelete the current message, or move back to the previous deleted message and undelete it (=rmail-undelete-previous-message=).
+
+- x
+
+  Expunge the Rmail file (=rmail-expunge=).
+
+  There are two Rmail commands for deleting messages. Both delete the current message and select another. d (=rmail-delete-forward=) moves to the following message, skipping messages already deleted, while C-d (=rmail-delete-backward=) moves to the previous nondeleted message. If there is no nondeleted message to move to in the specified direction, the message that was just deleted remains current. A numeric prefix argument serves as a repeat count, to allow deletion of several messages in a single command. A negative argument reverses the meaning of d and C-d.
+
+  Whenever Rmail deletes a message, it runs the hook =rmail-delete-message-hook=. When the hook functions are invoked, the message has been marked deleted, but it is still the current message in the Rmail buffer.
+
+  To make all the deleted messages finally vanish from the Rmail file, type x (=rmail-expunge=). Until you do this, you can still undelete the deleted messages. The undeletion command, u (=rmail-undelete-previous-message=), is designed to cancel the effect of a d command in most cases. It undeletes the current message if the current message is deleted. Otherwise it moves backward to previous messages until a deleted message is found, and undeletes that message. A numeric prefix argument serves as a repeat count, to allow undeletion of several messages in a single command.
+
+You can usually undo a d with a u because the u moves back to and undeletes the message that the d deleted. But this does not work when the d skips a few already-deleted messages that follow the message being deleted; then the u command undeletes the last of the messages that were skipped. There is no clean way to avoid this problem. However, by repeating the u command, you can eventually get back to the message that you intend to undelete. You can also select a particular deleted message with the M-p command, then type u to undelete it.
+
+A deleted message has the 'deleted' attribute, and as a result 'deleted' appears in the mode line when the current message is deleted. In fact, deleting or undeleting a message is nothing more than adding or removing this attribute. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Attributes][Rmail Attributes]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Files][Rmail Files]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Deletion][Rmail Deletion]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.5 Rmail Files and Inboxes
+    :PROPERTIES:
+    :CUSTOM_ID: rmail-files-and-inboxes
+    :END:
+
+When you receive mail locally, the operating system places incoming mail for you in a file that we call your inbox. When you start up Rmail, it runs a C program called movemail to copy the new messages from your inbox into your primary Rmail file, which also contains other messages saved from previous Rmail sessions. It is in this file that you actually read the mail with Rmail. This operation is called getting new mail. You can get new mail at any time in Rmail by typing g.
+
+The variable =rmail-primary-inbox-list= contains a list of the files that are inboxes for your primary Rmail file. If you don't set this variable explicitly, Rmail uses the MAIL environment variable, or, as a last resort, a default inbox based on =rmail-spool-directory=. The default inbox file depends on your operating system; often it is /var/mail/username, /var/spool/mail/username, or /usr/spool/mail/username.
+
+You can specify the inbox file(s) for any Rmail file for the current session with the command =set-rmail-inbox-list=; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Files][Rmail Files]].
+
+There are two reasons for having separate Rmail files and inboxes.
+
+1. The inbox file format varies between operating systems and according to the other mail software in use. Only one part of Rmail needs to know about the alternatives, and it need only understand how to convert all of them to Rmail's own format.\\
+2. It is very cumbersome to access an inbox file without danger of losing mail, because it is necessary to interlock with mail delivery. Moreover, different operating systems use different interlocking techniques. The strategy of moving mail out of the inbox once and for all into a separate Rmail file avoids the need for interlocking in all the rest of Rmail, since only Rmail operates on the Rmail file.
+
+Rmail uses the standard 'mbox' format, introduced by Unix and GNU systems for inbox files, as its internal format of Rmail files. (In fact, there are a few slightly different mbox formats. The differences are not very important, but you can set the variable =rmail-mbox-format= to tell Rmail which form your system uses. See that variable's documentation for more details.)
+
+When getting new mail, Rmail first copies the new mail from the inbox file to the Rmail file; then it saves the Rmail file; then it clears out the inbox file. This way, a system crash may cause duplication of mail between the inbox and the Rmail file, but cannot lose mail. If =rmail-preserve-inbox= is non-=nil=, then Rmail does not clear out the inbox file when it gets new mail. You may wish to set this, for example, on a portable computer you use to check your mail via POP while traveling, so that your mail will remain on the server and you can save it later on your main desktop workstation.
+
+In some cases, Rmail copies the new mail from the inbox file indirectly. First it runs the movemail program to move the mail from the inbox to an intermediate file called .newmail-inboxname, in the same directory as the Rmail file. Then Rmail merges the new mail from that file, saves the Rmail file, and only then deletes the intermediate file. If there is a crash at the wrong time, this file continues to exist, and Rmail will use it again the next time it gets new mail from that inbox.
+
+If Rmail is unable to convert the data in .newmail-inboxname into mbox format, it renames the file to RMAILOSE.n (n is an integer chosen to make the name unique) so that Rmail will not have trouble with the data again. You should look at the file, find whatever message confuses Rmail (probably one that includes the control-underscore character, octal code 037), and delete it. Then you can use 1 g to get new mail from the corrected file.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Output][Rmail Output]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Inbox][Rmail Inbox]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.6 Multiple Rmail Files
+    :PROPERTIES:
+    :CUSTOM_ID: multiple-rmail-files
+    :END:
+
+Rmail operates by default on your primary Rmail file, which is named ~/RMAIL and receives your incoming mail from your system inbox file. But you can also have other Rmail files and edit them with Rmail. These files can receive mail through their own inboxes, or you can move messages into them with explicit Rmail commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Output][Rmail Output]]).
+
+- i file
+
+  Read file into Emacs and run Rmail on it (=rmail-input=).
+
+- g
+
+  Merge new mail from current Rmail file's inboxes (=rmail-get-new-mail=).
+
+- C-u g file
+
+  Merge new mail from inbox file file.
+
+  To run Rmail on a file other than your primary Rmail file, you can use the i (=rmail-input=) command in Rmail. This visits the file in Rmail mode. You can use M-x rmail-input even when not in Rmail, but it is easier to type C-u M-x rmail, which does the same thing.
+
+The file you read with i should normally be a valid mbox file. If it is not, Rmail tries to convert its text to mbox format, and visits the converted text in the buffer. If you save the buffer, that converts the file.
+
+If you specify a file name that doesn't exist, i initializes a new buffer for creating a new Rmail file.
+
+You can also select an Rmail file from a menu. In the Classify menu, choose the Input Rmail File item; then choose the Rmail file you want. The variables =rmail-secondary-file-directory= and =rmail-secondary-file-regexp= specify which files to offer in the menu: the first variable says which directory to find them in; the second says which files in that directory to offer (all those that match the regular expression). If no files match, you cannot select this menu item. These variables also apply to choosing a file for output (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Output][Rmail Output]]).
+
+The inbox files to use are specified by the variable =rmail-inbox-list=, which is buffer-local in Rmail mode. As a special exception, if you have specified no inbox files for your primary Rmail file, it uses the MAIL environment variable, or your standard system inbox.
+
+The g command (=rmail-get-new-mail=) merges mail into the current Rmail file from its inboxes. If the Rmail file has no inboxes, g does nothing. The command M-x rmail also merges new mail into your primary Rmail file.
+
+To merge mail from a file that is not the usual inbox, give the g key a numeric argument, as in C-u g. Then it reads a file name and merges mail from that file. The inbox file is not deleted or changed in any way when g with an argument is used. This is, therefore, a general way of merging one file of messages into another.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Labels][Rmail Labels]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Files][Rmail Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.7 Copying Messages Out to Files
+    :PROPERTIES:
+    :CUSTOM_ID: copying-messages-out-to-files
+    :END:
+
+These commands copy messages from an Rmail file into another file.
+
+- o file
+
+  Append a full copy of the current message to the file file (=rmail-output=).
+
+- C-o file
+
+  Append a copy of the current message, as displayed, to the file file (=rmail-output-as-seen=).
+
+- w file
+
+  Output just the message body to the file file, taking the default file name from the message 'Subject' header.
+
+  The commands o and C-o copy the current message into a specified file, adding it at the end. The two commands differ mainly in how much to copy: o copies the full message headers, even if they are not all visible, while C-o copies exactly the headers currently displayed and no more. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Display][Rmail Display]]. In addition, o converts the message to Babyl format (used by Rmail in Emacs version 22 and before) if the file is in Babyl format; C-o cannot output to Babyl files at all.
+
+If the output file is currently visited in an Emacs buffer, the output commands append the message to that buffer. It is up to you to save the buffer eventually in its file.
+
+Sometimes you may receive a message whose body holds the contents of a file. You can save the body to a file (excluding the message header) with the w command (=rmail-output-body-to-file=). Often these messages contain the intended file name in the 'Subject' field, so the w command uses the 'Subject' field as the default for the output file name (after replacing some characters that cannot be portably used in file names). However, the file name is read using the minibuffer, so you can specify a different name if you wish.
+
+You can also output a message to an Rmail file chosen with a menu. In the Classify menu, choose the Output Rmail File menu item; then choose the Rmail file you want. This outputs the current message to that file, like the o command. The variables =rmail-secondary-file-directory= and =rmail-secondary-file-regexp= specify which files to offer in the menu: the first variable says which directory to find them in; the second says which files in that directory to offer (all those that match the regular expression). If no files match, you cannot select this menu item.
+
+Copying a message with o or C-o gives the original copy of the message the 'filed' attribute, so that 'filed' appears in the mode line when such a message is current.
+
+If you like to keep just a single copy of every mail message, set the variable =rmail-delete-after-output= to =t=; then the o, C-o and w commands delete the original message after copying it. (You can undelete it afterward if you wish, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Deletion][Rmail Deletion]].)
+
+The variable =rmail-output-file-alist= lets you specify intelligent defaults for the output file, based on the contents of the current message. The value should be a list whose elements have this form:
+
+#+BEGIN_EXAMPLE
+         (regexp . name-exp)
+#+END_EXAMPLE
+
+If there's a match for regexp in the current message, then the default file name for output is name-exp. If multiple elements match the message, the first matching element decides the default file name. The subexpression name-exp may be a string constant giving the file name to use, or more generally it may be any Lisp expression that yields a file name as a string. =rmail-output-file-alist= applies to both o and C-o.
+
+Rmail can automatically save messages from your primary Rmail file (the one that =rmail-file-name= specifies) to other files, based on the value of the variable =rmail-automatic-folder-directives=. This variable is a list of elements ('directives') that say which messages to save where. Each directive is a list consisting of an output file, followed by one or more pairs of a header name and a regular expression. If a message has a header matching the specified regular expression, that message is saved to the given file. If the directive has more than one header entry, all must match. Rmail checks directives when it shows a message from the file =rmail-file-name=, and applies the first that matches (if any). If the output file is =nil=, the message is deleted, not saved. For example, you can use this feature to save messages from a particular address, or with a particular subject, to a dedicated file.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Attributes][Rmail Attributes]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Output][Rmail Output]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.8 Labels
+    :PROPERTIES:
+    :CUSTOM_ID: labels
+    :END:
+
+Each message can have various labels assigned to it as a means of classification. Each label has a name; different names are different labels. Any given label is either present or absent on a particular message. A few label names have standard meanings and are given to messages automatically by Rmail when appropriate; these special labels are called attributes. (See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Attributes][Rmail Attributes]].) All other labels are assigned only by users.
+
+- a label
+
+  Assign the label label to the current message (=rmail-add-label=).
+
+- k label
+
+  Remove the label label from the current message (=rmail-kill-label=).
+
+- C-M-n labels
+
+  Move to the next message that has one of the labels labels (=rmail-next-labeled-message=).
+
+- C-M-p labels
+
+  Move to the previous message that has one of the labels labels (=rmail-previous-labeled-message=).
+
+- l labels
+
+- C-M-l labels
+
+  Make a summary of all messages containing any of the labels labels (=rmail-summary-by-labels=).
+
+  The a (=rmail-add-label=) and k (=rmail-kill-label=) commands allow you to assign or remove any label on the current message. If the label argument is empty, it means to assign or remove the label most recently assigned or removed.
+
+Once you have given messages labels to classify them as you wish, there are three ways to use the labels: in moving, in summaries, and in sorting.
+
+C-M-n labels (=rmail-next-labeled-message=) moves to the next message that has one of the labels labels. The argument labels specifies one or more label names, separated by commas. C-M-p (=rmail-previous-labeled-message=) is similar, but moves backwards to previous messages. A numeric argument to either command serves as a repeat count.
+
+The command C-M-l labels (=rmail-summary-by-labels=) displays a summary containing only the messages that have at least one of a specified set of labels. The argument labels is one or more label names, separated by commas. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary][Rmail Summary]], for information on summaries.
+
+If the labels argument to C-M-n, C-M-p or C-M-l is empty, it means to use the last set of labels specified for any of these commands.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Sorting][Rmail Sorting]], for information on sorting messages with labels.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Reply][Rmail Reply]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Labels][Rmail Labels]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.9 Rmail Attributes
+    :PROPERTIES:
+    :CUSTOM_ID: rmail-attributes
+    :END:
+
+Some labels such as 'deleted' and 'filed' have built-in meanings, and Rmail assigns them to messages automatically at appropriate times; these labels are called attributes. Here is a list of Rmail attributes:
+
+- 'unseen'
+
+  Means the message has never been current. Assigned to messages when they come from an inbox file, and removed when a message is made current. When you start Rmail, it initially shows the first message that has this attribute.
+
+- 'deleted'
+
+  Means the message is deleted. Assigned by deletion commands and removed by undeletion commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Deletion][Rmail Deletion]]).
+
+- 'filed'
+
+  Means the message has been copied to some other file. Assigned by the o and C-o file output commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Output][Rmail Output]]).
+
+- 'answered'
+
+  Means you have mailed an answer to the message. Assigned by the r command (=rmail-reply=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Reply][Rmail Reply]].
+
+- 'forwarded'
+
+  Means you have forwarded the message. Assigned by the f command (=rmail-forward=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Reply][Rmail Reply]].
+
+- 'edited'
+
+  Means you have edited the text of the message within Rmail. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Editing][Rmail Editing]].
+
+- 'resent'
+
+  Means you have resent the message. Assigned by the command M-x rmail-resend. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Reply][Rmail Reply]].
+
+- 'retried'
+
+  Means you have retried a failed outgoing message. Assigned by the command M-x rmail-retry-failure. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Reply][Rmail Reply]].
+
+All other labels are assigned or removed only by users, and have no standard meaning.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary][Rmail Summary]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Attributes][Rmail Attributes]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.10 Sending Replies
+    :PROPERTIES:
+    :CUSTOM_ID: sending-replies
+    :END:
+
+Rmail has several commands to send outgoing mail. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]], for information on using Message mode, including certain features meant to work with Rmail. What this section documents are the special commands of Rmail for entering the mail buffer used to compose the outgoing message. Note that the usual keys for sending mail---C-x m, C-x 4 m, and C-x 5 m---also work normally in Rmail mode.
+
+- m
+
+  Send a message (=rmail-mail=).
+
+- c
+
+  Continue editing the already started outgoing message (=rmail-continue=).
+
+- r
+
+  Send a reply to the current Rmail message (=rmail-reply=).
+
+- f
+
+  Forward the current message to other users (=rmail-forward=).
+
+- C-u f
+
+  Resend the current message to other users (=rmail-resend=).
+
+- M-m
+
+  Try sending a bounced message a second time (=rmail-retry-failure=).
+
+  The most common reason to send a message while in Rmail is to reply to the message you are reading. To do this, type r (=rmail-reply=). This displays a mail composition buffer in another window, much like C-x 4 m, but preinitializes the 'Subject', 'To', 'CC', 'In-reply-to' and 'References' header fields based on the message you are replying to. The 'To' field starts out as the address of the person who sent the message you received, and the 'CC' field starts out with all the other recipients of that message.
+
+  You can exclude certain recipients from being included automatically in replies, using the variable =mail-dont-reply-to-names=. Its value should be a regular expression; any recipients that match are excluded from the 'CC' field. They are also excluded from the 'To' field, unless this would leave the field empty. If this variable is =nil=, then the first time you compose a reply it is initialized to a default value that matches your own address.
+
+To reply only to the sender of the original message, enter the reply command with a numeric argument: C-u r or 1 r. This omits the 'CC' field completely for a particular reply.
+
+Once the mail composition buffer has been initialized, editing and sending the mail goes as usual (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]). You can edit the presupplied header fields if they are not what you want. You can also use commands such as C-c C-y, which yanks in the message that you are replying to (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]). You can also switch to the Rmail buffer, select a different message there, switch back, and yank the new current message.
+
+Sometimes a message does not reach its destination. Mailers usually send the failed message back to you, enclosed in a failure message. The Rmail command M-m (=rmail-retry-failure=) prepares to send the same message a second time: it sets up a mail composition buffer with the same text and header fields as before. If you type C-c C-c right away, you send the message again exactly the same as the first time. Alternatively, you can edit the text or headers and then send it. The variable =rmail-retry-ignored-headers=, in the same format as =rmail-ignored-headers= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Display][Rmail Display]]), controls which headers are stripped from the failed message when retrying it.
+
+Another frequent reason to send mail in Rmail is to forward the current message to other users. f (=rmail-forward=) makes this easy by preinitializing the mail composition buffer with the current message as the text, and a subject of the form =[=from=:=subject=]=, where from and subject are the sender and subject of the original message. All you have to do is fill in the recipients and send. When you forward a message, recipients get a message which is from you, and which has the original message in its contents.
+
+Rmail offers two formats for forwarded messages. The default is to use the MIME format (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Display][Rmail Display]]). This includes the original message as a separate part. You can use a simpler format if you prefer, by setting the variable =rmail-enable-mime-composing= to =nil=. In this case, Rmail just includes the original message enclosed between two delimiter lines. It also modifies every line that starts with a dash, by inserting '-' at the start of the line. When you receive a forwarded message in this format, if it contains something besides ordinary text---for example, program source code---you might find it useful to undo that transformation. You can do this by selecting the forwarded message and typing M-x unforward-rmail-message. This command extracts the original forwarded message, deleting the inserted '-' strings, and inserts it into the Rmail file as a separate message immediately following the current one.
+
+Resending is an alternative similar to forwarding; the difference is that resending sends a message that is from the original sender, just as it reached you---with a few added header fields ('Resent-From' and 'Resent-To') to indicate that it came via you. To resend a message in Rmail, use C-u f. (f runs =rmail-forward=, which invokes =rmail-resend= if you provide a numeric argument.)
+
+Use the m (=rmail-mail=) command to start editing an outgoing message that is not a reply. It leaves the header fields empty. Its only difference from C-x 4 m is that it makes the Rmail buffer accessible for C-c C-y, just as r does.
+
+The c (=rmail-continue=) command resumes editing the mail composition buffer, to finish editing an outgoing message you were already composing, or to alter a message you have sent.
+
+If you set the variable =rmail-mail-new-frame= to a non-=nil= value, then all the Rmail commands to start sending a message create a new frame to edit it in. This frame is deleted when you send the message.
+
+All the Rmail commands to send a message use the mail-composition method that you have chosen (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Methods][Mail Methods]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Sorting][Rmail Sorting]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Reply][Rmail Reply]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.11 Summaries
+    :PROPERTIES:
+    :CUSTOM_ID: summaries
+    :END:
+
+A summary is a buffer containing one line per message to give you an overview of the mail in an Rmail file. Each line shows the message number and date, the sender, the line count, the labels, and the subject. Moving point in the summary buffer selects messages as you move to their summary lines. Almost all Rmail commands are valid in the summary buffer also; when used there, they apply to the message described by the current line of the summary.
+
+A summary buffer applies to a single Rmail file only; if you are editing multiple Rmail files, each one can have its own summary buffer. The summary buffer name is made by appending '-summary' to the Rmail buffer's name. Normally only one summary buffer is displayed at a time.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Make-Summary][Rmail Make Summary]]: Making various sorts of summaries.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary-Edit][Rmail Summary Edit]]: Manipulating messages from the summary.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary-Edit][Rmail Summary Edit]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary][Rmail Summary]]
+
+** 33.11.1 Making Summaries
+     :PROPERTIES:
+     :CUSTOM_ID: making-summaries
+     :END:
+
+Here are the commands to create a summary for the current Rmail buffer. Once the Rmail buffer has a summary, changes in the Rmail buffer (such as deleting or expunging messages, and getting new mail) automatically update the summary.
+
+- h
+
+- C-M-h
+
+  Summarize all messages (=rmail-summary=).
+
+- l labels
+
+- C-M-l labels
+
+  Summarize messages that have one or more of the specified labels (=rmail-summary-by-labels=).
+
+- C-M-r rcpts
+
+  Summarize messages that match the specified recipients (=rmail-summary-by-recipients=).
+
+- C-M-t topic
+
+  Summarize messages that have a match for the specified regexp topic in their subjects (=rmail-summary-by-topic=).
+
+- C-M-s regexp
+
+  Summarize messages whose headers match the specified regular expression regexp (=rmail-summary-by-regexp=).
+
+- C-M-f senders
+
+  Summarize messages that match the specified senders. (=rmail-summary-by-senders=).
+
+  The h or C-M-h (=rmail-summary=) command fills the summary buffer for the current Rmail buffer with a summary of all the messages in the buffer. It then displays and selects the summary buffer in another window.
+
+  C-M-l labels (=rmail-summary-by-labels=) makes a partial summary mentioning only the messages that have one or more of the labels labels. labels should contain label names separated by commas.
+
+  C-M-r rcpts (=rmail-summary-by-recipients=) makes a partial summary mentioning only the messages that have one or more recipients matching the regular expression rcpts. This is matched against the 'To', 'From', and 'CC' headers (supply a prefix argument to exclude the 'CC' header).
+
+  C-M-t topic (=rmail-summary-by-topic=) makes a partial summary mentioning only the messages whose subjects have a match for the regular expression topic. With a prefix argument, the match is against the whole message, not just the subject.
+
+  C-M-s regexp (=rmail-summary-by-regexp=) makes a partial summary that mentions only the messages whose headers (including the date and the subject lines) match the regular expression regexp.
+
+  C-M-f senders (=rmail-summary-by-senders=) makes a partial summary that mentions only the messages whose 'From' fields match the regular expression senders.
+
+Note that there is only one summary buffer for any Rmail buffer; making any kind of summary discards any previous summary.
+
+The variable =rmail-summary-window-size= says how many lines to use for the summary window. The variable =rmail-summary-line-count-flag= controls whether the summary line for a message should include the line count of the message. Setting this option to =nil= might speed up the generation of summaries.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Make-Summary][Rmail Make Summary]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary][Rmail Summary]]
+
+** 33.11.2 Editing in Summaries
+     :PROPERTIES:
+     :CUSTOM_ID: editing-in-summaries
+     :END:
+
+You can use the Rmail summary buffer to do almost anything you can do in the Rmail buffer itself. In fact, once you have a summary buffer, there's no need to switch back to the Rmail buffer.
+
+You can select and display various messages in the Rmail buffer, from the summary buffer, just by moving point in the summary buffer to different lines. It doesn't matter what Emacs command you use to move point; whichever line point is on at the end of the command, that message is selected in the Rmail buffer.
+
+Almost all Rmail commands work in the summary buffer as well as in the Rmail buffer. Thus, d in the summary buffer deletes the current message, u undeletes, and x expunges. (However, in the summary buffer, if there are no more undeleted messages in the relevant direction, the delete commands go to the first or last message, rather than staying on the current message.) o and C-o output the current message to a FILE; r starts a reply to it; etc. You can scroll the current message while remaining in the summary buffer using and . However, in the summary buffer scrolling past the end or the beginning of a message with or goes, respectively, to the next or previous undeleted message. Customize the =rmail-summary-scroll-between-messages= option to =nil= to disable scrolling to next/previous messages.
+
+M-u (=rmail-summary-undelete-many=) undeletes all deleted messages in the summary. A prefix argument means to undelete that many of the previous deleted messages.
+
+The Rmail commands to move between messages also work in the summary buffer, but with a twist: they move through the set of messages included in the summary. They also ensure the Rmail buffer appears on the screen (unlike cursor motion commands, which update the contents of the Rmail buffer but don't display it in a window unless it already appears). Here is a list of these commands:
+
+- n
+
+  Move to next line, skipping lines saying "deleted", and select its message (=rmail-summary-next-msg=).
+
+- p
+
+  Move to previous line, skipping lines saying "deleted", and select its message (=rmail-summary-previous-msg=).
+
+- M-n
+
+  Move to next line and select its message (=rmail-summary-next-all=).
+
+- M-p
+
+  Move to previous line and select its message (=rmail-summary-previous-all=).
+
+-
+
+  #+BEGIN_QUOTE
+  #+END_QUOTE
+
+  Move to the last line, and select its message (=rmail-summary-last-message=).
+
+- <
+
+  Move to the first line, and select its message (=rmail-summary-first-message=).
+
+- j
+
+-
+
+  Select the message on the current line (ensuring that the Rmail buffer appears on the screen; =rmail-summary-goto-msg=). With argument n, select message number n and move to its line in the summary buffer; this signals an error if the message is not listed in the summary buffer.
+
+- M-s pattern
+
+  Search through messages for pattern starting with the current message; select the message found, and move point in the summary buffer to that message's line (=rmail-summary-search=). A prefix argument acts as a repeat count; a negative argument means search backward (equivalent to =rmail-summary-search-backward=.)
+
+- C-M-n labels
+
+  Move to the next message with at least one of the specified labels (=rmail-summary-next-labeled-message=). labels is a comma-separated list of labels. A prefix argument acts as a repeat count.
+
+- C-M-p labels
+
+  Move to the previous message with at least one of the specified labels (=rmail-summary-previous-labeled-message=).
+
+- C-c C-n
+
+  Move to the next message with the same subject as the current message (=rmail-summary-next-same-subject=). A prefix argument acts as a repeat count.
+
+- C-c C-p
+
+  Move to the previous message with the same subject as the current message (=rmail-summary-previous-same-subject=).
+
+  Deletion, undeletion, and getting new mail, and even selection of a different message all update the summary buffer when you do them in the Rmail buffer. If the variable =rmail-redisplay-summary= is non-=nil=, these actions also bring the summary buffer back onto the screen.
+
+  When you are finished using the summary, type Q (=rmail-summary-wipe=) to delete the summary buffer's window. You can also exit Rmail while in the summary: q (=rmail-summary-quit=) deletes the summary window, then exits from Rmail by saving the Rmail file and switching to another buffer. Alternatively, b (=rmail-summary-bury=) simply buries the Rmail summary and buffer.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Display][Rmail Display]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Summary][Rmail Summary]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.12 Sorting the Rmail File
+    :PROPERTIES:
+    :CUSTOM_ID: sorting-the-rmail-file
+    :END:
+
+​
+
+- C-c C-s C-d
+
+- M-x rmail-sort-by-date
+
+  Sort messages of current Rmail buffer by date.
+
+- C-c C-s C-s
+
+- M-x rmail-sort-by-subject
+
+  Sort messages of current Rmail buffer by subject.
+
+- C-c C-s C-a
+
+- M-x rmail-sort-by-author
+
+  Sort messages of current Rmail buffer by author's name.
+
+- C-c C-s C-r
+
+- M-x rmail-sort-by-recipient
+
+  Sort messages of current Rmail buffer by recipient's name.
+
+- C-c C-s C-c
+
+- M-x rmail-sort-by-correspondent
+
+  Sort messages of current Rmail buffer by the name of the other correspondent.
+
+- C-c C-s C-l
+
+- M-x rmail-sort-by-lines
+
+  Sort messages of current Rmail buffer by number of lines.
+
+- C-c C-s C-k labels
+
+- M-x rmail-sort-by-labels labels
+
+  Sort messages of current Rmail buffer by labels. The argument labels should be a comma-separated list of labels. The order of these labels specifies the order of messages; messages with the first label come first, messages with the second label come second, and so on. Messages that have none of these labels come last.
+
+The Rmail sort commands perform a /stable sort/: if there is no reason to prefer either one of two messages, their order remains unchanged. You can use this to sort by more than one criterion. For example, if you use =rmail-sort-by-date= and then =rmail-sort-by-author=, messages from the same author appear in order by date.
+
+With a prefix argument, all these commands reverse the order of comparison. This means they sort messages from newest to oldest, from biggest to smallest, or in reverse alphabetical order.
+
+The same keys in the summary buffer run similar functions; for example, C-c C-s C-l runs =rmail-summary-sort-by-lines=. These commands always sort the whole Rmail buffer, even if the summary is only showing a subset of messages.
+
+Note that you cannot undo a sort, so you may wish to save the Rmail buffer before sorting it.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Coding][Rmail Coding]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Sorting][Rmail Sorting]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.13 Display of Messages
+    :PROPERTIES:
+    :CUSTOM_ID: display-of-messages
+    :END:
+
+This section describes how Rmail displays mail headers, MIME sections and attachments, URLs, and encrypted messages.
+
+- t
+
+  Toggle display of complete header (=rmail-toggle-header=).
+
+  Before displaying each message for the first time, Rmail reformats its header, hiding uninteresting header fields to reduce clutter. The t (=rmail-toggle-header=) command toggles this, switching between showing the reformatted header fields and showing the complete, original header. With a positive prefix argument, the command shows the reformatted header; with a zero or negative prefix argument, it shows the full header. Selecting the message again also reformats it if necessary.
+
+  The variable =rmail-ignored-headers= holds a regular expression specifying the header fields to hide; any matching header line will be hidden. The variable =rmail-nonignored-headers= overrides this: any header field matching that regular expression is shown even if it matches =rmail-ignored-headers= too. The variable =rmail-displayed-headers= is an alternative to these two variables; if non-=nil=, this should be a regular expression specifying which headers to display (the default is =nil=).
+
+  Rmail highlights certain header fields that are especially interesting---by default, the 'From' and 'Subject' fields. This highlighting uses the =rmail-highlight= face. The variable =rmail-highlighted-headers= holds a regular expression specifying the header fields to highlight; if it matches the beginning of a header field, that whole field is highlighted. To disable this feature, set =rmail-highlighted-headers= to =nil=.
+
+  If a message is in MIME (Multipurpose Internet Mail Extensions) format and contains multiple parts (MIME entities), Rmail displays each part with a tagline. The tagline summarizes the part's index, size, and content type. Depending on the content type, it may also contain one or more buttons; these perform actions such as saving the part into a file.
+
+-
+
+  Hide or show the MIME part at point (=rmail-mime-toggle-hidden=).
+
+-
+
+  Move point to the next MIME tagline button. (=rmail-mime-next-item=).
+
+- S-
+
+  Move point to the previous MIME part (=rmail-mime-previous-item=).
+
+- v
+
+  Toggle between MIME display and raw message (=rmail-mime=).
+
+Each plain-text MIME part is initially displayed immediately after its tagline, as part of the Rmail buffer (unless the message has an HTML part, see below), while MIME parts of other types are represented only by their taglines, with their actual contents hidden. In either case, you can toggle a MIME part between its displayed and hidden states by typing anywhere in the part---or anywhere in its tagline (except for buttons for other actions, if there are any). Type (or click with the mouse) to activate a tagline button, and to cycle point between tagline buttons.
+
+The v (=rmail-mime=) command toggles between the default MIME display described above, and a raw display showing the undecoded MIME data. With a prefix argument, this command toggles the display of only an entity at point.
+
+If the message has an HTML MIME part, Rmail displays it in preference to the plain-text part, if Emacs can render HTML[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-17][17]]. To prevent that, and have the plain-text part displayed instead, customize the variable =rmail-mime-prefer-html= to a =nil= value.
+
+To prevent Rmail from handling MIME decoded messages, change the variable =rmail-enable-mime= to =nil=. When this is the case, the v (=rmail-mime=) command instead creates a temporary buffer to display the current MIME message.
+
+If the current message is an encrypted one, use the command M-x rmail-epa-decrypt to decrypt it, using the EasyPG library (see [[https://www.gnu.org/software/emacs/manual/html_mono/epa.html#Top][EasyPG]]).
+
+You can highlight and activate URLs in the Rmail buffer using Goto Address mode:
+
+#+BEGIN_EXAMPLE
+         (add-hook 'rmail-show-message-hook 'goto-address-mode)
+#+END_EXAMPLE
+
+Then you can browse these URLs by clicking on them with mouse-2 (or mouse-1 quickly) or by moving to one and typing C-c . See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Goto-Address-mode][Activating URLs]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Editing][Rmail Editing]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Display][Rmail Display]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.14 Rmail and Coding Systems
+    :PROPERTIES:
+    :CUSTOM_ID: rmail-and-coding-systems
+    :END:
+
+Rmail automatically decodes messages which contain non-ASCII characters, just as Emacs does with files you visit and with subprocess output. Rmail uses the standard 'charset=charset' header in the message, if any, to determine how the message was encoded by the sender. It maps charset into the corresponding Emacs coding system (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Coding-Systems][Coding Systems]]), and uses that coding system to decode message text. If the message header doesn't have the 'charset' specification, or if charset is not recognized, Rmail chooses the coding system with the usual Emacs heuristics and defaults (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recognize-Coding][Recognize Coding]]).
+
+Occasionally, a message is decoded incorrectly, either because Emacs guessed the wrong coding system in the absence of the 'charset' specification, or because the specification was inaccurate. For example, a misconfigured mailer could send a message with a 'charset=iso-8859-1' header when the message is actually encoded in =koi8-r=. When you see the message text garbled, or some of its characters displayed as hex codes or empty boxes, this may have happened.
+
+You can correct the problem by decoding the message again using the right coding system, if you can figure out or guess which one is right. To do this, invoke the M-x rmail-redecode-body command. It reads the name of a coding system, and then redecodes the message using the coding system you specified. If you specified the right coding system, the result should be readable.
+
+When you get new mail in Rmail, each message is translated automatically from the coding system it is written in, as if it were a separate file. This uses the priority list of coding systems that you have specified. If a MIME message specifies a character set, Rmail obeys that specification. For reading and saving Rmail files themselves, Emacs uses the coding system specified by the variable =rmail-file-coding-system=. The default value is =nil=, which means that Rmail files are not translated (they are read and written in the Emacs internal character code).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Digest][Rmail Digest]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Coding][Rmail Coding]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.15 Editing Within a Message
+    :PROPERTIES:
+    :CUSTOM_ID: editing-within-a-message
+    :END:
+
+Most of the usual Emacs key bindings are available in Rmail mode, though a few, such as C-M-n and C-M-h, are redefined by Rmail for other purposes. However, the Rmail buffer is normally read only, and most of the letters are redefined as Rmail commands. If you want to edit the text of a message, you must use the Rmail command e.
+
+- e
+
+  Edit the current message as ordinary text.
+
+  The e command (=rmail-edit-current-message=) switches from Rmail mode into Rmail Edit mode, another major mode which is nearly the same as Text mode. The mode line indicates this change.
+
+  In Rmail Edit mode, letters insert themselves as usual and the Rmail commands are not available. You can edit the message body and header fields. When you are finished editing the message, type C-c C-c (=rmail-cease-edit=) to switch back to Rmail mode. Alternatively, you can return to Rmail mode but cancel any editing that you have done, by typing C-c C-] (=rmail-abort-edit=).
+
+  Entering Rmail Edit mode runs the hook =text-mode-hook=; then it runs the hook =rmail-edit-mode-hook= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]]). Returning to ordinary Rmail mode adds the attribute 'edited' to the message, if you have made any changes in it (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Attributes][Rmail Attributes]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Rot13][Rmail Rot13]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Editing][Rmail Editing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.16 Digest Messages
+    :PROPERTIES:
+    :CUSTOM_ID: digest-messages
+    :END:
+
+A digest message is a message which exists to contain and carry several other messages. Digests are used on some mailing lists; all the messages that arrive for the list during a period of time such as one day are put inside a single digest which is then sent to the subscribers. Transmitting the single digest uses less computer time than transmitting the individual messages even though the total size is the same, because of the per-message overhead in network mail transmission.
+
+When you receive a digest message, the most convenient way to read it is to undigestify it: to turn it back into many individual messages. Then you can read and delete the individual messages as it suits you. To do this, select the digest message and type the command M-x undigestify-rmail-message. This extracts the submessages as separate Rmail messages, and inserts them following the digest. The digest message itself is flagged as deleted.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Movemail][Movemail]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Digest][Rmail Digest]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.17 Reading Rot13 Messages
+    :PROPERTIES:
+    :CUSTOM_ID: reading-rot13-messages
+    :END:
+
+Mailing list messages that might offend or annoy some readers are sometimes encoded in a simple code called rot13---so named because it rotates the alphabet by 13 letters. This code is not for secrecy, as it provides none; rather, it enables those who wish to avoid seeing the real text of the message. For example, a review of a film might use rot13 to hide important plot points.
+
+To view a buffer that uses the rot13 code, use the command M-x rot13-other-window. This displays the current buffer in another window which applies the code when displaying the text.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Mailboxes][Remote Mailboxes]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Rot13][Rmail Rot13]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.18 movemail program
+    :PROPERTIES:
+    :CUSTOM_ID: movemail-program
+    :END:
+
+Rmail uses the movemail program to move mail from your inbox to your Rmail file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail-Inbox][Rmail Inbox]]). When loaded for the first time, Rmail attempts to locate the movemail program and determine its version. There are two versions of the movemail program: the GNU Mailutils version (see [[https://www.gnu.org/software/emacs/manual/html_mono/mailutils.html#movemail][movemail]]), and an Emacs-specific version that is built and installed unless Emacs was configured --with-mailutils in effect. The two movemail versions support the same command line syntax and the same basic subset of options. However, the Mailutils version offers additional features and is more secure.
+
+The Emacs version of movemail can retrieve mail from the usual Unix mailbox formats. *Warning*: Although it can also use the POP3 protocol, this is not recommended because it does not support POP3 via encrypted TLS channels.
+
+The Mailutils version is able to handle a wide set of mailbox formats, such as plain Unix mailboxes, =maildir= and =MH= mailboxes, etc. It is able to access remote mailboxes using the POP3 or IMAP4 protocol, and can retrieve mail from them using a TLS encrypted channel. It also accepts mailbox arguments in URL form. The detailed description of mailbox URLs can be found in [[https://www.gnu.org/software/emacs/manual/html_mono/mailutils.html#URL][URL]]. In short, a URL is:
+
+#+BEGIN_EXAMPLE
+         proto://[user[:password]@]host-or-file-name[:port]
+#+END_EXAMPLE
+
+where square brackets denote optional elements.
+
+- proto
+
+  Specifies the mailbox protocol, or format to use. The exact semantics of the rest of URL elements depends on the actual value of proto (see below).
+
+- user
+
+  User name to access the remote mailbox.
+
+- password
+
+  User password to access the remote mailbox.
+
+- host-or-file-name
+
+  Hostname of the remote server for remote mailboxes or file name of a local mailbox.
+
+- port
+
+  Optional port number, if not the default for that protocol.
+
+proto can be one of:
+
+- =mbox=
+
+  Usual Unix mailbox format. In this case, user, pass and port are not used, and host-or-file-name denotes the file name of the mailbox file, e.g., =mbox:///var/spool/mail/smith=.
+
+- =mh=
+
+  A local mailbox in the MH format. user, pass and port are not used. host-or-file-name denotes the name of MH folder, e.g., =mh:///Mail/inbox=.
+
+- =maildir=
+
+  A local mailbox in the maildir format. user, pass and port are not used, and host-or-file-name denotes the name of =maildir= mailbox, e.g., =maildir:///mail/inbox=.
+
+- =file=
+
+  Any local file in mailbox format. Its actual format is detected automatically by movemail.
+
+- =pop=
+
+- =pops=
+
+  A remote mailbox to be accessed via POP3 protocol. user specifies the remote user name to use, pass may be used to specify the user password, host-or-file-name is the name or IP address of the remote mail server to connect to, and port is the port number; e.g., =pop://smith:guessme@remote.server.net:995=. If the server supports it, movemail tries to use an encrypted connection---use the 'pops' form to require one.
+
+- =imap=
+
+- =imaps=
+
+  A remote mailbox to be accessed via IMAP4 protocol. user specifies the remote user name to use, pass may be used to specify the user password, host-or-file-name is the name or IP address of the remote mail server to connect to, and port is the port number; e.g., =imap://smith:guessme@remote.server.net:993=. If the server supports it, movemail tries to use an encrypted connection---use the 'imaps' form to require one.
+
+Alternatively, you can specify the file name of the mailbox to use. This is equivalent to specifying the 'file' protocol:
+
+#+BEGIN_EXAMPLE
+         /var/spool/mail/user == file:///var/spool/mail/user
+#+END_EXAMPLE
+
+The variable =rmail-movemail-program= controls which version of movemail to use. If that is a string, it specifies the absolute file name of the movemail executable. If it is =nil=, Rmail searches for movemail in the directories listed in =rmail-movemail-search-path=, then in =exec-path= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell][Shell]]), then in =exec-directory=.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Mailbox-Formats][Other Mailbox Formats]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Movemail][Movemail]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.19 Retrieving Mail from Remote Mailboxes
+    :PROPERTIES:
+    :CUSTOM_ID: retrieving-mail-from-remote-mailboxes
+    :END:
+
+Some sites use a method called POP3 for accessing users' inbox data instead of storing the data in inbox files. The Mailutils movemail by default supports POP3 with TLS encryption. *Warning:* Although the Emacs movemail supports POP3, its use for this is not recommended since it does not support encrypted connections---the Mailutils version does. Both versions of movemail work only with POP3, not with older versions of POP.
+
+You can specify a POP3 inbox by using a POP3 URL (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Movemail][Movemail]]). A POP3 URL is of the form 'pop://username@hostname:port', where hostname and port are the host name (or IP address) and port number of the remote mail server and username is the user name on that server. Additionally, you may specify the password in the mailbox URL: 'pop://username:password@hostname:port'. In this case, password takes preference over the one set by =rmail-remote-password= (see below). This is especially useful if you have several remote mailboxes with different passwords. If using Mailutils movemail, you may wish to use 'pops' in place of 'pop'.
+
+For backward compatibility, Rmail also supports an alternative way of specifying remote POP3 mailboxes. Specifying an inbox name in the form 'po:username:hostname:port' is equivalent to 'pop://username@hostname:port'. If you omit the :hostname part, the MAILHOST environment variable specifies the machine on which to look for the POP3 server.
+
+Another method for accessing remote mailboxes is IMAP. This method is supported only by the Mailutils movemail. To specify an IMAP mailbox in the inbox list, use the following mailbox URL: 'imap://username[:password]@hostname:port'. The password part is optional, as described above. You may wish to use 'imaps' in place of 'imap'.
+
+Accessing a remote mailbox may require a password. Rmail uses the following algorithm to retrieve it:
+
+1. If a password is present in the mailbox URL (see above), it is used.
+2. If the variable =rmail-remote-password-required= is =nil=, Rmail assumes no password is required.
+3. If the variable =rmail-remote-password= is non-=nil=, its value is used.
+4. Otherwise, Rmail will ask you for the password to use.
+
+If you need to pass additional command-line flags to movemail, set the variable =rmail-movemail-flags= a list of the flags you wish to use. Do not use this variable to pass the '-p' flag to preserve your inbox contents; use =rmail-preserve-inbox= instead.
+
+The movemail program installed at your site may support Kerberos authentication. If it is supported, it is used by default whenever you attempt to retrieve POP3 mail when =rmail-remote-password= and =rmail-remote-password-required= are unset.
+
+Some POP3 servers store messages in reverse order. If your server does this, and you would rather read your mail in the order in which it was received, you can tell movemail to reverse the order of downloaded messages by adding the '-r' flag to =rmail-movemail-flags=.
+
+Mailutils movemail supports TLS encryption. If you wish to use it, add the '--tls' flag to =rmail-movemail-flags=.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Mailboxes][Remote Mailboxes]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]
+
+* 33.20 Retrieving Mail from Local Mailboxes in Various Formats
+    :PROPERTIES:
+    :CUSTOM_ID: retrieving-mail-from-local-mailboxes-in-various-formats
+    :END:
+
+If your incoming mail is stored on a local machine in a format other than Unix mailbox, you will need the Mailutils movemail to retrieve it. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Movemail][Movemail]], for the detailed description of movemail versions. For example, to access mail from an inbox in =maildir= format located in /var/spool/mail/in, you would include the following in the Rmail inbox list:
+
+#+BEGIN_EXAMPLE
+         maildir:///var/spool/mail/in
+#+END_EXAMPLE

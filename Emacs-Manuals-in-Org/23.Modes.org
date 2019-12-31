@@ -1,0 +1,207 @@
+#+TITLE: 23.Modes
+* 23) Major and Minor Modes
+
+Emacs contains many editing modes that alter its basic behavior in useful ways. These are divided into major modes and minor modes.
+
+Major modes provide specialized facilities for working on a particular file type, such as a C source file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Programs][Programs]]), or a particular type of non-file buffer, such as a shell buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell][Shell]]). Major modes are mutually exclusive; each buffer has one and only one major mode at any time.
+
+Minor modes are optional features which you can turn on or off, not necessarily specific to a type of file or buffer. For example, Auto Fill mode is a minor mode in which breaks lines between words as you type (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Fill][Auto Fill]]). Minor modes are independent of one another, and of the selected major mode.
+
+* 23.1 Major Modes
+    :PROPERTIES:
+    :CUSTOM_ID: major-modes
+    :END:
+
+Every buffer possesses a major mode, which determines the editing behavior of Emacs while that buffer is current. The mode line normally shows the name of the current major mode, in parentheses (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]]).
+
+The least specialized major mode is called Fundamental mode. This mode has no mode-specific redefinitions or variable settings, so that each Emacs command behaves in its most general manner, and each user option variable is in its default state.
+
+For editing text of a specific type that Emacs knows about, such as Lisp code or English text, you typically use a more specialized major mode, such as Lisp mode or Text mode. Most major modes fall into three major groups. The first group contains modes for normal text, either plain or with mark-up. It includes Text mode, HTML mode, SGML mode, TeX mode and Outline mode. The second group contains modes for specific programming languages. These include Lisp mode (which has several variants), C mode, Fortran mode, and others. The third group consists of major modes that are not associated directly with files; they are used in buffers created for specific purposes by Emacs. Examples include Dired mode for buffers made by Dired (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]]), Message mode for buffers made by C-x m (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]), and Shell mode for buffers used to communicate with an inferior shell process (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Interactive-Shell][Interactive Shell]]).
+
+Usually, the major mode is automatically set by Emacs, when you first visit a file or create a buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Choosing-Modes][Choosing Modes]]). You can explicitly select a new major mode by using an M-x command. Take the name of the mode and add =-mode= to get the name of the command to select that mode (e.g., M-x lisp-mode enters Lisp mode). Since every buffer has exactly one major mode, there is no way to "turn off" a major mode; instead you must switch to a different one.
+
+The value of the buffer-local variable =major-mode= is a symbol with the same name as the major mode command (e.g., =lisp-mode=). This variable is set automatically; you should not change it yourself.
+
+The default value of =major-mode= determines the major mode to use for files that do not specify a major mode, and for new buffers created with C-x b. Normally, this default value is the symbol =fundamental-mode=, which specifies Fundamental mode. You can change this default value via the Customization interface (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Easy-Customization][Easy Customization]]), or by adding a line like this to your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]):
+
+#+BEGIN_EXAMPLE
+         (setq-default major-mode 'text-mode)
+#+END_EXAMPLE
+
+If the default value of =major-mode= is =nil=, the major mode is taken from the previously current buffer.
+
+Specialized major modes often change the meanings of certain keys to do something more suitable for the mode. For instance, programming language modes bind to indent the current line according to the rules of the language (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Indentation][Indentation]]). The keys that are commonly changed are , , and C-j. Many modes also define special commands of their own, usually bound to key sequences whose prefix key is C-c (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Keys][Keys]]). Major modes can also alter user options and variables; for instance, programming language modes typically set a buffer-local value for the variable =comment-start=, which determines how source code comments are delimited (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comments][Comments]]).
+
+To view the documentation for the current major mode, including a list of its key bindings, type C-h m (=describe-mode=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-Help][Misc Help]].
+
+Every major mode, apart from Fundamental mode, defines a mode hook, a customizable list of Lisp functions to run each time the mode is enabled in a buffer. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]], for more information about hooks. Each mode hook is named after its major mode, e.g., Fortran mode has =fortran-mode-hook=. Furthermore, all text-based major modes run =text-mode-hook=, and many programming language modes [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-10][10]] (including all those distributed with Emacs) run =prog-mode-hook=, prior to running their own mode hooks. Hook functions can look at the value of the variable =major-mode= to see which mode is actually being entered.
+
+Mode hooks are commonly used to enable minor modes (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minor-Modes][Minor Modes]]). For example, you can put the following lines in your init file to enable Flyspell minor mode in all text-based major modes (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]]), and Eldoc minor mode in Emacs Lisp mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Doc][Lisp Doc]]):
+
+#+BEGIN_EXAMPLE
+         (add-hook 'text-mode-hook 'flyspell-mode)
+         (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+#+END_EXAMPLE
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Choosing-Modes][Choosing Modes]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Major-Modes][Major Modes]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Modes][Modes]]
+
+* 23.2 Minor Modes
+    :PROPERTIES:
+    :CUSTOM_ID: minor-modes
+    :END:
+
+A minor mode is an optional editing mode that alters the behavior of Emacs in some well-defined way. Unlike major modes, any number of minor modes can be in effect at any time. Some minor modes are buffer-local, and can be turned on (enabled) in certain buffers and off (disabled) in others. Other minor modes are global: while enabled, they affect everything you do in the Emacs session, in all buffers. Most minor modes are disabled by default, but a few are enabled by default.
+
+Most buffer-local minor modes say in the mode line when they are enabled, just after the major mode indicator. For example, 'Fill' in the mode line means that Auto Fill mode is enabled. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]].
+
+Like major modes, each minor mode is associated with a mode command, whose name consists of the mode name followed by '-mode'. For instance, the mode command for Auto Fill mode is =auto-fill-mode=. But unlike a major mode command, which simply enables the mode, the mode command for a minor mode can either enable or disable it:
+
+- If you invoke the mode command directly with no prefix argument (either via M-x, or by binding it to a key and typing that key; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Key-Bindings][Key Bindings]]), that toggles the minor mode. The minor mode is turned on if it was off, and turned off if it was on.\\
+- If you invoke the mode command with a prefix argument, the minor mode is unconditionally turned off if that argument is zero or negative; otherwise, it is unconditionally turned on.\\
+- If the mode command is called via Lisp, the minor mode is unconditionally turned on if the argument is omitted or =nil=. This makes it easy to turn on a minor mode from a major mode's mode hook (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Major-Modes][Major Modes]]). A non-=nil= argument is handled like an interactive prefix argument, as described above.
+
+Most minor modes also have a mode variable, with the same name as the mode command. Its value is non-=nil= if the mode is enabled, and =nil= if it is disabled. In general, you should not try to enable or disable the mode by changing the value of the mode variable directly in Lisp; you should run the mode command instead. However, setting the mode variable through the Customize interface (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Easy-Customization][Easy Customization]]) will always properly enable or disable the mode, since Customize automatically runs the mode command for you.
+
+The following is a list of some buffer-local minor modes:
+
+- Abbrev mode automatically expands text based on pre-defined abbreviation definitions. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Abbrevs][Abbrevs]].
+
+- Auto Fill mode inserts newlines as you type to prevent lines from becoming too long. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filling][Filling]].
+
+- Auto Save mode saves the buffer contents periodically to reduce the amount of work you can lose in case of a crash. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]].
+
+- Electric Quote mode automatically converts quotation marks. For example, it requotes text typed =like this' to text='like this'`. You can control what kind of text it operates in, and you can disable it entirely in individual buffers. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quotation-Marks][Quotation Marks]].
+
+- Enriched mode enables editing and saving of formatted text. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Enriched-Text][Enriched Text]].
+
+- Flyspell mode automatically highlights misspelled words. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]].
+
+- Font-Lock mode automatically highlights certain textual units found in programs. It is enabled globally by default, but you can disable it in individual buffers. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Faces][Faces]].
+
+- Display Line Numbers mode is a convenience wrapper around =display-line-numbers=, setting it using the value of =display-line-numbers-type=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Display-Custom][Display Custom]].
+
+- Outline minor mode provides similar facilities to the major mode called Outline mode. See
+
+  Outline Mode
+
+  .
+
+- Overwrite mode causes ordinary printing characters to replace existing text instead of shoving it to the right. For example, if point is in front of the ‘
+
+  B
+
+  ' in ‘
+
+  FOOBAR
+
+  ', then in Overwrite mode typing a
+
+  G
+
+  changes it to ‘
+
+  FOOGAR
+
+  ', instead of producing ‘
+
+  FOOGBAR
+
+  ' as usual. In Overwrite mode, the command
+
+  C-q
+
+  inserts the next character whatever it may be, even if it is a digit---this gives you a way to insert a character instead of replacing an existing character. The mode command,
+
+  #+BEGIN_EXAMPLE
+      overwrite-mode
+  #+END_EXAMPLE
+
+  , is bound to the key.
+
+- Binary Overwrite mode is a variant of Overwrite mode for editing binary files; it treats newlines and tabs like other characters, so that they overwrite other characters and can be overwritten by them. In Binary Overwrite mode, digits after C-q specify an octal character code, as usual.
+
+- Visual Line mode performs word wrapping, causing long lines to be wrapped at word boundaries. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visual-Line-Mode][Visual Line Mode]].
+
+And here are some useful global minor modes:
+
+- Column Number mode enables display of the current column number in the mode line. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]].\\
+- Delete Selection mode causes text insertion to first delete the text in the region, if the region is active. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Using-Region][Using Region]].\\
+- Icomplete mode displays an indication of available completions when you are in the minibuffer and completion is active. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Icomplete][Icomplete]].\\
+- Line Number mode enables display of the current line number in the mode line. It is enabled by default. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]].\\
+- Menu Bar mode gives each frame a menu bar. It is enabled by default. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Menu-Bars][Menu Bars]].\\
+- Scroll Bar mode gives each window a scroll bar. It is enabled by default, but the scroll bar is only displayed on graphical terminals. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Scroll-Bars][Scroll Bars]].\\
+- Tool Bar mode gives each frame a tool bar. It is enabled by default, but the tool bar is only displayed on graphical terminals. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Tool-Bars][Tool Bars]].\\
+- Transient Mark mode highlights the region, and makes many Emacs commands operate on the region when the mark is active. It is enabled by default. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]].
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minor-Modes][Minor Modes]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Modes][Modes]]
+
+* 23.3 Choosing File Modes
+    :PROPERTIES:
+    :CUSTOM_ID: choosing-file-modes
+    :END:
+
+When you visit a file, Emacs chooses a major mode automatically. Normally, it makes the choice based on the file name---for example, files whose names end in '.c' are normally edited in C mode---but sometimes it chooses the major mode based on special text in the file. This special text can also be used to enable buffer-local minor modes.
+
+Here is the exact procedure:
+
+First, Emacs checks whether the file contains file-local mode variables. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Variables][File Variables]]. If there is a file-local variable that specifies a major mode, then Emacs uses that major mode, ignoring all other criteria. There are several methods to specify a major mode using a file-local variable; the simplest is to put the mode name in the first nonblank line, preceded and followed by ‘-*-'. Other text may appear on the line as well. For example,
+
+#+BEGIN_EXAMPLE
+         ; -*-Lisp-*-
+#+END_EXAMPLE
+
+tells Emacs to use Lisp mode. Note how the semicolon is used to make Lisp treat this line as a comment. You could equivalently write
+
+#+BEGIN_EXAMPLE
+         ; -*- mode: Lisp;-*-
+#+END_EXAMPLE
+
+You can also use file-local variables to specify buffer-local minor modes, by using =eval= specifications. For example, this first nonblank line puts the buffer in Lisp mode and enables Auto-Fill mode:
+
+#+BEGIN_EXAMPLE
+         ; -*- mode: Lisp; eval: (auto-fill-mode 1); -*-
+#+END_EXAMPLE
+
+Note, however, that it is usually inappropriate to enable minor modes this way, since most minor modes represent individual user preferences. If you personally want to use a minor mode for a particular file type, it is better to enable the minor mode via a major mode hook (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Major-Modes][Major Modes]]).
+
+Second, if there is no file variable specifying a major mode, Emacs checks whether the file's contents begin with '#!'. If so, that indicates that the file can serve as an executable shell command, which works by running an interpreter named on the file's first line (the rest of the file is used as input to the interpreter). Therefore, Emacs tries to use the interpreter name to choose a mode. For instance, a file that begins with '#!/usr/bin/perl' is opened in Perl mode. The variable =interpreter-mode-alist= specifies the correspondence between interpreter program names and major modes.
+
+When the first line starts with '#!', you usually cannot use the '-/-' feature on the first line, because the system would get confused when running the interpreter. So Emacs looks for ‘-/-' on the second line in such files as well as on the first line. The same is true for man pages which start with the magic string ‘'"' to specify a list of troff preprocessors.
+
+Third, Emacs tries to determine the major mode by looking at the text at the start of the buffer, based on the variable =magic-mode-alist=. By default, this variable is =nil= (an empty list), so Emacs skips this step; however, you can customize it in your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]). The value should be a list of elements of the form
+
+#+BEGIN_EXAMPLE
+         (regexp . mode-function)
+#+END_EXAMPLE
+
+where regexp is a regular expression (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]]), and mode-function is a major mode command. If the text at the beginning of the file matches regexp, Emacs chooses the major mode specified by mode-function.
+
+Alternatively, an element of =magic-mode-alist= may have the form
+
+#+BEGIN_EXAMPLE
+         (match-function . mode-function)
+#+END_EXAMPLE
+
+where match-function is a Lisp function that is called at the beginning of the buffer; if the function returns non-=nil=, Emacs set the major mode with mode-function.
+
+Fourth---if Emacs still hasn't found a suitable major mode---it looks at the file's name. The correspondence between file names and major modes is controlled by the variable =auto-mode-alist=. Its value is a list in which each element has this form,
+
+#+BEGIN_EXAMPLE
+         (regexp . mode-function)
+#+END_EXAMPLE
+
+or this form,
+
+#+BEGIN_EXAMPLE
+         (regexp mode-function flag)
+#+END_EXAMPLE
+
+For example, one element normally found in the list has the form =(``"\\.c\\'"`` . c-mode)=, and it is responsible for selecting C mode for files whose names end in .c. (Note that '\' is needed in Lisp syntax to include a '' in the string, which must be used to suppress the special meaning of ‘.' in regexps.) If the element has the form =(=regexp mode-function flag=)= and flag is non-=nil=, then after calling mode-function, Emacs discards the suffix that matched regexp and searches the list again for another match.
+
+On GNU/Linux and other systems with case-sensitive file names, Emacs performs a case-sensitive search through =auto-mode-alist=; if this search fails, it performs a second case-insensitive search through the alist. To suppress the second search, change the variable =auto-mode-case-fold= to =nil=. On systems with case-insensitive file names, such as Microsoft Windows, Emacs performs a single case-insensitive search through =auto-mode-alist=.
+
+Finally, if Emacs /still/ hasn't found a major mode to use, it compares the text at the start of the buffer to the variable =magic-fallback-mode-alist=. This variable works like =magic-mode-alist=, described above, except that it is consulted only /after/ =auto-mode-alist=. By default, =magic-fallback-mode-alist= contains forms that check for image files, HTML/XML/SGML files, PostScript files, and Unix style Conf files.
+
+If you have changed the major mode of a buffer, you can return to the major mode Emacs would have chosen automatically, by typing M-x normal-mode. This is the same function that =find-file= calls to choose the major mode. It also processes the file's ‘-*-' line or local variables list (if any). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Variables][File Variables]].
+
+The commands C-x C-w and =set-visited-file-name= change to a new major mode if the new file name implies a mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]). (C-x C-s does this too, if the buffer wasn't visiting a file.) However, this does not happen if the buffer contents specify a major mode, and certain special major modes do not allow the mode to change. You can turn off this mode-changing feature by setting =change-major-mode-with-file-name= to =nil=.

@@ -1,0 +1,857 @@
+#+TITLE: 15.Search
+
+* 15) Searching and Replacement
+
+Like other editors, Emacs has commands to search for occurrences of a string. Emacs also has commands to replace occurrences of a string with a different string. There are also commands that do the same thing, but search for patterns instead of fixed strings.
+
+You can also search multiple files under the control of =xref= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Identifier-Search][Identifier Search]]) or through the Dired A command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Operating-on-Files][Operating on Files]]), or ask the =grep= program to do it (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Grep-Searching][Grep Searching]]).
+
+* 15.1 Incremental Search
+    :PROPERTIES:
+    :CUSTOM_ID: incremental-search
+    :END:
+
+The principal search command in Emacs is incremental: it begins searching as soon as you type the first character of the search string. As you type in the search string, Emacs shows you where the string (as you have typed it so far) would be found. When you have typed enough characters to identify the place you want, you can stop. Depending on what you plan to do next, you may or may not need to terminate the search explicitly with .
+
+- C-s
+
+  Incremental search forward (=isearch-forward=).
+
+- C-r
+
+  Incremental search backward (=isearch-backward=).
+
+You can also invoke incremental search from the menu bar's 'Edit->Search' menu.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Isearch][Basic Isearch]]: Basic incremental search commands.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repeat-Isearch][Repeat Isearch]]: Searching for the same string again.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Isearch-Yank][Isearch Yank]]: Commands that grab text into the search string or else edit the search string.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Error-in-Isearch][Error in Isearch]]: When your string is not found.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Special-Isearch][Special Isearch]]: Special input in incremental search.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Not-Exiting-Isearch][Not Exiting Isearch]]: Prefix argument and scrolling commands.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Isearch-Minibuffer][Isearch Minibuffer]]: Incremental search of the minibuffer history.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repeat-Isearch][Repeat Isearch]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]
+
+** 15.1.1 Basics of Incremental Search
+     :PROPERTIES:
+     :CUSTOM_ID: basics-of-incremental-search
+     :END:
+
+- C-s
+
+  Begin incremental search (=isearch-forward=).
+
+- C-r
+
+  Begin reverse incremental search (=isearch-backward=).
+
+  C-s (=isearch-forward=) starts a forward incremental search. It reads characters from the keyboard, and moves point just past the end of the next occurrence of those characters in the buffer.
+
+For instance, if you type C-s and then F, that puts the cursor after the first 'F' that occurs in the buffer after the starting point. If you then type O, the cursor moves to just after the first 'FO'; the 'F' in that 'FO' might not be the first 'F' previously found. After another O, the cursor moves to just after the first 'FOO'.
+
+At each step, Emacs highlights the current match---the buffer text that matches the search string---using the =isearch= face (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Faces][Faces]]). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search-Customizations][Search Customizations]], for various options that customize this highlighting. The current search string is also displayed in the echo area.
+
+If you make a mistake typing the search string, type (=isearch-delete-char=). Each cancels the last input item entered during the search. Emacs records a new input item whenever you type a command that changes the search string, the position of point, the success or failure of the search, the direction of the search, the position of the other end of the current search result, or the "wrappedness" of the search. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Error-in-Isearch][Error in Isearch]], for more about dealing with unsuccessful search.
+
+When you are satisfied with the place you have reached, type (=isearch-exit=). This stops searching, leaving the cursor where the search brought it. Also, any command not specially meaningful in searches stops the searching and is then executed. Thus, typing C-a exits the search and then moves to the beginning of the line; typing one of the arrow keys exits the search and performs the respective movement command; etc. is necessary only if the next command you want to type is a printing character, , , or another character that is special within searches (C-q, C-w, C-r, C-s, C-y, M-y, M-r, M-c, M-e, and some others described below). You can fine-tune the commands that exit the search; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Not-Exiting-Isearch][Not Exiting Isearch]].
+
+As a special exception, entering when the search string is empty launches nonincremental search (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Nonincremental-Search][Nonincremental Search]]). (This can be customized; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search-Customizations][Search Customizations]].)
+
+To abandon the search and return to the place where you started, type (=isearch-cancel=) or C-g C-g (=isearch-abort=).
+
+When you exit the incremental search, it adds the original value of point to the mark ring, without activating the mark; you can thus use C-u C- or C-x C-x to return to where you were before beginning the search. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]]. (Emacs only does this if the mark was not already active; if the mark was active when you started the search, both C-u C- and C-x C-x will go to the mark.)
+
+To search backwards, use C-r (=isearch-backward=) instead of C-s to start the search. A backward search finds matches that end before the starting point, just as a forward search finds matches that begin after it.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Isearch-Yank][Isearch Yank]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Isearch][Basic Isearch]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]
+
+** 15.1.2 Repeating Incremental Search
+     :PROPERTIES:
+     :CUSTOM_ID: repeating-incremental-search
+     :END:
+
+Suppose you search forward for 'FOO' and find a match, but not the one you expected to find: the 'FOO' you were aiming for occurs later in the buffer. In this event, type another C-s (=isearch-repeat-forward=) to move to the next occurrence of the search string. You can repeat this any number of times. If you overshoot, you can cancel some C-s commands with . Similarly, each C-r (=isearch-repeat-backward=) in a backward incremental search repeats the backward search.
+
+If you pause for a little while during incremental search, Emacs highlights all the other possible matches for the search string that are present on the screen. This helps you anticipate where you can get to by typing C-s or C-r to repeat the search. The other matches are highlighted differently from the current match, using the customizable face =lazy-highlight= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Faces][Faces]]). If you don't like this feature, you can disable it by setting =isearch-lazy-highlight= to =nil=. For other customizations related to highlighting matches, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search-Customizations][Search Customizations]].
+
+After exiting a search, you can search for the same string again by typing just C-s C-s. The first C-s is the key that invokes incremental search, and the second C-s means to search again for the last search string. Similarly, C-r C-r searches backward for the last search string. In determining the last search string, it doesn't matter whether that string was searched for with C-s or C-r.
+
+If you are searching forward but you realize you were looking for something before the starting point, type C-r to switch to a backward search, leaving the search string unchanged. Similarly, C-s in a backward search switches to a forward search.
+
+If a search is failing and you ask to repeat it by typing another C-s, it starts again from the beginning of the buffer. Repeating a failing reverse search with C-r starts again from the end. This is called wrapping around, and 'Wrapped' appears in the search prompt once this has happened. If you keep on going past the original starting point of the search, it changes to 'Overwrapped', which means that you are revisiting matches that you have already seen.
+
+To reuse earlier search strings, use the search ring. The commands M-p (=isearch-ring-retreat=) and M-n (=isearch-ring-advance=) move through the ring to pick a search string to reuse. These commands leave the selected search ring element in the minibuffer, where you can edit it. Type C-s/C-r or to accept the string and start searching for it. The number of most recently used search strings saved in the search ring is specified by the variable =search-ring-max=, 16 by default.
+
+To edit the current search string in the minibuffer without replacing it with items from the search ring, type M-e (=isearch-edit-string=) or click mouse-1 in the minibuffer. Type , C-s or C-r to finish editing the string and search for it. Type C-f or to add to the search string characters following point from the buffer from which you started the search.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Error-in-Isearch][Error in Isearch]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repeat-Isearch][Repeat Isearch]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]
+
+** 15.1.3 Isearch Yanking
+     :PROPERTIES:
+     :CUSTOM_ID: isearch-yanking
+     :END:
+
+In many cases, you will want to use text at or near point as your search string. The commands described in this subsection let you do that conveniently.
+
+C-w (=isearch-yank-word-or-char=) appends the next character or word at point to the search string. This is an easy way to search for another occurrence of the text at point. (The decision of whether to copy a character or a word is heuristic.)
+
+Similarly, M-s C-e (=isearch-yank-line=) appends the rest of the current line to the search string. If point is already at the end of a line, it appends the next line. With a prefix argument n, it appends the next n lines.
+
+Within incremental search, C-y (=isearch-yank-kill=) appends the current kill to the search string. M-y (=isearch-yank-pop=), if called after C-y, replaces that appended text with an earlier kill, similar to the usual M-y (=yank-pop=) command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Yanking][Yanking]]). Clicking mouse-2 in the echo area appends the current X selection (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Primary-Selection][Primary Selection]]) to the search string (=isearch-yank-x-selection=).
+
+C-M-w (=isearch-del-char=) deletes the last character from the search string, and C-M-y (=isearch-yank-char=) appends the character after point to the search string. An alternative method to add the character after point is to enter the minibuffer with M-e (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repeat-Isearch][Repeat Isearch]]) and type C-f or at the end of the search string in the minibuffer. Each C-f or you type adds another character following point to the search string.
+
+Normally, when the search is case-insensitive, text yanked into the search string is converted to lower case, so that the search remains case-insensitive (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][case folding]]). However, if the value of the variable =search-upper-case= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][search-upper-case]]) is other than =not-yanks=, that disables this down-casing.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Special-Isearch][Special Isearch]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Isearch-Yank][Isearch Yank]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]
+
+** 15.1.4 Errors in Incremental Search
+     :PROPERTIES:
+     :CUSTOM_ID: errors-in-incremental-search
+     :END:
+
+If your string is not found at all, the echo area says 'Failing I-Search', and the cursor moves past the place where Emacs found as much of your string as it could. Thus, if you search for 'FOOT', and there is no 'FOOT', you might see the cursor after the 'FOO' in 'FOOL'. In the echo area, the part of the search string that failed to match is highlighted using the face =isearch-fail=.
+
+At this point, there are several things you can do. If your string was mistyped, use to cancel a previous input item (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Isearch][Basic Isearch]]), C-M-w to erase one character at a time, or M-e to edit it. If you like the place you have found, you can type to remain there. Or you can type C-g, which removes from the search string the characters that could not be found (the 'T' in 'FOOT'), leaving those that were found (the 'FOO' in 'FOOT'). A second C-g at that point cancels the search entirely, returning point to where it was when the search started.
+
+The quit command, C-g, does special things during searches; just what it does depends on the status of the search. If the search has found what you specified and is waiting for input, C-g cancels the entire search, moving the cursor back to where you started the search. If C-g is typed when there are characters in the search string that have not been found---because Emacs is still searching for them, or because it has failed to find them---then the search string characters which have not been found are discarded from the search string. With them gone, the search is now successful and waiting for more input, so a second C-g will cancel the entire search.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Not-Exiting-Isearch][Not Exiting Isearch]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Error-in-Isearch][Error in Isearch]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]
+
+** 15.1.5 Special Input for Incremental Search
+     :PROPERTIES:
+     :CUSTOM_ID: special-input-for-incremental-search
+     :END:
+
+In addition to characters described in the previous subsections, some of the other characters you type during incremental search have special effects. They are described here.
+
+To toggle lax space matching (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][lax space matching]]), type M-s .
+
+To toggle case sensitivity of the search, type M-c or M-s c. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][case folding]]. If the search string includes upper-case letters, the search is case-sensitive by default.
+
+To toggle whether or not the search will consider similar and equivalent characters as a match, type M-s '. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][character folding]]. If the search string includes accented characters, that disables character folding during that search.
+
+To toggle whether or not invisible text is searched, type M-s i (=isearch-toggle-invisible=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Outline-Search][Outline Search]].
+
+To toggle between non-regexp and regexp incremental search, type M-r or M-s r (=isearch-toggle-regexp=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Search][Regexp Search]].
+
+To toggle symbol mode, type M-s \_. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Symbol-Search][Symbol Search]].
+
+To search for a newline character, type C-j as part of the search string.
+
+To search for non-ASCII characters, use one of the following methods:
+
+- Type C-q (=isearch-quote-char=), followed by a non-graphic character or a sequence of octal digits. This adds a character to the search string, similar to inserting into a buffer using C-q (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Inserting-Text][Inserting Text]]). For example, C-q C-s during incremental search adds the 'control-S' character to the search string.
+
+- Type C-x 8 (=isearch-char-by-name=), followed by a Unicode name or code-point in hex. This adds the specified character into the search string, similar to the usual =insert-char= command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Inserting-Text][Inserting Text]]).
+
+- Use an input method (see
+
+  Input Methods
+
+  ). If an input method is enabled in the current buffer when you start the search, the same method will be active in the minibuffer when you type the search string. While typing the search string, you can toggle the input method with
+
+  C-\\
+
+  (
+
+  #+BEGIN_EXAMPLE
+      isearch-toggle-input-method
+  #+END_EXAMPLE
+
+  ). You can also turn on a non-default input method with
+
+  C-\^
+
+  (
+
+  #+BEGIN_EXAMPLE
+      isearch-toggle-specified-input-method
+  #+END_EXAMPLE
+
+  ), which prompts for the name of the input method. When an input method is active during incremental search, the search prompt includes the input method mnemonic, like this:
+
+  #+BEGIN_EXAMPLE
+                I-search [im]:
+  #+END_EXAMPLE
+
+  where im is the mnemonic of the active input method. Any input method you enable during incremental search remains enabled in the current buffer afterwards.
+
+  Typing M-s o in incremental search invokes =isearch-occur=, which runs =occur= with the current search string. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Repeating-Search][occur]].
+
+  Typing M-% (=isearch-query-replace=) in incremental search invokes =query-replace= or =query-replace-regexp= (depending on search mode) with the current search string used as the string to replace. A negative prefix argument means to replace backward. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Query-Replace][Query Replace]]. Typing C-M-% (=isearch-query-replace-regexp=) invokes =query-replace-regexp= with the current search string used as the regexp to replace.
+
+  Typing M- in incremental search invokes =isearch-complete=, which attempts to complete the search string using the search ring (the previous search strings you used) as a list of completion alternatives. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]. In many operating systems, the M- key sequence is captured by the window manager; you then need to rebind =isearch-complete= to another key sequence if you want to use it (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rebinding][Rebinding]]).
+
+  You can exit the search while leaving the matches for the last search string highlighted on display. To this end, type M-s h r (=isearch-highlight-regexp=), which will run =highlight-regexp= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Highlight-Interactively][Highlight Interactively]]) passing it the regexp derived from the last search string and prompting you for the face to use for highlighting. To remove the highlighting, type M-s h u (=unhighlight-regexp=).
+
+  When incremental search is active, you can type C-h C-h (=isearch-help-map=) to access interactive help options, including a list of special key bindings. These key bindings are part of the keymap =isearch-mode-map= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Keymaps][Keymaps]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Isearch-Minibuffer][Isearch Minibuffer]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Special-Isearch][Special Isearch]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]
+
+** 15.1.6 Not Exiting Incremental Search
+     :PROPERTIES:
+     :CUSTOM_ID: not-exiting-incremental-search
+     :END:
+
+This subsection describes how to control whether typing a command not specifically meaningful in searches exits the search before executing the command. It also describes two categories of commands which you can type without exiting the current incremental search, even though they are not themselves part of incremental search.
+
+Normally, typing a command that is not bound by the incremental search exits the search before executing the command. Thus, the command operates on the buffer from which you invoked the search. However, if you customize the variable =search-exit-option= to =nil=, the characters which you type that are not interpreted by the incremental search are simply appended to the search string. This is so you could include in the search string control characters, such as C-a, that would normally exit the search and invoke the command bound to them on the buffer.
+
+- Prefix Arguments
+
+  In incremental search, when you type a command that specifies a prefix argument (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Arguments][Arguments]]), by default it will apply either to the next action in the search or to the command that exits the search. In other words, entering a prefix argument will not by itself terminate the search. In previous versions of Emacs, entering a prefix argument always terminated the search. You can revert to this behavior by setting the variable =isearch-allow-prefix= to =nil=. When =isearch-allow-scroll= is non-=nil= (see below), prefix arguments always have the default behavior described above, i.e., they don't terminate the search, even if =isearch-allow-prefix= is =nil=.
+
+- Scrolling Commands
+
+  Normally, scrolling commands exit incremental search. If you change the variable =isearch-allow-scroll= to a non-=nil= value, that enables the use of the scroll-bar, as well as keyboard scrolling commands like C-v, M-v, and C-l (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Scrolling][Scrolling]]). This applies only to calling these commands via their bound key sequences---typing M-x will still exit the search. You can give prefix arguments to these commands in the usual way. This feature won't let you scroll the current match out of visibility, however. The =isearch-allow-scroll= feature also affects some other commands, such as C-x 2 (=split-window-below=) and C-x \^ (=enlarge-window=), which don't exactly scroll but do affect where the text appears on the screen. It applies to any command whose name has a non-=nil= =isearch-scroll= property. So you can control which commands are affected by changing these properties. For example, to make C-h l usable within an incremental search in all future Emacs sessions, use C-h c to find what command it runs (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Key-Help][Key Help]]), which is =view-lossage=. Then you can put the following line in your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]): =(put 'view-lossage 'isearch-scroll t)= This feature can be applied to any command that doesn't permanently change point, the buffer contents, the match data, the current buffer, or the selected window and frame. The command must not itself attempt an incremental search. This feature is disabled if =isearch-allow-scroll= is =nil= (which it is by default).
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Not-Exiting-Isearch][Not Exiting Isearch]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]
+
+** 15.1.7 Searching the Minibuffer
+     :PROPERTIES:
+     :CUSTOM_ID: searching-the-minibuffer
+     :END:
+
+If you start an incremental search while the minibuffer is active, Emacs searches the contents of the minibuffer. Unlike searching an ordinary buffer, the search string is not shown in the echo area, because that is used to display the minibuffer.
+
+If an incremental search fails in the minibuffer, it tries searching the minibuffer history. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-History][Minibuffer History]]. You can visualize the minibuffer and its history as a series of pages, with the earliest history element on the first page and the current minibuffer on the last page. A forward search, C-s, searches forward to later pages; a reverse search, C-r, searches backwards to earlier pages. Like in ordinary buffer search, a failing search can wrap around, going from the last page to the first page or vice versa.
+
+When the current match is on a history element, that history element is pulled into the minibuffer. If you exit the incremental search normally (e.g., by typing ), it remains in the minibuffer afterwards. Canceling the search, with C-g, restores the contents of the minibuffer when you began the search.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Word-Search][Word Search]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.2 Nonincremental Search
+    :PROPERTIES:
+    :CUSTOM_ID: nonincremental-search
+    :END:
+
+Emacs also has conventional nonincremental search commands, which require you to type the entire search string before searching begins.
+
+- C-s string
+
+  Search for string.
+
+- C-r string
+
+  Search backward for string.
+
+To start a nonincremental search, first type C-s . This enters the minibuffer to read the search string; terminate the string with , and then the search takes place. If the string is not found, the search command signals an error.
+
+When you type C-s , the C-s invokes incremental search as usual. That command is specially programmed to invoke the command for nonincremental search, if the string you specify is empty. (Such an empty argument would otherwise be useless.) C-r does likewise, invoking the nonincremental backward-searching command.
+
+Nonincremental search can also be invoked from the menu bar's 'Edit->Search' menu.
+
+You can also use two simpler commands, M-x search-forward and M-x search-backward. These commands look for the literal strings you specify, and don't support any of the lax-search features (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]]) except case folding.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Symbol-Search][Symbol Search]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Nonincremental-Search][Nonincremental Search]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.3 Word Search
+    :PROPERTIES:
+    :CUSTOM_ID: word-search
+    :END:
+
+A word search finds a sequence of words without regard to the type of punctuation between them. For instance, if you enter a search string that consists of two words separated by a single space, the search matches any sequence of those two words separated by one or more spaces, newlines, or other punctuation characters. This is particularly useful for searching text documents, because you don't have to worry whether the words you are looking for are separated by newlines or spaces. Note that major modes for programming languages or other specialized modes can modify the definition of a word to suit their syntactic needs.
+
+- M-s w
+
+  If incremental search is active, toggle word search mode (=isearch-toggle-word=); otherwise, begin an incremental forward word search (=isearch-forward-word=).
+
+- M-s w words
+
+  Search for words, using a forward nonincremental word search.
+
+- M-s w C-r words
+
+  Search backward for words, using a nonincremental word search.
+
+- M-s M-w
+
+  Search the Web for the text in region.
+
+  To begin a forward incremental word search, type M-s w. If incremental search is not already active, this runs the command =isearch-forward-word=. If incremental search is already active (whether a forward or backward search), M-s w runs the command =isearch-toggle-word=, which switches to a word search while keeping the direction of the search and the current search string unchanged. You can toggle word search back off by typing M-s w again.
+
+  To begin a nonincremental word search, type M-s w for a forward search, or M-s w C-r for a backward search. These run the commands =word-search-forward= and =word-search-backward= respectively.
+
+Incremental and nonincremental word searches differ slightly in the way they find a match. In a nonincremental word search, each word in the search string must exactly match a whole word. In an incremental word search, the matching is more lax: while you are typing the search string, its first and last words need not match whole words. This is so that the matching can proceed incrementally as you type. This additional laxity does not apply to the lazy highlight (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]), which always matches whole words. While you are typing the search string, 'Pending' appears in the search prompt until you use a search repeating key like C-s.
+
+The word search commands don't perform character folding, and toggling lax whitespace matching (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][lax space matching]]) has no effect on them.
+
+To search the Web for the text in region, type M-s M-w. This command performs an Internet search for the words in region using the search engine whose URL is specified by the variable =eww-search-prefix= (see [[https://www.gnu.org/software/emacs/manual/html_mono/eww.html#Basics][EWW]]). If the region is not active, or doesn't contain any words, this command prompts the user for a URL or keywords to search.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Search][Regexp Search]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Word-Search][Word Search]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.4 Symbol Search
+    :PROPERTIES:
+    :CUSTOM_ID: symbol-search
+    :END:
+
+A symbol search is much like an ordinary search, except that the boundaries of the search must match the boundaries of a symbol. The meaning of symbol in this context depends on the major mode, and usually refers to a source code token, such as a Lisp symbol in Emacs Lisp mode. For instance, if you perform an incremental symbol search for the Lisp symbol =forward-word=, it would not match =isearch-forward-word=. This feature is thus mainly useful for searching source code.
+
+- M-s \_
+
+  If incremental search is active, toggle symbol search mode (=isearch-toggle-symbol=); otherwise, begin an incremental forward symbol search (=isearch-forward-symbol=).
+
+- M-s .
+
+  Start a symbol incremental search forward with the symbol found near point added to the search string initially.
+
+- M-s \_ symbol
+
+  Search forward for symbol, nonincrementally.
+
+- M-s \_ C-r symbol
+
+  Search backward for symbol, nonincrementally.
+
+  To begin a forward incremental symbol search, type M-s \_ (or M-s . if the symbol to search is near point). If incremental search is not already active, this runs the command =isearch-forward-symbol=. If incremental search is already active, M-s \_ switches to a symbol search, preserving the direction of the search and the current search string; you can disable symbol search by typing M-s \_ again. In incremental symbol search, while you are typing the search string, only the beginning of the search string is required to match the beginning of a symbol, and 'Pending' appears in the search prompt until you use a search repeating key like C-s.
+
+To begin a nonincremental symbol search, type M-s \_ for a forward search, or M-s \_ C-r or a backward search. In nonincremental symbol searches, the beginning and end of the search string are required to match the beginning and end of a symbol, respectively.
+
+The symbol search commands don't perform character folding, and toggling lax whitespace matching (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][lax space matching]]) has no effect on them.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Symbol-Search][Symbol Search]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.5 Regular Expression Search
+    :PROPERTIES:
+    :CUSTOM_ID: regular-expression-search
+    :END:
+
+A regular expression (or regexp for short) is a pattern that denotes a class of alternative strings to match. Emacs provides both incremental and nonincremental ways to search for a match for a regexp. The syntax of regular expressions is explained in the next section.
+
+- C-M-s
+
+  Begin incremental regexp search (=isearch-forward-regexp=).
+
+- C-M-r
+
+  Begin reverse incremental regexp search (=isearch-backward-regexp=).
+
+  Incremental search for a regexp is done by typing C-M-s (=isearch-forward-regexp=), by invoking C-s with a prefix argument (whose value does not matter), or by typing M-r within a forward incremental search. This command reads a search string incrementally just like C-s, but it treats the search string as a regexp rather than looking for an exact match against the text in the buffer. Each time you add text to the search string, you make the regexp longer, and the new regexp is searched for. To search backward for a regexp, use C-M-r (=isearch-backward-regexp=), C-r with a prefix argument, or M-r within a backward incremental search.
+
+  All of the special key sequences in an ordinary incremental search (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Special-Isearch][Special Isearch]]) do similar things in an incremental regexp search. For instance, typing C-s immediately after starting the search retrieves the last incremental search regexp used and searches forward for it. Incremental regexp and non-regexp searches have independent defaults. They also have separate search rings, which you can access with M-p and M-n. The maximum number of search regexps saved in the search ring is determined by the value of =regexp-search-ring-max=, 16 by default.
+
+Unlike ordinary incremental search, incremental regexp search does not use lax space matching by default. To toggle this feature use M-s (=isearch-toggle-lax-whitespace=). Then any typed in incremental regexp search will match any sequence of one or more whitespace characters. The variable =search-whitespace-regexp= specifies the regexp for the lax space matching. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Special-Isearch][Special Isearch]].
+
+Also unlike ordinary incremental search, incremental regexp search cannot use character folding (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]]). (If you toggle character folding during incremental regexp search with M-s ', the search becomes a non-regexp search and the search pattern you typed is interpreted as a literal string.)
+
+In some cases, adding characters to the regexp in an incremental regexp search can make the cursor move back and start again. For example, if you have searched for 'foo' and you add '|bar', the cursor backs up in case the first 'bar' precedes the first 'foo'. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]].
+
+Forward and backward regexp search are not symmetrical, because regexp matching in Emacs always operates forward, starting with the beginning of the regexp. Thus, forward regexp search scans forward, trying a forward match at each possible starting position. Backward regexp search scans backward, trying a forward match at each possible starting position. These search methods are not mirror images.
+
+Nonincremental search for a regexp is done with the commands =re-search-forward= and =re-search-backward=. You can invoke these with M-x, or by way of incremental regexp search with C-M-s and C-M-r . When you invoke these commands with M-x, they search for the exact regexp you specify, and thus don't support any lax-search features (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]]) except case folding.
+
+If you use the incremental regexp search commands with a prefix argument, they perform ordinary string search, like =isearch-forward= and =isearch-backward=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Backslash][Regexp Backslash]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Search][Regexp Search]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.6 Syntax of Regular Expressions
+    :PROPERTIES:
+    :CUSTOM_ID: syntax-of-regular-expressions
+    :END:
+
+This section (and this manual in general) describes regular expression features that users typically use. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Regular-Expressions][Regular Expressions]], for additional features used mainly in Lisp programs.
+
+Regular expressions have a syntax in which a few characters are special constructs and the rest are ordinary. An ordinary character matches that same character and nothing else. The special characters are ‘$\^.*+?['. The character ‘]' is special if it ends a character alternative (see below). The character '-' is special inside a character alternative. Any other character appearing in a regular expression is ordinary, unless a ‘' precedes it. (When you use regular expressions in a Lisp program, each ‘' must be doubled, see the example near the end of this section.)
+
+For example, 'f' is not a special character, so it is ordinary, and therefore 'f' is a regular expression that matches the string 'f' and no other string. (It does /not/ match the string 'ff'.) Likewise, 'o' is a regular expression that matches only 'o'. (When case distinctions are being ignored, these regexps also match 'F' and 'O', but we consider this a generalization of "the same string", rather than an exception.)
+
+Any two regular expressions a and b can be concatenated. The result is a regular expression which matches a string if a matches some amount of the beginning of that string and b matches the rest of the string. As a trivial example, concatenating the regular expressions 'f' and 'o' gives the regular expression 'fo', which matches only the string 'fo'. To do something less trivial, you need to use one of the special characters. Here is a list of them.
+
+- . (Period)
+
+  is a special character that matches any single character except a newline. For example, the regular expressions 'a.b' matches any three-character string that begins with 'a' and ends with 'b'.
+
+-
+
+  -
+
+  is not a construct by itself; it is a postfix operator that means to match the preceding regular expression repetitively any number of times, as many times as possible. Thus, 'o/' matches any number of ‘o's, including no ‘o's. ‘/' always applies to the /smallest/ possible preceding expression. Thus, 'fo/' has a repeating ‘o', not a repeating ‘fo'. It matches ‘f', ‘fo', ‘foo', and so on. The matcher processes a ‘/' construct by matching, immediately, as many repetitions as can be found. Then it continues with the rest of the pattern. If that fails, backtracking occurs, discarding some of the matches of the '/'-modified construct in case that makes it possible to match the rest of the pattern. For example, in matching ‘ca/ar' against the string 'caaar', the 'a/' first tries to match all three ‘a's; but the rest of the pattern is ‘ar' and there is only ‘r' left to match, so this try fails. The next alternative is for ‘a/' to match only two ‘a's. With this choice, the rest of the regexp matches successfully.
+
+-
+
+  -
+
+  is a postfix operator, similar to '/' except that it must match the preceding expression at least once. Thus, ‘ca+r' matches the strings ‘car' and ‘caaaar' but not the string ‘cr', whereas ‘ca/r' matches all three strings.
+
+- ?
+
+  is a postfix operator, similar to ‘*' except that it can match the preceding expression either once or not at all. Thus, 'ca?r' matches 'car' or 'cr', and nothing else.
+
+- *?, +?, ??
+
+  are non-greedy variants of the operators above. The normal operators '/', ‘+', ‘?' match as much as they can, as long as the overall regexp can still match. With a following ‘?', they will match as little as possible. Thus, both ‘ab/' and 'ab/?' can match the string ‘a' and the string ‘abbbb'; but if you try to match them both against the text ‘abbb', ‘ab/' will match it all (the longest valid match), while 'ab/?' will match just ‘a' (the shortest valid match). Non-greedy operators match the shortest possible string starting at a given starting point; in a forward search, though, the earliest possible starting point for match is always the one chosen. Thus, if you search for ‘a./?$' against the text 'abbab' followed by a newline, it matches the whole string. Since it /can/ match starting at the first 'a', it does.
+
+- {n}
+
+  is a postfix operator specifying n repetitions---that is, the preceding regular expression must match exactly n times in a row. For example, 'x{4}' matches the string 'xxxx' and nothing else.
+
+- {n,m}
+
+  is a postfix operator specifying between n and m repetitions---that is, the preceding regular expression must match at least n times, but no more than m times. If m is omitted, then there is no upper limit, but the preceding regular expression must match at least n times. '{0,1}' is equivalent to '?'. '{0,}' is equivalent to ‘*'. '{1,}' is equivalent to '+'.
+
+- [ ... ]
+
+  is a character set, beginning with '[' and terminated by ‘]'. In the simplest case, the characters between the two brackets are what this set can match. Thus, '[ad]' matches either one 'a' or one 'd', and '[ad]/' matches any string composed of just ‘a's and ‘d's (including the empty string). It follows that ‘c[ad]/r' matches 'cr', 'car', 'cdr', 'caddaar', etc. You can also include character ranges in a character set, by writing the starting and ending characters with a '-' between them. Thus, '[a-z]' matches any lower-case ASCII letter. Ranges may be intermixed freely with individual characters, as in '[a-z$%.]', which matches any lower-case ASCII letter or '$', '%' or period. As another example, '[α-ωί]' matches all lower-case Greek letters. You can also include certain special character classes in a character set. A '[:' and balancing ‘:]' enclose a character class inside a character alternative. For instance, '[[:alnum:]]' matches any letter or digit. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Char-Classes][Char Classes]], for a list of character classes. To include a ']' in a character set, you must make it the first character. For example, '[]a]' matches ']' or 'a'. To include a '-', write '-' as the first or last character of the set, or put it after a range. Thus, '[]-]' matches both ']' and '-'. To include '\^' in a set, put it anywhere but at the beginning of the set. (At the beginning, it complements the set---see below.) When you use a range in case-insensitive search, you should write both ends of the range in upper case, or both in lower case, or both should be non-letters. The behavior of a mixed-case range such as 'A-z' is somewhat ill-defined, and it may change in future Emacs versions.
+
+- [\^ ... ]
+
+  '[\^' begins a complemented character set, which matches any character except the ones specified. Thus, '[\^a-z0-9A-Z]' matches all characters /except/ ASCII letters and digits. '\^' is not special in a character set unless it is the first character. The character following the '\^' is treated as if it were first (in other words, '-' and ']' are not special there). A complemented character set can match a newline, unless newline is mentioned as one of the characters not to match. This is in contrast to the handling of regexps in programs such as =grep=.
+
+- \^
+
+  is a special character that matches the empty string, but only at the beginning of a line in the text being matched. Otherwise it fails to match anything. Thus, '\^foo' matches a 'foo' that occurs at the beginning of a line. For historical compatibility reasons, '\^' can be used with this meaning only at the beginning of the regular expression, or after '(' or '|'.
+
+- $
+
+  is similar to '\^' but matches only at the end of a line. Thus, 'x+$’ matches a string of one ‘x’ or more at the end of a line. For historical compatibility reasons, ‘$' can be used with this meaning only at the end of the regular expression, or before ')' or '|'.
+
+- \\
+
+  has two functions: it quotes the special characters (including ''), and it introduces additional special constructs. Because ‘' quotes special characters, ‘$' is a regular expression that matches only '$', and '[' is a regular expression that matches only '[', and so on. See the following section for the special constructs that begin with ‘'.
+
+Note: for historical compatibility, special characters are treated as ordinary ones if they are in contexts where their special meanings make no sense. For example, '/foo' treats ‘/' as ordinary since there is no preceding expression on which the ‘*' can act. It is poor practice to depend on this behavior; it is better to quote the special character anyway, regardless of where it appears.
+
+As a '' is not special inside a character alternative, it can never remove the special meaning of ‘-' or ']'. So you should not quote these characters when they have no special meaning either. This would not clarify anything, since backslashes can legitimately precede these characters where they /have/ special meaning, as in '[\^\]' (="[^\\]"= for Lisp string syntax), which matches any single character except a backslash.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Example][Regexp Example]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.7 Backslash in Regular Expressions
+    :PROPERTIES:
+    :CUSTOM_ID: backslash-in-regular-expressions
+    :END:
+
+For the most part, ‘' followed by any character matches only that character. However, there are several exceptions: two-character sequences starting with ‘' that have special meanings. The second character in the sequence is always an ordinary character when used on its own. Here is a table of ‘' constructs.
+
+- |
+
+  specifies an alternative. Two regular expressions a and b with '|' in between form an expression that matches some text if either a matches it or b matches it. It works by trying to match a, and if that fails, by trying to match b. Thus, 'foo|bar' matches either 'foo' or 'bar' but no other string. '|' applies to the largest possible surrounding expressions. Only a surrounding '( ... )' grouping can limit the grouping power of '|'. Full backtracking capability exists to handle multiple uses of '|'.
+
+- ( ... )
+
+  is a grouping construct that serves three purposes: To enclose a set of '|' alternatives for other operations. Thus, '(foo|bar)x' matches either 'foox' or 'barx'. To enclose a complicated expression for the postfix operators '/', ‘+' and ‘?' to operate on. Thus, ‘ba(na)/' matches 'bananana', etc., with any (zero or more) number of 'na' strings. To record a matched substring for future reference. This last application is not a consequence of the idea of a parenthetical grouping; it is a separate feature that is assigned as a second meaning to the same '( ... )' construct. In practice there is usually no conflict between the two meanings; when there is a conflict, you can use a shy group, described below.
+
+- (?: ... )
+
+  specifies a shy group that does not record the matched substring; you can't refer back to it with '\d' (see below). This is useful in mechanically combining regular expressions, so that you can add groups for syntactic purposes without interfering with the numbering of the groups that are meant to be referred to.
+
+- \d
+  matches the same text that matched the dth occurrence of a '( ... )' construct. This is called a back reference. After the end of a '( ... )' construct, the matcher remembers the beginning and end of the text matched by that construct. Then, later on in the regular expression, you can use '' followed by the digit d to mean "match the same text matched the dth time by the '( ... )' construct". The strings matching the first nine ‘( ... )' constructs appearing in a regular expression are assigned numbers 1 through 9 in the order that the open-parentheses appear in the regular expression. So you can use '\1' through '\9' to refer to the text matched by the corresponding '( ... )' constructs. For example, '(./)\1' matches any newline-free string that is composed of two identical halves. The ‘(./)' matches the first half, which may be anything, but the '\1' that follows must match the same exact text. If a particular '( ... )' construct matches more than once (which can easily happen if it is followed by ‘*'), only the last match is recorded.
+
+- `
+
+  matches the empty string, but only at the beginning of the string or buffer (or its accessible portion) being matched against.
+
+- '
+
+  matches the empty string, but only at the end of the string or buffer (or its accessible portion) being matched against.
+
+- =
+
+  matches the empty string, but only at point.
+
+- \b
+  matches the empty string, but only at the beginning or end of a word. Thus, '\bfoo\b' matches any occurrence of 'foo' as a separate word. '\bballs?\b' matches 'ball' or 'balls' as a separate word. '\b' matches at the beginning or end of the buffer regardless of what text appears next to it.
+
+- \B
+  matches the empty string, but /not/ at the beginning or end of a word.
+
+- <
+
+  matches the empty string, but only at the beginning of a word. '<' matches at the beginning of the buffer only if a word-constituent character follows.
+
+- >
+
+  matches the empty string, but only at the end of a word. '>' matches at the end of the buffer only if the contents end with a word-constituent character.
+
+- \w
+  matches any word-constituent character. The syntax table determines which characters these are. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Syntax-Tables][Syntax Tables]].
+
+- \W
+
+  matches any character that is not a word-constituent.
+
+- \_<
+
+  matches the empty string, but only at the beginning of a symbol. A symbol is a sequence of one or more symbol-constituent characters. A symbol-constituent character is a character whose syntax is either 'w' or ‘\_'. '\_<' matches at the beginning of the buffer only if a symbol-constituent character follows. As with words, the syntax table determines which characters are symbol-constituent.
+
+- \_>
+
+  matches the empty string, but only at the end of a symbol. '\_>' matches at the end of the buffer only if the contents end with a symbol-constituent character.
+
+- \sc
+  matches any character whose syntax is c. Here c is a character that designates a particular syntax class: thus, 'w' for word constituent, '-' or ‘ ' for whitespace, '.' for ordinary punctuation, etc. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Syntax-Tables][Syntax Tables]].
+
+- \Sc
+  matches any character whose syntax is not c.
+
+- \cc
+  matches any character that belongs to the category c. For example, '\cc' matches Chinese characters, '\cg' matches Greek characters, etc. For the description of the known categories, type M-x describe-categories .
+
+- \Cc
+  matches any character that does /not/ belong to category c.
+
+The constructs that pertain to words and syntax are controlled by the setting of the syntax table. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Syntax-Tables][Syntax Tables]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Backslash][Regexp Backslash]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.8 Regular Expression Example
+    :PROPERTIES:
+    :CUSTOM_ID: regular-expression-example
+    :END:
+
+Here is an example of a regexp---similar to the regexp that Emacs uses, by default, to recognize the end of a sentence, not including the following space (i.e., the variable =sentence-end-base=):
+
+#+BEGIN_EXAMPLE
+         [.?!][]\"')}]*
+#+END_EXAMPLE
+
+This contains two parts in succession: a character set matching period, '?', or '!', and a character set matching close-brackets, quotes, or parentheses, repeated zero or more times.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replace][Replace]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Example][Regexp Example]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.9 Lax Matching During Searching
+    :PROPERTIES:
+    :CUSTOM_ID: lax-matching-during-searching
+    :END:
+
+Normally, you'd want search commands to disregard certain minor differences between the search string you type and the text being searched. For example, sequences of whitespace characters of different length are usually perceived as equivalent; letter-case differences usually don't matter; etc. This is known as character equivalence.
+
+This section describes the Emacs lax search features, and how to tailor them to your needs.
+
+By default, search commands perform lax space matching: each space, or sequence of spaces, matches any sequence of one or more whitespace characters in the text. (Incremental regexp search has a separate default; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Search][Regexp Search]].) Hence, 'foo bar' matches 'foo bar', 'foo bar', 'foo bar', and so on (but not 'foobar'). More precisely, Emacs matches each sequence of space characters in the search string to a regular expression specified by the variable =search-whitespace-regexp=. For example, to make spaces match sequences of newlines as well as spaces, set it to '"[[:space:]\n]+"'. The default value of this variable depends on the buffer's major mode; most major modes classify spaces, tabs, and formfeed characters as whitespace.
+
+If you want whitespace characters to match exactly, you can turn lax space matching off by typing M-s (=isearch-toggle-lax-whitespace=) within an incremental search. Another M-s turns lax space matching back on. To disable lax whitespace matching for all searches, change =search-whitespace-regexp= to =nil=; then each space in the search string matches exactly one space.
+
+Searches in Emacs by default ignore the case of the text they are searching through, if you specify the search string in lower case. Thus, if you specify searching for 'foo', then 'Foo' and 'fOO' also match. Regexps, and in particular character sets, behave likewise: '[ab]' matches 'a' or 'A' or 'b' or 'B'. This feature is known as case folding, and it is supported in both incremental and non-incremental search modes.
+
+An upper-case letter anywhere in the search string makes the search case-sensitive. Thus, searching for 'Foo' does not find 'foo' or 'FOO'. This applies to regular expression search as well as to literal string search. The effect ceases if you delete the upper-case letter from the search string. The variable =search-upper-case= controls this: if it is non-=nil= (the default), an upper-case character in the search string makes the search case-sensitive; setting it to =nil= disables this effect of upper-case characters.
+
+If you set the variable =case-fold-search= to =nil=, then all letters must match exactly, including case. This is a per-buffer variable; altering the variable normally affects only the current buffer, unless you change its default value. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Locals][Locals]]. This variable applies to nonincremental searches also, including those performed by the replace commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replace][Replace]]) and the minibuffer history matching commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-History][Minibuffer History]]).
+
+Typing M-c or M-s c (=isearch-toggle-case-fold=) within an incremental search toggles the case sensitivity of that search. The effect does not extend beyond the current incremental search, but it does override the effect of adding or removing an upper-case letter in the current search.
+
+Several related variables control case-sensitivity of searching and matching for specific commands or activities. For instance, =tags-case-fold-search= controls case sensitivity for =find-tag=. To find these variables, do M-x apropos-variable case-fold-search .
+
+Case folding disregards case distinctions among characters, making upper-case characters match lower-case variants, and vice versa. A generalization of case folding is character folding, which disregards wider classes of distinctions among similar characters. For instance, under character folding the letter =a= matches all of its accented cousins like =ä= and =á=, i.e., the match disregards the diacritics that distinguish these variants. In addition, =a= matches other characters that resemble it, or have it as part of their graphical representation, such as U+249C parenthesized latin small letter a and U+2100 account of (which looks like a small =a= over =c=). Similarly, the ASCII double-quote character ="= matches all the other variants of double quotes defined by the Unicode standard. Finally, character folding can make a sequence of one or more characters match another sequence of a different length: for example, the sequence of two characters =ff= matches U+FB00 latin small ligature ff. Character sequences that are not identical, but match under character folding are known as equivalent character sequences.
+
+Generally, search commands in Emacs do not by default perform character folding in order to match equivalent character sequences. You can enable this behavior by customizing the variable =search-default-mode= to =char-fold-to-regexp=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search-Customizations][Search Customizations]]. Within an incremental search, typing M-s ' (=isearch-toggle-char-fold=) toggles character folding, but only for that search. (Replace commands have a different default, controlled by a separate option; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replacement-and-Lax-Matches][Replacement and Lax Matches]].)
+
+Like with case folding, typing an explicit variant of a character, such as =ä=, as part of the search string disables character folding for that search. If you delete such a character from the search string, this effect ceases.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Repeating-Search][Other Repeating Search]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.10 Replacement Commands
+    :PROPERTIES:
+    :CUSTOM_ID: replacement-commands
+    :END:
+
+Emacs provides several commands for performing search-and-replace operations. In addition to the simple M-x replace-string command, there is M-% (=query-replace=), which presents each occurrence of the search pattern and asks you whether to replace it.
+
+The replace commands normally operate on the text from point to the end of the buffer. When the region is active, they operate on it instead (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]). The basic replace commands replace one search string (or regexp) with one replacement string. It is possible to perform several replacements in parallel, using the command =expand-region-abbrevs= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Expanding-Abbrevs][Expanding Abbrevs]]).
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Unconditional-Replace][Unconditional Replace]]: Replacing all matches for a string.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Replace][Regexp Replace]]: Replacing all matches for a regexp.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replacement-and-Lax-Matches][Replacement and Lax Matches]] Lax searching for text to replace.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Query-Replace][Query Replace]]: How to use querying.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Replace][Regexp Replace]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replace][Replace]]
+
+** 15.10.1 Unconditional Replacement
+     :PROPERTIES:
+     :CUSTOM_ID: unconditional-replacement
+     :END:
+
+​
+
+- M-x replace-string string newstring
+
+  Replace every occurrence of string with newstring.
+
+To replace every instance of 'foo' after point with 'bar', use the command M-x replace-string with the two arguments 'foo' and 'bar'. Replacement happens only in the text after point, so if you want to cover the whole buffer you must go to the beginning first. All occurrences up to the end of the buffer are replaced; to limit replacement to part of the buffer, activate the region around that part. When the region is active, replacement is limited to the region (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]).
+
+When =replace-string= exits, it leaves point at the last occurrence replaced. It adds the prior position of point (where the =replace-string= command was issued) to the mark ring, without activating the mark; use C-u C- to move back there. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]].
+
+A prefix argument restricts replacement to matches that are surrounded by word boundaries.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replacement-and-Lax-Matches][Replacement and Lax Matches]], for details about case-sensitivity and character folding in replace commands.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replacement-and-Lax-Matches][Replacement and Lax Matches]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Unconditional-Replace][Unconditional Replace]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replace][Replace]]
+
+** 15.10.2 Regexp Replacement
+     :PROPERTIES:
+     :CUSTOM_ID: regexp-replacement
+     :END:
+
+The M-x replace-string command replaces exact matches for a single string. The similar command M-x replace-regexp replaces any match for a specified regular expression pattern (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]]).
+
+- M-x replace-regexp regexp newstring
+
+  Replace every match for regexp with newstring.
+
+  In =replace-regexp=, the newstring need not be constant: it can refer to all or part of what is matched by the regexp. '&' in newstring stands for the entire match being replaced. '\d' in newstring, where d is a digit starting from 1, stands for whatever matched the dth parenthesized grouping in regexp. (This is called a "back reference".) '#' refers to the count of replacements already made in this command, as a decimal number. In the first replacement, '#' stands for '0'; in the second, for '1'; and so on. For example,
+
+#+BEGIN_EXAMPLE
+         M-x replace-regexp <RET> c[ad]+r <RET> \&-safe <RET>
+#+END_EXAMPLE
+
+replaces (for example) 'cadr' with 'cadr-safe' and 'cddr' with 'cddr-safe'.
+
+#+BEGIN_EXAMPLE
+         M-x replace-regexp <RET> \(c[ad]+r\)-safe <RET> \1 <RET>
+#+END_EXAMPLE
+
+performs the inverse transformation. To include a '' in the text to replace with, you must enter ‘\'.
+
+If you want to enter part of the replacement string by hand each time, use '?' in the replacement string. Each replacement will ask you to edit the replacement string in the minibuffer, putting point where the '?' was.
+
+The remainder of this subsection is intended for specialized tasks and requires knowledge of Lisp. Most readers can skip it.
+
+You can use Lisp expressions to calculate parts of the replacement string. To do this, write ',' followed by the expression in the replacement string. Each replacement calculates the value of the expression and converts it to text without quoting (if it's a string, this means using the string's contents), and uses it in the replacement string in place of the expression itself. If the expression is a symbol, one space in the replacement string after the symbol name goes with the symbol name, so the value replaces them both.
+
+Inside such an expression, you can use some special sequences. '&' and '\d' refer here, as usual, to the entire match as a string, and to a submatch as a string. d may be multiple digits, and the value of '\d' is =nil= if the d'th parenthesized grouping did not match. You can also use '#&' and '#d' to refer to those matches as numbers (this is valid when the match or submatch has the form of a numeral). '#' here too stands for the number of already-completed replacements.
+
+For example, we can exchange 'x' and 'y' this way:
+
+#+BEGIN_EXAMPLE
+         M-x replace-regexp <RET> \(x\)\|y <RET>
+         \,(if \1 "y" "x") <RET>
+#+END_EXAMPLE
+
+For computing replacement strings for ',', the =format= function is often useful (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Formatting-Strings][Formatting Strings]]). For example, to add consecutively numbered strings like 'ABC00042' to columns 73 to 80 (unless they are already occupied), you can use
+
+#+BEGIN_EXAMPLE
+         M-x replace-regexp <RET> ^.\{0,72\}$ <RET>
+         \,(format "%-72sABC%05d" \& \#) <RET>
+#+END_EXAMPLE
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Query-Replace][Query Replace]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexp-Replace][Regexp Replace]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replace][Replace]]
+
+** 15.10.3 Replace Commands and Lax Matches
+     :PROPERTIES:
+     :CUSTOM_ID: replace-commands-and-lax-matches
+     :END:
+
+This subsection describes the behavior of replace commands with respect to lax matches (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]]) and how to customize it. In general, replace commands mostly default to stricter matching than their search counterparts.
+
+Unlike incremental search, the replacement commands do not use lax space matching (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][lax space matching]]) by default. To enable lax space matching for replacement, change the variable =replace-lax-whitespace= to non-=nil=. (This only affects how Emacs finds the text to replace, not the replacement text.)
+
+A companion variable =replace-regexp-lax-whitespace= controls whether =query-replace-regexp= uses lax whitespace matching when searching for patterns.
+
+If the first argument of a replace command is all lower case, the command ignores case while searching for occurrences to replace---provided =case-fold-search= is non-=nil=. If =case-fold-search= is set to =nil=, case is always significant in all searches.
+
+In addition, when the newstring argument is all or partly lower case, replacement commands try to preserve the case pattern of each occurrence. Thus, the command
+
+#+BEGIN_EXAMPLE
+         M-x replace-string <RET> foo <RET> bar <RET>
+#+END_EXAMPLE
+
+replaces a lower case 'foo' with a lower case 'bar', an all-caps 'FOO' with 'BAR', and a capitalized 'Foo' with 'Bar'. (These three alternatives---lower case, all caps, and capitalized, are the only ones that =replace-string= can distinguish.)
+
+If upper-case letters are used in the replacement string, they remain upper case every time that text is inserted. If upper-case letters are used in the first argument, the second argument is always substituted exactly as given, with no case conversion. Likewise, if either =case-replace= or =case-fold-search= is set to =nil=, replacement is done without case conversion.
+
+The replacement commands by default do not use character folding (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][character folding]]) when looking for the text to replace. To enable character folding for matching in =query-replace= and =replace-string=, set the variable =replace-char-fold= to a non-=nil= value. (This setting does not affect the replacement text, only how Emacs finds the text to replace. It also doesn't affect =replace-regexp=.)
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replacement-and-Lax-Matches][Replacement and Lax Matches]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replace][Replace]]
+
+** 15.10.4 Query Replace
+     :PROPERTIES:
+     :CUSTOM_ID: query-replace
+     :END:
+
+​
+
+- M-% string newstring
+
+  Replace some occurrences of string with newstring.
+
+- C-M-% regexp newstring
+
+  Replace some matches for regexp with newstring.
+
+  If you want to change only some of the occurrences of 'foo' to 'bar', not all of them, use M-% (=query-replace=). This command finds occurrences of 'foo' one by one, displays each occurrence and asks you whether to replace it. Aside from querying, =query-replace= works just like =replace-string= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Unconditional-Replace][Unconditional Replace]]). In particular, it preserves case provided =case-replace= is non-=nil=, as it normally is (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replacement-and-Lax-Matches][Replacement and Lax Matches]]). A numeric argument means to consider only occurrences that are bounded by word-delimiter characters. A negative prefix argument replaces backward.
+
+  C-M-% performs regexp search and replace (=query-replace-regexp=). It works like =replace-regexp= except that it queries like =query-replace=.
+
+  You can reuse earlier replacements with these commands. When =query-replace= or =query-replace-regexp= prompts for the search string, use M-p and M-n to show previous replacements in the form 'from -> to', where from is the search pattern, to is its replacement, and the separator between them is determined by the value of the variable =query-replace-from-to-separator=. Type to select the desired replacement. If the value of this variable is =nil=, replacements are not added to the command history, and cannot be reused.
+
+  These commands highlight the current match using the face =query-replace=. You can disable this highlight by setting the variable =query-replace-highlight= to =nil=. They highlight other matches using =lazy-highlight= just like incremental search (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]); this can be disabled by setting =query-replace-lazy-highlight= to =nil=. By default, =query-replace-regexp= will show the substituted replacement string for the current match in the minibuffer. If you want to keep special sequences '&' and '\n' unexpanded, customize =query-replace-show-replacement= variable.
+
+  The variable =query-replace-skip-read-only=, if set non-=nil=, will cause replacement commands to ignore matches in read-only text. The default is not to ignore them.
+
+The characters you can type when you are shown a match for the string or regexp are:
+
+-
+
+- y
+
+  to replace the occurrence with newstring.
+
+-
+
+  #+BEGIN_HTML
+    <DEL>
+  #+END_HTML
+
+-
+
+-
+
+- n
+
+  to skip to the next occurrence without replacing this one.
+
+- , (Comma)
+
+  to replace this occurrence and display the result. You are then asked for another input character to say what to do next. Since the replacement has already been made, and are equivalent in this situation; both move to the next occurrence. You can type C-r at this point (see below) to alter the replaced text. You can also undo the replacement with the =undo= command (e.g., type C-x u; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Undo][Undo]]); this exits the =query-replace=, so if you want to do further replacement you must use C-x to restart (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repetition][Repetition]]).
+
+-
+
+- q
+
+  to exit without doing any more replacements.
+
+- . (Period)
+
+  to replace this occurrence and then exit without searching for more occurrences.
+
+- !
+
+  to replace all remaining occurrences without asking again.
+
+- \^
+
+  to go back to the position of the previous occurrence (or what used to be an occurrence), in case you changed it by mistake or want to reexamine it.
+
+- u
+
+  to undo the last replacement and go back to where that replacement was made.
+
+- U
+
+  to undo all the replacements and go back to where the first replacement was made.
+
+- C-r
+
+  to enter a recursive editing level, in case the occurrence needs to be edited rather than just replaced with newstring. When you are done, exit the recursive editing level with C-M-c to proceed to the next occurrence. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recursive-Edit][Recursive Edit]].
+
+- C-w
+
+  to delete the occurrence, and then enter a recursive editing level as in C-r. Use the recursive edit to insert text to replace the deleted occurrence of string. When done, exit the recursive editing level with C-M-c to proceed to the next occurrence.
+
+- e
+
+  to edit the replacement string in the minibuffer. When you exit the minibuffer by typing , the minibuffer contents replace the current occurrence of the pattern. They also become the new replacement string for any further occurrences.
+
+- C-l
+
+  to redisplay the screen. Then you must type another character to specify what to do with this occurrence.
+
+- Y (Upper-case)
+
+  to replace all remaining occurrences in all remaining buffers in multi-buffer replacements (like the Dired Q command that performs query replace on selected files). It answers this question and all subsequent questions in the series with "yes", without further user interaction.
+
+- N (Upper-case)
+
+  to skip to the next buffer in multi-buffer replacements without replacing remaining occurrences in the current buffer. It answers this question "no", gives up on the questions for the current buffer, and continues to the next buffer in the sequence.
+
+- C-h
+
+- ?
+
+-
+
+  to display a message summarizing these options. Then you must type another character to specify what to do with this occurrence.
+
+Aside from this, any other character exits the =query-replace=, and is then reread as part of a key sequence. Thus, if you type C-k, it exits the =query-replace= and then kills to end of line. In particular, C-g simply exits the =query-replace=.
+
+To restart a =query-replace= once it is exited, use C-x , which repeats the =query-replace= because it used the minibuffer to read its arguments. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repetition][C-x]].
+
+The option =search-invisible= determines how =query-replace= treats invisible text. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Outline-Search][Outline Search]].
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Operating-on-Files][Operating on Files]], for the Dired Q command which performs query replace on selected files. See also [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Transforming-File-Names][Transforming File Names]], for Dired commands to rename, copy, or link files by replacing regexp matches in file names.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search-Customizations][Search Customizations]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Replace][Replace]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.11 Other Search-and-Loop Commands
+    :PROPERTIES:
+    :CUSTOM_ID: other-search-and-loop-commands
+    :END:
+
+Here are some other commands that find matches for a regular expression. They all ignore case in matching, if the pattern contains no upper-case letters and =case-fold-search= is non-=nil=. Aside from =multi-occur= and =multi-occur-in-matching-buffers=, which always search the whole buffer, all operate on the text from point to the end of the buffer, or on the region if it is active.
+
+- M-x multi-isearch-buffers
+
+  Prompt for one or more buffer names, ending with ; then, begin a multi-buffer incremental search in those buffers. (If the search fails in one buffer, the next C-s tries searching the next specified buffer, and so forth.) With a prefix argument, prompt for a regexp and begin a multi-buffer incremental search in buffers matching that regexp.
+
+- M-x multi-isearch-buffers-regexp
+
+  This command is just like =multi-isearch-buffers=, except it performs an incremental regexp search.
+
+- M-x multi-isearch-files
+
+  Prompt for one or more file names, ending with ; then, begin a multi-file incremental search in those files. (If the search fails in one file, the next C-s tries searching the next specified file, and so forth.) With a prefix argument, prompt for a regexp and begin a multi-file incremental search in files matching that regexp.
+
+- M-x multi-isearch-files-regexp
+
+  This command is just like =multi-isearch-files=, except it performs an incremental regexp search. In some modes that set the buffer-local variable =multi-isearch-next-buffer-function= (e.g., in Change Log mode) a multi-file incremental search is activated automatically.
+
+- M-x occur
+
+- M-s o
+
+  Prompt for a regexp, and display a list showing each line in the buffer that contains a match for it. If you type M-n at the prompt, you can reuse search strings from previous incremental searches. The text that matched is highlighted using the =match= face. A numeric argument n specifies that n lines of context are to be displayed before and after each matching line. The default number of context lines is specified by the variable =list-matching-lines-default-context-lines=. When =list-matching-lines-jump-to-current-line= is non-=nil= the current line is shown highlighted with face =list-matching-lines-current-line-face= and the point is set at the first match after such line. You can also run M-s o when an incremental search is active; this uses the current search string. Note that matches for the regexp you type are extended to include complete lines, and a match that starts before the previous match ends is not considered a match. In the /Occur/ buffer, you can click on each entry, or move point there and type , to visit the corresponding position in the buffer that was searched. o and C-o display the match in another window; C-o does not select it. Alternatively, you can use the C-x =(=next-error`) command to visit the occurrences one by one (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation-Mode][Compilation Mode]]). Typing e in the /Occur/ buffer switches to Occur Edit mode, in which edits made to the entries are also applied to the text in the originating buffer. Type C-c C-c to return to Occur mode. The command M-x list-matching-lines is a synonym for M-x occur.
+
+- M-x multi-occur
+
+  This command is just like =occur=, except it is able to search through multiple buffers. It asks you to specify the buffer names one by one.
+
+- M-x multi-occur-in-matching-buffers
+
+  This command is similar to =multi-occur=, except the buffers to search are specified by a regular expression that matches visited file names. With a prefix argument, it uses the regular expression to match buffer names instead.
+
+- M-x how-many
+
+  Prompt for a regexp, and print the number of matches for it in the buffer after point. If the region is active, this operates on the region instead.
+
+- M-x flush-lines
+
+  Prompt for a regexp, and delete each line that contains a match for it, operating on the text after point. This command deletes the current line if it contains a match starting after point. If the region is active, it operates on the region instead; if a line partially contained in the region contains a match entirely contained in the region, it is deleted. If a match is split across lines, =flush-lines= deletes all those lines. It deletes the lines before starting to look for the next match; hence, it ignores a match starting on the same line at which another match ended.
+
+- M-x keep-lines
+
+  Prompt for a regexp, and delete each line that /does not/ contain a match for it, operating on the text after point. If point is not at the beginning of a line, this command always keeps the current line. If the region is active, the command operates on the region instead; it never deletes lines that are only partially contained in the region (a newline that ends a line counts as part of that line). If a match is split across lines, this command keeps all those lines.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Repeating-Search][Other Repeating Search]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]]
+
+* 15.12 Tailoring Search to Your Needs
+    :PROPERTIES:
+    :CUSTOM_ID: tailoring-search-to-your-needs
+    :END:
+
+This section describes miscellaneous search-related customizations not described elsewhere.
+
+The default search mode for the incremental search is specified by the variable =search-default-mode=. It can be =nil=, =t=, or a function. If it is =nil=, the default mode is to do literal searches without character folding, but with case folding and lax-whitespace matches as determined by =case-fold-search= and =search-whitespace-regexp=, respectively (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lax-Search][Lax Search]]). If the value is =t=, incremental search defaults to regexp searches. The default value specifies a function that only performs case folding and lax-whitespace matching.
+
+The current match of an on-going incremental search is highlighted using the =isearch= face. This highlighting can be disabled by setting the variable =search-highlight= to =nil=.
+
+The other matches for the search string that are visible on display are highlighted using the =lazy-highlight= face. Setting the variable =isearch-lazy-highlight= to =nil= disables this highlighting. Here are some other variables that customize the lazy highlighting:
+
+- =lazy-highlight-initial-delay=
+
+  Time in seconds to wait before highlighting visible matches.
+
+- =lazy-highlight-interval=
+
+  Time in seconds between highlighting successive matches.
+
+- =lazy-highlight-max-at-a-time=
+
+  The maximum number of matches to highlight before checking for input. A large number can take some time to highlight, so if you want to continue searching and type C-s or C-r during that time, Emacs will not respond until it finishes highlighting all those matches. Thus, smaller values make Emacs more responsive.
+
+  Normally, entering within incremental search when the search string is empty launches a nonincremental search. (Actually, it lets you edit the search string, and the next does the search.) However, if you customize the variable =search-nonincremental-instead= to =nil=, typing will always exit the incremental search, even if the search string is empty.
+
+  By default, incremental search and query-replace commands match invisible text, but hide any such matches as soon as the current match moves off the invisible text. If you customize the variable =isearch-hide-immediately= to =nil=, any invisible text where matches were found stays on display until the search or the replace command exits.
+
+  Searching incrementally on slow terminals, such as displays connected to remote machines over slow connection, could be annoying due to the need to redraw large portions of the display as the search proceeds. Emacs provides a special display mode for slow terminals, whereby search pops up a separate small window and displays the text surrounding the match in that window. Small windows display faster, so the annoying effect of slow speed is alleviated. The variable =search-slow-speed= determines the baud rate threshold below which Emacs will use this display mode. The variable =search-slow-window-lines= controls the number of lines in the window Emacs pops up for displaying the search results; the default is 1 line. Normally, this window will pop up at the bottom of the window that displays the buffer where you start searching, but if the value of =search-slow-window-lines= is negative, that means to put the window at the top and give it the number of lines that is the absolute value of =search-slow-window-lines=.

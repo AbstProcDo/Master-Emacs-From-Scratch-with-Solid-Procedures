@@ -1,0 +1,1049 @@
+* 18) File Handling
+   :PROPERTIES:
+   :CUSTOM_ID: file-handling
+   :END:
+
+The operating system stores data permanently in named files, so most of the text you edit with Emacs comes from a file and is ultimately stored in a file.
+
+To edit a file, you must tell Emacs to read the file and prepare a buffer containing a copy of the file's text. This is called visiting the file. Editing commands apply directly to text in the buffer; that is, to the copy inside Emacs. Your changes appear in the file itself only when you save the buffer back into the file.
+
+In addition to visiting and saving files, Emacs can delete, copy, rename, and append to files, keep multiple versions of them, and operate on file directories.
+
+1) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]]: How to type and edit file-name arguments.
+2) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]]: Visiting a file prepares Emacs to edit the file.
+3) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]: Saving makes your changes permanent.
+4) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Reverting][Reverting]]: Reverting cancels all the changes not saved.
+5) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Autorevert][Autorevert]]: Auto Reverting non-file buffers.
+6) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]]: Auto Save periodically protects against loss of data.
+7) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Aliases][File Aliases]]: Handling multiple names for one file.
+8) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Directories][Directories]]: Creating, deleting, and listing file directories.
+9) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]]: Finding where two files differ.
+10) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Diff-Mode][Diff Mode]]: Mode for editing file differences.
+11) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Copying-and-Naming][Copying and Naming]]: Copying, naming and renaming files.
+12) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-File-Ops][Misc File Ops]]: Other things you can do on files.
+13) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compressed-Files][Compressed Files]]: Accessing compressed files.
+14) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Archives][File Archives]]: Operating on tar, zip, jar etc. archive files.
+15) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]]: Accessing files on other machines.
+16) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]]: Quoting special characters in file names.
+17) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Name-Cache][File Name Cache]]: Completion against a list of files you often use.
+18) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Conveniences][File Conveniences]]: Convenience Features for Finding Files.
+19) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filesets][Filesets]]: Handling sets of files.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.1 File Names
+    :PROPERTIES:
+    :CUSTOM_ID: file-names
+    :END:
+
+Many Emacs commands that operate on a file require you to specify the file name, using the minibuffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-File][Minibuffer File]]).
+
+While in the minibuffer, you can use the usual completion and history commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]]). Note that file name completion ignores file names whose extensions appear in the variable =completion-ignored-extensions= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Options][Completion Options]]). Note also that most commands use permissive completion with confirmation for reading file names: you are allowed to submit a nonexistent file name, but if you type immediately after completing up to a nonexistent file name, Emacs prints '[Confirm]' and you must type a second to confirm. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Exit][Completion Exit]], for details.
+
+Minibuffer history commands offer some special features for reading file names, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-History][Minibuffer History]].
+
+Each buffer has a default directory, stored in the buffer-local variable =default-directory=. Whenever Emacs reads a file name using the minibuffer, it usually inserts the default directory into the minibuffer as the initial contents. You can inhibit this insertion by changing the variable =insert-default-directory= to =nil= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-File][Minibuffer File]]). Regardless, Emacs always assumes that any relative file name is relative to the default directory, e.g., entering a file name without a directory specifies a file in the default directory.
+
+When you visit a file, Emacs sets =default-directory= in the visiting buffer to the directory of its file. When you create a new buffer that is not visiting a file, via a command like C-x b, its default directory is usually copied from the buffer that was current at the time (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Select-Buffer][Select Buffer]]). You can use the command M-x pwd to see the value of =default-directory= in the current buffer. The command M-x cd prompts for a directory's name, and sets the buffer's =default-directory= to that directory (doing this does not change the buffer's file name, if any).
+
+As an example, when you visit the file /u/rms/gnu/gnu.tasks, the default directory is set to /u/rms/gnu/. If you invoke a command that reads a file name, entering just 'foo' in the minibuffer, with a directory omitted, specifies the file /u/rms/gnu/foo; entering '../.login' specifies /u/rms/.login; and entering 'new/foo' specifies /u/rms/gnu/new/foo.
+
+When typing a file name into the minibuffer, you can make use of a couple of shortcuts: a double slash ignores everything before the second slash in the pair, and '~/' is your home directory. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-File][Minibuffer File]].
+
+The character '$’ is used to substitute an environment variable into a file name. The name of the environment variable consists of all the alphanumeric characters after the ‘$'; alternatively, it can be enclosed in braces after the '$’. For example, if you have used the shell command export FOO=rms/hacks to set up an environment variable named FOO, then both /u/$FOO/test.c and /u/${FOO}/test.c are abbreviations for /u/rms/hacks/test.c. If the environment variable is not defined, no substitution occurs, so that the character ‘$' stands for itself. Note that environment variables set outside Emacs affect Emacs only if they are applied before Emacs is started.
+
+To access a file with '$’ in its name, if the ‘$' causes expansion, type '$$’. This pair is converted to a single ‘$' at the same time that variable substitution is performed for a single '$'. Alternatively, quote the whole file name with '/:' (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]]). File names which begin with a literal '~' should also be quoted with '/:'.
+
+You can include non-ASCII characters in file names. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Name-Coding][File Name Coding]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.2 Visiting Files
+    :PROPERTIES:
+    :CUSTOM_ID: visiting-files
+    :END:
+
+​
+
+- C-x C-f
+
+  Visit a file (=find-file=).
+
+- C-x C-r
+
+  Visit a file for viewing, without allowing changes to it (=find-file-read-only=).
+
+- C-x C-v
+
+  Visit a different file instead of the one visited last (=find-alternate-file=).
+
+- C-x 4 f
+
+  Visit a file, in another window (=find-file-other-window=). Don't alter what is displayed in the selected window.
+
+- C-x 5 f
+
+  Visit a file, in a new frame (=find-file-other-frame=). Don't alter what is displayed in the selected frame.
+
+- M-x find-file-literally
+
+  Visit a file with no conversion of the contents.
+
+  Visiting a file means reading its contents into an Emacs buffer so you can edit them. Emacs makes a new buffer for each file that you visit.
+
+  To visit a file, type C-x C-f (=find-file=) and use the minibuffer to enter the name of the desired file. While in the minibuffer, you can abort the command by typing C-g. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]], for details about entering file names into minibuffers.
+
+If the specified file exists but the system does not allow you to read it, an error message is displayed in the echo area (on GNU and Unix systems you might be able to visit such a file using the 'su' or 'sudo' methods; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]]). Otherwise, you can tell that C-x C-f has completed successfully by the appearance of new text on the screen, and by the buffer name shown in the mode line (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]]). Emacs normally constructs the buffer name from the file name, omitting the directory name. For example, a file named /usr/rms/emacs.tex is visited in a buffer named 'emacs.tex'. If there is already a buffer with that name, Emacs constructs a unique name; the normal method is to add a suffix based on the directory name (e.g., '', '', and so on), but you can select other methods. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Uniquify][Uniquify]].
+
+To create a new file, just visit it using the same command, C-x C-f. Emacs displays '(New file)' in the echo area, but in other respects behaves as if you had visited an existing empty file.
+
+After visiting a file, the changes you make with editing commands are made in the Emacs buffer. They do not take effect in the visited file, until you save the buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]). If a buffer contains changes that have not been saved, we say the buffer is modified. This implies that some changes will be lost if the buffer is not saved. The mode line displays two stars near the left margin to indicate that the buffer is modified.
+
+If you visit a file that is already in Emacs, C-x C-f switches to the existing buffer instead of making another copy. Before doing so, it checks whether the file has changed since you last visited or saved it. If the file has changed, Emacs offers to reread it.
+
+If you try to visit a file larger than =large-file-warning-threshold= (the default is 10000000, which is about 10 megabytes), Emacs asks you for confirmation first. You can answer y to proceed with visiting the file. Note, however, that Emacs cannot visit files that are larger than the maximum Emacs buffer size, which is limited by the amount of memory Emacs can allocate and by the integers that Emacs can represent (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Buffers][Buffers]]). If you try, Emacs displays an error message saying that the maximum buffer size has been exceeded.
+
+If the file name you specify contains shell-style wildcard characters, Emacs visits all the files that match it. (On case-insensitive filesystems, Emacs matches the wildcards disregarding the letter case.) Wildcards include '?', ‘*', and '[...]' sequences. To enter the wild card '?' in a file name in the minibuffer, you need to type C-q ?. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]], for information on how to visit a file whose name actually contains wildcard characters. You can disable the wildcard feature by customizing =find-file-wildcards=.
+
+If you visit the wrong file unintentionally by typing its name incorrectly, type C-x C-v (=find-alternate-file=) to visit the file you really wanted. C-x C-v is similar to C-x C-f, but it kills the current buffer (after first offering to save it if it is modified). When C-x C-v reads the file name to visit, it inserts the entire default file name in the buffer, with point just after the directory part; this is convenient if you made a slight error in typing the name.
+
+If you visit a file that is actually a directory, Emacs invokes Dired, the Emacs directory browser. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]]. You can disable this behavior by setting the variable =find-file-run-dired= to =nil=; in that case, it is an error to try to visit a directory.
+
+Files which are actually collections of other files, or file archives, are visited in special modes which invoke a Dired-like environment to allow operations on archive members. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Archives][File Archives]], for more about these features.
+
+If you visit a file that the operating system won't let you modify, or that is marked read-only, Emacs makes the buffer read-only too, so that you won't go ahead and make changes that you'll have trouble saving afterward. You can make the buffer writable with C-x C-q (=read-only-mode=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-Buffer][Misc Buffer]].
+
+If you want to visit a file as read-only in order to protect yourself from entering changes accidentally, visit it with the command C-x C-r (=find-file-read-only=) instead of C-x C-f.
+
+C-x 4 f (=find-file-other-window=) is like C-x C-f except that the buffer containing the specified file is selected in another window. The window that was selected before C-x 4 f continues to show the same buffer it was already showing. If this command is used when only one window is being displayed, that window is split in two, with one window showing the same buffer as before, and the other one showing the newly requested file. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]].
+
+C-x 5 f (=find-file-other-frame=) is similar, but opens a new frame, or selects any existing frame showing the specified file. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Frames][Frames]].
+
+On graphical displays, there are two additional methods for visiting files. Firstly, when Emacs is built with a suitable GUI toolkit, commands invoked with the mouse (by clicking on the menu bar or tool bar) use the toolkit's standard file selection dialog instead of prompting for the file name in the minibuffer. On GNU/Linux and Unix platforms, Emacs does this when built with GTK+, LessTif, and Motif toolkits; on MS-Windows and Mac, the GUI version does that by default. For information on how to customize this, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dialog-Boxes][Dialog Boxes]].
+
+Secondly, Emacs supports drag and drop: dropping a file into an ordinary Emacs window visits the file using that window. As an exception, dropping a file into a window displaying a Dired buffer moves or copies the file into the displayed directory. For details, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Drag-and-Drop][Drag and Drop]], and [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-Dired-Features][Misc Dired Features]].
+
+On text-mode terminals and on graphical displays when Emacs was built without a GUI toolkit, you can visit files via the menu-bar 'File' menu, which has the 'Visit New File' and the 'Open File' items.
+
+Each time you visit a file, Emacs automatically scans its contents to detect what character encoding and end-of-line convention it uses, and converts these to Emacs's internal encoding and end-of-line convention within the buffer. When you save the buffer, Emacs performs the inverse conversion, writing the file to disk with its original encoding and end-of-line convention. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Coding-Systems][Coding Systems]].
+
+If you wish to edit a file as a sequence of ASCII characters with no special encoding or conversion, use the M-x find-file-literally command. This visits a file, like C-x C-f, but does not do format conversion (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Format-Conversion][Format Conversion]]), character code conversion (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Coding-Systems][Coding Systems]]), or automatic uncompression (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compressed-Files][Compressed Files]]), and does not add a final newline because of =require-final-newline= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customize-Save][Customize Save]]). If you have already visited the same file in the usual (non-literal) manner, this command asks you whether to visit it literally instead.
+
+Two special hook variables allow extensions to modify the operation of visiting files. Visiting a file that does not exist runs the functions in =find-file-not-found-functions=; this variable holds a list of functions, which are called one by one (with no arguments) until one of them returns non-=nil=. This is not a normal hook, and the name ends in '-functions' rather than '-hook' to indicate that fact.
+
+Successful visiting of any file, whether existing or not, calls the functions in =find-file-hook=, with no arguments. This variable is a normal hook. In the case of a nonexistent file, the =find-file-not-found-functions= are run first. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]].
+
+There are several ways to specify automatically the major mode for editing the file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Choosing-Modes][Choosing Modes]]), and to specify local variables defined for that file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Variables][File Variables]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Reverting][Reverting]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.3 Saving Files
+    :PROPERTIES:
+    :CUSTOM_ID: saving-files
+    :END:
+
+Saving a buffer in Emacs means writing its contents back into the file that was visited in the buffer.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Save-Commands][Save Commands]]: Commands for saving files.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]]: How Emacs saves the old version of your file.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customize-Save][Customize Save]]: Customizing the saving of files.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Interlocking][Interlocking]]: How Emacs protects against simultaneous editing of one file by two users.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Shadowing][Shadowing]]: Copying files to ``shadows'' automatically.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Time-Stamps][Time Stamps]]: Emacs can update time stamps on saved files.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]
+
+** 18.3.1 Commands for Saving Files
+     :PROPERTIES:
+     :CUSTOM_ID: commands-for-saving-files
+     :END:
+
+These are the commands that relate to saving and writing files.
+
+- C-x C-s
+
+  Save the current buffer to its file (=save-buffer=).
+
+- C-x s
+
+  Save any or all buffers to their files (=save-some-buffers=).
+
+- M-~
+
+  Forget that the current buffer has been changed (=not-modified=). With prefix argument (C-u), mark the current buffer as changed.
+
+- C-x C-w
+
+  Save the current buffer with a specified file name (=write-file=).
+
+- M-x set-visited-file-name
+
+  Change the file name under which the current buffer will be saved.
+
+  When you wish to save the file and make your changes permanent, type C-x C-s (=save-buffer=). After saving is finished, C-x C-s displays a message like this:
+
+#+BEGIN_EXAMPLE
+         Wrote /u/rms/gnu/gnu.tasks
+#+END_EXAMPLE
+
+If the current buffer is not modified (no changes have been made in it since the buffer was created or last saved), saving is not really done, because it would have no effect. Instead, C-x C-s displays a message like this in the echo area:
+
+#+BEGIN_EXAMPLE
+         (No changes need to be saved)
+#+END_EXAMPLE
+
+With a prefix argument, C-u C-x C-s, Emacs also marks the buffer to be backed up when the next save is done. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]].
+
+The command C-x s (=save-some-buffers=) offers to save any or all modified buffers. It asks you what to do with each buffer. The possible responses are analogous to those of =query-replace=:
+
+- y
+
+  Save this buffer and ask about the rest of the buffers.
+
+- n
+
+  Don't save this buffer, but ask about the rest of the buffers.
+
+- !
+
+  Save this buffer and all the rest with no more questions.
+
+-
+
+  Terminate =save-some-buffers= without any more saving.
+
+- .
+
+  Save this buffer, then exit =save-some-buffers= without even asking about other buffers.
+
+- C-r
+
+  View the buffer that you are currently being asked about. When you exit View mode, you get back to =save-some-buffers=, which asks the question again.
+
+- d
+
+  Diff the buffer against its corresponding file, so you can see what changes you would be saving. This calls the command =diff-buffer-with-file= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]]).
+
+- C-h
+
+  Display a help message about these options.
+
+You can customize the value of =save-some-buffers-default-predicate= to control which buffers Emacs will ask about.
+
+C-x C-c, the key sequence to exit Emacs, invokes =save-some-buffers= and therefore asks the same questions.
+
+If you have changed a buffer but do not wish to save the changes, you should take some action to prevent it. Otherwise, each time you use C-x s or C-x C-c, you are liable to save this buffer by mistake. One thing you can do is type M-~ (=not-modified=), which clears out the indication that the buffer is modified. If you do this, none of the save commands will believe that the buffer needs to be saved. ('~' is often used as a mathematical symbol for "not"; thus M-~ is "not", metafied.) Alternatively, you can cancel all the changes made since the file was visited or saved, by reading the text from the file again. This is called reverting. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Reverting][Reverting]]. (You could also undo all the changes by repeating the undo command C-x u until you have undone all the changes; but reverting is easier.)
+
+M-x set-visited-file-name alters the name of the file that the current buffer is visiting. It reads the new file name using the minibuffer. Then it marks the buffer as visiting that file name, and changes the buffer name correspondingly. =set-visited-file-name= does not save the buffer in the newly visited file; it just alters the records inside Emacs in case you do save later. It also marks the buffer as modified so that C-x C-s in that buffer /will/ save.
+
+If you wish to mark the buffer as visiting a different file and save it right away, use C-x C-w (=write-file=). This is equivalent to =set-visited-file-name= followed by C-x C-s, except that C-x C-w asks for confirmation if the file exists. C-x C-s used on a buffer that is not visiting a file has the same effect as C-x C-w; that is, it reads a file name, marks the buffer as visiting that file, and saves it there. The default file name in a buffer that is not visiting a file is made by combining the buffer name with the buffer's default directory (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]]).
+
+If the new file name implies a major mode, then C-x C-w switches to that major mode, in most cases. The command =set-visited-file-name= also does this. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Choosing-Modes][Choosing Modes]].
+
+If Emacs is about to save a file and sees that the date of the latest version on disk does not match what Emacs last read or wrote, Emacs notifies you of this fact, because it probably indicates a problem caused by simultaneous editing and requires your immediate attention. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Interlocking][Simultaneous Editing]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customize-Save][Customize Save]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Save-Commands][Save Commands]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]
+
+** 18.3.2 Backup Files
+     :PROPERTIES:
+     :CUSTOM_ID: backup-files
+     :END:
+
+On most operating systems, rewriting a file automatically destroys all record of what the file used to contain. Thus, saving a file from Emacs throws away the old contents of the file---or it would, except that Emacs carefully copies the old contents to another file, called the backup file, before actually saving.
+
+Emacs makes a backup for a file only the first time the file is saved from a buffer. No matter how many times you subsequently save the file, its backup remains unchanged. However, if you kill the buffer and then visit the file again, a new backup file will be made.
+
+For most files, the variable =make-backup-files= determines whether to make backup files. On most operating systems, its default value is =t=, so that Emacs does write backup files.
+
+For files managed by a version control system (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Version-Control][Version Control]]), the variable =vc-make-backup-files= determines whether to make backup files. By default it is =nil=, since backup files are redundant when you store all the previous versions in a version control system. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#General-VC-Options][General VC Options]].
+
+At your option, Emacs can keep either a single backup for each file, or make a series of numbered backup files for each file that you edit. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Names][Backup Names]].
+
+The default value of the =backup-enable-predicate= variable prevents backup files being written for files in the directories used for temporary files, specified by =temporary-file-directory= or =small-temporary-file-directory=.
+
+You can explicitly tell Emacs to make another backup file from a buffer, even though that buffer has been saved before. If you save the buffer with C-u C-x C-s, the version thus saved will be made into a backup file if you save the buffer again. C-u C-u C-x C-s saves the buffer, but first makes the previous file contents into a new backup file. C-u C-u C-u C-x C-s does both things: it makes a backup from the previous contents, and arranges to make another from the newly saved contents if you save again.
+
+You can customize the variable =backup-directory-alist= to specify that files matching certain patterns should be backed up in specific directories. A typical use is to add an element =("."  .=dir=)= to make all backups in the directory with absolute name dir. Emacs modifies the backup file names to avoid clashes between files with the same names originating in different directories. Alternatively, adding, =("." . ".~")= would make backups in the invisible subdirectory .~ of the original file's directory. Emacs creates the directory, if necessary, to make the backup.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Names][Names]]: How backup files are named.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Deletion][Deletion]]: Emacs deletes excess numbered backups.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Copying][Copying]]: Backups can be made by copying or renaming.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Deletion][Backup Deletion]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]]
+
+*** 18.3.2.1 Single or Numbered Backups
+      :PROPERTIES:
+      :CUSTOM_ID: single-or-numbered-backups
+      :END:
+
+When Emacs makes a backup file, its name is normally constructed by appending '~' to the file name being edited; thus, the backup file for eval.c would be eval.c~.
+
+If access control stops Emacs from writing backup files under the usual names, it writes the backup file as _{/.emacs.d/%backup%}. Only one such file can exist, so only the most recently made such backup is available.
+
+Emacs can also make numbered backup files. Numbered backup file names contain '.~', the number, and another '~' after the original file name. Thus, the backup files of eval.c would be called eval.c._{1}, eval.c._{2}, and so on, all the way through names like eval.c._{259} and beyond.
+
+The variable =version-control= determines whether to make single backup files or multiple numbered backup files. Its possible values are:
+
+- =nil=
+
+  Make numbered backups for files that have numbered backups already. Otherwise, make single backups. This is the default.
+
+- =t=
+
+  Make numbered backups.
+
+- =never=
+
+  Never make numbered backups; always make single backups.
+
+The usual way to set this variable is globally, through your init file or the customization buffer. However, you can set =version-control= locally in an individual buffer to control the making of backups for that buffer's file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Locals][Locals]]). You can have Emacs set =version-control= locally whenever you visit a given file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Variables][File Variables]]). Some modes, such as Rmail mode, set this variable.
+
+If you set the environment variable VERSION\_CONTROL, to tell various GNU utilities what to do with backup files, Emacs also obeys the environment variable by setting the Lisp variable =version-control= accordingly at startup. If the environment variable's value is 't' or 'numbered', then =version-control= becomes =t=; if the value is 'nil' or 'existing', then =version-control= becomes =nil=; if it is 'never' or 'simple', then =version-control= becomes =never=.
+
+If you set the variable =make-backup-file-name-function= to a suitable Lisp function, you can override the usual way Emacs constructs backup file names.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Copying][Backup Copying]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Names][Backup Names]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]]
+
+*** 18.3.2.2 Automatic Deletion of Backups
+      :PROPERTIES:
+      :CUSTOM_ID: automatic-deletion-of-backups
+      :END:
+
+To prevent excessive consumption of disk space, Emacs can delete numbered backup versions automatically. Generally Emacs keeps the first few backups and the latest few backups, deleting any in between. This happens every time a new backup is made.
+
+The two variables =kept-old-versions= and =kept-new-versions= control this deletion. Their values are, respectively, the number of oldest (lowest-numbered) backups to keep and the number of newest (highest-numbered) ones to keep, each time a new backup is made. The backups in the middle (excluding those oldest and newest) are the excess middle versions---those backups are deleted. These variables' values are used when it is time to delete excess versions, just after a new backup version is made; the newly made backup is included in the count in =kept-new-versions=. By default, both variables are 2.
+
+If =delete-old-versions= is =t=, Emacs deletes the excess backup files silently. If it is =nil=, the default, Emacs asks you whether it should delete the excess backup versions. If it has any other value, then Emacs never automatically deletes backups.
+
+Dired's . (Period) command can also be used to delete old versions. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Flagging-Many-Files][Flagging Many Files]].
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup-Deletion][Backup Deletion]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]]
+
+*** 18.3.2.3 Copying vs. Renaming
+      :PROPERTIES:
+      :CUSTOM_ID: copying-vs.renaming
+      :END:
+
+Backup files can be made by copying the old file or by renaming it. This makes a difference when the old file has multiple names (hard links). If the old file is renamed into the backup file, then the alternate names become names for the backup file. If the old file is copied instead, then the alternate names remain names for the file that you are editing, and the contents accessed by those names will be the new contents.
+
+The method of making a backup file may also affect the file's owner and group. If copying is used, these do not change. If renaming is used, you become the file's owner, and the file's group becomes the default (different operating systems have different defaults for the group).
+
+The choice of renaming or copying is made as follows:
+
+- If the variable =backup-by-copying= is non-=nil= (the default is =nil=), use copying.
+
+- Otherwise, if the variable =backup-by-copying-when-linked= is non-=nil= (the default is =nil=), and the file has multiple names, use copying.
+
+- Otherwise, if the variable
+
+  #+BEGIN_EXAMPLE
+      backup-by-copying-when-mismatch
+  #+END_EXAMPLE
+
+  is non-
+
+  #+BEGIN_EXAMPLE
+      nil
+  #+END_EXAMPLE
+
+  (the default is
+
+  #+BEGIN_EXAMPLE
+      t
+  #+END_EXAMPLE
+
+  ), and renaming would change the file's owner or group, use copying.
+
+  If you change =backup-by-copying-when-mismatch= to =nil=, Emacs checks the numeric user-id of the file's owner. If this is higher than =backup-by-copying-when-privileged-mismatch=, then it behaves as though =backup-by-copying-when-mismatch= is non-=nil= anyway.
+
+- Otherwise, renaming is the default choice.
+
+When a file is managed with a version control system (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Version-Control][Version Control]]), Emacs does not normally make backups in the usual way for that file. But committing (a.k.a. checking in, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#VCS-Concepts][VCS Concepts]]) new versions of files is similar in some ways to making backups. One unfortunate similarity is that these operations typically break hard links, disconnecting the file name you visited from any alternate names for the same file. This has nothing to do with Emacs---the version control system does it.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Interlocking][Interlocking]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]
+
+** 18.3.3 Customizing Saving of Files
+     :PROPERTIES:
+     :CUSTOM_ID: customizing-saving-of-files
+     :END:
+
+If the value of the variable =require-final-newline= is =t=, saving or writing a file silently puts a newline at the end if there isn't already one there. If the value is =visit=, Emacs adds a newline at the end of any file that doesn't have one, just after it visits the file. (This marks the buffer as modified, and you can undo it.) If the value is =visit-save=, Emacs adds such newlines both on visiting and on saving. If the value is =nil=, Emacs leaves the end of the file unchanged; any other non-=nil= value means Emacs asks you whether to add a newline. The default is =nil=.
+
+Some major modes are designed for specific kinds of files that are always supposed to end in newlines. Such major modes set the variable =require-final-newline= to the value of =mode-require-final-newline=, which defaults to =t=. By setting the latter variable, you can control how these modes handle final newlines.
+
+Normally, when a program writes a file, the operating system briefly caches the file's data in main memory before committing the data to disk. This can greatly improve performance; for example, when running on laptops, it can avoid a disk spin-up each time a file is written. However, it risks data loss if the operating system crashes before committing the cache to disk.
+
+To lessen this risk, Emacs can invoke the =fsync= system call after saving a file. Using =fsync= does not eliminate the risk of data loss, partly because many systems do not implement =fsync= properly, and partly because Emacs's file-saving procedure typically relies also on directory updates that might not survive a crash even if =fsync= works properly.
+
+The =write-region-inhibit-fsync= variable controls whether Emacs invokes =fsync= after saving a file. The variable's default value is =nil= when Emacs is interactive, and =t= when Emacs runs in batch mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Initial-Options][Batch Mode]]).
+
+Emacs never uses =fsync= when writing auto-save files, as these files might lose data anyway.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Shadowing][File Shadowing]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customize-Save][Customize Save]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]
+
+** 18.3.4 Protection against Simultaneous Editing
+     :PROPERTIES:
+     :CUSTOM_ID: protection-against-simultaneous-editing
+     :END:
+
+Simultaneous editing occurs when two users visit the same file, both make changes, and then both save them. If nobody is informed that this is happening, whichever user saves first would later find that their changes were lost.
+
+On some systems, Emacs notices immediately when the second user starts to change the file, and issues an immediate warning. On all systems, Emacs checks when you save the file, and warns if you are about to overwrite another user's changes. You can prevent loss of the other user's work by taking the proper corrective action instead of saving the file.
+
+When you make the first modification in an Emacs buffer that is visiting a file, Emacs records that the file is locked by you. (It does this by creating a specially-named symbolic link[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-7][7]] with special contents in the same directory. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#File-Locks][File Locks]], for more details.) Emacs removes the lock when you save the changes. The idea is that the file is locked whenever an Emacs buffer visiting it has unsaved changes.
+
+You can prevent the creation of lock files by setting the variable =create-lockfiles= to =nil=. *Caution:* by doing so you will lose the benefits that this feature provides.
+
+If you begin to modify the buffer while the visited file is locked by someone else, this constitutes a collision. When Emacs detects a collision, it asks you what to do, by calling the Lisp function =ask-user-about-lock=. You can redefine this function for the sake of customization. The standard definition of this function asks you a question and accepts three possible answers:
+
+- s
+
+  Steal the lock. Whoever was already changing the file loses the lock, and you gain the lock.
+
+- p
+
+  Proceed. Go ahead and edit the file despite its being locked by someone else.
+
+- q
+
+  Quit. This causes an error (=file-locked=), and the buffer contents remain unchanged---the modification you were trying to make does not actually take place.
+
+If Emacs or the operating system crashes, this may leave behind lock files which are stale, so you may occasionally get warnings about spurious collisions. When you determine that the collision is spurious, just use p to tell Emacs to go ahead anyway.
+
+Note that locking works on the basis of a file name; if a file has multiple names, Emacs does not prevent two users from editing it simultaneously under different names.
+
+A lock file cannot be written in some circumstances, e.g., if Emacs lacks the system permissions or cannot create lock files for some other reason. In these cases, Emacs can still detect the collision when you try to save a file, by checking the file's last-modification date. If the file has changed since the last time Emacs visited or saved it, that implies that changes have been made in some other way, and will be lost if Emacs proceeds with saving. Emacs then displays a warning message and asks for confirmation before saving; answer yes to save, and no or C-g cancel the save.
+
+If you are notified that simultaneous editing has already taken place, one way to compare the buffer to its file is the M-x diff-buffer-with-file command. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Time-Stamps][Time Stamps]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Interlocking][Interlocking]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]
+
+** 18.3.5 Shadowing Files
+     :PROPERTIES:
+     :CUSTOM_ID: shadowing-files
+     :END:
+
+You can arrange to keep identical shadow copies of certain files in more than one place---possibly on different machines. To do this, first you must set up a shadow file group, which is a set of identically-named files shared between a list of sites. The file group is permanent and applies to further Emacs sessions as well as the current one. Once the group is set up, every time you exit Emacs, it will copy the file you edited to the other files in its group. You can also do the copying without exiting Emacs, by typing M-x shadow-copy-files.
+
+A shadow cluster is a group of hosts that share directories, so that copying to or from one of them is sufficient to update the file on all of them. Each shadow cluster has a name, and specifies the network address of a primary host (the one we copy files to), and a regular expression that matches the host names of all the other hosts in the cluster. You can define a shadow cluster with M-x shadow-define-cluster.
+
+- M-x shadow-initialize
+
+  Set up file shadowing.
+
+- M-x shadow-define-literal-group
+
+  Declare a single file to be shared between sites.
+
+- M-x shadow-define-regexp-group
+
+  Make all files that match each of a group of files be shared between hosts.
+
+- M-x shadow-define-cluster name
+
+  Define a shadow file cluster name.
+
+- M-x shadow-copy-files
+
+  Copy all pending shadow files.
+
+- M-x shadow-cancel
+
+  Cancel the instruction to shadow some files.
+
+To set up a shadow file group, use M-x shadow-define-literal-group or M-x shadow-define-regexp-group. See their documentation strings for further information.
+
+Before copying a file to its shadows, Emacs asks for confirmation. You can answer "no" to bypass copying of this file, this time. If you want to cancel the shadowing permanently for a certain file, use M-x shadow-cancel to eliminate or change the shadow file group.
+
+File Shadowing is not available on MS Windows.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Shadowing][File Shadowing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]
+
+** 18.3.6 Updating Time Stamps Automatically
+     :PROPERTIES:
+     :CUSTOM_ID: updating-time-stamps-automatically
+     :END:
+
+You can arrange to put a time stamp in a file, so that it is updated automatically each time you edit and save the file. The time stamp must be in the first eight lines of the file, and you should insert it like this:
+
+#+BEGIN_EXAMPLE
+         Time-stamp: <>
+#+END_EXAMPLE
+
+or like this:
+
+#+BEGIN_EXAMPLE
+         Time-stamp: " "
+#+END_EXAMPLE
+
+Then add the function =time-stamp= to the hook =before-save-hook= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]]). When you save the file, this function then automatically updates the time stamp with the current date and time. You can also use the command M-x time-stamp to update the time stamp manually. By default the time stamp is formatted according to your locale setting (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Environment][Environment]]) and time zone (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Time-of-Day][Time of Day]]). For customizations, see the Custom group =time-stamp=.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Autorevert][Autorevert]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.4 Reverting a Buffer
+    :PROPERTIES:
+    :CUSTOM_ID: reverting-a-buffer
+    :END:
+
+If you have made extensive changes to a file-visiting buffer and then change your mind, you can revert the changes and go back to the saved version of the file. To do this, type M-x revert-buffer. Since reverting unintentionally could lose a lot of work, Emacs asks for confirmation first.
+
+The =revert-buffer= command tries to position point in such a way that, if the file was edited only slightly, you will be at approximately the same part of the text as before. But if you have made major changes, point may end up in a totally different location.
+
+Reverting marks the buffer as not modified. However, it adds the reverted changes as a single modification to the buffer's undo history (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Undo][Undo]]). Thus, after reverting, you can type C-/ or its aliases to bring the reverted changes back, if you happen to change your mind.
+
+Some kinds of buffers that are not associated with files, such as Dired buffers, can also be reverted. For them, reverting means recalculating their contents. Buffers created explicitly with C-x b cannot be reverted; =revert-buffer= reports an error if you try.
+
+When you edit a file that changes automatically and frequently---for example, a log of output from a process that continues to run---it may be useful for Emacs to revert the file without querying you. To request this behavior, set the variable =revert-without-query= to a list of regular expressions. When a file name matches one of these regular expressions, =find-file= and =revert-buffer= will revert it automatically if it has changed---provided the buffer itself is not modified. (If you have edited the text, it would be wrong to discard your changes.)
+
+You can also tell Emacs to revert buffers periodically. To do this for a specific buffer, enable the minor mode Auto-Revert mode by typing M-x auto-revert-mode. This automatically reverts the current buffer when its visited file changes on disk. To do the same for all file buffers, type M-x global-auto-revert-mode to enable Global Auto-Revert mode. These minor modes do not check or revert remote files, because that is usually too slow. This behavior can be changed by setting the variable =auto-revert-remote-files= to non-=nil=.
+
+By default, Auto-Revert mode works using file notifications, whereby changes in the filesystem are reported to Emacs by the OS. You can disable use of file notifications by customizing the variable =auto-revert-use-notify= to a =nil= value, then Emacs will check for file changes by polling every five seconds. You can change the polling interval through the variable =auto-revert-interval=.
+
+Not all systems support file notifications; where they are not supported, =auto-revert-use-notify= will be =nil= by default.
+
+One use of Auto-Revert mode is to "tail" a file such as a system log, so that changes made to that file by other programs are continuously displayed. To do this, just move the point to the end of the buffer, and it will stay there as the file contents change. However, if you are sure that the file will only change by growing at the end, use Auto-Revert Tail mode instead (=auto-revert-tail-mode=). It is more efficient for this. Auto-Revert Tail mode works also for remote files.
+
+When a buffer is auto-reverted, a message is generated. This can be suppressed by setting =auto-revert-verbose= to =nil=.
+
+In Dired buffers (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]]), Auto-Revert mode refreshes the buffer when a file is created or deleted in the buffer's directory.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#VC-Undo][VC Undo]], for commands to revert to earlier versions of files under version control. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#VC-Mode-Line][VC Mode Line]], for Auto Revert peculiarities when visiting files under version control.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Reverting][Reverting]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.5 Auto Reverting Non-File Buffers
+    :PROPERTIES:
+    :CUSTOM_ID: auto-reverting-non-file-buffers
+    :END:
+
+Global Auto Revert Mode normally only reverts file buffers. There are two ways to auto-revert certain non-file buffers: by enabling Auto Revert Mode in those buffers (using M-x auto-revert-mode); and by setting =global-auto-revert-non-file-buffers= to a non-=nil= value. The latter enables Auto Reverting for all types of buffers for which it is implemented (listed in the menu below).
+
+Like file buffers, non-file buffers should normally not revert while you are working on them, or while they contain information that might get lost after reverting. Therefore, they do not revert if they are modified. This can get tricky, because deciding when a non-file buffer should be marked modified is usually more difficult than for file buffers.
+
+Another tricky detail is that, for efficiency reasons, Auto Revert often does not try to detect all possible changes in the buffer, only changes that are major or easy to detect. Hence, enabling auto-reverting for a non-file buffer does not always guarantee that all information in the buffer is up-to-date, and does not necessarily make manual reverts useless.
+
+At the other extreme, certain buffers automatically revert every =auto-revert-interval= seconds. (This currently only applies to the Buffer Menu.) In this case, Auto Revert does not print any messages while reverting, even when =auto-revert-verbose= is non-=nil=.
+
+The details depend on the particular types of buffers and are explained in the corresponding sections.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Reverting-the-Buffer-Menu][Auto Reverting the Buffer Menu]]: Auto Revert of the Buffer Menu.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Reverting-Dired][Auto Reverting Dired]]: Auto Revert of Dired buffers.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Reverting-Dired][Auto Reverting Dired]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Autorevert][Autorevert]]
+
+** 18.5.1 Auto Reverting the Buffer Menu
+     :PROPERTIES:
+     :CUSTOM_ID: auto-reverting-the-buffer-menu
+     :END:
+
+If auto-reverting of non-file buffers is enabled, the Buffer Menu (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Several-Buffers][Several Buffers]]) automatically reverts every =auto-revert-interval= seconds, whether there is a need for it or not. (It would probably take longer to check whether there is a need than to actually revert.)
+
+If the Buffer Menu inappropriately gets marked modified, just revert it manually using g and auto-reverting will resume. However, if you marked certain buffers to get deleted or to be displayed, you have to be careful, because reverting erases all marks. The fact that adding marks sets the buffer's modified flag prevents Auto Revert from automatically erasing the marks.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Reverting-the-Buffer-Menu][Auto Reverting the Buffer Menu]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Autorevert][Autorevert]]
+
+** 18.5.2 Auto Reverting Dired buffers
+     :PROPERTIES:
+     :CUSTOM_ID: auto-reverting-dired-buffers
+     :END:
+
+Dired buffers only auto-revert when the file list of the buffer's main directory changes (e.g., when a new file is added or deleted). They do not auto-revert when information about a particular file changes (e.g., when the size changes) or when inserted subdirectories change. To be sure that /all/ listed information is up to date, you have to manually revert using g, /even/ if auto-reverting is enabled in the Dired buffer. Sometimes, you might get the impression that modifying or saving files listed in the main directory actually does cause auto-reverting. This is because making changes to a file, or saving it, very often causes changes in the directory itself; for instance, through backup files or auto-save files. However, this is not guaranteed.
+
+If the Dired buffer is marked modified and there are no changes you want to protect, then most of the time you can make auto-reverting resume by manually reverting the buffer using g. There is one exception. If you flag or mark files, you can safely revert the buffer. This will not erase the flags or marks (unless the marked file has been deleted, of course). However, the buffer will stay modified, even after reverting, and auto-reverting will not resume. This is because, if you flag or mark files, you may be working on the buffer and you might not want the buffer to change without warning. If you want auto-reverting to resume in the presence of marks and flags, mark the buffer non-modified using M-~. However, adding, deleting or changing marks or flags will mark it modified again.
+
+Remote Dired buffers are currently not auto-reverted. Neither are Dired buffers for which you used shell wildcards or file arguments to list only some of the files. /Find/ and /Locate/ buffers do not auto-revert either.
+
+Note that auto-reverting Dired buffers may not work satisfactorily on some systems.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Aliases][File Aliases]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Autorevert][Autorevert]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.6 Auto-Saving: Protection Against Disasters
+    :PROPERTIES:
+    :CUSTOM_ID: auto-saving-protection-against-disasters
+    :END:
+
+From time to time, Emacs automatically saves each visited file in a separate file, without altering the file you actually use. This is called auto-saving. It prevents you from losing more than a limited amount of work if the system crashes.
+
+When Emacs determines that it is time for auto-saving, it considers each buffer, and each is auto-saved if auto-saving is enabled for it and it has been changed since the last time it was auto-saved. The message 'Auto-saving...' is displayed in the echo area during auto-saving, if any files are actually auto-saved. Errors occurring during auto-saving are caught so that they do not interfere with the execution of commands you have been typing.
+
+1) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save-Files][Files]]: The file where auto-saved changes are actually made until you save the file.
+2) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save-Control][Control]]: Controlling when and how often to auto-save.
+3) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recover][Recover]]: Recovering text from auto-save files.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save-Control][Auto Save Control]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]]
+
+** 18.6.1 Auto-Save Files
+     :PROPERTIES:
+     :CUSTOM_ID: auto-save-files
+     :END:
+
+Auto-saving does not normally save in the files that you visited, because it can be very undesirable to save a change that you did not want to make permanent. Instead, auto-saving is done in a different file called the auto-save file, and the visited file is changed only when you request saving explicitly (such as with C-x C-s).
+
+Normally, the auto-save file name is made by appending '#' to the front and ~rear~ of the visited file name. Thus, a buffer visiting file foo.c is auto-saved in a file #foo.c#. Most buffers that are not visiting files are auto-saved only if you request it explicitly; when they are auto-saved, the auto-save file name is made by appending '#' to the front and rear of buffer name, then adding digits and letters at the end for uniqueness. For example, the /mail/ buffer in which you compose messages to be sent might be auto-saved in a file named #/mail/#704juu. Auto-save file names are made this way unless you reprogram parts of Emacs to do something different (the functions =make-auto-save-file-name= and =auto-save-file-name-p=). The file name to be used for auto-saving in a buffer is calculated when auto-saving is turned on in that buffer.
+# 得到: 原来真的存在这种mode.
+The variable =auto-save-file-name-transforms= allows a degree of control over the auto-save file name. It lets you specify a series of regular expressions and replacements to transform the auto save file name. The default value puts the auto-save files for remote files (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]]) into the temporary file directory on the local machine.
+
+When you delete a substantial part of the text in a large buffer, auto save turns off temporarily in that buffer. This is because if you deleted the text unintentionally, you might find the auto-save file more useful if it contains the deleted text. To reenable auto-saving after this happens, save the buffer with C-x C-s, or use C-u 1 M-x auto-save-mode.
+
+If you want auto-saving to be done in the visited file rather than in a separate auto-save file, enable the global minor mode =auto-save-visited-mode=. In this mode, auto-saving is identical to explicit saving. Note that this mode is orthogonal to the =auto-save= mode described above; you can enable both at the same time. However, if =auto-save= mode is active in some buffer and the obsolete =auto-save-visited-file-name= variable is set to a =non-nil= value, that buffer won't be affected by =auto-save-visited-mode=.
+
+#+BEGIN_QUOTE
+Define:orthogonal [ɔr'θɑgənəl] 直角的, 不相干的.
+Origin:ortho(直角)+gonal(角度)
+before vowels orth-, word-forming element meaning "straight, upright, rectangular, regular; true, correct, proper," now mostly in scientific and technical compounds, from Greek orthos "straight, true, correct, regular," from PIE *eredh- "high" (source also of Sanskrit urdhvah "high, lofty, steep," Latin arduus "high, steep," Old Irish ard "high").
+没有其他同类型的单词.
+助记:没有其他办法
+#+END_QUOTE
+
+
+You can use the variable =auto-save-visited-interval= to customize the interval between auto-save operations in =auto-save-visited-mode=; by default it's five seconds. =auto-save-interval= and =auto-save-timeout= have no effect on =auto-save-visited-mode=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save-Control][Auto Save Control]], for details on these variables.
+
+A buffer's auto-save file is deleted when you save the buffer in its visited file. (You can ~inhibit~ this by setting the variable =delete-auto-save-files= to =nil=.) Changing the visited file name with C-x C-w or =set-visited-file-name= renames any auto-save file to go with the new visited name.
+
+Define:inhibit
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recover][Recover]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save-Files][Auto Save Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]]
+
+** 18.6.2 Controlling Auto-Saving
+     :PROPERTIES:
+     :CUSTOM_ID: controlling-auto-saving
+     :END:
+
+Each time you visit a file, auto-saving is turned on for that file's buffer if the variable =auto-save-default= is =non-nil= (but not in batch mode; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Initial-Options][Initial Options]]). The default for this variable is =t=, so auto-saving is the usual practice for file-visiting buffers. To toggle auto-saving in the current buffer, type M-x auto-save-mode. Auto Save mode acts as a buffer-local minor mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minor-Modes][Minor Modes]]).
+
+Emacs auto-saves periodically based on how many characters you have typed since the last auto-save. The variable =auto-save-interval= specifies how many characters there are between auto-saves. By default, it is 300. Emacs doesn't accept values that are too small: if you customize =auto-save-interval= to a value less than 20, Emacs will behave as if the value is 20.
+
+Auto-saving also takes place when you stop typing for a while. By default, it does this after 30 seconds of idleness (at this time, Emacs may also perform garbage collection; see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Garbage-Collection][Garbage Collection]]). To change this interval, customize the variable =auto-save-timeout=. The actual time period is longer if the current buffer is long; this is a ~heuristic~ which aims to keep out of your way when you are editing long buffers, in which auto-save takes an appreciable amount of time. Auto-saving during idle periods accomplishes two things: first, it makes sure all your work is saved if you go away from the terminal for a while; second, it may avoid some auto-saving while you are actually typing.
+
+Define: heuristic
+
+When =auto-save-visited-mode= is enabled, Emacs will auto-save file-visiting buffers after five seconds of idle time. You can customize the variable =auto-save-visited-interval= to change the idle time interval.
+
+Emacs also does auto-saving whenever it gets a fatal error. This includes killing the Emacs job with a shell command such as 'kill %emacs', or disconnecting a phone line or network connection.
+
+You can perform an auto-save explicitly with the command M-x do-auto-save.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save-Control][Auto Save Control]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]]
+
+** 18.6.3 Recovering Data from Auto-Saves
+     :PROPERTIES:
+     :CUSTOM_ID: recovering-data-from-auto-saves
+     :END:
+
+You can use the contents of an auto-save file to recover from a loss of data with the command M-x recover-file file . This visits file and then (after your confirmation) restores the contents from its auto-save file #file#. You can then save with C-x C-s to put the recovered text into file itself. For example, to recover file foo.c from its auto-save file #foo.c#, do:
+
+#+BEGIN_EXAMPLE
+         M-x recover-file <RET> foo.c <RET>
+         yes <RET>
+         C-x C-s
+#+END_EXAMPLE
+
+Before asking for confirmation, M-x recover-file displays a directory listing describing the specified file and the auto-save file, so you can compare their sizes and dates. If the auto-save file is older, M-x recover-file does not offer to read it.
+
+If Emacs or the computer crashes, you can recover all the files you were editing from their auto save files with the command M-x recover-session. This first shows you a list of recorded interrupted sessions. Move point to the one you choose, and type C-c C-c.
+
+Then =recover-session= asks about each of the files that were being edited during that session, asking whether to recover that file. If you answer y, it calls =recover-file=, which works in its normal fashion. It shows the dates of the original file and its auto-save file, and asks once again whether to recover that file.
+
+When =recover-session= is done, the files you've chosen to recover are present in Emacs buffers. You should then save them. Only this---saving them---updates the files themselves.
+
+Emacs records information about interrupted sessions in files named .saves-pid-hostname~ in the directory ~/.emacs.d/auto-save-list/. This directory is determined by the variable =auto-save-list-file-prefix=. If you set =auto-save-list-file-prefix= to =nil=, sessions are not recorded for recovery.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Directories][Directories]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.7 File Name Aliases
+    :PROPERTIES:
+    :CUSTOM_ID: file-name-aliases
+    :END:
+
+Symbolic links and hard links both make it possible for several file names to refer to the same file. Hard links are alternate names that refer directly to the file; all the names are equally valid, and no one of them is preferred. By contrast, a symbolic link is a kind of defined alias: when foo is a symbolic link to bar, you can use either name to refer to the file, but bar is the real name, while foo is just an alias. More complex cases occur when symbolic links point to directories.
+
+Normally, if you visit a file which Emacs is already visiting under a different name, Emacs displays a message in the echo area and uses the existing buffer visiting that file. This can happen on systems that support hard or symbolic links, or if you use a long file name on a system that truncates long file names, or on a case-insensitive file system. You can suppress the message by setting the variable =find-file-suppress-same-file-warnings= to a non-=nil= value. You can disable this feature entirely by setting the variable =find-file-existing-other-name= to =nil=: then if you visit the same file under two different names, you get a separate buffer for each file name.
+
+If the variable =find-file-visit-truename= is non-=nil=, then the file name recorded for a buffer is the file's truename (made by replacing all symbolic links with their target names), rather than the name you specify. Setting =find-file-visit-truename= also implies the effect of =find-file-existing-other-name=.
+
+Sometimes, a directory is ordinarily accessed through a symbolic link, and you may want Emacs to preferentially show its linked name. To do this, customize =directory-abbrev-alist=. Each element in this list should have the form =(=from=.=to=)=, which means to replace from with to whenever from appears in a directory name. The from string is a regular expression (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]]). It is matched against directory names anchored at the first character, and should start with '`' (to support directory names with embedded newlines, which would defeat '\^'). The to string should be an ordinary absolute directory name pointing to the same directory. Do not use '~' to stand for a home directory in the to string; Emacs performs these substitutions separately. Here's an example, from a system on which /home/fsf is normally accessed through a symbolic link named /fsf:
+
+#+BEGIN_EXAMPLE
+         (("\\`/home/fsf" . "/fsf"))
+#+END_EXAMPLE
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Aliases][File Aliases]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.8 File Directories
+    :PROPERTIES:
+    :CUSTOM_ID: file-directories
+    :END:
+
+The file system groups files into directories. A directory listing is a list of all the files in a directory. Emacs provides commands to create and delete directories, and to make directory listings in brief format (file names only) and verbose format (sizes, dates, and other attributes included). Emacs also includes a directory browser feature called Dired, which you can invoke with C-x d; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]].
+
+- C-x C-d dir-or-pattern
+
+  Display a brief directory listing (=list-directory=).
+
+- C-u C-x C-d dir-or-pattern
+
+  Display a verbose directory listing.
+
+- M-x make-directory dirname
+
+  Create a new directory named dirname.
+
+- M-x delete-directory dirname
+
+  Delete the directory named dirname. If it isn't empty, you will be asked whether you want to delete it recursively.
+
+  The command to display a directory listing is C-x C-d (=list-directory=). It reads using the minibuffer a file name which is either a directory to be listed or a wildcard-containing pattern for the files to be listed. For example,
+
+#+BEGIN_EXAMPLE
+         C-x C-d /u2/emacs/etc <RET>
+#+END_EXAMPLE
+
+lists all the files in directory /u2/emacs/etc. Here is an example of specifying a file name pattern:
+
+#+BEGIN_EXAMPLE
+         C-x C-d /u2/emacs/src/*.c <RET>
+#+END_EXAMPLE
+
+Normally, C-x C-d displays a brief directory listing containing just file names. A numeric argument (regardless of value) tells it to make a verbose listing including sizes, dates, and owners (like 'ls -l').
+
+The text of a directory listing is mostly obtained by running =ls= in an inferior process. Two Emacs variables control the switches passed to =ls=: =list-directory-brief-switches= is a string giving the switches to use in brief listings (="-CF"= by default), and =list-directory-verbose-switches= is a string giving the switches to use in a verbose listing (="-l"= by default).
+
+In verbose directory listings, Emacs adds information about the amount of free space on the disk that contains the directory. You can customize how this is done for local filesystems via the variables =directory-free-space-program= and =directory-free-space-args=: the former specifies what program to run (default: df), the latter which arguments to pass to that program (default is system-dependent). (On MS-Windows and MS-DOS, these two variables are ignored, and an internal Emacs implementation of the same functionality is used instead.)
+
+The command M-x delete-directory prompts for a directory's name using the minibuffer, and deletes the directory if it is empty. If the directory is not empty, you will be asked whether you want to delete it recursively. On systems that have a "Trash" (or "Recycle Bin") feature, you can make this command move the specified directory to the Trash instead of deleting it outright, by changing the variable =delete-by-moving-to-trash= to =t=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-File-Ops][Misc File Ops]], for more information about using the Trash.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Diff-Mode][Diff Mode]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Directories][Directories]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.9 Comparing Files
+    :PROPERTIES:
+    :CUSTOM_ID: comparing-files
+    :END:
+
+The command M-x diff prompts for two file names, using the minibuffer, and displays the differences between the two files in a buffer named /diff/. This works by running the diff program, using options taken from the variable =diff-switches=. The value of =diff-switches= should be a string; the default is ="-u"= to specify a unified context diff. See [[https://www.gnu.org/software/emacs/manual/html_mono/diffutils.html#Top][Diff]], for more information about the diff program.
+
+The output of the =diff= command is shown using a major mode called Diff mode. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Diff-Mode][Diff Mode]].
+
+A (much more sophisticated) alternative is M-x ediff (see [[https://www.gnu.org/software/emacs/manual/html_mono/ediff.html#Top][Ediff]]).
+
+The command M-x diff-backup compares a specified file with its most recent backup. If you specify the name of a backup file, =diff-backup= compares it with the source file that it is a backup of. In all other respects, this behaves like M-x diff.
+
+The command M-x diff-buffer-with-file compares a specified buffer with its corresponding file. This shows you what changes you would make to the file if you save the buffer.
+
+The command M-x compare-windows compares the text in the current window with that in the window that was the selected window before you selected the current one. (For more information about windows in Emacs, [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]].) Comparison starts at point in each window, after pushing each initial point value on the mark ring (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]]) in its respective buffer. Then it moves point forward in each window, one character at a time, until it reaches characters that don't match. Then the command exits.
+
+If point in the two windows is followed by non-matching text when the command starts, M-x compare-windows tries heuristically to advance up to matching text in the two windows, and then exits. So if you use M-x compare-windows repeatedly, each time it either skips one matching range or finds the start of another.
+
+With a numeric argument, =compare-windows= ignores changes in whitespace. If the variable =compare-ignore-case= is non-=nil=, the comparison ignores differences in case as well. If the variable =compare-ignore-whitespace= is non-=nil=, =compare-windows= by default ignores changes in whitespace, but a prefix argument turns that off for that single invocation of the command.
+
+You can use M-x smerge-mode to turn on Smerge mode, a minor mode for editing output from the diff3 program. This is typically the result of a failed merge from a version control system update outside VC, due to conflicting changes to a file. Smerge mode provides commands to resolve conflicts by selecting specific changes.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emerge][Emerge]], for the Emerge facility, which provides a powerful interface for merging files.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Copying-and-Naming][Copying and Naming]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.10 Diff Mode
+    :PROPERTIES:
+    :CUSTOM_ID: diff-mode
+    :END:
+
+Diff mode is a major mode used for the output of M-x diff and other similar commands. This kind of output is called a patch, because it can be passed to the patch command to automatically apply the specified changes. To select Diff mode manually, type M-x diff-mode.
+
+The changes specified in a patch are grouped into hunks, which are contiguous chunks of text that contain one or more changed lines. Hunks usually also include unchanged lines to provide context for the changes. Each hunk is preceded by a hunk header, which specifies the old and new line numbers where the hunk's changes occur. Diff mode highlights each hunk header, to distinguish it from the actual contents of the hunk.
+
+The first hunk in a patch is preceded by a file header, which shows the names of the new and the old versions of the file, and their time stamps. If a patch shows changes for more than one file, each file has such a header before the first hunk of that file's changes.
+
+You can edit a Diff mode buffer like any other buffer. (If it is read-only, you need to make it writable first; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-Buffer][Misc Buffer]].) Whenever you edit a hunk, Diff mode attempts to automatically correct the line numbers in the hunk headers, to ensure that the patch remains correct, and could still be applied by patch. To disable automatic line number correction, change the variable =diff-update-on-the-fly= to =nil=.
+
+Diff mode arranges for hunks to be treated as compiler error messages by C-x ` and other commands that handle error messages (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation-Mode][Compilation Mode]]). Thus, you can use the compilation-mode commands to visit the corresponding source locations.
+
+In addition, Diff mode provides the following commands to navigate, manipulate and apply parts of patches:
+
+- M-n
+
+  Move to the next hunk-start (=diff-hunk-next=). With prefix argument n, move forward to the nth next hunk. This command has a side effect: it refines the hunk you move to, highlighting its changes with better granularity. To disable this feature, type M-x diff-auto-refine-mode to toggle off the minor mode Diff Auto-Refine mode. To disable Diff Auto-Refine mode by default, add this to your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]]): =(add-hook 'diff-mode-hook                    (lambda () (diff-auto-refine-mode -1)))=
+
+- M-p
+
+  Move to the previous hunk-start (=diff-hunk-prev=). With prefix argument n, move back to the nth previous hunk. Like M-n, this has the side-effect of refining the hunk you move to, unless you disable Diff Auto-Refine mode.
+
+- M-}
+
+  Move to the next file-start, in a multi-file patch (=diff-file-next=). With prefix argument n, move forward to the start of the nth next file.
+
+- M-{
+
+  Move to the previous file-start, in a multi-file patch (=diff-file-prev=). With prefix argument n, move back to the start of the nth previous file.
+
+- M-k
+
+  Kill the hunk at point (=diff-hunk-kill=).
+
+- M-K
+
+  In a multi-file patch, kill the current file part. (=diff-file-kill=).
+
+- C-c C-a
+
+  Apply this hunk to its target file (=diff-apply-hunk=). With a prefix argument of C-u, revert this hunk, i.e. apply the reverse of the hunk, which changes the "new" version into the "old" version. If =diff-jump-to-old-file= is non-=nil=, apply the hunk to the "old" version of the file instead.
+
+- C-c C-b
+
+  Highlight the changes of the hunk at point with a finer granularity (=diff-refine-hunk=). This allows you to see exactly which parts of each changed line were actually changed.
+
+- C-c C-c
+
+  Go to the source file and line corresponding to this hunk (=diff-goto-source=). By default, this jumps to the "new" version of the file, the one shown first on the file header. With a prefix argument, jump to the "old" version instead. If =diff-jump-to-old-file= is non-=nil=, this command by default jumps to the "old" file, and the meaning of the prefix argument is reversed. If the prefix argument is a number greater than 8 (e.g., if you type C-u C-u C-c C-c), then this command also sets =diff-jump-to-old-file= for the next invocation.
+
+- C-c C-e
+
+  Start an Ediff session with the patch (=diff-ediff-patch=). See [[https://www.gnu.org/software/emacs/manual/html_mono/ediff.html#Top][Ediff]].
+
+- C-c C-n
+
+  Restrict the view to the current hunk (=diff-restrict-view=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Narrowing][Narrowing]]. With a prefix argument, restrict the view to the current file of a multiple-file patch. To widen again, use C-x n w (=widen=).
+
+- C-c C-r
+
+  Reverse the direction of comparison for the entire buffer (=diff-reverse-direction=). With a prefix argument, reverse the direction only inside the current region (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]). Reversing the direction means changing the hunks and the file-start headers to produce a patch that would change the "new" version into the "old" one.
+
+- C-c C-s
+
+  Split the hunk at point (=diff-split-hunk=) into two separate hunks. This inserts a hunk header and modifies the header of the current hunk. This command is useful for manually editing patches, and only works with the unified diff format produced by the -u or --unified options to the diff program. If you need to split a hunk in the context diff format produced by the -c or --context options to diff, first convert the buffer to the unified diff format with C-c C-u.
+
+- C-c C-d
+
+  Convert the entire buffer to the context diff format (=diff-unified->context=). With a prefix argument, convert only the hunks within the region.
+
+- C-c C-u
+
+  Convert the entire buffer to unified diff format (=diff-context->unified=). With a prefix argument, convert unified format to context format. When the mark is active, convert only the hunks within the region.
+
+- C-c C-w
+
+  Re-generate the current hunk, disregarding changes in whitespace (=diff-ignore-whitespace-hunk=).
+
+- C-x 4 A
+
+  Generate a ChangeLog entry, like C-x 4 a does (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Change-Log][Change Log]]), for each one of the hunks (=diff-add-change-log-entries-other-window=). This creates a skeleton of the log of changes that you can later fill with the actual descriptions of the changes. C-x 4 a itself in Diff mode operates on behalf of the current hunk's file, but gets the function name from the patch itself. This is useful for making log entries for functions that are deleted by the patch.
+
+  Patches sometimes include trailing whitespace on modified lines, as an unintentional and undesired change. There are two ways to deal with this problem. Firstly, if you enable Whitespace mode in a Diff buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Useless-Whitespace][Useless Whitespace]]), it automatically highlights trailing whitespace in modified lines. Secondly, you can use the command M-x diff-delete-trailing-whitespace, which searches for trailing whitespace in the lines modified by the patch, and removes that whitespace in both the patch and the patched source file(s). This command does not save the modifications that it makes, so you can decide whether to save the changes (the list of modified files is displayed in the echo area). With a prefix argument, it tries to modify the original ("old") source files rather than the patched ("new") source files.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-File-Ops][Misc File Ops]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Diff-Mode][Diff Mode]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.11 Copying, Naming and Renaming Files
+    :PROPERTIES:
+    :CUSTOM_ID: copying-naming-and-renaming-files
+    :END:
+
+Emacs has several commands for copying, naming, and renaming files. All of them read two file names, old (or target) and new, using the minibuffer, and then copy or adjust a file's name accordingly; they do not accept wildcard file names.
+
+In all these commands, if the argument new is just a directory name (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Directory-Names][Directory Names]]), the real new name is in that directory, with the same non-directory component as old. For example, the command M-x rename-file ~/foo /tmp/ renames ~/foo to /tmp/foo. On GNU and other POSIX-like systems, directory names end in '/'.
+
+All these commands ask for confirmation when the new file name already exists.
+
+M-x copy-file copies the contents of the file old to the file new.
+
+M-x copy-directory copies directories, similar to the cp -r shell command. If new is a directory name, it creates a copy of the old directory and puts it in new. Otherwise it copies all the contents of old into a new directory named new.
+
+M-x rename-file renames file old as new. If the file name new already exists, you must confirm with yes or renaming is not done; this is because renaming causes the old meaning of the name new to be lost. If old and new are on different file systems, the file old is copied and deleted.
+
+If a file is under version control (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Version-Control][Version Control]]), you should rename it using M-x vc-rename-file instead of M-x rename-file. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#VC-Delete_002fRename][VC Delete/Rename]].
+
+M-x add-name-to-file adds an additional name to an existing file without removing the old name. The new name is created as a hard link to the existing file. The new name must belong on the same file system that the file is on. On MS-Windows, this command works only if the file resides in an NTFS file system. On MS-DOS, and some remote system types, it works by copying the file.
+
+M-x make-symbolic-link creates a symbolic link named new, which points at target. The effect is that future attempts to open file new will refer to whatever file is named target at the time the opening is done, or will get an error if the name target is nonexistent at that time. This command does not expand the argument target, so that it allows you to specify a relative name as the target of the link. However, this command does expand leading '~' in target so that you can easily specify home directories, and strips leading '/:' so that you can specify relative names beginning with literal '~' or '/:'. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]]. On MS-Windows, this command works only on MS Windows Vista and later. When new is remote, it works depending on the system type.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compressed-Files][Compressed Files]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Copying-and-Naming][Copying and Naming]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.12 Miscellaneous File Operations
+    :PROPERTIES:
+    :CUSTOM_ID: miscellaneous-file-operations
+    :END:
+
+Emacs has commands for performing many other operations on files. All operate on one file; they do not accept wildcard file names.
+
+M-x delete-file prompts for a file and deletes it. If you are deleting many files in one directory, it may be more convenient to use Dired rather than =delete-file=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired-Deletion][Dired Deletion]].
+
+M-x move-file-to-trash moves a file into the system Trash (or Recycle Bin). This is a facility available on most operating systems; files that are moved into the Trash can be brought back later if you change your mind. (The way to restore trashed files is system-dependent.)
+
+By default, Emacs deletion commands do /not/ use the Trash. To use the Trash (when it is available) for common deletion commands, change the variable =delete-by-moving-to-trash= to =t=. This affects the commands M-x delete-file and M-x delete-directory (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Directories][Directories]]), as well as the deletion commands in Dired (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired-Deletion][Dired Deletion]]). Supplying a prefix argument to M-x delete-file or M-x delete-directory makes them delete outright, instead of using the Trash, regardless of =delete-by-moving-to-trash=.
+
+If a file is under version control (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Version-Control][Version Control]]), you should delete it using M-x vc-delete-file instead of M-x delete-file. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#VC-Delete_002fRename][VC Delete/Rename]].
+
+M-x insert-file (also C-x i) inserts a copy of the contents of the specified file into the current buffer at point, leaving point unchanged before the contents. The position after the inserted contents is added to the mark ring, without activating the mark (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]]).
+
+M-x insert-file-literally is like M-x insert-file, except the file is inserted literally: it is treated as a sequence of ASCII characters with no special encoding or conversion, similar to the M-x find-file-literally command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]]).
+
+M-x write-region is the inverse of M-x insert-file; it copies the contents of the region into the specified file. M-x append-to-file adds the text of the region to the end of the specified file. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Accumulating-Text][Accumulating Text]]. The variable =write-region-inhibit-fsync= applies to these commands, as well as saving files; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customize-Save][Customize Save]].
+
+M-x set-file-modes reads a file name followed by a file mode, and applies that file mode to the specified file. File modes, also called file permissions, determine whether a file can be read, written to, or executed, and by whom. This command reads file modes using the same symbolic or octal format accepted by the chmod command; for instance, 'u+x' means to add execution permission for the user who owns the file. It has no effect on operating systems that do not support file modes. =chmod= is a convenience alias for this function.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Archives][File Archives]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-File-Ops][Misc File Ops]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.13 Accessing Compressed Files
+    :PROPERTIES:
+    :CUSTOM_ID: accessing-compressed-files
+    :END:
+
+Emacs automatically uncompresses compressed files when you visit them, and automatically recompresses them if you alter them and save them. Emacs recognizes compressed files by their file names. File names ending in '.gz' indicate a file compressed with =gzip=. Other endings indicate other compression programs.
+
+Automatic uncompression and compression apply to all the operations in which Emacs uses the contents of a file. This includes visiting it, saving it, inserting its contents into a buffer, loading it, and byte compiling it.
+
+To disable this feature, type the command M-x auto-compression-mode. You can disable it permanently by customizing the variable =auto-compression-mode=.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compressed-Files][Compressed Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.14 File Archives
+    :PROPERTIES:
+    :CUSTOM_ID: file-archives
+    :END:
+
+A file whose name ends in '.tar' is normally an archive made by the =tar= program. Emacs views these files in a special mode called Tar mode which provides a Dired-like list of the contents (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]]). You can move around through the list just as you would in Dired, and visit the subfiles contained in the archive. However, not all Dired commands are available in Tar mode.
+
+If Auto Compression mode is enabled (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compressed-Files][Compressed Files]]), then Tar mode is used also for compressed archives---files with extensions '.tgz', =.tar.Z= and =.tar.gz=.
+
+The keys e, f and all extract a component file into its own buffer. You can edit it there, and if you save the buffer, the edited version will replace the version in the Tar buffer. Clicking with the mouse on the file name in the Tar buffer does likewise. v extracts a file into a buffer in View mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#View-Mode][View Mode]]). o extracts the file and displays it in another window, so you could edit the file and operate on the archive simultaneously.
+
+The I key adds a new (regular) file to the archive. The file is initially empty, but can readily be edited using the commands above. The command inserts the new file before the current one, so that using it on the topmost line of the Tar buffer makes the new file the first one in the archive, and using it at the end of the buffer makes it the last one.
+
+d marks a file for deletion when you later use x, and u unmarks a file, as in Dired. C copies a file from the archive to disk and R renames a file within the archive. g reverts the buffer from the archive on disk. The keys M, G, and O change the file's permission bits, group, and owner, respectively.
+
+Saving the Tar buffer writes a new version of the archive to disk with the changes you made to the components.
+
+You don't need the =tar= program to use Tar mode---Emacs reads the archives directly. However, accessing compressed archives requires the appropriate uncompression program.
+
+A separate but similar Archive mode is used for =arc=, =jar=, =lzh=, =zip=, =rar=, =7z=, and =zoo= archives, as well as =exe= files that are self-extracting executables.
+
+The key bindings of Archive mode are similar to those in Tar mode, with the addition of the m key which marks a file for subsequent operations, and M- which unmarks all the marked files. Also, the a key toggles the display of detailed file information, for those archive types where it won't fit in a single line. Operations such as renaming a subfile, or changing its mode or owner, are supported only for some of the archive formats.
+
+Unlike Tar mode, Archive mode runs the archiving programs to unpack and repack archives. However, you don't need these programs to look at the archive table of contents, only to extract or manipulate the subfiles in the archive. Details of the program names and their options can be set in the 'Archive' Customize group (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customization-Groups][Customization Groups]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Archives][File Archives]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.15 Remote Files
+    :PROPERTIES:
+    :CUSTOM_ID: remote-files
+    :END:
+
+You can refer to files on other machines using a special file name syntax:
+
+#+BEGIN_EXAMPLE
+         /method:host:filename
+         /method:user@host:filename
+         /method:user@host#port:filename
+#+END_EXAMPLE
+
+To carry out this request, Emacs uses a remote-login program such as ssh. You must always specify in the file name which method to use---for example, /ssh:user@host:filename uses ssh. When you specify the pseudo method '-' in the file name, Emacs chooses the method as follows:
+
+1. If the host name starts with 'ftp.' (with dot), Emacs uses FTP.
+2. If the user name is 'ftp' or 'anonymous', Emacs uses FTP.
+3. If the variable =tramp-default-method= is set to 'ftp', Emacs uses FTP.
+4. If ssh-agent is running, Emacs uses scp.
+5. Otherwise, Emacs uses ssh.
+
+You can entirely turn off the remote file name feature by setting the variable =tramp-mode= to =nil=. You can turn off the feature in individual cases by quoting the file name with '/:' (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]]).
+
+Remote file access through FTP is handled by the Ange-FTP package, which is documented in the following. Remote file access through the other methods is handled by the Tramp package, which has its own manual. See [[https://www.gnu.org/software/emacs/manual/html_mono/tramp.html#Top][The Tramp Manual]].
+
+When the Ange-FTP package is used, Emacs logs in through FTP using the name user, if that is specified in the remote file name. If user is unspecified, Emacs logs in using your user name on the local system; but if you set the variable =ange-ftp-default-user= to a string, that string is used instead. When logging in, Emacs may also ask for a password.
+
+For performance reasons, Emacs does not make backup files for files accessed via FTP by default. To make it do so, change the variable =ange-ftp-make-backup-files= to a non-=nil= value.
+
+By default, auto-save files for remote files are made in the temporary file directory on the local machine, as specified by the variable =auto-save-file-name-transforms=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save-Files][Auto Save Files]].
+
+To visit files accessible by anonymous FTP, you use special user names 'anonymous' or 'ftp'. Passwords for these user names are handled specially. The variable =ange-ftp-generate-anonymous-password= controls what happens: if the value of this variable is a string, then that string is used as the password; if non-=nil= (the default), then the value of =user-mail-address= is used; if =nil=, then Emacs prompts you for a password as usual (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Passwords][Passwords]]).
+
+Sometimes you may be unable to access files on a remote machine because a firewall in between blocks the connection for security reasons. If you can log in on a gateway machine from which the target files /are/ accessible, and whose FTP server supports gatewaying features, you can still use remote file names; all you have to do is specify the name of the gateway machine by setting the variable =ange-ftp-gateway-host=, and set =ange-ftp-smart-gateway= to =t=. Otherwise you may be able to make remote file names work, but the procedure is complex. You can read the instructions by typing M-x finder-commentary ange-ftp .
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Name-Cache][File Name Cache]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.16 Quoted File Names
+    :PROPERTIES:
+    :CUSTOM_ID: quoted-file-names
+    :END:
+
+You can quote an absolute file name to prevent special characters and syntax in it from having their special effects. The way to do this is to add '/:' at the beginning.
+
+For example, you can quote a local file name which appears remote, to prevent it from being treated as a remote file name. Thus, if you have a directory named /foo: and a file named bar in it, you can refer to that file in Emacs as '/:/foo:/bar'.
+
+If you want to quote only special characters in the local part of a remote file name, you can quote just the local part. '/ssh:baz:/:/foo:/bar' refers to the file bar of directory /foo: on the host baz.
+
+'/:' can also prevent '~' from being treated as a special character for a user's home directory. For example, /:/tmp/~hack refers to a file whose name is ~hack in directory /tmp.
+
+Quoting with '/:' is also a way to enter in the minibuffer a file name that contains '$’. In order for this to work, the ‘/:’ must be at the beginning of the minibuffer contents. (You can also double each ‘$'; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names-with-_0024][File Names with $]].)
+
+You can also quote wildcard characters with '/:', for visiting. For example, /:/tmp/foo/bar visits the file /tmp/foo/bar.
+
+Another method of getting the same result is to enter /tmp/foo[*]bar, which is a wildcard specification that matches only /tmp/foo/bar. However, in many cases there is no need to quote the wildcard characters because even unquoted they give the right result. For example, if the only file name in /tmp that starts with 'foo' and ends with 'bar' is foo/bar, then specifying /tmp/foo/bar will visit only /tmp/foo/bar.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Conveniences][File Conveniences]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.17 File Name Cache
+    :PROPERTIES:
+    :CUSTOM_ID: file-name-cache
+    :END:
+
+You can use the file name cache to make it easy to locate a file by name, without having to remember exactly where it is located. When typing a file name in the minibuffer, C- (=file-cache-minibuffer-complete=) completes it using the file name cache. If you repeat C-, that cycles through the possible completions of what you had originally typed. (However, note that the C- character cannot be typed on most text terminals.)
+
+The file name cache does not fill up automatically. Instead, you load file names into the cache using these commands:
+
+​
+
+- M-x file-cache-add-directory directory
+
+  Add each file name in directory to the file name cache.
+
+- M-x file-cache-add-directory-using-find directory
+
+  Add each file name in directory and all of its nested subdirectories to the file name cache.
+
+- M-x file-cache-add-directory-using-locate directory
+
+  Add each file name in directory and all of its nested subdirectories to the file name cache, using locate to find them all.
+
+- M-x file-cache-add-directory-list variable
+
+  Add each file name in each directory listed in variable to the file name cache. variable should be a Lisp variable whose value is a list of directories, like =load-path=.
+
+- M-x file-cache-clear-cache
+
+  Clear the cache; that is, remove all file names from it.
+
+The file name cache is not persistent: it is kept and maintained only for the duration of the Emacs session. You can view the contents of the cache with the =file-cache-display= command.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filesets][Filesets]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Name-Cache][File Name Cache]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.18 Convenience Features for Finding Files
+    :PROPERTIES:
+    :CUSTOM_ID: convenience-features-for-finding-files
+    :END:
+
+In this section, we introduce some convenient facilities for finding recently-opened files, reading file names from a buffer, and viewing image files.
+
+If you enable Recentf mode, with M-x recentf-mode, the 'File' menu includes a submenu containing a list of recently opened files. M-x recentf-save-list saves the current =recent-file-list= to a file, and M-x recentf-edit-list edits it.
+
+The M-x ffap command generalizes =find-file= with more powerful heuristic defaults (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#FFAP][FFAP]]), often based on the text at point. Partial Completion mode offers other features extending =find-file=, which can be used with =ffap=. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion-Options][Completion Options]].
+
+Visiting image files automatically selects Image mode. In this major mode, you can type C-c C-c (=image-toggle-display=) to toggle between displaying the file as an image in the Emacs buffer, and displaying its underlying text (or raw byte) representation. Additionally you can type C-c C-x (=image-toggle-hex-display=) to toggle between displaying the file as an image in the Emacs buffer, and displaying it in hex representation. Displaying the file as an image works only if Emacs is compiled with support for displaying such images. If the displayed image is wider or taller than the frame, the usual point motion keys (C-f, C-p, and so forth) cause different parts of the image to be displayed. You can press n (=image-next-file=) and p (=image-previous-file=) to visit the next image file and the previous image file in the same directory, respectively.
+
+If the image can be animated, the command (=image-toggle-animation=) starts or stops the animation. Animation plays once, unless the option =image-animate-loop= is non-=nil=. With f (=image-next-frame=) and b (=image-previous-frame=) you can step through the individual frames. Both commands accept a numeric prefix to step through several frames at once. You can go to a specific frame with F (=image-goto-frame=). Frames are indexed from 1. Typing a + (=image-increase-speed=) increases the speed of the animation, a - (=image-decrease-speed=) decreases it, and a r (=image-reverse-speed=) reverses it. The command a 0 (=image-reset-speed=) resets the speed to the original value.
+
+If Emacs was compiled with support for the ImageMagick library, it can use ImageMagick to render a wide variety of images. The variable =imagemagick-enabled-types= lists the image types that Emacs may render using ImageMagick; each element in the list should be an internal ImageMagick name for an image type, as a symbol or an equivalent string (e.g., =BMP= for .bmp images). To enable ImageMagick for all possible image types, change =imagemagick-enabled-types= to =t=. The variable =imagemagick-types-inhibit= lists the image types which should never be rendered using ImageMagick, regardless of the value of =imagemagick-enabled-types= (the default list includes types like =C= and =HTML=, which ImageMagick can render as an image but Emacs should not). To disable ImageMagick entirely, change =imagemagick-types-inhibit= to =t=.
+
+The Image-Dired package can also be used to view images as thumbnails. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Image_002dDired][Image-Dired]].
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Conveniences][File Conveniences]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
+
+* 18.19 Filesets
+    :PROPERTIES:
+    :CUSTOM_ID: filesets
+    :END:
+
+If you regularly edit a certain group of files, you can define them as a fileset. This lets you perform certain operations, such as visiting, =query-replace=, and shell commands on all the files at once. To make use of filesets, you must first add the expression =(filesets-init)= to your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]). This adds a 'Filesets' sub-menu to the menu bar's 'File' menu.
+
+The simplest way to define a fileset is by adding files to it one at a time. To add a file to fileset name, visit the file and type M-x filesets-add-buffer name . If there is no fileset name, this creates a new one, which initially contains only the current file. The command M-x filesets-remove-buffer removes the current file from a fileset.
+
+You can also edit the list of filesets directly, with M-x filesets-edit (or by choosing 'Edit Filesets' from the 'Filesets' menu). The editing is performed in a Customize buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Easy-Customization][Easy Customization]]). Normally, a fileset is a simple list of files, but you can also define a fileset as a regular expression matching file names. Some examples of these more complicated filesets are shown in the Customize buffer. Remember to select 'Save for future sessions' if you want to use the same filesets in future Emacs sessions.
+
+You can use the command M-x filesets-open to visit all the files in a fileset, and M-x filesets-close to close them. Use M-x filesets-run-cmd to run a shell command on all the files in a fileset. These commands are also available from the 'Filesets' menu, where each existing fileset is represented by a submenu.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Version-Control][Version Control]], for a different concept of filesets: groups of files bundled together for version control operations. Filesets of that type are unnamed, and do not persist across Emacs sessions.

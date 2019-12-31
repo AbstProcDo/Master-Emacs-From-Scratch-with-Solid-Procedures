@@ -1,0 +1,182 @@
+#+TITLE: 52.Lossage
+* 51) Dealing with Emacs Trouble
+   :PROPERTIES:
+   :CUSTOM_ID: dealing-with-emacs-trouble
+   :END:
+
+This section describes how to recognize and deal with situations in which Emacs does not work as you expect, such as keyboard code mixups, garbled displays, running out of memory, and crashes and hangs.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Bugs][Bugs]], for what to do when you think you have found a bug in Emacs.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DEL-Does-Not-Delete][DEL Does Not Delete]]: What to do if doesn't delete.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Stuck-Recursive][Stuck Recursive]]: '[...]' in mode line around the parentheses.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Screen-Garbled][Screen Garbled]]: Garbage on the screen.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text-Garbled][Text Garbled]]: Garbage in the text.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Memory-Full][Memory Full]]: How to cope when you run out of memory.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Crashing][Crashing]]: What Emacs does when it crashes.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#After-a-Crash][After a Crash]]: Recovering editing in an Emacs session that crashed.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emergency-Escape][Emergency Escape]]: What to do if Emacs stops responding.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Stuck-Recursive][Stuck Recursive]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.1 If Fails to Delete
+    :PROPERTIES:
+    :CUSTOM_ID: if-fails-to-delete
+    :END:
+
+Every keyboard has a large key, usually labeled , which is ordinarily used to erase the last character that you typed. In Emacs, this key is supposed to be equivalent to .
+
+When Emacs starts up on a graphical display, it determines automatically which key should be . In some unusual cases, Emacs gets the wrong information from the system, and ends up deleting forwards instead of backwards.
+
+Some keyboards also have a key, which is ordinarily used to delete forwards. If this key deletes backward in Emacs, that too suggests Emacs got the wrong information---but in the opposite sense.
+
+On a text terminal, if you find that prompts for a Help command, like Control-h, instead of deleting a character, it means that key is actually sending the 'BS' character. Emacs ought to be treating as , but it isn't.
+
+In all of those cases, the immediate remedy is the same: use the command M-x normal-erase-is-backspace-mode. This toggles between the two modes that Emacs supports for handling , so if Emacs starts in the wrong mode, this should switch to the right mode. On a text terminal, if you want to ask for help when is treated as , use instead of C-h; C-? may also work, if it sends character code 127.
+
+To fix the problem in every Emacs session, put one of the following lines into your initialization file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]). For the first case above, where deletes forwards instead of backwards, use this line to make act as :
+
+#+BEGIN_EXAMPLE
+         (normal-erase-is-backspace-mode 0)
+#+END_EXAMPLE
+
+For the other two cases, use this line:
+
+#+BEGIN_EXAMPLE
+         (normal-erase-is-backspace-mode 1)
+#+END_EXAMPLE
+
+Another way to fix the problem for every Emacs session is to customize the variable =normal-erase-is-backspace=: the value =t= specifies the mode where or is , and =nil= specifies the other mode. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Easy-Customization][Easy Customization]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Screen-Garbled][Screen Garbled]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DEL-Does-Not-Delete][DEL Does Not Delete]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.2 Recursive Editing Levels
+    :PROPERTIES:
+    :CUSTOM_ID: recursive-editing-levels
+    :END:
+
+Recursive editing levels are important and useful features of Emacs, but they can seem like malfunctions if you do not understand them.
+
+If the mode line has square brackets '[...]' around the parentheses that contain the names of the major and minor modes, you have entered a recursive editing level. If you did not do this on purpose, or if you don't understand what that means, you should just get out of the recursive editing level. To do so, type M-x top-level. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recursive-Edit][Recursive Edit]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text-Garbled][Text Garbled]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Stuck-Recursive][Stuck Recursive]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.3 Garbage on the Screen
+    :PROPERTIES:
+    :CUSTOM_ID: garbage-on-the-screen
+    :END:
+
+If the text on a text terminal looks wrong, the first thing to do is see whether it is wrong in the buffer. Type C-l (=recenter-top-bottom=) to redisplay the entire screen. If the screen appears correct after this, the problem was entirely in the previous screen update. (Otherwise, see the following section.)
+
+Display updating problems often result from an incorrect terminfo entry for the terminal you are using. The file etc/TERMS in the Emacs distribution gives the fixes for known problems of this sort. INSTALL contains general advice for these problems in one of its sections. If you seem to be using the right terminfo entry, it is possible that there is a bug in the terminfo entry, or a bug in Emacs that appears for certain terminal types.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Memory-Full][Memory Full]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Screen-Garbled][Screen Garbled]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.4 Garbage in the Text
+    :PROPERTIES:
+    :CUSTOM_ID: garbage-in-the-text
+    :END:
+
+If C-l shows that the text is wrong, first type C-h l (=view-lossage=) to see what commands you typed to produce the observed results. Then try undoing the changes step by step using C-x u (=undo=), until it gets back to a state you consider correct.
+
+If a large portion of text appears to be missing at the beginning or end of the buffer, check for the word 'Narrow' in the mode line. If it appears, the text you don't see is probably still present, but temporarily off-limits. To make it accessible again, type C-x n w (=widen=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Narrowing][Narrowing]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Crashing][Crashing]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text-Garbled][Text Garbled]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.5 Running out of Memory
+    :PROPERTIES:
+    :CUSTOM_ID: running-out-of-memory
+    :END:
+
+If you get the error message 'Virtual memory exceeded', save your modified buffers with C-x s (=save-some-buffers=). This method of saving them has the smallest need for additional memory. Emacs keeps a reserve of memory which it makes available when this error happens; that should be enough to enable C-x s to complete its work. When the reserve has been used, '!MEM FULL!' appears at the beginning of the mode line, indicating there is no more reserve.
+
+Once you have saved your modified buffers, you can exit this Emacs session and start another, or you can use M-x kill-some-buffers to free space in the current Emacs job. If this frees up sufficient space, Emacs will refill its memory reserve, and '!MEM FULL!' will disappear from the mode line. That means you can safely go on editing in the same Emacs session.
+
+Do not use M-x buffer-menu to save or kill buffers when you run out of memory, because the Buffer Menu needs a fair amount of memory itself, and the reserve supply may not be enough.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#After-a-Crash][After a Crash]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Memory-Full][Memory Full]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.6 When Emacs Crashes
+    :PROPERTIES:
+    :CUSTOM_ID: when-emacs-crashes
+    :END:
+
+Emacs is not supposed to crash, but if it does, it produces a crash report prior to exiting. The crash report is printed to the standard error stream. If Emacs was started from a graphical desktop on a GNU or Unix system, the standard error stream is commonly redirected to a file such as ~/.xsession-errors, so you can look for the crash report there. On MS-Windows, the crash report is written to a file named emacs\_backtrace.txt in the current directory of the Emacs process, in addition to the standard error stream.
+
+The format of the crash report depends on the platform. On some platforms, such as those using the GNU C Library, the crash report includes a backtrace describing the execution state prior to crashing, which can be used to help debug the crash. Here is an example for a GNU system:
+
+#+BEGIN_EXAMPLE
+         Fatal error 11: Segmentation fault
+         Backtrace:
+         emacs[0x5094e4]
+         emacs[0x4ed3e6]
+         emacs[0x4ed504]
+         /lib64/libpthread.so.0[0x375220efe0]
+         /lib64/libpthread.so.0(read+0xe)[0x375220e08e]
+         emacs[0x509af6]
+         emacs[0x5acc26]
+         ...
+#+END_EXAMPLE
+
+The number '11' is the system signal number corresponding to the crash---in this case a segmentation fault. The hexadecimal numbers are program addresses, which can be associated with source code lines using a debugging tool. For example, the GDB command ‘list *0x509af6' prints the source-code lines corresponding to the 'emacs[0x509af6]' entry. If your system has the addr2line utility, the following shell command outputs a backtrace with source-code line numbers:
+
+#+BEGIN_EXAMPLE
+         sed -n 's/.*\[\(.*\)]$/\1/p' backtrace |
+           addr2line -C -f -i -p -e bindir/emacs-binary
+#+END_EXAMPLE
+
+Here, backtrace is the name of a text file containing a copy of the backtrace, bindir is the name of the directory that contains the Emacs executable, and emacs-binary is the name of the Emacs executable file, normally emacs on GNU and Unix systems and emacs.exe on MS-Windows and MS-DOS. Omit the -p option if your version of addr2line is too old to have it.
+
+Optionally, Emacs can generate a core dump when it crashes, on systems that support core files. A core dump is a file containing voluminous data about the state of the program prior to the crash, usually examined by loading it into a debugger such as GDB. On many platforms, core dumps are disabled by default, and you must explicitly enable them by running the shell command 'ulimit -c unlimited' (e.g., in your shell startup script).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emergency-Escape][Emergency Escape]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Crashing][Crashing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.7 Recovery After a Crash
+    :PROPERTIES:
+    :CUSTOM_ID: recovery-after-a-crash
+    :END:
+
+If Emacs or the computer crashes, you can recover the files you were editing at the time of the crash from their auto-save files. To do this, start Emacs again and type the command M-x recover-session.
+
+This command initially displays a buffer which lists interrupted session files, each with its date. You must choose which session to recover from. Typically the one you want is the most recent one. Move point to the one you choose, and type C-c C-c.
+
+Then =recover-session= considers each of the files that you were editing during that session; for each such file, it asks whether to recover that file. If you answer y for a file, it shows the dates of that file and its auto-save file, then asks once again whether to recover that file. For the second question, you must confirm with yes. If you do, Emacs visits the file but gets the text from the auto-save file.
+
+When =recover-session= is done, the files you've chosen to recover are present in Emacs buffers. You should then save them. Only this---saving them---updates the files themselves.
+
+As a last resort, if you had buffers with content which were not associated with any files, or if the autosave was not recent enough to have recorded important changes, you can use the etc/emacs-buffer.gdb script with GDB (the GNU Debugger) to retrieve them from a core dump--provided that a core dump was saved, and that the Emacs executable was not stripped of its debugging symbols.
+
+As soon as you get the core dump, rename it to another name such as core.emacs, so that another crash won't overwrite it.
+
+To use this script, run =gdb= with the file name of your Emacs executable and the file name of the core dump, e.g., 'gdb /usr/bin/emacs core.emacs'. At the =(gdb)= prompt, load the recovery script: 'source /usr/src/emacs/etc/emacs-buffer.gdb'. Then type the command =ybuffer-list= to see which buffers are available. For each buffer, it lists a buffer number. To save a buffer, use =ysave-buffer=; you specify the buffer number, and the file name to write that buffer into. You should use a file name which does not already exist; if the file does exist, the script does not make a backup of its old contents.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#After-a-Crash][After a Crash]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lossage][Lossage]]
+
+* 51.8 Emergency Escape
+    :PROPERTIES:
+    :CUSTOM_ID: emergency-escape
+    :END:
+
+On text terminals, the emergency escape feature suspends Emacs immediately if you type C-g a second time before Emacs can actually respond to the first one by quitting. This is so you can always get out of GNU Emacs no matter how badly it might be hung. When things are working properly, Emacs recognizes and handles the first C-g so fast that the second one won't trigger emergency escape. However, if some problem prevents Emacs from handling the first C-g properly, then the second one will get you back to the shell.
+
+When you resume Emacs after a suspension caused by emergency escape, it reports the resumption and asks a question or two before going back to what it had been doing:
+
+#+BEGIN_EXAMPLE
+         Emacs is resuming after an emergency escape.
+         Auto-save? (y or n)
+         Abort (and dump core)? (y or n)
+#+END_EXAMPLE
+
+Answer each question with y or n followed by .
+
+Saying y to 'Auto-save?' causes immediate auto-saving of all modified buffers in which auto-saving is enabled. Saying n skips this. This question is omitted if Emacs is in a state where auto-saving cannot be done safely.
+
+Saying y to 'Abort (and dump core)?' causes Emacs to crash, dumping core. This is to enable a wizard to figure out why Emacs was failing to quit in the first place. Execution does not continue after a core dump.
+
+If you answer this question n, Emacs execution resumes. With luck, Emacs will ultimately do the requested quit. If not, each subsequent C-g invokes emergency escape again.
+
+If Emacs is not really hung, just slow, you may invoke the double C-g feature without really meaning to. Then just resume and answer n to both questions, and you will get back to the former state. The quit you requested will happen by and by.
+
+Emergency escape is active only for text terminals. On graphical displays, you can use the mouse to kill Emacs or switch to another program.
+
+On MS-DOS, you must type C- (twice) to cause emergency escape---but there are cases where it won't work, when a system call hangs or when Emacs is stuck in a tight loop in C code.

@@ -1,0 +1,223 @@
+#+TITLE: 11.Mark-and-Region
+
+* 11) The Mark and the Region
+
+Many Emacs commands operate on an arbitrary contiguous part of the current buffer. To specify the text for such a command to operate on, you set the mark at one end of it, and move point to the other end. The text between point and the mark is called the region. The region always extends between point and the mark, no matter which one comes earlier in the text; each time you move point, the region changes.
+
+Setting the mark at a position in the text also activates it. When the mark is active, we say also that the region is active; Emacs indicates its extent by highlighting the text within it, using the =region= face (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Face-Customization][Face Customization]]).
+
+After certain non-motion commands, including any command that changes the text in the buffer, Emacs automatically deactivates the mark; this turns off the highlighting. You can also explicitly deactivate the mark at any time, by typing C-g (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quitting][Quitting]]).
+
+The above default behavior is known as Transient Mark mode. Disabling Transient Mark mode switches Emacs to an alternative behavior, in which the region is usually not highlighted. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Disabled-Transient-Mark][Disabled Transient Mark]].
+
+Setting the mark in one buffer has no effect on the marks in other buffers. When you return to a buffer with an active mark, the mark is at the same place as before. When multiple windows show the same buffer, they can have different values of point, and thus different regions, but they all share one common mark position. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]. Ordinarily, only the selected window highlights its region; however, if the variable =highlight-nonselected-windows= is non-=nil=, each window highlights its own region.
+
+There is another kind of region: the rectangular region. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rectangles][Rectangles]].
+* 11.1 Setting the Mark
+    :PROPERTIES:
+    :CUSTOM_ID: setting-the-mark
+    :END:
+
+Here are some commands for setting the mark:
+
+- C-
+
+  Set the mark at point, and activate it (=set-mark-command=).
+
+- C-@
+
+  The same.
+
+- C-x C-x
+
+  Set the mark at point, and activate it; then move point where the mark used to be (=exchange-point-and-mark=).
+
+- Drag-mouse-1
+
+  Set point and the mark around the text you drag across.
+
+- mouse-3
+
+  Set the mark at point, then move point to where you click (=mouse-save-then-kill=).
+
+- Shifted cursor motion keys
+
+  Set the mark at point if the mark is inactive, then move point. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]].
+
+  The most common way to set the mark is with C- (=set-mark-command=)[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-5][5]]. This sets the mark where point is, and activates it. You can then move point away, leaving the mark behind.
+
+For example, suppose you wish to convert part of the buffer to upper case. To accomplish this, go to one end of the desired text, type C-, and move point until the desired portion of text is highlighted. Now type C-x C-u (=upcase-region=). This converts the text in the region to upper case, and then deactivates the mark.
+
+Whenever the mark is active, you can deactivate it by typing C-g (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quitting][Quitting]]). Most commands that operate on the region also automatically deactivate the mark, like C-x C-u in the above example.
+
+Instead of setting the mark in order to operate on a region, you can also use it to remember a position in the buffer (by typing C- C-), and later jump back there (by typing C-u C-). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]], for details.
+
+The command C-x C-x (=exchange-point-and-mark=) exchanges the positions of point and the mark. C-x C-x is useful when you are satisfied with the position of point but want to move the other end of the region (where the mark is). Using C-x C-x a second time, if necessary, puts the mark at the new position with point back at its original position. Normally, if the mark is inactive, this command first reactivates the mark wherever it was last set, to ensure that the region is left highlighted. However, if you call it with a prefix argument, it leaves the mark inactive and the region unhighlighted; you can use this to jump to the mark in a manner similar to C-u C-.
+
+You can also set the mark with the mouse. If you press the left mouse button (down-mouse-1) and drag the mouse across a range of text, this sets the mark where you first pressed the mouse button and puts point where you release it. Alternatively, clicking the right mouse button (mouse-3) sets the mark at point and then moves point to where you clicked. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mouse-Commands][Mouse Commands]], for a more detailed description of these mouse commands.
+
+Finally, you can set the mark by holding down the shift key while typing certain cursor motion commands (such as S-, S-C-f, S-C-n, etc.). This is called shift-selection. It sets the mark at point before moving point, but only if there is no active mark set via a previous shift-selection or mouse commands. The mark set by mouse commands and by shift-selection behaves slightly differently from the usual mark: any subsequent unshifted cursor motion command deactivates it automatically. For details, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]].
+
+Many commands that insert text, such as C-y (=yank=), set the mark at the other end of the inserted text, without activating it. This lets you easily return to that position (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]]). You can tell that a command does this when it shows 'Mark set' in the echo area.
+
+Under X, every time the active region changes, Emacs saves the text in the region to the primary selection. This lets you insert that text into other X applications with mouse-2 clicks. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Primary-Selection][Primary Selection]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Using-Region][Using Region]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Setting-Mark][Setting Mark]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
+* 11.2 Commands to Mark Textual Objects
+    :PROPERTIES:
+    :CUSTOM_ID: commands-to-mark-textual-objects
+    :END:
+
+Here are commands for placing point and the mark around a textual object such as a word, list, paragraph or page:
+
+- M-@
+
+  Set mark at the end of the next word (=mark-word=). This does not move point.
+
+- C-M-@
+
+  Set mark after end of following balanced expression (=mark-sexp=). This does not move point.
+
+- M-h
+
+  Move point to the beginning of the current paragraph, and set mark at the end (=mark-paragraph=).
+
+- C-M-h
+
+  Move point to the beginning of the current defun, and set mark at the end (=mark-defun=).
+
+- C-x C-p
+
+  Move point to the beginning of the current page, and set mark at the end (=mark-page=).
+
+- C-x h
+
+  Move point to the beginning of the buffer, and set mark at the end (=mark-whole-buffer=).
+
+  M-@ (=mark-word=) sets the mark at the end of the next word (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Words][Words]], for information about words). Repeated invocations of this command extend the region by advancing the mark one word at a time. As an exception, if the mark is active and located before point, M-@ moves the mark backwards from its current position one word at a time.
+
+This command also accepts a numeric argument n, which tells it to advance the mark by n words. A negative argument −n moves the mark back by n words.
+
+Similarly, C-M-@ (=mark-sexp=) puts the mark at the end of the next balanced expression (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Expressions][Expressions]]). Repeated invocations extend the region to subsequent expressions, while positive or negative numeric arguments move the mark forward or backward by the specified number of expressions.
+
+The other commands in the above list set both point and mark, so as to delimit an object in the buffer. M-h (=mark-paragraph=) marks paragraphs (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Paragraphs][Paragraphs]]), C-M-h (=mark-defun=) marks top-level definitions (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Moving-by-Defuns][Moving by Defuns]]), and C-x C-p (=mark-page=) marks pages (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Pages][Pages]]). Repeated invocations again play the same role, extending the region to consecutive objects; similarly, numeric arguments specify how many objects to move the mark by.
+
+C-x h (=mark-whole-buffer=) sets up the entire buffer as the region, by putting point at the beginning and the mark at the end.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Marking-Objects][Marking Objects]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
+* 11.3 Operating on the Region
+    :PROPERTIES:
+    :CUSTOM_ID: operating-on-the-region
+    :END:
+
+Once you have a region, here are some of the ways you can operate on it:
+
+- Kill it with C-w (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]]).
+- Copy it to the kill ring with M-w (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Yanking][Yanking]]).
+- Convert case with C-x C-l or C-x C-u (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Case][Case]]).
+- Undo changes within it using C-u C-/ (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Undo][Undo]]).
+- Replace text within it using M-% (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Query-Replace][Query Replace]]).
+- Indent it with C-x or C-M- (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Indentation][Indentation]]).
+- Fill it as text with M-x fill-region (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filling][Filling]]).
+- Check the spelling of words within it with M-$ (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]]).
+- Evaluate it as Lisp code with M-x eval-region (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Eval][Lisp Eval]]).
+- Save it in a register with C-x r s (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Registers][Registers]]).
+- Save it in a buffer or a file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Accumulating-Text][Accumulating Text]]).
+
+Some commands have a default behavior when the mark is inactive, but operate on the region if the mark is active. For example, M-$ (=ispell-word=) normally checks the spelling of the word at point, but it checks the text in the region if the mark is active (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]]). Normally, such commands use their default behavior if the region is empty (i.e., if mark and point are at the same position). If you want them to operate on the empty region, change the variable =use-empty-active-region= to =t=.
+
+As described in [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Erasing][Erasing]], the (=backward-delete-char=) and (=delete-forward-char=) commands also act this way. If the mark is active, they delete the text in the region. (As an exception, if you supply a numeric argument n, where n is not one, these commands delete n characters regardless of whether the mark is active). If you change the variable =delete-active-region= to =nil=, then these commands don't act differently when the mark is active. If you change the value to =kill=, these commands kill the region instead of deleting it (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]]).
+
+Other commands always operate on the region, and have no default behavior. Such commands usually have the word =region= in their names, like C-w (=kill-region=) and C-x C-u (=upcase-region=). If the mark is inactive, they operate on the inactive region---that is, on the text between point and the position at which the mark was last set (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]]). To disable this behavior, change the variable =mark-even-if-inactive= to =nil=. Then these commands will instead signal an error if the mark is inactive.
+
+By default, text insertion occurs normally even if the mark is active---for example, typing a inserts the character 'a', then deactivates the mark. Delete Selection mode, a minor mode, modifies this behavior: if you enable that mode, then inserting text while the mark is active causes the text in the region to be deleted first. To toggle Delete Selection mode on or off, type M-x delete-selection-mode.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Global-Mark-Ring][Global Mark Ring]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Using-Region][Using Region]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
+* 11.4 The Mark Ring
+    :PROPERTIES:
+    :CUSTOM_ID: the-mark-ring
+    :END:
+
+Each buffer remembers previous locations of the mark, in the mark ring. Commands that set the mark also push the old mark onto this ring. One of the uses of the mark ring is to remember spots that you may want to go back to.
+
+- C- C-
+
+  Set the mark, pushing it onto the mark ring, without activating it.
+
+- C-u C-
+
+  Move point to where the mark was, and restore the mark from the ring of former marks.
+
+  The command C- C- is handy when you want to use the mark to remember a position to which you may wish to return. It pushes the current point onto the mark ring, without activating the mark (which would cause Emacs to highlight the region). This is actually two consecutive invocations of C- (=set-mark-command=); the first C- sets the mark, and the second C- deactivates it. (When Transient Mark mode is off, C- C- instead activates Transient Mark mode temporarily; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Disabled-Transient-Mark][Disabled Transient Mark]].)
+
+  To return to a marked position, use =set-mark-command= with a prefix argument: C-u C-. This moves point to where the mark was, and deactivates the mark if it was active. Each subsequent C-u C- jumps to a prior position stored in the mark ring. The positions you move through in this way are not lost; they go to the end of the ring.
+
+  If you set =set-mark-command-repeat-pop= to non-=nil=, then immediately after you type C-u C-, you can type C- instead of C-u C- to cycle through the mark ring. By default, =set-mark-command-repeat-pop= is =nil=.
+
+Each buffer has its own mark ring. All editing commands use the current buffer's mark ring. In particular, C-u C- always stays in the same buffer.
+
+The variable =mark-ring-max= specifies the maximum number of entries to keep in the mark ring. This defaults to 16 entries. If that many entries exist and another one is pushed, the earliest one in the list is discarded. Repeating C-u C- cycles through the positions currently in the ring.
+
+If you want to move back to the same place over and over, the mark ring may not be convenient enough. If so, you can record the position in a register for later retrieval (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Position-Registers][Saving Positions in Registers]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
+* 11.5 The Global Mark Ring
+    :PROPERTIES:
+    :CUSTOM_ID: the-global-mark-ring
+    :END:
+
+In addition to the ordinary mark ring that belongs to each buffer, Emacs has a single global mark ring. Each time you set a mark, this is recorded in the global mark ring in addition to the current buffer's own mark ring, if you have switched buffers since the previous mark setting. Hence, the global mark ring records a sequence of buffers that you have been in, and, for each buffer, a place where you set the mark. The length of the global mark ring is controlled by =global-mark-ring-max=, and is 16 by default.
+
+The command C-x C- (=pop-global-mark=) jumps to the buffer and position of the latest entry in the global ring. It also rotates the ring, so that successive uses of C-x C- take you to earlier buffers and mark positions.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Disabled-Transient-Mark][Disabled Transient Mark]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Global-Mark-Ring][Global Mark Ring]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
+* 11.6 Shift Selection
+    :PROPERTIES:
+    :CUSTOM_ID: shift-selection
+    :END:
+
+If you hold down the shift key while typing a cursor motion command, this sets the mark before moving point, so that the region extends from the original position of point to its new position. This feature is referred to as shift-selection. It is similar to the way text is selected in other editors.
+
+The mark set via shift-selection behaves a little differently from what we have described above. Firstly, in addition to the usual ways of deactivating the mark (such as changing the buffer text or typing C-g), the mark is deactivated by any /unshifted/ cursor motion command. Secondly, any subsequent /shifted/ cursor motion command avoids setting the mark anew. Therefore, a series of shifted cursor motion commands will continuously adjust the region.
+
+Shift-selection only works if the shifted cursor motion key is not already bound to a separate command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Customization][Customization]]). For example, if you bind S-C-f to another command, typing S-C-f runs that command instead of performing a shift-selected version of C-f (=forward-char=).
+
+A mark set via mouse commands behaves the same as a mark set via shift-selection (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Setting-Mark][Setting Mark]]). For example, if you specify a region by dragging the mouse, you can continue to extend the region using shifted cursor motion commands. In either case, any unshifted cursor motion command deactivates the mark.
+
+To turn off shift-selection, set =shift-select-mode= to =nil=. Doing so does not disable setting the mark via mouse commands.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
+* 11.7 Disabling Transient Mark Mode
+    :PROPERTIES:
+    :CUSTOM_ID: disabling-transient-mark-mode
+    :END:
+
+The default behavior of the mark and region, in which setting the mark activates it and highlights the region, is called Transient Mark mode. This is a minor mode that is enabled by default. It can be toggled with M-x transient-mark-mode, or with the 'Highlight Active Region' menu item in the 'Options' menu. Turning it off switches Emacs to an alternative mode of operation:
+
+- Setting the mark, with commands like
+
+  C-
+
+  or
+
+  C-x C-x
+
+  , does not highlight the region. Therefore, you can't tell by looking where the mark is located; you have to remember.
+
+  The usual solution to this problem is to set the mark and then use it soon, before you forget where it is. You can also check where the mark is by using C-x C-x, which exchanges the positions of the point and the mark (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Setting-Mark][Setting Mark]]).
+
+- Some commands, which ordinarily act on the region when the mark is active, no longer do so. For example, normally M-% (=query-replace=) performs replacements within the region, if the mark is active. When Transient Mark mode is off, it always operates from point to the end of the buffer. Commands that act this way are identified in their own documentation.
+
+  While Transient Mark mode is off, you can activate it temporarily using C- C- or C-u C-x C-x.
+
+- C- C-
+
+  Set the mark at point (like plain C-) and enable Transient Mark mode just once, until the mark is deactivated. (This is not really a separate command; you are using the C- command twice.)
+
+- C-u C-x C-x
+
+  Exchange point and mark, activate the mark and enable Transient Mark mode temporarily, until the mark is next deactivated. (This is the C-x C-x command, =exchange-point-and-mark=, with a prefix argument.)
+
+These commands set or activate the mark, and enable Transient Mark mode only until the mark is deactivated. One reason you may want to use them is that some commands operate on the entire buffer instead of the region when Transient Mark mode is off. Enabling Transient Mark mode momentarily gives you a way to use these commands on the region.
+
+When you specify a region with the mouse (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Setting-Mark][Setting Mark]]), or with shift-selection (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]]), this likewise activates Transient Mark mode temporarily and highlights the region.

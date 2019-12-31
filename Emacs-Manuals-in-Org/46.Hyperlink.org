@@ -1,0 +1,131 @@
+#+TITLE: 46.Hyperlink
+* 46) Hyperlinking and Web Navigation Features
+   :PROPERTIES:
+   :CUSTOM_ID: hyperlinking-and-web-navigation-features
+   :END:
+
+The following subsections describe convenience features for handling URLs and other types of links occurring in Emacs buffer text.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#EWW][EWW]]: A web browser in Emacs.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Embedded-WebKit-Widgets][Embedded WebKit Widgets]]: Embedding browser widgets in Emacs buffers.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Browse_002dURL][Browse-URL]]: Following URLs.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Goto-Address-mode][Goto Address mode]]: Activating URLs.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#FFAP][FFAP]]: Finding files etc. at point.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Embedded-WebKit-Widgets][Embedded WebKit Widgets]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hyperlinking][Hyperlinking]]
+* 46.1 Web Browsing with EWW
+    :PROPERTIES:
+    :CUSTOM_ID: web-browsing-with-eww
+    :END:
+
+EWW, the Emacs Web Wowser, is a web browser package for Emacs. It allows browsing URLs within an Emacs buffer. The command M-x eww will open a URL or search the web. You can open a file using the command M-x eww-open-file. You can use EWW as the web browser for =browse-url=, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Browse_002dURL][Browse-URL]]. For full details, see [[https://www.gnu.org/software/emacs/manual/html_mono/eww.html#Top][EWW]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Browse_002dURL][Browse-URL]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#EWW][EWW]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hyperlinking][Hyperlinking]]
+* 46.2 Embedded WebKit Widgets
+    :PROPERTIES:
+    :CUSTOM_ID: embedded-webkit-widgets
+    :END:
+
+If Emacs was compiled with the appropriate support packages, it is able to show browser widgets in its buffers. The command M-x xwidget-webkit-browse-url asks for a URL to display in the browser widget. The URL normally defaults to the URL at or before point, but if there is an active region (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]), the default URL comes from the region instead, after removing any whitespace from it. The command then creates a new buffer with the embedded browser showing the specified URL. The buffer is put in the Xwidget-WebKit mode (similar to Image mode, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Conveniences][File Conveniences]]), which provides one-key commands for scrolling the widget, changing its size, and reloading it. Type C-h b in that buffer to see the key bindings.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Goto-Address-mode][Goto Address mode]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Embedded-WebKit-Widgets][Embedded WebKit Widgets]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hyperlinking][Hyperlinking]]
+* 46.3 Following URLs
+    :PROPERTIES:
+    :CUSTOM_ID: following-urls
+    :END:
+
+​
+
+- M-x browse-url url
+
+  Load a URL into a Web browser.
+
+The Browse-URL package allows you to easily follow URLs from within Emacs. Most URLs are followed by invoking a web browser; 'mailto:' URLs are followed by invoking the =compose-mail= Emacs command to send mail to the specified address (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]).
+
+The command M-x browse-url prompts for a URL, and follows it. If point is located near a plausible URL, that URL is offered as the default. The Browse-URL package also provides other commands which you might like to bind to keys, such as =browse-url-at-point= and =browse-url-at-mouse=.
+
+You can customize Browse-URL's behavior via various options in the =browse-url= Customize group. In particular, the option =browse-url-mailto-function= lets you define how to follow 'mailto:' URLs, while =browse-url-browser-function= lets you define how to follow other types of URLs. For more information, view the package commentary by typing C-h P browse-url .
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#FFAP][FFAP]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Browse_002dURL][Browse-URL]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hyperlinking][Hyperlinking]]
+* 46.4 Activating URLs
+    :PROPERTIES:
+    :CUSTOM_ID: activating-urls
+    :END:
+
+​
+
+- M-x goto-address-mode
+
+  Activate URLs and e-mail addresses in the current buffer.
+
+  You can make Emacs mark out URLs specially in the current buffer, by typing M-x goto-address-mode. When this buffer-local minor mode is enabled, it finds all the URLs in the buffer, highlights them, and turns them into clickable buttons. You can follow the URL by typing C-c (=goto-address-at-point=) while point is on its text; or by clicking with mouse-2, or by clicking mouse-1 quickly (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mouse-References][Mouse References]]). Following a URL is done by calling =browse-url= as a subroutine (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Browse_002dURL][Browse-URL]]).
+
+It can be useful to add =goto-address-mode= to mode hooks and hooks for displaying an incoming message (e.g., =rmail-show-message-hook= for Rmail, and =mh-show-mode-hook= for MH-E). This is not needed for Gnus, which has a similar feature of its own.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Goto-Address-mode][Goto Address mode]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hyperlinking][Hyperlinking]]
+* 46.5 Finding Files and URLs at Point
+    :PROPERTIES:
+    :CUSTOM_ID: finding-files-and-urls-at-point
+    :END:
+
+The FFAP package replaces certain key bindings for finding files, such as C-x C-f, with commands that provide more sensible defaults. These commands behave like the ordinary ones when given a prefix argument. Otherwise, they get the default file name or URL from the text around point. If what is found in the buffer has the form of a URL rather than a file name, the commands use =browse-url= to view it (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Browse_002dURL][Browse-URL]]).
+
+This feature is useful for following references in mail or news buffers, README files, MANIFEST files, and so on. For more information, view the package commentary by typing C-h P ffap .
+
+To enable FFAP, type M-x ffap-bindings. This makes the following key bindings, and also installs hooks for additional FFAP functionality in Rmail, Gnus and VM article buffers.
+
+- C-x C-f filename
+
+  Find filename, guessing a default from text around point (=find-file-at-point=).
+
+- C-x C-r filename
+
+  =ffap-read-only=, analogous to =find-file-read-only=.
+
+- C-x C-v filename
+
+  =ffap-alternate-file=, analogous to =find-alternate-file=.
+
+- C-x d directory
+
+  Start Dired on directory, defaulting to the directory at point (=dired-at-point=).
+
+- C-x C-d directory
+
+  =ffap-list-directory=, analogous to =list-directory=.
+
+- C-x 4 f filename
+
+  =ffap-other-window=, analogous to =find-file-other-window=.
+
+- C-x 4 r filename
+
+  =ffap-read-only-other-window=, analogous to =find-file-read-only-other-window=.
+
+- C-x 4 d directory
+
+  =ffap-dired-other-window=, like =dired-other-window=.
+
+- C-x 5 f filename
+
+  =ffap-other-frame=, analogous to =find-file-other-frame=.
+
+- C-x 5 r filename
+
+  =ffap-read-only-other-frame=, analogous to =find-file-read-only-other-frame=.
+
+- C-x 5 d directory
+
+  =ffap-dired-other-frame=, analogous to =dired-other-frame=.
+
+- M-x ffap-next
+
+  Search buffer for next file name or URL, then find that file or URL.
+
+- S-mouse-3
+
+  =ffap-at-mouse= finds the file guessed from text around the position of a mouse click.
+
+- C-S-mouse-3
+
+  Display a menu of files and URLs mentioned in current buffer, then find the one you select (=ffap-menu=).

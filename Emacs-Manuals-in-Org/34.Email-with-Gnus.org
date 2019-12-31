@@ -1,0 +1,134 @@
+#+TITLE: 34.Email-with-Gnus
+* 34 Email and Usenet News with Gnus
+
+Gnus is an Emacs package primarily designed for reading and posting Usenet news. It can also be used to read and respond to messages from a number of other sources---email, remote directories, digests, and so on. Here we introduce Gnus and describe several basic features. For full details, see [[https://www.gnu.org/software/emacs/manual/html_mono/gnus.html#Top][Gnus]].
+
+1. [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Buffers-of-Gnus][Buffers of Gnus]]: The group, summary, and article buffers.
+2. [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Gnus-Startup][Gnus Startup]]: What you should know about starting Gnus.
+3. [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Gnus-Group-Buffer][Gnus Group Buffer]]: A short description of Gnus group commands.
+4. [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Gnus-Summary-Buffer][Gnus Summary Buffer]]: A short description of Gnus summary commands.
+
+* 34.1 Gnus Buffers
+    :PROPERTIES:
+    :CUSTOM_ID: gnus-buffers
+    :END:
+
+Gnus uses several buffers to display information and to receive commands. The three most commonly-used Gnus buffers are the group buffer, the summary buffer and the article buffer.
+
+The group buffer contains a list of article sources (e.g., newsgroups and email inboxes), which are collectively referred to as groups. This is the first buffer Gnus displays when it starts up. It normally displays only the groups to which you subscribe and that contain unread articles. From this buffer, you can select a group to read.
+
+The summary buffer lists the articles in a single group, showing one article per line. By default, it displays each article's author, subject, and line number, but this is customizable; See [[https://www.gnu.org/software/emacs/manual/html_mono/gnus.html#Summary-Buffer-Format][Summary Buffer Format]]. The summary buffer is created when you select a group in the group buffer, and is killed when you exit the group.
+
+From the summary buffer, you can choose an article to view. The article is displayed in the article buffer. In normal Gnus usage, you view this buffer but do not select it---all useful Gnus commands can be invoked from the summary buffer. But you can select the article buffer, and execute Gnus commands from it, if you wish.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Gnus-Group-Buffer][Gnus Group Buffer]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Buffers-of-Gnus][Buffers of Gnus]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Gnus][Gnus]]
+
+* 34.2 When Gnus Starts Up
+    :PROPERTIES:
+    :CUSTOM_ID: when-gnus-starts-up
+    :END:
+
+If your system has been set up for reading Usenet news, getting started with Gnus is easy---just type M-x gnus.
+
+On starting up, Gnus reads your news initialization file: a file named .newsrc in your home directory which lists your Usenet newsgroups and subscriptions (this file is not unique to Gnus; it is used by many other newsreader programs). It then tries to contact the system's default news server, which is typically specified by the NNTPSERVER environment variable.
+
+If your system does not have a default news server, or if you wish to use Gnus for reading email, then before invoking M-x gnus you need to tell Gnus where to get news and/or mail. To do this, customize the variables =gnus-select-method= and/or =gnus-secondary-select-methods=. See [[https://www.gnu.org/software/emacs/manual/html_mono/gnus.html#Finding-the-News][Finding the News]].
+
+Once Gnus has started up, it displays the group buffer. By default, the group buffer shows only a small number of subscribed groups. Groups with other statuses---unsubscribed, killed, or zombie---are hidden. The first time you start Gnus, any group to which you are not subscribed is made into a killed group; any group that subsequently appears on the news server becomes a zombie group.
+
+To proceed, you must select a group in the group buffer to open the summary buffer for that group; then, select an article in the summary buffer to view its article buffer in a separate window. The following sections explain how to use the group and summary buffers to do this.
+
+To quit Gnus, type q in the group buffer. This automatically records your group statuses in the files .newsrc and .newsrc.eld, so that they take effect in subsequent Gnus sessions.
+
+* 34.3 Using the Gnus Group Buffer
+    :PROPERTIES:
+    :CUSTOM_ID: using-the-gnus-group-buffer
+    :END:
+
+The following commands are available in the Gnus group buffer:
+
+- <SPC>
+  Switch to the summary buffer for the group on the current line (=gnus-group-read-group=).
+
+- l
+- A s
+  In the group buffer, list only the groups to which you subscribe and which contain unread articles (=gnus-group-list-groups=; this is the default listing).
+
+- L
+- A u
+  List all subscribed and unsubscribed groups, but not killed or zombie groups (=gnus-group-list-all-groups=).
+
+- A k
+  List killed groups (=gnus-group-list-killed=).
+
+- A z
+  List zombie groups (=gnus-group-list-zombies=).
+
+- u
+  Toggle the subscription status of the group (=gnus-group-unsubscribe-current-group=) on the current line (i.e., turn a subscribed group into an unsubscribed group, or vice versa). Invoking this on a killed or zombie group turns it into an unsubscribed group.
+
+- C-k
+  Kill the group on the current line (=gnus-group-kill-group=). Killed groups are not recorded in the .newsrc file, and they are not shown in the l or L listings.
+
+-  <DEL>
+
+  Move point to the previous group containing unread articles (=gnus-group-prev-unread-group=).
+
+- n
+
+  Move point to the next unread group (=gnus-group-next-unread-group=).
+
+- p
+
+  Move point to the previous unread group (=gnus-group-prev-unread-group=).
+
+- q
+
+  Update your Gnus settings, and quit Gnus (=gnus-group-exit=).
+
+* 34.4 Using the Gnus Summary Buffer
+    :PROPERTIES:
+    :CUSTOM_ID: using-the-gnus-summary-buffer
+    :END:
+
+The following commands are available in the Gnus summary buffer:
+
+- <SPC>
+
+  If there is no article selected, select the article on the current line and display its article buffer. Otherwise, try scrolling the selected article buffer in its window; on reaching the end of the buffer, select the next unread article (=gnus-summary-next-page=). Thus, you can read through all articles by repeatedly typing .
+
+- <del>
+
+  #+BEGIN_HTML
+    <DEL>
+  #+END_HTML
+
+  Scroll the text of the article backwards (=gnus-summary-prev-page=).
+
+- n
+
+  Select the next unread article (=gnus-summary-next-unread-article=).
+
+- p
+
+  Select the previous unread article (=gnus-summary-prev-unread-article=).
+
+- s
+
+  Do an incremental search on the selected article buffer (=gnus-summary-isearch-article=), as if you switched to the buffer and typed C-s (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]).
+
+- M-s regexp
+
+  Search forward for articles containing a match for regexp (=gnus-summary-search-article-forward=).
+
+- M-r regexp
+
+  Search back for articles containing a match for regexp (=gnus-summary-search-article-backward=).
+
+- q
+
+  Exit the summary buffer and return to the group buffer (=gnus-summary-exit=).
+
+* Summary
+果然没有讲出来什么内容.
+然没有讲出来什么内容.

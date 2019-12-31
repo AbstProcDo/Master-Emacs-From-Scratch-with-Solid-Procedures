@@ -1,0 +1,260 @@
+#+TITLE: 39.Emacs-Server
+
+* 39 Using Emacs as a Server
+
+Various programs can invoke your choice of editor to edit a particular piece of text. For instance, version control programs invoke an editor to enter version control logs (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Version-Control][Version Control]]), and the Unix mail utility invokes an editor to enter a message to send. By convention, your choice of editor is specified by the environment variable EDITOR. If you set EDITOR to 'emacs', Emacs would be invoked, but in an inconvenient way---by starting a new Emacs process. This is inconvenient because the new Emacs process doesn't share buffers, a command history, or other kinds of information with any existing Emacs process.
+
+You can solve this problem by setting up Emacs as an edit server, so that it "listens" for external edit requests and acts accordingly. There are various ways to start an Emacs server:
+
+- Run the command
+
+  #+BEGIN_EXAMPLE
+      server-start
+  #+END_EXAMPLE
+
+  in an existing Emacs process: either type
+
+  M-x server-start
+
+  , or put the expression
+
+  #+BEGIN_EXAMPLE
+      (server-start)
+  #+END_EXAMPLE
+
+  in your init file (see
+
+  Init File
+
+  ). The existing Emacs process is the server; when you exit Emacs, the server dies with the Emacs process.
+
+- Run Emacs as a
+
+  daemon
+
+  , using one of the ‘
+
+  --daemon
+
+  ' command-line options. See
+
+  Initial Options
+
+  . When Emacs is started this way, it calls
+
+  #+BEGIN_EXAMPLE
+      server-start
+  #+END_EXAMPLE
+
+  after initialization and does not open an initial frame. It then waits for edit requests from clients.
+
+- If your operating system uses
+
+  systemd
+
+  to manage startup, you can automatically start Emacs in daemon mode when you login using the supplied
+
+  systemd unit file
+
+  . To activate this:
+
+  #+BEGIN_EXAMPLE
+                systemctl --user enable emacs
+  #+END_EXAMPLE
+
+  (If your Emacs was installed into a non-standard location, you may need to copy the emacs.service file to a standard directory such as ~/.config/systemd/user/.)
+
+- An external process can invoke the Emacs server when a connection event occurs upon a specified socket and pass the socket to the new Emacs server process. An instance of this is the socket functionality of
+
+  - systemd :: the
+
+  systemd
+
+  service creates a socket and listens for connections on it; when
+
+  emacsclient
+
+  connects to it for the first time,
+
+  systemd
+
+  can launch the Emacs server and hand over the socket to it for servicing
+
+  emacsclient
+
+  connections. A setup to use this functionality could be:
+
+  ~/.config/systemd/user/emacs.socket:
+
+  #+BEGIN_EXAMPLE
+                [Socket]
+                ListenStream=/path/to/.emacs.socket
+
+                [Install]
+                WantedBy=sockets.target
+  #+END_EXAMPLE
+
+  (The emacs.service file described above must also be installed.)
+
+  The =ListenStream= path will be the path that Emacs listens for connections from emacsclient; this is a file of your choice.
+
+  Once an Emacs server is started, you can use a shell command called emacsclient to connect to the Emacs process and tell it to visit a file. You can then set the EDITOR environment variable to 'emacsclient', so that external programs will use the existing Emacs process for editing.[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-21][21]]
+
+  You can run multiple Emacs servers on the same machine by giving each one a unique server name, using the variable =server-name=. For example, M-x set-variable server-name "foo" sets the server name to 'foo'. The =emacsclient= program can specify a server by name, using the '-s' or the '-f' option (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#emacsclient-Options][emacsclient Options]]), depending on whether or not the server uses a TCP socket (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#TCP-Emacs-server][TCP Emacs server]]).
+
+If you want to run multiple Emacs daemons (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Initial-Options][Initial Options]]), you can give each daemon its own server name like this:
+
+#+BEGIN_EXAMPLE
+           emacs --daemon=foo
+#+END_EXAMPLE
+
+If you have defined a server by a unique server name, it is possible to connect to the server from another Emacs instance and evaluate Lisp expressions on the server, using the =server-eval-at= function. For instance, =(server-eval-at "foo" '(+ 1 2))= evaluates the expression =(+ 1 2)= on the 'foo' server, and returns =3=. (If there is no server with that name, an error is signaled.) Currently, this feature is mainly useful for developers.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#TCP-Emacs-server][TCP Emacs server]]: Listening to a TCP socket.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Invoking-emacsclient][Invoking emacsclient]]: Connecting to the Emacs server.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#emacsclient-Options][emacsclient Options]]: Emacs client startup options.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Invoking-emacsclient][Invoking emacsclient]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emacs-Server][Emacs Server]]
+
+* 39.1 TCP Emacs server
+    :PROPERTIES:
+    :CUSTOM_ID: tcp-emacs-server
+    :END:
+
+An Emacs server usually listens to connections on a local Unix domain socket. Some operating systems, such as MS-Windows, do not support local sockets; in that case, the server uses TCP sockets instead. In some cases it is useful to have the server listen on a TCP socket even if local sockets are supported, e.g., if you need to contact the Emacs server from a remote machine. You can set =server-use-tcp= to non-=nil= to have Emacs listen on a TCP socket instead of a local socket. This is the default if your OS does not support local sockets.
+
+If the Emacs server is set to use TCP, it will by default listen on a random port on the localhost interface. This can be changed to another interface and/or a fixed port using the variables =server-host= and =server-port=.
+
+A TCP socket is not subject to file system permissions. To retain some control over which users can talk to an Emacs server over TCP sockets, the emacsclient program must send an authorization key to the server. This key is normally randomly generated by the Emacs server. This is the recommended mode of operation.
+
+If needed, you can set the authorization key to a static value by setting the =server-auth-key= variable. The key must consist of 64 ASCII printable characters except for space (this means characters from '!' to '~', or from decimal code 33 to 126). You can use M-x server-generate-key to get a random key.
+
+When you start a TCP Emacs server, Emacs creates a server file containing the TCP information to be used by emacsclient to connect to the server. The variable =server-auth-dir= specifies the default directory containing the server file; by default, this is ~/.emacs.d/server/. In the absence of a local socket with file permissions, the permissions of this directory determine which users can have their emacsclient processes talk to the Emacs server. If =server-name= is an absolute file name, the server file is created where specified by that file name.
+
+To tell emacsclient to connect to the server over TCP with a specific server file, use the '-f' or '--server-file' option, or set the EMACS\_SERVER\_FILE environment variable (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#emacsclient-Options][emacsclient Options]]). If =server-auth-dir= is set to a non-standard value, or if =server-name= is set to an absolute file name, emacsclient needs an absolute file name to the server file, as the default =server-auth-dir= is hard-coded in emacsclient to be used as the directory for resolving relative filenames.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#emacsclient-Options][emacsclient Options]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#TCP-Emacs-server][TCP Emacs server]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emacs-Server][Emacs Server]]
+
+* 39.2 Invoking =emacsclient=
+    :PROPERTIES:
+    :CUSTOM_ID: invoking-emacsclient
+    :END:
+
+The simplest way to use the emacsclient program is to run the shell command 'emacsclient file', where file is a file name. This connects to an Emacs server, and tells that Emacs process to visit file in one of its existing frames---either a graphical frame, or one in a text terminal (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Frames][Frames]]). You can then select that frame to begin editing.
+
+If there is no Emacs server, the emacsclient program halts with an error message (you can prevent this from happening by using the '--alternate-editor=""' option to emacsclient, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#emacsclient-Options][emacsclient Options]]). If the Emacs process has no existing frame---which can happen if it was started as a daemon (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emacs-Server][Emacs Server]])---then Emacs opens a frame on the terminal in which you called emacsclient.
+
+You can also force emacsclient to open a new frame on a graphical display using the '-c' option, or on a text terminal using the '-t' option. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#emacsclient-Options][emacsclient Options]].
+
+If you are running on a single text terminal, you can switch between emacsclient's shell and the Emacs server using one of two methods: (i) run the Emacs server and emacsclient on different virtual terminals, and switch to the Emacs server's virtual terminal after calling emacsclient; or (ii) call emacsclient from within the Emacs server itself, using Shell mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Interactive-Shell][Interactive Shell]]) or Term mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Term-Mode][Term Mode]]); emacsclient blocks only the subshell under Emacs, and you can still use Emacs to edit the file.
+
+When you finish editing file in the Emacs server, type C-x # (=server-edit=) in its buffer. This saves the file and sends a message back to the emacsclient program, telling it to exit. Programs that use EDITOR usually wait for the editor---in this case emacsclient---to exit before doing something else.
+
+You can also call emacsclient with multiple file name arguments: 'emacsclient file1 file2 ...' tells the Emacs server to visit file1, file2, and so forth. Emacs selects the buffer visiting file1, and buries the other buffers at the bottom of the buffer list (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Buffers][Buffers]]). The emacsclient program exits once all the specified files are finished (i.e., once you have typed C-x # in each server buffer).
+
+Finishing with a server buffer also kills the buffer, unless it already existed in the Emacs session before the server was asked to create it. However, if you set =server-kill-new-buffers= to =nil=, then a different criterion is used: finishing with a server buffer kills it if the file name matches the regular expression =server-temp-file-regexp=. This is set up to distinguish certain temporary files.
+
+Each C-x # checks for other pending external requests to edit various files, and selects the next such file. You can switch to a server buffer manually if you wish; you don't have to arrive at it with C-x #. But C-x # is the way to tell emacsclient that you are finished.
+
+If you set the value of the variable =server-window= to a window or a frame, C-x # always displays the next server buffer in that window or in that frame.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Invoking-emacsclient][Invoking emacsclient]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emacs-Server][Emacs Server]]
+
+* 39.3 =emacsclient= Options
+    :PROPERTIES:
+    :CUSTOM_ID: emacsclient-options
+    :END:
+
+You can pass some optional arguments to the emacsclient program, such as:
+
+#+BEGIN_EXAMPLE
+         emacsclient -c +12 file1 +4:3 file2
+#+END_EXAMPLE
+
+The '+line' or '+line:column' arguments specify line numbers, or line and column numbers, for the next file argument. These behave like the command line arguments for Emacs itself. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Action-Arguments][Action Arguments]].
+
+The other optional arguments recognized by emacsclient are listed below:
+
+- '-a command'
+
+- '--alternate-editor=command'
+
+  Specify a shell command to run if emacsclient fails to contact Emacs. This is useful when running =emacsclient= in a script. The command may include arguments, which may be quoted "like this". Currently, escaping of quotes is not supported. As a special exception, if command is the empty string, then emacsclient starts Emacs in daemon mode (as 'emacs --daemon') and then tries connecting again. The environment variable ALTERNATE\_EDITOR has the same effect as the '-a' option. If both are present, the latter takes precedence.
+
+- '-c'
+
+- '--create-frame'
+
+  Create a new graphical client frame, instead of using an existing Emacs frame. See below for the special behavior of C-x C-c in a client frame. If Emacs cannot create a new graphical frame (e.g., if it cannot connect to the X server), it tries to create a text terminal client frame, as though you had supplied the '-t' option instead. On MS-Windows, a single Emacs session cannot display frames on both graphical and text terminals, nor on multiple text terminals. Thus, if the Emacs server is running on a text terminal, the '-c' option, like the '-t' option, creates a new frame in the server's current text terminal. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows-Startup][Windows Startup]]. If you omit a filename argument while supplying the '-c' option, the new frame displays the /scratch/ buffer by default. You can customize this behavior with the variable =initial-buffer-choice= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Entering-Emacs][Entering Emacs]]).
+
+- '-F alist'
+
+- '--frame-parameters=alist'
+
+  Set the parameters for a newly-created graphical frame (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Frame-Parameters][Frame Parameters]]).
+
+- '-d display'
+
+- '--display=display'
+
+  Tell Emacs to open the given files on the X display display (assuming there is more than one X display available).
+
+- '-e'
+
+- '--eval'
+
+  Tell Emacs to evaluate some Emacs Lisp code, instead of visiting some files. When this option is given, the arguments to emacsclient are interpreted as a list of expressions to evaluate, /not/ as a list of files to visit.
+
+- '-f server-file'
+
+- '--server-file=server-file'
+
+  Specify a server file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#TCP-Emacs-server][TCP Emacs server]]) for connecting to an Emacs server via TCP. Alternatively, you can set the EMACS\_SERVER\_FILE environment variable to point to the server file. (The command-line option overrides the environment variable.) An Emacs server usually uses a local socket to listen for connections, but also supports connections over TCP. To connect to a TCP Emacs server, emacsclient needs to read a server file containing the connection details of the Emacs server. The name of this file is specified with this option, either as a file name relative to ~/.emacs.d/server or as an absolute file name. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#TCP-Emacs-server][TCP Emacs server]].
+
+- '-n'
+
+- '--no-wait'
+
+  Let emacsclient exit immediately, instead of waiting until all server buffers are finished. You can take as long as you like to edit the server buffers within Emacs, and they are /not/ killed when you type C-x # in them.
+
+- '--parent-id id'
+
+  Open an emacsclient frame as a client frame in the parent X window with id id, via the XEmbed protocol. Currently, this option is mainly useful for developers.
+
+- '-q'
+
+- '--quiet'
+
+  Do not let emacsclient display messages about waiting for Emacs or connecting to remote server sockets.
+
+- '-u'
+
+- '--suppress-output'
+
+  Do not let emacsclient display results returned from the server. Mostly useful in combination with '-e' when the evaluation performed is for side-effect rather than result.
+
+- '-s server-name'
+
+- '--socket-name=server-name'
+
+  Connect to the Emacs server named server-name. (This option is not supported on MS-Windows.) The server name is given by the variable =server-name= on the Emacs server. If this option is omitted, emacsclient connects to the first server it finds. If you set =server-name= of the Emacs server to an absolute file name, give the same absolute file name as server-name to this option to instruct emacsclient to connect to that server. You need to use this option if you started Emacs as daemon (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Initial-Options][Initial Options]]) and specified the name for the server started by the daemon.
+
+- '-t'
+
+- '--tty'
+
+- '-nw'
+
+  Create a new client frame on the current text terminal, instead of using an existing Emacs frame. This behaves just like the '-c' option, described above, except that it creates a text terminal frame (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Non_002dWindow-Terminals][Non-Window Terminals]]). On MS-Windows, '-t' behaves just like '-c' if the Emacs server is using the graphical display, but if the Emacs server is running on a text terminal, it creates a new frame in the current text terminal.
+
+- '-T tramp-prefix'
+
+- '--tramp-prefix=tramp-prefix'
+
+  Set the prefix to add to filenames for Emacs to locate files on remote machines (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]]) using TRAMP (see [[https://www.gnu.org/software/emacs/manual/html_mono/tramp.html#Top][The Tramp Manual]]). This is mostly useful in combination with using the Emacs server over TCP (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#TCP-Emacs-server][TCP Emacs server]]). By ssh-forwarding the listening port and making the server-file available on a remote machine, programs on the remote machine can use emacsclient as the value for the EDITOR and similar environment variables, but instead of talking to an Emacs server on the remote machine, the files will be visited in the local Emacs session using TRAMP. Setting the environment variable EMACSCLIENT\_TRAMP has the same effect as using the '-T' option. If both are specified, the command-line option takes precedence. For example, assume two hosts, 'local' and 'remote', and that the local Emacs listens on tcp port 12345. Assume further that /home is on a shared file system, so that the server file ~/.emacs.d/server/server is readable on both hosts. =local$ ssh -R12345:localhost:12345 remote          remote$ export EDITOR="emacsclient \                  --server-file=server \                  --tramp=/ssh:remote:"          remote$ $EDITOR /tmp/foo.txt #Should open in local emacs.=
+
+The new graphical or text terminal frames created by the '-c' or '-t' options are considered client frames. Any new frame that you create from a client frame is also considered a client frame. If you type C-x C-c (=save-buffers-kill-terminal=) in a client frame, that command does not kill the Emacs session as it normally does (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Exiting][Exiting]]). Instead, Emacs deletes the client frame; furthermore, if the client frame has an emacsclient waiting to regain control (i.e., if you did not supply the '-n' option), Emacs deletes all other frames of the same client, and marks the client's server buffers as finished, as though you had typed C-x # in all of them. If it so happens that there are no remaining frames after the client frame(s) are deleted, the Emacs session exits.
+
+As an exception, when Emacs is started as a daemon, all frames are considered client frames, and C-x C-c never kills Emacs. To kill a daemon session, type M-x kill-emacs.
+
+Note that the '-t' and '-n' options are contradictory: '-t' says to take control of the current text terminal to create a new client frame, while '-n' says not to take control of the text terminal. If you supply both options, Emacs visits the specified files(s) in an existing frame rather than a new client frame, negating the effect of '-t'.

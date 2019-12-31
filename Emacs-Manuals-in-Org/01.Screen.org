@@ -1,0 +1,118 @@
+#+TITLE: 01.Screen
+* 1) The Organization of the Screen
+
+On a graphical display, such as on GNU/Linux using the X Window System, Emacs occupies a graphical window. On a text terminal, Emacs occupies the entire terminal screen. We will use the term frame to mean a graphical window or terminal screen occupied by Emacs. Emacs behaves very similarly on both kinds of frames. It normally starts out with just one frame, but you can create additional frames if you wish (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Frames][Frames]]).
+
+Each frame consists of several distinct regions. At the top of the frame is a menu bar, which allows you to access commands via a series of menus. On a graphical display, directly below the menu bar is a tool bar, a row of icons that perform editing commands when you click on them. At the very bottom of the frame is an echo area, where informative messages are displayed and where you enter information when Emacs asks for it.
+
+The main area of the frame, below the tool bar (if one exists) and above the echo area, is called the window. Henceforth in this manual, we will use the word "window" in this sense. Graphical display systems commonly use the word "window" with a different meaning; but, as stated above, we refer to those graphical windows as "frames".
+
+An Emacs window is where the buffer---the text or other graphics you are editing or viewing---is displayed. On a graphical display, the window possesses a scroll bar on one side, which can be used to scroll through the buffer. The last line of the window is a mode line. This displays various information about what is going on in the buffer, such as whether there are unsaved changes, the editing modes that are in use, the current line number, and so forth.
+
+When you start Emacs, there is normally only one window in the frame. However, you can subdivide this window horizontally or vertically to create multiple windows, each of which can independently display a buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]).
+
+At any time, one window is the selected window. On a graphical display, the selected window shows a more prominent cursor (usually solid and blinking); other windows show a less prominent cursor (usually a hollow box). On a text terminal, there is only one cursor, which is shown in the selected window. The buffer displayed in the selected window is called the current buffer, and it is where editing happens. Most Emacs commands implicitly apply to the current buffer; the text displayed in unselected windows is mostly visible for reference. If you use multiple frames on a graphical display, selecting a particular frame selects a window in that frame.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Point][Point]]: The place in the text where editing commands operate.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Echo-Area][Echo Area]]: Short messages appear at the bottom of the screen.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]]: Interpreting the mode line.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Menu-Bar][Menu Bar]]: How to use the menu bar.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Echo-Area][Echo Area]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Screen][Screen]]
+* 1.1 Point
+    :PROPERTIES:
+    :CUSTOM_ID: point
+    :END:
+
+The cursor in the selected window shows the location where most editing commands take effect, which is called point[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-2][2]]. Many Emacs commands move point to different places in the buffer; for example, you can place point by clicking mouse button 1 (normally the left button) at the desired location.
+
+By default, the cursor in the selected window is drawn as a solid block and appears to be /on/ a character, but you should think of point as /between/ two characters; it is situated /before/ the character under the cursor. For example, if your text looks like 'frob' with the cursor over the 'b', then point is between the 'o' and the 'b'. If you insert the character '!' at that position, the result is 'fro!b', with point between the '!' and the 'b'. Thus, the cursor remains over the 'b', as before.
+
+If you are editing several files in Emacs, each in its own buffer, each buffer has its own value of point. A buffer that is not currently displayed remembers its value of point if you later display it again. Furthermore, if a buffer is displayed in multiple windows, each of those windows has its own value of point.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Cursor-Display][Cursor Display]], for options that control how Emacs displays the cursor.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Point][Point]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Screen][Screen]]
+* 1.2 The Echo Area
+    :PROPERTIES:
+    :CUSTOM_ID: the-echo-area
+    :END:
+
+The line at the very bottom of the frame is the echo area. It is used to display small amounts of text for various purposes.
+
+The echo area is so-named because one of the things it is used for is echoing, which means displaying the characters of a multi-character command as you type. Single-character commands are not echoed. Multi-character commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Keys][Keys]]) are echoed if you pause for more than a second in the middle of a command. Emacs then echoes all the characters of the command so far, to prompt you for the rest. Once echoing has started, the rest of the command echoes immediately as you type it. This behavior is designed to give confident users fast response, while giving hesitant users maximum feedback.
+
+The echo area is also used to display an error message when a command cannot do its job. Error messages may be accompanied by beeping or by flashing the screen.
+
+Some commands display informative messages in the echo area to tell you what the command has done, or to provide you with some specific information. These informative messages, unlike error messages, are not accompanied with a beep or flash. For example, C-x = (hold down and type x, then let go of and type =) displays a message describing the character at point, its position in the buffer, and its current column in the window. Commands that take a long time often display messages ending in '...' while they are working (sometimes also indicating how much progress has been made, as a percentage), and add 'done' when they are finished.
+
+Informative echo area messages are saved in a special buffer named /Messages/. (We have not explained buffers yet; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Buffers][Buffers]], for more information about them.) If you miss a message that appeared briefly on the screen, you can switch to the /Messages/ buffer to see it again. The /Messages/ buffer is limited to a certain number of lines, specified by the variable =message-log-max=. (We have not explained variables either; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Variables][Variables]], for more information about them.) Beyond this limit, one line is deleted from the beginning whenever a new message line is added at the end.
+
+See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Display-Custom][Display Custom]], for options that control how Emacs uses the echo area.
+
+The echo area is also used to display the minibuffer, a special window where you can input arguments to commands, such as the name of a file to be edited. When the minibuffer is in use, the text displayed in the echo area begins with a prompt string, and the active cursor appears within the minibuffer, which is temporarily considered the selected window. You can always get out of the minibuffer by typing C-g. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer][Minibuffer]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Menu-Bar][Menu Bar]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Echo-Area][Echo Area]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Screen][Screen]]
+* 1.3 The Mode Line
+    :PROPERTIES:
+    :CUSTOM_ID: the-mode-line
+    :END:
+
+At the bottom of each window is a mode line, which describes what is going on in the current buffer. When there is only one window, the mode line appears right above the echo area; it is the next-to-last line in the frame. On a graphical display, the mode line is drawn with a 3D box appearance. Emacs also usually draws the mode line of the selected window with a different color than that of unselected windows, in order to make it stand out.
+
+The text displayed in the mode line has the following format:
+
+#+BEGIN_EXAMPLE
+          cs:ch-fr  buf      pos line   (major minor)
+#+END_EXAMPLE
+
+On a text terminal, this text is followed by a series of dashes extending to the right edge of the window. These dashes are omitted on a graphical display.
+
+The cs string and the colon character after it describe the character set and newline convention used for the current buffer. Normally, Emacs automatically handles these settings for you, but it is sometimes useful to have this information.
+
+cs describes the character set of the text in the buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Coding-Systems][Coding Systems]]). If it is a dash ('-'), that indicates no special character set handling (with the possible exception of end-of-line conventions, described in the next paragraph). '=' means no conversion whatsoever, and is usually used for files containing non-textual data. Other characters represent various coding systems---for example, '1' represents ISO Latin-1.
+
+On a text terminal, cs is preceded by two additional characters that describe the coding systems for keyboard input and terminal output. Furthermore, if you are using an input method, cs is preceded by a string that identifies the input method (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Input-Methods][Input Methods]]).
+
+The character after cs is usually a colon. If a different string is displayed, that indicates a nontrivial end-of-line convention for encoding a file. Usually, lines of text are separated by newline characters in a file, but two other conventions are sometimes used. The MS-DOS convention uses a carriage return character followed by a linefeed character; when editing such files, the colon changes to either a backslash ('') or ‘(DOS)', depending on the operating system. Another convention, employed by older Macintosh systems, uses a carriage return character instead of a newline; when editing such files, the colon changes to either a forward slash ('/') or '(Mac)'. On some systems, Emacs displays '(Unix)' instead of the colon for files that use newline as the line separator.
+
+On frames created for emacsclient (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Invoking-emacsclient][Invoking emacsclient]]), the next character is '@'. This indication is typical for frames of an Emacs process running as a daemon (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emacs-Server][Emacs Server]]).
+
+The next element on the mode line is the string indicated by ch. This shows two dashes ('--') if the buffer displayed in the window has the same contents as the corresponding file on the disk; i.e., if the buffer is unmodified. If the buffer is modified, it shows two stars (‘**'). For a read-only buffer, it shows ‘%*' if the buffer is modified, and '%%' otherwise.
+
+The character after ch is normally a dash ('-'). However, if =default-directory= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]]) for the current buffer is on a remote machine, '@' is displayed instead.
+
+fr gives the selected frame name (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Frames][Frames]]). It appears only on text terminals. The initial frame's name is 'F1'.
+
+buf is the name of the buffer displayed in the window. Usually, this is the same as the name of a file you are editing. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Buffers][Buffers]].
+
+pos tells you whether there is additional text above the top of the window, or below the bottom. If your buffer is small and all of it is visible in the window, pos is 'All'. Otherwise, it is 'Top' if you are looking at the beginning of the buffer, 'Bot' if you are looking at the end of the buffer, or 'nn%', where nn is the percentage of the buffer above the top of the window. With Size Indication mode, you can display the size of the buffer as well. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Optional-Mode-Line][Optional Mode Line]].
+
+line is the character 'L' followed by the line number at point. (You can display the current column number too, by turning on Column Number mode. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Optional-Mode-Line][Optional Mode Line]].)
+
+major is the name of the major mode used in the buffer. A major mode is a principal editing mode for the buffer, such as Text mode, Lisp mode, C mode, and so forth. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Major-Modes][Major Modes]]. Some major modes display additional information after the major mode name. For example, Compilation buffers and Shell buffers display the status of the subprocess.
+
+minor is a list of some of the enabled minor modes, which are optional editing modes that provide additional features on top of the major mode. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minor-Modes][Minor Modes]].
+
+Some features are listed together with the minor modes whenever they are turned on, even though they are not really minor modes. 'Narrow' means that the buffer being displayed has editing restricted to only a portion of its text (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Narrowing][Narrowing]]). 'Def' means that a keyboard macro is currently being defined (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Keyboard-Macros][Keyboard Macros]]).
+
+In addition, if Emacs is inside a recursive editing level, square brackets ('[...]') appear around the parentheses that surround the modes. If Emacs is in one recursive editing level within another, double square brackets appear, and so on. Since recursive editing levels affect Emacs globally, such square brackets appear in the mode line of every window. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recursive-Edit][Recursive Edit]].
+
+You can change the appearance of the mode line as well as the format of its contents. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Optional-Mode-Line][Optional Mode Line]]. In addition, the mode line is mouse-sensitive; clicking on different parts of the mode line performs various commands. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line-Mouse][Mode Line Mouse]]. Also, hovering the mouse pointer above mouse-sensitive portions of the mode line shows tooltips (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Tooltips][Tooltips]]) with information about commands you can invoke by clicking on the mode line.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Screen][Screen]]
+* 1.4 The Menu Bar
+    :PROPERTIES:
+    :CUSTOM_ID: the-menu-bar
+    :END:
+
+Each Emacs frame normally has a menu bar at the top which you can use to perform common operations. There's no need to list them here, as you can more easily see them yourself.
+
+On a display that supports a mouse, you can use the mouse to choose a command from the menu bar. An arrow on the right edge of a menu item means it leads to a subsidiary menu, or submenu. A '...' at the end of a menu item means that the command will prompt you for further input before it actually does anything.
+
+Some of the commands in the menu bar have ordinary key bindings as well; if so, a key binding is shown after the item itself. To view the full command name and documentation for a menu item, type C-h k, and then select the menu bar with the mouse in the usual way (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Key-Help][Key Help]]).
+
+Instead of using the mouse, you can also invoke the first menu bar item by pressing (to run the command =menu-bar-open=). You can then navigate the menus with the arrow keys or with C-b, C-f (left/right), C-p, and C-n (up/down). To activate a selected menu item, press ; to cancel menu navigation, press C-g or . (However, note that when Emacs was built with a GUI toolkit, the menus are drawn and controlled by the toolkit, and the key sequences to cancel menu navigation might be different from the above description.)
+
+On a text terminal, you can optionally access the menu-bar menus in the echo area. To this end, customize the variable =tty-menu-open-use-tmm= to a non-=nil= value. Then typing will run the command =tmm-menubar= instead of dropping down the menu. (You can also type M-=, which always invokes=tmm-menubar=.)=tmm-menubar` lets you select a menu item with the keyboard. A provisional choice appears in the echo area. You can use the up and down arrow keys to move through the menu to different items, and then you can type to select the item. Each menu item is also designated by a letter or digit (usually the initial of some word in the item's name). This letter or digit is separated from the item name by '==>'. You can type the item's letter or digit to select the item.
+

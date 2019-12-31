@@ -1,0 +1,412 @@
+#+TITLE: 37.Document-View
+* 37 Document Viewing
+  
+DocView mode is a major mode for viewing DVI, PostScript (PS), PDF, OpenDocument, and Microsoft Office documents. It provides features such as slicing, zooming, and searching inside documents. It works by converting the document to a set of images using the gs (GhostScript) or mudraw/pdfdraw (MuPDF) commands and other external tools [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-18][18]], and displaying those images.
+
+When you visit a document file that can be displayed with DocView mode, Emacs automatically uses that mode [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-19][19]]. As an exception, when you visit a PostScript file, Emacs switches to PS mode, a major mode for editing PostScript files as text; however, it also enables DocView minor mode, so you can type C-c C-c to view the document with DocView. In either DocView mode or DocView minor mode, repeating C-c C-c (=doc-view-toggle-display=) toggles between DocView and the underlying file contents.
+
+When you38 Running Shell Commands from Emacs
+
+Emacs has commands for passing single command lines to shell subprocesses, and for running a shell interactively with input and output to an Emacs buffer, and for running a shell in a terminal emulator window.
+
+M-! cmd <RET>
+    Run the shell command cmd and display the output (shell-command).
+M-| cmd <RET>
+    Run the shell command cmd with region contents as input; optionally replace the region with the output (shell-command-on-region).
+M-& cmd <RET>
+    Run the shell command cmd asynchronously, and display the output (async-shell-command).
+M-x shell
+    Run a subshell with input and output through an Emacs buffer. You can then give commands interactively.
+M-x term
+    Run a subshell with input and output through an Emacs buffer. You can then give commands interactively. Full terminal emulation is available.
+
+Whenever you specify a relative file name for an executable program (either in the cmd argument to one of the above commands, or in other contexts), Emacs searches for the program in the directories specified by the variable exec-path. The value of this variable must be a list of directories; the default value is initialized from the environment variable PATH when Emacs is started (see General Variables).
+
+M-x eshell invokes a shell implemented entirely in Emacs. It is documented in its own manual. See Eshell.
+
+    Single Shell: How to run one shell command and return.
+    Interactive Shell: Permanent shell taking input via Emacs.
+    Shell Mode: Special Emacs commands used with permanent shell.
+    Shell Prompts: Two ways to recognize shell prompts.
+    History: Repeating previous commands in a shell buffer.
+    Directory Tracking: Keeping track when the subshell changes directory.
+    Options: Options for customizing Shell mode.
+    Terminal emulator: An Emacs window as a terminal emulator.
+    Term Mode: Special Emacs commands used in Term mode.
+    Remote Host: Connecting to another computer.
+    Serial Terminal: Connecting to a serial port.
+
+Next: Interactive Shell, Up: Shell
+38.1 Single Shell Commands
+
+M-! (shell-command) reads a line of text using the minibuffer and executes it as a shell command, in a subshell made just for that command. Standard input for the command comes from the null device. If the shell command produces any output, the output appears either in the echo area (if it is short), or in an Emacs buffer named *Shell Command Output*, displayed in another window (if the output is long). The variables resize-mini-windows and max-mini-window-height (see Minibuffer Edit) control when Emacs should consider the output to be too long for the echo area.
+
+For instance, one way to decompress a file named foo.gz is to type M-! gunzip foo.gz <RET>. That shell command normally creates the file foo and produces no terminal output.
+
+A numeric argument to shell-command, e.g., M-1 M-!, causes it to insert terminal output into the current buffer instead of a separate buffer. It puts point before the output, and sets the mark after the output. For instance, M-1 M-! gunzip < foo.gz <RET> would insert the uncompressed form of the file foo.gz into the current buffer.
+
+Provided the specified shell command does not end with ‘&’, it runs synchronously, and you must wait for it to exit before continuing to use Emacs. To stop waiting, type C-g to quit; this sends a SIGINT signal to terminate the shell command (this is the same signal that C-c normally generates in the shell). Emacs then waits until the command actually terminates. If the shell command doesn't stop (because it ignores the SIGINT signal), type C-g again; this sends the command a SIGKILL signal, which is impossible to ignore.
+
+A shell command that ends in ‘&’ is executed asynchronously, and you can continue to use Emacs as it runs. You can also type M-& (async-shell-command) to execute a shell command asynchronously; this is exactly like calling M-! with a trailing ‘&’, except that you do not need the ‘&’. The default output buffer for asynchronous shell commands is named ‘*Async Shell Command*’. Emacs inserts the output into this buffer as it comes in, whether or not the buffer is visible in a window.
+
+If you want to run more than one asynchronous shell command at the same time, they could end up competing for the output buffer. The option async-shell-command-buffer specifies what to do about this; e.g., whether to rename the pre-existing output buffer, or to use a different buffer for the new command. Consult the variable's documentation for more possibilities.
+
+If you want the output buffer for asynchronous shell commands to be displayed only when the command generates output, set async-shell-command-display-buffer to nil.
+
+M-| (shell-command-on-region) is like M-!, but passes the contents of the region as the standard input to the shell command, instead of no input. With a numeric argument, it deletes the old region and replaces it with the output from the shell command.
+
+For example, you can use M-| with the gpg program to see what keys are in the buffer. If the buffer contains a GnuPG key, type C-x h M-| gpg <RET> to feed the entire buffer contents to gpg. This will output the list of keys to the *Shell Command Output* buffer.
+
+The above commands use the shell specified by the variable shell-file-name. Its default value is determined by the SHELL environment variable when Emacs is started. If the file name is relative, Emacs searches the directories listed in exec-path (see Shell).
+
+To specify a coding system for M-! or M-|, use the command C-x <RET> c immediately beforehand. See Communication Coding.
+
+By default, error output is intermixed with the regular output in the output buffer. But if you change the value of the variable shell-command-default-error-buffer to a string, error output is inserted into a buffer of that name.
+
+By default, the output buffer is erased between shell commands. If you change the value of the variable shell-command-dont-erase-buffer to a non-nil value, the output buffer is not erased. This variable also controls where to set the point in the output buffer after the command completes; see the documentation of the variable for details.
+
+Next: Shell Mode, Previous: Single Shell, Up: Shell
+38.2 Interactive Subshell
+
+To run a subshell interactively, type M-x shell. This creates (or reuses) a buffer named *shell*, and runs a shell subprocess with input coming from and output going to that buffer. That is to say, any terminal output from the subshell goes into the buffer, advancing point, and any terminal input for the subshell comes from text in the buffer. To give input to the subshell, go to the end of the buffer and type the input, terminated by <RET>.
+
+By default, when the subshell is invoked interactively, the *shell* buffer is displayed in a new window, unless the current window already shows the *shell* buffer. This behavior can be customized via display-buffer-alist (see Window Choice).
+
+While the subshell is waiting or running a command, you can switch windows or buffers and perform other editing in Emacs. Emacs inserts the output from the subshell into the Shell buffer whenever it has time to process it (e.g., while waiting for keyboard input).
+
+In the Shell buffer, prompts are displayed with the face comint-highlight-prompt, and submitted input lines are displayed with the face comint-highlight-input. This makes it easier to distinguish input lines from the shell output. See Faces.
+
+To make multiple subshells, invoke M-x shell with a prefix argument (e.g., C-u M-x shell). Then the command will read a buffer name, and create (or reuse) a subshell in that buffer. You can also rename the *shell* buffer using M-x rename-uniquely, then create a new *shell* buffer using plain M-x shell. Subshells in different buffers run independently and in parallel.
+
+To specify the shell file name used by M-x shell, customize the variable explicit-shell-file-name. If this is nil (the default), Emacs uses the environment variable ESHELL if it exists. Otherwise, it usually uses the variable shell-file-name (see Single Shell); but if the default directory is remote (see Remote Files), it prompts you for the shell file name. See Minibuffer File, for hints how to type remote file names effectively.
+
+Emacs sends the new shell the contents of the file ~/.emacs_shellname as input, if it exists, where shellname is the name of the file that the shell was loaded from. For example, if you use bash, the file sent to it is ~/.emacs_bash. If this file is not found, Emacs tries with ~/.emacs.d/init_shellname.sh.
+
+To specify a coding system for the shell, you can use the command C-x <RET> c immediately before M-x shell. You can also change the coding system for a running subshell by typing C-x <RET> p in the shell buffer. See Communication Coding.
+
+Emacs sets the environment variable INSIDE_EMACS in the subshell to ‘version,comint’, where version is the Emacs version (e.g., ‘24.1’). Programs can check this variable to determine whether they are running inside an Emacs subshell.
+
+Next: Shell Prompts, Previous: Interactive Shell, Up: Shell
+38.3 Shell Mode
+
+The major mode for Shell buffers is Shell mode. Many of its special commands are bound to the C-c prefix, and resemble the usual editing and job control characters present in ordinary shells, except that you must type C-c first. Here is a list of Shell mode commands:
+
+<RET>
+    Send the current line as input to the subshell (comint-send-input). Any shell prompt at the beginning of the line is omitted (see Shell Prompts). If point is at the end of buffer, this is like submitting the command line in an ordinary interactive shell. However, you can also invoke <RET> elsewhere in the shell buffer to submit the current line as input.
+<TAB>
+    Complete the command name or file name before point in the shell buffer (completion-at-point). This uses the usual Emacs completion rules (see Completion), with the completion alternatives being file names, environment variable names, the shell command history, and history references (see History References). For options controlling the completion, see Shell Options.
+M-?
+    Display temporarily a list of the possible completions of the file name before point (comint-dynamic-list-filename-completions).
+C-d
+    Either delete a character or send EOF (comint-delchar-or-maybe-eof). Typed at the end of the shell buffer, this sends EOF to the subshell. Typed at any other position in the buffer, this deletes a character as usual.
+C-c C-a
+    Move to the beginning of the line, but after the prompt if any (comint-bol-or-process-mark). If you repeat this command twice in a row, the second time it moves back to the process mark, which is the beginning of the input that you have not yet sent to the subshell. (Normally that is the same place—the end of the prompt on this line—but after C-c <SPC> the process mark may be in a previous line.)
+C-c <SPC>
+    Accumulate multiple lines of input, then send them together (comint-accumulate). This command inserts a newline before point, but does not send the preceding text as input to the subshell—at least, not yet. Both lines, the one before this newline and the one after, will be sent together (along with the newline that separates them), when you type <RET>.
+C-c C-u
+    Kill all text pending at end of buffer to be sent as input (comint-kill-input). If point is not at end of buffer, this only kills the part of this text that precedes point.
+C-c C-w
+    Kill a word before point (backward-kill-word).
+C-c C-c
+    Interrupt the shell or its current subjob if any (comint-interrupt-subjob). This command also kills any shell input pending in the shell buffer and not yet sent.
+C-c C-z
+    Stop the shell or its current subjob if any (comint-stop-subjob). This command also kills any shell input pending in the shell buffer and not yet sent.
+C-c C-\
+    Send quit signal to the shell or its current subjob if any (comint-quit-subjob). This command also kills any shell input pending in the shell buffer and not yet sent.
+C-c C-o
+    Delete the last batch of output from a shell command (comint-delete-output). This is useful if a shell command spews out lots of output that just gets in the way.
+C-c C-s
+    Write the last batch of output from a shell command to a file (comint-write-output). With a prefix argument, the file is appended to instead. Any prompt at the end of the output is not written.
+C-c C-r
+C-M-l
+    Scroll to display the beginning of the last batch of output at the top of the window; also move the cursor there (comint-show-output).
+C-c C-e
+    Scroll to put the last line of the buffer at the bottom of the window (comint-show-maximum-output).
+C-c C-f
+    Move forward across one shell command, but not beyond the current line (shell-forward-command). The variable shell-command-regexp specifies how to recognize the end of a command.
+C-c C-b
+    Move backward across one shell command, but not beyond the current line (shell-backward-command).
+M-x dirs
+    Ask the shell for its working directory, and update the Shell buffer's default directory. See Directory Tracking.
+M-x send-invisible <RET> text <RET>
+    Send text as input to the shell, after reading it without echoing. This is useful when a shell command runs a program that asks for a password.
+
+    Please note that Emacs will not echo passwords by default. If you really want them to be echoed, evaluate (see Lisp Eval) the following Lisp expression:
+
+              (remove-hook 'comint-output-filter-functions
+                           'comint-watch-for-password-prompt)
+
+
+M-x comint-continue-subjob
+    Continue the shell process. This is useful if you accidentally suspend the shell process.20
+M-x comint-strip-ctrl-m
+    Discard all control-M characters from the current group of shell output. The most convenient way to use this command is to make it run automatically when you get output from the subshell. To do that, evaluate this Lisp expression:
+
+              (add-hook 'comint-output-filter-functions
+                        'comint-strip-ctrl-m)
+
+
+M-x comint-truncate-buffer
+    This command truncates the shell buffer to a certain maximum number of lines, specified by the variable comint-buffer-maximum-size. Here's how to do this automatically each time you get output from the subshell:
+
+              (add-hook 'comint-output-filter-functions
+                        'comint-truncate-buffer)
+
+Shell mode is a derivative of Comint mode, a general-purpose mode for communicating with interactive subprocesses. Most of the features of Shell mode actually come from Comint mode, as you can see from the command names listed above. The special features of Shell mode include the directory tracking feature, and a few user commands.
+
+Other Emacs features that use variants of Comint mode include GUD (see Debuggers) and M-x run-lisp (see External Lisp).
+
+You can use M-x comint-run to execute any program of your choice in a subprocess using unmodified Comint mode—without the specializations of Shell mode.
+
+Next: Shell History, Previous: Shell Mode, Up: Shell
+38.4 Shell Prompts
+
+A prompt is text output by a program to show that it is ready to accept new user input. Normally, Comint mode (and thus Shell mode) automatically figures out which part of the buffer is a prompt, based on the output of the subprocess. (Specifically, it assumes that any received output line which doesn't end with a newline is a prompt.)
+
+Comint mode divides the buffer into two types of fields: input fields (where user input is typed) and output fields (everywhere else). Prompts are part of the output fields. Most Emacs motion commands do not cross field boundaries, unless they move over multiple lines. For instance, when point is in the input field on a shell command line, C-a puts point at the beginning of the input field, after the prompt. Internally, the fields are implemented using the field text property (see Text Properties).
+
+If you change the variable comint-use-prompt-regexp to a non-nil value, then Comint mode will recognize prompts using a regular expression (see Regexps). In Shell mode, the regular expression is specified by the variable shell-prompt-pattern. The default value of comint-use-prompt-regexp is nil, because this method for recognizing prompts is unreliable, but you may want to set it to a non-nil value in unusual circumstances. In that case, Emacs does not divide the Comint buffer into fields, so the general motion commands behave as they normally do in buffers without special text properties. However, you can use the paragraph motion commands to conveniently navigate the buffer (see Paragraphs); in Shell mode, Emacs uses shell-prompt-pattern as paragraph boundaries.
+
+Next: Directory Tracking, Previous: Shell Prompts, Up: Shell
+38.5 Shell Command History
+
+Shell buffers support three ways of repeating earlier commands. You can use keys like those used for the minibuffer history; these work much as they do in the minibuffer, inserting text from prior commands while point remains always at the end of the buffer. You can move through the buffer to previous inputs in their original place, then resubmit them or copy them to the end. Or you can use a ‘!’-style history reference.
+
+    Ring: Fetching commands from the history list.
+    Copy: Moving to a command and then copying it.
+    History References: Expanding ‘!’-style history references.
+
+Next: Shell History Copying, Up: Shell History
+38.5.1 Shell History Ring
+
+M-p
+C-<UP>
+    Fetch the next earlier old shell command (comint-previous-input).
+
+
+M-n
+C-<DOWN>
+    Fetch the next later old shell command (comint-next-input).
+
+
+M-r
+    Begin an incremental regexp search of old shell commands (comint-history-isearch-backward-regexp).
+C-c C-x
+    Fetch the next subsequent command from the history (comint-get-next-from-history).
+C-c .
+    Fetch one argument from an old shell command (comint-input-previous-argument).
+C-c C-l
+    Display the buffer's history of shell commands in another window (comint-dynamic-list-input-ring).
+
+Shell buffers provide a history of previously entered shell commands. To reuse shell commands from the history, use the editing commands M-p, M-n, and M-r. These work similar to the minibuffer history commands (see Minibuffer History), except that they operate within the Shell buffer rather than the minibuffer, and M-r in a Shell buffer invokes incremental search through shell command history.
+
+M-p fetches an earlier shell command to the end of the shell buffer. Successive use of M-p fetches successively earlier shell commands, each replacing any text that was already present as potential shell input. M-n does likewise except that it finds successively more recent shell commands from the buffer. C-<UP> works like M-p, and C-<DOWN> like M-n.
+
+The history search command M-r begins an incremental regular expression search of previous shell commands. After typing M-r, start typing the desired string or regular expression; the last matching shell command will be displayed in the current line. Incremental search commands have their usual effects—for instance, C-s and C-r search forward and backward for the next match (see Incremental Search). When you find the desired input, type <RET> to terminate the search. This puts the input in the command line. Any partial input you were composing before navigating the history list is restored when you go to the beginning or end of the history ring.
+
+Often it is useful to reexecute several successive shell commands that were previously executed in sequence. To do this, first find and reexecute the first command of the sequence. Then type C-c C-x; that will fetch the following command—the one that follows the command you just repeated. Then type <RET> to reexecute this command. You can reexecute several successive commands by typing C-c C-x <RET> over and over.
+
+The command C-c . (comint-input-previous-argument) copies an individual argument from a previous command, like <ESC> . in Bash. The simplest use copies the last argument from the previous shell command. With a prefix argument n, it copies the nth argument instead. Repeating C-c . copies from an earlier shell command instead, always using the same value of n (don't give a prefix argument when you repeat the C-c . command).
+
+These commands get the text of previous shell commands from a special history list, not from the shell buffer itself. Thus, editing the shell buffer, or even killing large parts of it, does not affect the history that these commands access.
+
+Some shells store their command histories in files so that you can refer to commands from previous shell sessions. Emacs reads the command history file for your chosen shell, to initialize its own command history. The file name is ~/.bash_history for bash, ~/.sh_history for ksh, and ~/.history for other shells.
+
+Next: History References, Previous: Shell Ring, Up: Shell History
+38.5.2 Shell History Copying
+
+C-c C-p
+    Move point to the previous prompt (comint-previous-prompt).
+
+
+C-c C-n
+    Move point to the following prompt (comint-next-prompt).
+
+
+C-c <RET>
+    Copy the input command at point, inserting the copy at the end of the buffer (comint-copy-old-input). This is useful if you move point back to a previous command. After you copy the command, you can submit the copy as input with <RET>. If you wish, you can edit the copy before resubmitting it. If you use this command on an output line, it copies that line to the end of the buffer.
+mouse-2
+    If comint-use-prompt-regexp is nil (the default), copy the old input command that you click on, inserting the copy at the end of the buffer (comint-insert-input). If comint-use-prompt-regexp is non-nil, or if the click is not over old input, just yank as usual.
+
+Moving to a previous input and then copying it with C-c <RET> or mouse-2 produces the same results—the same buffer contents—that you would get by using M-p enough times to fetch that previous input from the history list. However, C-c <RET> copies the text from the buffer, which can be different from what is in the history list if you edit the input text in the buffer after it has been sent.
+
+Previous: Shell History Copying, Up: Shell History
+38.5.3 Shell History References
+
+Various shells, including csh and bash, support history references that begin with ‘!’ and ‘^’. Shell mode recognizes these constructs, and can perform the history substitution for you.
+
+If you insert a history reference and type <TAB>, this searches the input history for a matching command, performs substitution if necessary, and places the result in the buffer in place of the history reference. For example, you can fetch the most recent command beginning with ‘mv’ with ! m v <TAB>. You can edit the command if you wish, and then resubmit the command to the shell by typing <RET>.
+
+Shell mode can optionally expand history references in the buffer when you send them to the shell. To request this, set the variable comint-input-autoexpand to input. You can make <SPC> perform history expansion by binding <SPC> to the command comint-magic-space. See Rebinding.
+
+Shell mode recognizes history references when they follow a prompt. See Shell Prompts, for how Shell mode recognizes prompts.
+
+Next: Shell Options, Previous: Shell History, Up: Shell
+38.6 Directory Tracking
+
+Shell mode keeps track of ‘cd’, ‘pushd’ and ‘popd’ commands given to the subshell, in order to keep the Shell buffer's default directory (see File Names) the same as the shell's working directory. It recognizes these commands by examining lines of input that you send.
+
+If you use aliases for these commands, you can tell Emacs to recognize them also, by setting the variables shell-pushd-regexp, shell-popd-regexp, and shell-cd-regexp to the appropriate regular expressions (see Regexps). For example, if shell-pushd-regexp matches the beginning of a shell command line, that line is regarded as a pushd command. These commands are recognized only at the beginning of a shell command line.
+
+If Emacs gets confused about changes in the working directory of the subshell, type M-x dirs. This command asks the shell for its working directory and updates the default directory accordingly. It works for shells that support the most common command syntax, but may not work for unusual shells.
+
+You can also use Dirtrack mode, a buffer-local minor mode that implements an alternative method of tracking the shell's working directory. To use this method, your shell prompt must contain the working directory at all times, and you must supply a regular expression for recognizing which part of the prompt contains the working directory; see the documentation of the variable dirtrack-list for details. To use Dirtrack mode, type M-x dirtrack-mode in the Shell buffer, or add dirtrack-mode to shell-mode-hook (see Hooks).
+
+Next: Terminal emulator, Previous: Directory Tracking, Up: Shell
+38.7 Shell Mode Options
+
+If the variable comint-scroll-to-bottom-on-input is non-nil, insertion and yank commands scroll the selected window to the bottom before inserting. The default is nil.
+
+If comint-scroll-show-maximum-output is non-nil, then arrival of output when point is at the end tries to scroll the last line of text to the bottom line of the window, showing as much useful text as possible. (This mimics the scrolling behavior of most terminals.) The default is t.
+
+By setting comint-move-point-for-output, you can opt for having point jump to the end of the buffer whenever output arrives—no matter where in the buffer point was before. If the value is this, point jumps in the selected window. If the value is all, point jumps in each window that shows the Comint buffer. If the value is other, point jumps in all nonselected windows that show the current buffer. The default value is nil, which means point does not jump to the end.
+
+If you set comint-prompt-read-only, the prompts in the Comint buffer are read-only.
+
+The variable comint-input-ignoredups controls whether successive identical inputs are stored in the input history. A non-nil value means to omit an input that is the same as the previous input. The default is nil, which means to store each input even if it is equal to the previous input.
+
+Three variables customize file name completion. The variable comint-completion-addsuffix controls whether completion inserts a space or a slash to indicate a fully completed file or directory name (non-nil means do insert a space or slash). comint-completion-recexact, if non-nil, directs <TAB> to choose the shortest possible completion if the usual Emacs completion algorithm cannot add even a single character. comint-completion-autolist, if non-nil, says to list all the possible completions whenever completion is not exact.
+
+Command completion normally considers only executable files. If you set shell-completion-execonly to nil, it considers nonexecutable files as well.
+
+The variable shell-completion-fignore specifies a list of file name extensions to ignore in Shell mode completion. The default setting is nil, but some users prefer ("~" "#" "%") to ignore file names ending in ‘~’, ‘#’ or ‘%’. Other related Comint modes use the variable comint-completion-fignore instead.
+
+Some implementation details of the shell command completion may also be found in the lisp documentation of the shell-dynamic-complete-command function.
+
+You can configure the behavior of ‘pushd’. Variables control whether ‘pushd’ behaves like ‘cd’ if no argument is given (shell-pushd-tohome), pop rather than rotate with a numeric argument (shell-pushd-dextract), and only add directories to the directory stack if they are not already on it (shell-pushd-dunique). The values you choose should match the underlying shell, of course.
+
+Comint mode sets the TERM environment variable to a safe default value, but this value disables some useful features. For example, color is disabled in applications that use TERM to determine if color is supported. Therefore, Emacs provides an option comint-terminfo-terminal, which you can set to a terminal that is present in your system's terminfo database, in order to take advantage of advanced features of that terminal.
+
+Next: Term Mode, Previous: Shell Options, Up: Shell
+38.8 Emacs Terminal Emulator
+
+To run a subshell in a text terminal emulator, use M-x term. This creates (or reuses) a buffer named *terminal*, and runs a subshell with input coming from your keyboard, and output going to that buffer.
+
+The terminal emulator uses Term mode, which has two input modes. In line mode, Term basically acts like Shell mode (see Shell Mode). In char mode, each character is sent directly to the subshell, as terminal input; the sole exception is the terminal escape character, which by default is C-c (see Term Mode). Any echoing of your input is the responsibility of the subshell; any terminal output from the subshell goes into the buffer, advancing point.
+
+Some programs (such as Emacs itself) need to control the appearance of the terminal screen in detail. They do this by emitting special control codes. Term mode recognizes and handles ANSI-standard VT100-style escape sequences, which are accepted by most modern terminals, including xterm. (Hence, you can actually run Emacs inside an Emacs Term window.)
+
+The term face specifies the default appearance of text in the terminal emulator (the default is the same appearance as the default face). When terminal control codes are used to change the appearance of text, these are represented in the terminal emulator by the faces term-color-black, term-color-red, term-color-green, term-color-yellow term-color-blue, term-color-magenta, term-color-cyan, term-color-white, term-color-underline, and term-color-bold. See Faces.
+
+You can also use Term mode to communicate with a device connected to a serial port. See Serial Terminal.
+
+The file name used to load the subshell is determined the same way as for Shell mode. To make multiple terminal emulators, rename the buffer *terminal* to something different using M-x rename-uniquely, just as with Shell mode.
+
+Unlike Shell mode, Term mode does not track the current directory by examining your input. But some shells can tell Term what the current directory is. This is done automatically by bash version 1.15 and later.
+
+Next: Remote Host, Previous: Terminal emulator, Up: Shell
+38.9 Term Mode
+
+To switch between line and char mode in Term mode, use these commands:
+
+C-c C-j
+    Switch to line mode (term-line-mode). Do nothing if already in line mode.
+
+
+C-c C-k
+    Switch to char mode (term-char-mode). Do nothing if already in char mode.
+
+The following commands are only available in char mode:
+
+C-c C-c
+    Send a literal C-c to the sub-shell (term-interrupt-subjob).
+C-c char
+    This is equivalent to C-x char in normal Emacs. For example, C-c o invokes the global binding of C-x o, which is normally ‘other-window’.
+
+Term mode has a page-at-a-time feature. When enabled, it makes output pause at the end of each screenful:
+
+C-c C-q
+    Toggle the page-at-a-time feature (term-pager-toggle). This command works in both line and char modes. When the feature is enabled, the mode-line displays the word ‘page’, and each time Term receives more than a screenful of output, it pauses and displays ‘**MORE**’ in the mode-line. Type <SPC> to display the next screenful of output, or ? to see your other options. The interface is similar to the more program.
+
+Next: Serial Terminal, Previous: Term Mode, Up: Shell
+38.10 Remote Host Shell
+
+You can login to a remote computer, using whatever commands you would from a regular terminal (e.g., using the ssh or telnet or rlogin commands), from a Term window.
+
+A program that asks you for a password will normally suppress echoing of the password, so the password will not show up in the buffer. This will happen just as if you were using a real terminal, if the buffer is in char mode. If it is in line mode, the password is temporarily visible, but will be erased when you hit return. (This happens automatically; there is no special password processing.)
+
+When you log in to a different machine, you need to specify the type of terminal you're using, by setting the TERM environment variable in the environment for the remote login command. (If you use bash, you do that by writing the variable assignment before the remote login command, without a separating comma.) Terminal types ‘ansi’ or ‘vt100’ will work on most systems.
+
+Previous: Remote Host, Up: Shell
+38.11 Serial Terminal
+
+If you have a device connected to a serial port of your computer, you can communicate with it by typing M-x serial-term. This command asks for a serial port name and speed, and switches to a new Term mode buffer. Emacs communicates with the serial device through this buffer just like it does with a terminal in ordinary Term mode.
+
+The speed of the serial port is measured in bits per second. The most common speed is 9600 bits per second. You can change the speed interactively by clicking on the mode line.
+
+A serial port can be configured even more by clicking on ‘8N1’ in the mode line. By default, a serial port is configured as ‘8N1’, which means that each byte consists of 8 data bits, No parity check bit, and 1 stopbit.
+
+If the speed or the configuration is wrong, you cannot communicate with your device and will probably only see garbage output in the window.  visit a file which would normally be handled by DocView mode but some requirement is not met (e.g., you operate in a terminal frame or Emacs has no PNG support), you are queried if you want to view the document's contents as plain text. If you confirm, the buffer is put in text mode and DocView minor mode is activated. Thus, by typing C-c C-c you switch to the fallback mode. With another C-c C-c you return to DocView mode. The plain text contents can also be displayed from within DocView mode by typing C-c C-t (=doc-view-open-text=).
+
+You can explicitly enable DocView mode with the command M-x doc-view-mode. You can toggle DocView minor mode with M-x doc-view-minor-mode.
+
+When DocView mode starts, it displays a welcome screen and begins formatting the file, page by page. It displays the first page once that has been formatted.
+
+To kill the DocView buffer, type k (=doc-view-kill-proc-and-buffer=). To bury it, type q (=quit-window=).
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Navigation][Navigation]]: Navigating DocView buffers.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Searching][Searching]]: Searching inside documents.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Slicing][Slicing]]: Specifying which part of a page is displayed.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Conversion][Conversion]]: Influencing and triggering conversion.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Searching][DocView Searching]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Document-View][Document View]]
+
+* 37.1 DocView Navigation
+    :PROPERTIES:
+    :CUSTOM_ID: docview-navigation
+    :END:
+
+In DocView mode, you can scroll the current page using the usual Emacs movement keys: C-p, C-n, C-b, C-f, and the arrow keys.
+
+By default, the line-motion keys C-p and C-n stop scrolling at the beginning and end of the current page, respectively. However, if you change the variable =doc-view-continuous= to a non-=nil= value, then C-p displays the previous page if you are already at the beginning of the current page, and C-n displays the next page if you are at the end of the current page.
+
+You can also display the next page by typing n, , or C-x ] (=doc-view-next-page=). To display the previous page, type p, , or C-x [ (=doc-view-previous-page=).
+
+ (=doc-view-scroll-up-or-next-page=) is a convenient way to advance through the document. It scrolls within the current page or advances to the next. moves backwards in a similar way (=doc-view-scroll-down-or-previous-page=).
+
+To go to the first page, type M-< (=doc-view-first-page=); to go to the last one, type M-> (=doc-view-last-page=). To jump to a page by its number, type M-g M-g or M-g g (=doc-view-goto-page=).
+
+You can enlarge or shrink the document with + (=doc-view-enlarge=) and - (=doc-view-shrink=). These commands work by reconverting the document at the new size. To specify the default size for DocView, customize the variable =doc-view-resolution=.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Slicing][DocView Slicing]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Navigation][DocView Navigation]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Document-View][Document View]]
+
+* 37.2 DocView Searching
+    :PROPERTIES:
+    :CUSTOM_ID: docview-searching
+    :END:
+
+In DocView mode, you can search the file's text for a regular expression (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Regexps][Regexps]]). The interface for searching is inspired by =isearch= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Incremental-Search][Incremental Search]]).
+
+To begin a search, type C-s (=doc-view-search=) or C-r (=doc-view-search-backward=). This reads a regular expression using a minibuffer, then echoes the number of matches found within the document. You can move forward and back among the matches by typing C-s and C-r. DocView mode has no way to show the match inside the page image; instead, it displays a tooltip (at the mouse position) listing all matching lines in the current page. To force display of this tooltip, type C-t (=doc-view-show-tooltip=).
+
+To start a new search, use the search command with a prefix argument; i.e., C-u C-s for a forward search or C-u C-r for a backward search.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Conversion][DocView Conversion]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Searching][DocView Searching]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Document-View][Document View]]
+
+* 37.3 DocView Slicing
+    :PROPERTIES:
+    :CUSTOM_ID: docview-slicing
+    :END:
+
+Documents often have wide margins for printing. They are annoying when reading the document on the screen, because they use up screen space and can cause inconvenient scrolling.
+
+With DocView you can hide these margins by selecting a slice of pages to display. A slice is a rectangle within the page area; once you specify a slice in DocView, it applies to whichever page you look at.
+
+To specify the slice numerically, type s s (=doc-view-set-slice=); then enter the top left pixel position and the slice's width and height.
+
+A more convenient graphical way to specify the slice is with s m (=doc-view-set-slice-using-mouse=), where you use the mouse to select the slice. Simply press and hold the left mouse button at the upper-left corner of the region you want to have in the slice, then move the mouse pointer to the lower-right corner and release the button.
+
+The most convenient way is to set the optimal slice by using BoundingBox information automatically determined from the document by typing s b (=doc-view-set-slice-from-bounding-box=).
+
+To cancel the selected slice, type s r (=doc-view-reset-slice=). Then DocView shows the entire page including its entire margins.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#DocView-Slicing][DocView Slicing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Document-View][Document View]]
+
+* 37.4 DocView Conversion
+    :PROPERTIES:
+    :CUSTOM_ID: docview-conversion
+    :END:
+
+For efficiency, DocView caches the images produced by gs. The name of the directory where it caches images is given by the variable =doc-view-cache-directory=. You can clear the cache directory by typing M-x doc-view-clear-cache.
+
+To force reconversion of the currently viewed document, type r or g (=revert-buffer=). To kill the converter process associated with the current buffer, type K (=doc-view-kill-proc=). The command k (=doc-view-kill-proc-and-buffer=) kills the converter process and the DocView buffer.

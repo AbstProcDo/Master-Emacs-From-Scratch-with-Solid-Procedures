@@ -1,0 +1,868 @@
+#+TITLE: 27.Building
+* 27) Compiling and Testing Programs
+
+The previous chapter discusses the Emacs commands that are useful for making changes in programs. This chapter deals with commands that assist in the process of compiling and testing programs.
+
+* 27.1 Running Compilations under Emacs
+
+Emacs can run compilers for languages such as C and Fortran, feeding the compilation log into an Emacs buffer. It can also parse the error messages and show you where the errors occurred.
+
+- M-x compile
+
+  Run a compiler asynchronously under Emacs, with error messages going to the /compilation/ buffer.
+
+- M-x recompile
+
+- g (Compilation mode)
+
+  Invoke a compiler with the same command as in the last invocation of M-x compile.
+
+- M-x kill-compilation
+
+  Kill the running compilation subprocess.
+
+  To run =make= or another compilation command, type M-x compile. This reads a shell command line using the minibuffer, and then executes the command by running a shell as a subprocess (or inferior process) of Emacs. The output is inserted in a buffer named /compilation/. The current buffer's default directory is used as the working directory for the execution of the command, so by default compilation takes place in that directory.
+
+  The default compilation command is 'make -k', which is usually correct for programs compiled using the make utility (the '-k' flag tells make to continue compiling as much as possible after an error). See [[https://www.gnu.org/software/emacs/manual/html_mono/make.html#Top][Make]]. If you have done M-x compile before, the command that you specified is automatically stored in the variable =compile-command=; this is used as the default the next time you type M-x compile. A file can also specify a file-local value for =compile-command= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Variables][File Variables]]).
+
+Starting a compilation displays the /compilation/ buffer in another window but does not select it. While the compilation is running, the word 'run' is shown in the major mode indicator for the /compilation/ buffer, and the word 'Compiling' appears in all mode lines. You do not have to keep the /compilation/ buffer visible while compilation is running; it continues in any case. When the compilation ends, for whatever reason, the mode line of the /compilation/ buffer changes to say 'exit' (followed by the exit code: '[0]' for a normal exit), or 'signal' (if a signal terminated the process).
+
+If you want to watch the compilation transcript as it appears, switch to the /compilation/ buffer and move point to the end of the buffer. When point is at the end, new compilation output is inserted above point, which remains at the end. Otherwise, point remains fixed while compilation output is added at the end of the buffer.
+
+While compilation proceeds, the mode line shows the number of errors, warnings, and informational messages emitted by the compiler so far.
+
+If you change the variable =compilation-scroll-output= to a non-=nil= value, the /compilation/ buffer scrolls automatically to follow the output. If the value is =first-error=, scrolling stops when the first error appears, leaving point at that error. For any other non-=nil= value, scrolling continues until there is no more output.
+
+To rerun the last compilation with the same command, type M-x recompile. This reuses the compilation command from the last invocation of M-x compile. It also reuses the /compilation/ buffer and starts the compilation in its default directory, which is the directory in which the previous compilation was started. In /compilation/ buffers this command is bound to g.
+
+Starting a new compilation also kills any compilation already running in /compilation/, as the buffer can only handle one compilation at any time. However, M-x compile and M-x recompile ask for confirmation before actually killing a compilation that is running; to always automatically kill the compilation without asking, change the variable =compilation-always-kill= to =t=. You can also kill a compilation process with the command M-x kill-compilation.
+
+To run two compilations at once, start the first one, then rename the /compilation/ buffer (perhaps using =rename-uniquely=; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-Buffer][Misc Buffer]]), then switch buffers and start the other compilation. This will create a new /compilation/ buffer.
+
+You can control the environment passed to the compilation command with the variable =compilation-environment=. Its value is a list of environment variable settings; each element should be a string of the form ="=envvarname===value="=. These environment variable settings override the usual ones.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation-Shell][Compilation Shell]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation][Compilation]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.2 Compilation Mode
+    :PROPERTIES:
+    :CUSTOM_ID: compilation-mode
+    :END:
+
+The /compilation/ buffer uses a major mode called Compilation mode. Compilation mode turns each error message in the buffer into a hyperlink; you can move point to it and type , or click on it with the mouse (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mouse-References][Mouse References]]), to visit the locus of the error message in a separate window. The locus is the specific position in a file where that error occurred.
+
+The appearance of the /compilation/ buffer can be controlled by customizing the faces which are used to highlight parts of the /compilation/ buffer, e.g., =compilation-error= or =compilation-warning=, for error and warning messages respectively. Note that since those faces inherit from the =error= and =warning= faces, it is also possible to customize the parent face directly instead.
+
+Use M-x customize-group RET compilation to see the entire list of customization variables and faces.
+
+If you change the variable =compilation-auto-jump-to-first-error= to a non-=nil= value, Emacs automatically visits the locus of the first error message that appears in the /compilation/ buffer.
+
+Compilation mode provides the following additional commands. These commands can also be used in /grep/ buffers, where the hyperlinks are search matches rather than error messages (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Grep-Searching][Grep Searching]]).
+
+- M-g M-n
+
+- M-g n
+
+- C-x `
+
+  Visit the locus of the next error message or match (=next-error=).
+
+- M-g M-p
+
+- M-g p
+
+  Visit the locus of the previous error message or match (=previous-error=).
+
+- M-n
+
+  Move point to the next error message or match, without visiting its locus (=compilation-next-error=).
+
+- M-p
+
+  Move point to the previous error message or match, without visiting its locus (=compilation-previous-error=).
+
+- M-}
+
+  Move point to the next error message or match occurring in a different file (=compilation-next-file=).
+
+- M-{
+
+  Move point to the previous error message or match occurring in a different file (=compilation-previous-file=).
+
+- C-c C-f
+
+  Toggle Next Error Follow minor mode, which makes cursor motion in the compilation buffer produce automatic source display.
+
+- g
+
+  Re-run the last command whose output is shown in the /compilation/ buffer.
+
+  To visit errors sequentially, type C-x =(=next-error=), or equivalently M-g M-n or M-g n.  This command can be invoked from any buffer, not just a Compilation mode buffer.  The first time you invoke it after a compilation, it visits the locus of the first error message.  Each subsequent C-x= visits the next error, in a similar fashion. If you visit a specific error with or a mouse click in the /compilation/ buffer, subsequent C-x =commands advance from there.  When C-x= finds no more error messages to visit, it signals an error. C-u C-x ` starts again from the beginning of the compilation buffer, and visits the first locus.
+
+M-g M-p or M-g p (=previous-error=) iterates through errors in the opposite direction.
+
+The =next-error= and =previous-error= commands don't just act on the errors or matches listed in /compilation/ and /grep/ buffers; they also know how to iterate through error or match lists produced by other commands, such as M-x occur (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Repeating-Search][Other Repeating Search]]). If the current buffer contains error messages or matches, these commands will iterate through them; otherwise, Emacs looks for a buffer containing error messages or matches amongst the windows of the selected frame, then for any buffer that =next-error= or =previous-error= previously visited, and finally all other buffers. Any buffer these commands iterate through that is not currently displayed in a window will be displayed.
+
+By default, the =next-error= and =previous-error= commands skip less important messages. The variable =compilation-skip-threshold= controls this. The default value, 1, means to skip anything less important than a warning. A value of 2 means to skip anything less important than an error, while 0 means not to skip any messages.
+
+When Emacs visits the locus of an error message, it momentarily highlights the relevant source line. The duration of this highlight is determined by the variable =next-error-highlight=.
+
+If the /compilation/ buffer is shown in a window with a left fringe (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fringes][Fringes]]), the locus-visiting commands put an arrow in the fringe, pointing to the current error message. If the window has no left fringe, such as on a text terminal, these commands scroll the window so that the current message is at the top of the window. If you change the variable =compilation-context-lines= to an integer value n, these commands scroll the window so that the current error message is n lines from the top, whether or not there is a fringe; the default value, =nil=, gives the behavior described above.
+
+To parse messages from the compiler, Compilation mode uses the variable =compilation-error-regexp-alist= which lists various error message formats and tells Emacs how to extract the locus from each. A similar variable, =grep-regexp-alist=, tells Emacs how to parse output from a =grep= command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Grep-Searching][Grep Searching]]).
+
+Compilation mode also defines the keys and to scroll by screenfuls; M-n (=compilation-next-error=) and M-p (=compilation-previous-error=) to move to the next or previous error message; and M-{ (=compilation-next-file=) and M-} (=compilation-previous-file=) to move to the next or previous error message for a different source file.
+
+You can type C-c C-f to toggle Next Error Follow mode. In this minor mode, ordinary cursor motion in the compilation buffer automatically updates the source buffer, i.e., moving the cursor over an error message causes the locus of that error to be displayed.
+
+The features of Compilation mode are also available in a minor mode called Compilation Minor mode. This lets you parse error messages in any buffer, not just a normal compilation output buffer. Type M-x compilation-minor-mode to enable the minor mode. For instance, in an Rlogin buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Host][Remote Host]]), Compilation minor mode automatically accesses remote source files by FTP (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Grep-Searching][Grep Searching]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation-Mode][Compilation Mode]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.3 Subshells for Compilation
+    :PROPERTIES:
+    :CUSTOM_ID: subshells-for-compilation
+    :END:
+
+This section includes various techniques and advice for using a shell and its features in compilation buffers. This material is specific to local compilations, and will most probably not work in (or be irrelevant to) compilation buffers whose default directory is on remote hosts.
+
+The M-x compile command uses a shell to run the compilation command, but specifies the option for a noninteractive shell. This means, in particular, that the shell should start with no prompt. If you find your usual shell prompt making an unsightly appearance in the /compilation/ buffer, it means you have made a mistake in your shell's init file by setting the prompt unconditionally. (This init file may be named .bashrc, .profile, .cshrc, .shrc, etc., depending on what shell you use.) The shell init file should set the prompt only if there already is a prompt. Here's how to do it in bash:
+
+#+BEGIN_EXAMPLE
+         if [ "${PS1+set}" = set ]
+         then PS1=...
+         fi
+#+END_EXAMPLE
+
+And here's how to do it in csh:
+
+#+BEGIN_EXAMPLE
+         if ($?prompt) set prompt = ...
+#+END_EXAMPLE
+
+If you want to customize the value of the TERM environment variable passed to the compilation subshell, customize the variable =comint-terminfo-terminal= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Options][Shell Options]]).
+
+Emacs does not expect a compiler process to launch asynchronous subprocesses; if it does, and they keep running after the main compiler process has terminated, Emacs may kill them or their output may not arrive in Emacs. To avoid this problem, make the main compilation process wait for its subprocesses to finish. In a shell script, you can do this using '$!' and 'wait', like this:
+
+#+BEGIN_EXAMPLE
+         (sleep 10; echo 2nd)& pid=$!  # Record pid of subprocess
+         echo first message
+         wait $pid                     # Wait for subprocess
+#+END_EXAMPLE
+
+If the background process does not output to the compilation buffer, so you only need to prevent it from being killed when the main compilation process terminates, this is sufficient:
+
+#+BEGIN_EXAMPLE
+         nohup command; sleep 1
+#+END_EXAMPLE
+
+On MS-DOS, asynchronous subprocesses are not supported, so M-x compile runs the compilation command synchronously (i.e., you must wait until the command finishes before you can do anything else in Emacs). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#MS_002dDOS][MS-DOS]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Flymake][Flymake]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation-Shell][Compilation Shell]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.4 Searching with Grep under Emacs
+    :PROPERTIES:
+    :CUSTOM_ID: searching-with-grep-under-emacs
+    :END:
+
+Just as you can run a compiler from Emacs and then visit the lines with compilation errors, you can also run grep and then visit the lines on which matches were found. This works by treating the matches reported by grep as if they were errors. The output buffer uses Grep mode, which is a variant of Compilation mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation-Mode][Compilation Mode]]).
+
+- M-x grep
+
+- M-x lgrep
+
+  Run grep asynchronously under Emacs, listing matching lines in the buffer named /grep/.
+
+- M-x grep-find
+
+- M-x find-grep
+
+- M-x rgrep
+
+  Run grep via =find=, and collect output in the /grep/ buffer.
+
+- M-x zrgrep
+
+  Run =zgrep= and collect output in the /grep/ buffer.
+
+- M-x kill-grep
+
+  Kill the running grep subprocess.
+
+  To run grep, type M-x grep, then enter a command line that specifies how to run grep. Use the same arguments you would give grep when running it normally: a grep-style regexp (usually in single-quotes to quote the shell's special characters) followed by file names, which may use wildcards. If you specify a prefix argument for M-x grep, it finds the identifier (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Xref][Xref]]) in the buffer around point, and puts that into the default grep command.
+
+Your command need not simply run grep; you can use any shell command that produces output in the same format. For instance, you can chain grep commands, like this:
+
+#+BEGIN_EXAMPLE
+         grep -nH -e foo *.el | grep bar | grep toto
+#+END_EXAMPLE
+
+The output from grep goes in the /grep/ buffer. You can find the corresponding lines in the original files using C-x `, , and so forth, just like compilation errors. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation-Mode][Compilation Mode]], for detailed description of commands and key bindings available in the /grep/ buffer.
+
+Some grep programs accept a '--color' option to output special markers around matches for the purpose of highlighting. You can make use of this feature by setting =grep-highlight-matches= to =t=. When displaying a match in the source buffer, the exact match will be highlighted, instead of the entire source line.
+
+As with compilation commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation][Compilation]]), while the grep command runs, the mode line shows the running number of matches found and highlighted so far.
+
+The grep commands will offer to save buffers before running. This is controlled by the =grep-save-buffers= variable. The possible values are either =nil= (don't save), =ask= (ask before saving), or a function which will be used as a predicate (and is called with the file name as the parameter and should return non-=nil= if the buffer is to be saved). Any other non-=nil= value means that all buffers should be saved without asking. The default is =ask=.
+
+The command M-x grep-find (also available as M-x find-grep) is similar to M-x grep, but it supplies a different initial default for the command---one that runs both =find= and grep, so as to search every file in a directory tree. See also the =find-grep-dired= command, in [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired-and-Find][Dired and Find]].
+
+The commands M-x lgrep (local grep) and M-x rgrep (recursive grep) are more user-friendly versions of grep and =grep-find=, which prompt separately for the regular expression to match, the files to search, and the base directory for the search. Case sensitivity of the search is controlled by the current value of =case-fold-search=. The command M-x zrgrep is similar to M-x rgrep, but it calls zgrep instead of grep to search the contents of gzipped files.
+
+These commands build the shell commands based on the variables =grep-template= (for =lgrep=) and =grep-find-template= (for =rgrep=). The files to search can use aliases defined in the variable =grep-files-aliases=.
+
+Directories listed in the variable =grep-find-ignored-directories= are automatically skipped by M-x rgrep. The default value includes the data directories used by various version control systems.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debuggers][Debuggers]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Grep-Searching][Grep Searching]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.5 Finding Syntax Errors On The Fly
+    :PROPERTIES:
+    :CUSTOM_ID: finding-syntax-errors-on-the-fly
+    :END:
+
+Flymake mode is a minor mode that performs on-the-fly syntax checking for many programming and markup languages, including C, C++, Perl, HTML, and TeX/LaTeX. It is somewhat analogous to Flyspell mode, which performs spell checking for ordinary human languages in a similar fashion (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]]). As you edit a file, Flymake mode runs an appropriate syntax checking tool in the background, using a temporary copy of the buffer. It then parses the error and warning messages, and highlights the erroneous lines in the buffer. The syntax checking tool used depends on the language; for example, for C/C++ files this is usually the C compiler. Flymake can also use build tools such as =make= for checking complicated projects.
+
+To enable Flymake mode, type M-x flymake-mode. You can jump to the errors that it finds by using M-x flymake-goto-next-error and M-x flymake-goto-prev-error. To display any error messages associated with the current line, type M-x flymake-display-err-menu-for-current-line.
+
+For more details about using Flymake, see [[https://www.gnu.org/software/emacs/manual/html_mono/flymake.html#Top][Flymake]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Executing-Lisp][Executing Lisp]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Flymake][Flymake]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.6 Running Debuggers Under Emacs
+    :PROPERTIES:
+    :CUSTOM_ID: running-debuggers-under-emacs
+    :END:
+
+The GUD (Grand Unified Debugger) library provides an Emacs interface to a wide variety of symbolic debuggers. It can run the GNU Debugger (GDB), as well as DBX, SDB, XDB, Guile REPL debug commands, Perl's debugging mode, the Python debugger PDB, and the Java Debugger JDB.
+
+Emacs provides a special interface to GDB, which uses extra Emacs windows to display the state of the debugged program. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]].
+
+Emacs also has a built-in debugger for Emacs Lisp programs. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Debugging][The Lisp Debugger]].
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Starting-GUD][Starting GUD]]: How to start a debugger subprocess.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debugger-Operation][Debugger Operation]]: Connection between the debugger and source buffers.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Commands-of-GUD][Commands of GUD]]: Key bindings for common commands.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GUD-Customization][GUD Customization]]: Defining your own commands for GUD.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]: An enhanced mode that uses GDB features to implement a graphical debugging environment.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debugger-Operation][Debugger Operation]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debuggers][Debuggers]]
+
+** 27.6.1 Starting GUD
+     :PROPERTIES:
+     :CUSTOM_ID: starting-gud
+     :END:
+
+There are several commands for starting a debugger subprocess, each corresponding to a particular debugger program.
+
+- M-x gdb
+
+  Run GDB as a subprocess, and interact with it via an IDE-like Emacs interface. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]], for more information about this command.
+
+- M-x gud-gdb
+
+  Run GDB, using a GUD interaction buffer for input and output to the GDB subprocess (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debugger-Operation][Debugger Operation]]). If such a buffer already exists, switch to it; otherwise, create the buffer and switch to it. The other commands in this list do the same, for other debugger programs.
+
+- M-x perldb
+
+  Run the Perl interpreter in debug mode.
+
+- M-x jdb
+
+  Run the Java debugger.
+
+- M-x pdb
+
+  Run the Python debugger.
+
+- M-x guiler
+
+  Run Guile REPL for debugging Guile Scheme programs.
+
+- M-x dbx
+
+  Run the DBX debugger.
+
+- M-x xdb
+
+  Run the XDB debugger.
+
+- M-x sdb
+
+  Run the SDB debugger.
+
+Each of these commands reads a command line to invoke the debugger, using the minibuffer. The minibuffer's initial contents contain the standard executable name and options for the debugger, and sometimes also a guess for the name of the executable file you want to debug. Shell wildcards and variables are not allowed in this command line. Emacs assumes that the first command argument which does not start with a '-' is the executable file name.
+
+Tramp provides a facility for remote debugging, whereby both the debugger and the program being debugged are on the same remote host. See [[https://www.gnu.org/software/emacs/manual/html_mono/tramp.html#Running-a-debugger-on-a-remote-host][Running a debugger on a remote host]], for details. This is separate from GDB's remote debugging feature, where the program and the debugger run on different machines (see [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Remote-Debugging][Debugging Remote Programs]]).
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Commands-of-GUD][Commands of GUD]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Starting-GUD][Starting GUD]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debuggers][Debuggers]]
+
+** 27.6.2 Debugger Operation
+     :PROPERTIES:
+     :CUSTOM_ID: debugger-operation
+     :END:
+
+The GUD interaction buffer is an Emacs buffer which is used to send text commands to a debugger subprocess, and record its output. This is the basic interface for interacting with a debugger, used by M-x gud-gdb and other commands listed in [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Starting-GUD][Starting GUD]]. The M-x gdb command extends this interface with additional specialized buffers for controlling breakpoints, stack frames, and other aspects of the debugger state (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]).
+
+The GUD interaction buffer uses a variant of Shell mode, so the Emacs commands defined by Shell mode are available (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Mode][Shell Mode]]). Completion is available for most debugger commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]), and you can use the usual Shell mode history commands to repeat them. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Commands-of-GUD][Commands of GUD]], for special commands that can be used in the GUD interaction buffer.
+
+As you debug a program, Emacs displays the relevant source files by visiting them in Emacs buffers, with an arrow in the left fringe indicating the current execution line. (On a text terminal, the arrow appears as '=>', overlaid on the first two text columns.) Moving point in such a buffer does not move the arrow. You are free to edit these source files, but note that inserting or deleting lines will throw off the arrow's positioning, as Emacs has no way to figure out which edited source line corresponds to the line reported by the debugger subprocess. To update this information, you typically have to recompile and restart the program.
+
+GUD Tooltip mode is a global minor mode that adds tooltip support to GUD. To toggle this mode, type M-x gud-tooltip-mode. It is disabled by default. If enabled, you can move the mouse pointer over a variable, a function, or a macro (collectively called identifiers) to show their values in tooltips (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Tooltips][Tooltips]]). If just placing the mouse pointer over an expression doesn't show the value of the expression you had in mind, you can tell Emacs more explicitly what expression to evaluate by dragging the mouse over the expression, then leaving the mouse inside the marked area. The GUD Tooltip mode takes effect in the GUD interaction buffer, and in all source buffers with major modes listed in the variable =gud-tooltip-modes=. If the variable =gud-tooltip-echo-area= is non-=nil=, or if you turned off the tooltip mode, values are shown in the echo area instead of a tooltip.
+
+When using GUD Tooltip mode with M-x gud-gdb, displaying an expression's value in GDB can sometimes expand a macro, potentially causing side effects in the debugged program. For that reason, using tooltips in =gud-gdb= is disabled. If you use the M-x gdb interface, this problem does not occur, as there is special code to avoid side-effects; furthermore, you can display macro definitions associated with an identifier when the program is not executing.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GUD-Customization][GUD Customization]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debugger-Operation][Debugger Operation]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debuggers][Debuggers]]
+
+** 27.6.3 Commands of GUD
+     :PROPERTIES:
+     :CUSTOM_ID: commands-of-gud
+     :END:
+
+GUD provides commands for setting and clearing breakpoints, selecting stack frames, and stepping through the program.
+
+- C-x C-a C-b
+
+  Set a breakpoint on the source line that point is on.
+
+C-x C-a C-b (=gud-break=), when called in a source buffer, sets a debugger breakpoint on the current source line. This command is available only after starting GUD. If you call it in a buffer that is not associated with any debugger subprocess, it signals an error.
+
+The following commands are available both in the GUD interaction buffer and globally, but with different key bindings. The keys starting with C-c are available only in the GUD interaction buffer, while those starting with C-x C-a are available globally. Some of these commands are also available via the tool bar; some are not supported by certain debuggers.
+
+- C-c C-l
+
+- C-x C-a C-l
+
+  Display, in another window, the last source line referred to in the GUD interaction buffer (=gud-refresh=).
+
+- C-c C-s
+
+- C-x C-a C-s
+
+  Execute the next single line of code (=gud-step=). If the line contains a function call, execution stops after entering the called function.
+
+- C-c C-n
+
+- C-x C-a C-n
+
+  Execute the next single line of code, stepping across function calls without stopping inside the functions (=gud-next=).
+
+- C-c C-i
+
+- C-x C-a C-i
+
+  Execute a single machine instruction (=gud-stepi=).
+
+- C-c C-p
+
+- C-x C-a C-p
+
+  Evaluate the expression at point (=gud-print=). If Emacs does not print the exact expression that you want, mark it as a region first.
+
+- C-c C-r
+
+- C-x C-a C-r
+
+  Continue execution without specifying any stopping point. The program will run until it hits a breakpoint, terminates, or gets a signal that the debugger is checking for (=gud-cont=).
+
+- C-c C-d
+
+- C-x C-a C-d
+
+  Delete the breakpoint(s) on the current source line, if any (=gud-remove=). If you use this command in the GUD interaction buffer, it applies to the line where the program last stopped.
+
+- C-c C-t
+
+- C-x C-a C-t
+
+  Set a temporary breakpoint on the current source line, if any (=gud-tbreak=). If you use this command in the GUD interaction buffer, it applies to the line where the program last stopped.
+
+- C-c <
+
+- C-x C-a <
+
+  Select the next enclosing stack frame (=gud-up=). This is equivalent to the GDB command 'up'.
+
+- C-c >
+
+- C-x C-a >
+
+  Select the next inner stack frame (=gud-down=). This is equivalent to the GDB command 'down'.
+
+- C-c C-u
+
+- C-x C-a C-u
+
+  Continue execution to the current line (=gud-until=). The program will run until it hits a breakpoint, terminates, gets a signal that the debugger is checking for, or reaches the line on which the cursor currently sits.
+
+- C-c C-f
+
+- C-x C-a C-f
+
+  Run the program until the selected stack frame returns or stops for some other reason (=gud-finish=).
+
+If you are using GDB, these additional key bindings are available:
+
+- C-x C-a C-j
+
+  Only useful in a source buffer, =gud-jump= transfers the program's execution point to the current line. In other words, the next line that the program executes will be the one where you gave the command. If the new execution line is in a different function from the previously one, GDB prompts for confirmation since the results may be bizarre. See the GDB manual entry regarding =jump= for details.
+
+-
+
+  With GDB, complete a symbol name (=gud-gdb-complete-command=). This key is available only in the GUD interaction buffer.
+
+These commands interpret a numeric argument as a repeat count, when that makes sense.
+
+Because serves as a completion command, you can't use it to enter a tab as input to the program you are debugging with GDB. Instead, type C-q to enter a tab.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Commands-of-GUD][Commands of GUD]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debuggers][Debuggers]]
+
+** 27.6.4 GUD Customization
+     :PROPERTIES:
+     :CUSTOM_ID: gud-customization
+     :END:
+
+On startup, GUD runs one of the following hooks: =gdb-mode-hook=, if you are using GDB; =dbx-mode-hook=, if you are using DBX; =sdb-mode-hook=, if you are using SDB; =xdb-mode-hook=, if you are using XDB; =guiler-mode-hook= for Guile REPL debugging; =perldb-mode-hook=, for Perl debugging mode; =pdb-mode-hook=, for PDB; =jdb-mode-hook=, for JDB. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]].
+
+The =gud-def= Lisp macro (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Defining-Macros][Defining Macros]]) provides a convenient way to define an Emacs command that sends a particular command string to the debugger, and set up a key binding for in the GUD interaction buffer:
+
+#+BEGIN_EXAMPLE
+         (gud-def function cmdstring binding docstring)
+#+END_EXAMPLE
+
+This defines a command named function which sends cmdstring to the debugger process, and gives it the documentation string docstring. You can then use the command function in any buffer. If binding is non-=nil=, =gud-def= also binds the command to C-c binding in the GUD buffer's mode and to C-x C-a binding generally.
+
+The command string cmdstring may contain certain '%'-sequences that stand for data to be filled in at the time function is called:
+
+- '%f'
+
+  The name of the current source file. If the current buffer is the GUD buffer, then the current source file is the file that the program stopped in.
+
+- '%l'
+
+  The number of the current source line. If the current buffer is the GUD buffer, then the current source line is the line that the program stopped in.
+
+- '%e'
+
+  In transient-mark-mode the text in the region, if it is active. Otherwise the text of the C lvalue or function-call expression at or adjacent to point.
+
+- '%a'
+
+  The text of the hexadecimal address at or adjacent to point.
+
+- '%p'
+
+  The numeric argument of the called function, as a decimal number. If the command is used without a numeric argument, '%p' stands for the empty string. If you don't use '%p' in the command string, the command you define ignores any numeric argument.
+
+- '%d'
+
+  The name of the directory of the current source file.
+
+- '%c'
+
+  Fully qualified class name derived from the expression surrounding point (jdb only).
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GUD-Customization][GUD Customization]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debuggers][Debuggers]]
+
+** 27.6.5 GDB Graphical Interface
+     :PROPERTIES:
+     :CUSTOM_ID: gdb-graphical-interface
+     :END:
+
+The command M-x gdb starts GDB in an IDE-like interface, with specialized buffers for controlling breakpoints, stack frames, and other aspects of the debugger state. It also provides additional ways to control the debugging session with the mouse, such as clicking in the fringe of a source buffer to set a breakpoint there.
+
+To run GDB using just the GUD interaction buffer interface, without these additional features, use M-x gud-gdb (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Starting-GUD][Starting GUD]]). You must use this if you want to debug multiple programs within one Emacs session, as that is currently unsupported by M-x gdb.
+
+Internally, M-x gdb informs GDB that its screen size is unlimited; for correct operation, you must not change GDB's screen height and width values during the debugging session.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-User-Interface-Layout][GDB User Interface Layout]]: Control the number of displayed buffers.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Source-Buffers][Source Buffers]]: Use the mouse in the fringe/margin to control your program.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Breakpoints-Buffer][Breakpoints Buffer]]: A breakpoint control panel.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Threads-Buffer][Threads Buffer]]: Displays your threads.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Stack-Buffer][Stack Buffer]]: Select a frame from the call stack.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-GDB-Buffers][Other GDB Buffers]]: Other buffers for controlling the GDB state.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Watch-Expressions][Watch Expressions]]: Monitor variable values in the speedbar.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Multithreaded-Debugging][Multithreaded Debugging]]: Debugging programs with several threads.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Source-Buffers][Source Buffers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.1 GDB User Interface Layout
+      :PROPERTIES:
+      :CUSTOM_ID: gdb-user-interface-layout
+      :END:
+
+If the variable =gdb-many-windows= is =nil= (the default), M-x gdb normally displays only the GUD interaction buffer. However, if the variable =gdb-show-main= is also non-=nil=, it starts with two windows: one displaying the GUD interaction buffer, and the other showing the source for the =main= function of the program you are debugging.
+
+If =gdb-many-windows= is non-=nil=, then M-x gdb displays the following frame layout:
+
+#+BEGIN_EXAMPLE
+         +--------------------------------+--------------------------------+
+         |   GUD interaction buffer       |   Locals/Registers buffer      |
+         |--------------------------------+--------------------------------+
+         |   Primary Source buffer        |   I/O buffer for debugged pgm  |
+         |--------------------------------+--------------------------------+
+         |   Stack buffer                 |   Breakpoints/Threads buffer   |
+         +--------------------------------+--------------------------------+
+#+END_EXAMPLE
+
+If you ever change the window layout, you can restore the many-windows layout by typing M-x gdb-restore-windows. To toggle between the many windows layout and a simple layout with just the GUD interaction buffer and a source file, type M-x gdb-many-windows.
+
+If you have an elaborate window setup, and don't want =gdb-many-windows= to disrupt that, it is better to invoke M-x gdb in a separate frame to begin with, then the arrangement of windows on your original frame will not be affected. A separate frame for GDB sessions can come in especially handy if you work on a text-mode terminal, where the screen estate for windows could be at a premium.
+
+You may also specify additional GDB-related buffers to display, either in the same frame or a different one. Select the buffers you want by typing M-x gdb-display-buffertype-buffer or M-x gdb-frame-buffertype-buffer, where buffertype is the relevant buffer type, such as 'breakpoints'. You can do the same with the menu bar, with the 'GDB-Windows' and 'GDB-Frames' sub-menus of the 'GUD' menu.
+
+When you finish debugging, kill the GUD interaction buffer with C-x k, which will also kill all the buffers associated with the session. However you need not do this if, after editing and re-compiling your source code within Emacs, you wish to continue debugging. When you restart execution, GDB automatically finds the new executable. Keeping the GUD interaction buffer has the advantage of keeping the shell history as well as GDB's breakpoints. You do need to check that the breakpoints in recently edited source files are still in the right places.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Breakpoints-Buffer][Breakpoints Buffer]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-User-Interface-Layout][GDB User Interface Layout]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.2 Source Buffers
+      :PROPERTIES:
+      :CUSTOM_ID: source-buffers
+      :END:
+
+​
+
+- mouse-1 (in fringe)
+
+  Set or clear a breakpoint on that line (=gdb-mouse-set-clear-breakpoint=).
+
+- C-mouse-1 (in fringe)
+
+  Enable or disable a breakpoint on that line (=gdb-mouse-toggle-breakpoint-margin=).
+
+- mouse-3 (in fringe)
+
+  Continue execution to that line (=gdb-mouse-until=).
+
+- C-mouse-3 (in fringe)
+
+  Jump to that line (=gdb-mouse-jump=).
+
+On a graphical display, you can click mouse-1 in the fringe of a source buffer, to set a breakpoint on that line (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fringes][Fringes]]). A red dot appears in the fringe, where you clicked. If a breakpoint already exists there, the click removes it. A C-mouse-1 click enables or disables an existing breakpoint; a breakpoint that is disabled, but not unset, is indicated by a gray dot.
+
+On a text terminal, or when fringes are disabled, enabled breakpoints are indicated with a 'B' character in the left margin of the window. Disabled breakpoints are indicated with 'b'. (The margin is only displayed if a breakpoint is present.)
+
+A solid arrow in the left fringe of a source buffer indicates the line of the innermost frame where the debugged program has stopped. A hollow arrow indicates the current execution line of a higher-level frame. If you drag the arrow in the fringe with mouse-1, that causes execution to advance to the line where you release the button. Alternatively, you can click mouse-3 in the fringe to advance to that line. You can click C-mouse-3 in the fringe to jump to that line without executing the intermediate lines. This command allows you to go backwards, which can be useful for running through code that has already executed, in order to examine its execution in more detail.
+
+If the file names of the source files are shown with octal escapes, set the variable =gdb-mi-decode-strings= to the appropriate coding-system, most probably =utf-8=. (This is =nil= by default because GDB may emit octal escapes in situations where decoding is undesirable, and also because the program being debugged might use an encoding different from the one used to encode non-ASCII file names on your system.)
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Threads-Buffer][Threads Buffer]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Source-Buffers][Source Buffers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.3 Breakpoints Buffer
+      :PROPERTIES:
+      :CUSTOM_ID: breakpoints-buffer
+      :END:
+
+The GDB Breakpoints buffer shows the breakpoints, watchpoints and catchpoints in the debugger session. See [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Breakpoints][Breakpoints]]. It provides the following commands, which mostly apply to the current breakpoint (the breakpoint which point is on):
+
+-
+
+  Enable/disable current breakpoint (=gdb-toggle-breakpoint=). On a graphical display, this changes the color of the dot in the fringe of the source buffer at that line. The dot is red when the breakpoint is enabled, and gray when it is disabled.
+
+- D
+
+  Delete the current breakpoint (=gdb-delete-breakpoint=).
+
+-
+
+  Visit the source line for the current breakpoint (=gdb-goto-breakpoint=).
+
+- mouse-2
+
+  Visit the source line for the breakpoint you click on (=gdb-goto-breakpoint=).
+
+  When =gdb-many-windows= is non-=nil=, the GDB Breakpoints buffer shares its window with the GDB Threads buffer. To switch from one to the other click with mouse-1 on the relevant button in the header line. If =gdb-show-threads-by-default= is non-=nil=, the GDB Threads buffer is the one shown by default.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Stack-Buffer][Stack Buffer]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Breakpoints-Buffer][Breakpoints Buffer]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.4 Threads Buffer
+      :PROPERTIES:
+      :CUSTOM_ID: threads-buffer
+      :END:
+
+The GDB Threads buffer displays a summary of the threads in the debugged program. See [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Threads][Threads]]. To select a thread, move point there and press (=gdb-select-thread=), or click on it with mouse-2. This also displays the associated source buffer, and updates the contents of the other GDB buffers.
+
+You can customize variables in the =gdb-buffers= group to select fields included in GDB Threads buffer.
+
+- =gdb-thread-buffer-verbose-names=
+
+  Show long thread names like 'Thread 0x4e2ab70 (LWP 1983)'.
+
+- =gdb-thread-buffer-arguments=
+
+  Show arguments of thread top frames.
+
+- =gdb-thread-buffer-locations=
+
+  Show file information or library names.
+
+- =gdb-thread-buffer-addresses=
+
+  Show addresses for thread frames in threads buffer.
+
+To view information for several threads simultaneously, use the following commands from the GDB Threads buffer.
+
+- d
+
+  Display disassembly buffer for the thread at current line (=gdb-display-disassembly-for-thread=).
+
+- f
+
+  Display the GDB Stack buffer for the thread at current line (=gdb-display-stack-for-thread=).
+
+- l
+
+  Display the GDB Locals buffer for the thread at current line (=gdb-display-locals-for-thread=).
+
+- r
+
+  Display the GDB Registers buffer for the thread at current line (=gdb-display-registers-for-thread=).
+
+Their upper-case counterparts, D, F ,L and R, display the corresponding buffer in a new frame.
+
+When you create a buffer showing information about some specific thread, it becomes bound to that thread and keeps showing actual information while you debug your program. The mode indicator for each GDB buffer shows the number of the thread whose information that buffer displays. The thread number is also included in the name of each bound buffer.
+
+Further commands are available in the GDB Threads buffer which depend on the mode of GDB that is used for controlling execution of your program. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Multithreaded-Debugging][Multithreaded Debugging]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-GDB-Buffers][Other GDB Buffers]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Threads-Buffer][Threads Buffer]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.5 Stack Buffer
+      :PROPERTIES:
+      :CUSTOM_ID: stack-buffer
+      :END:
+
+The GDB Stack buffer displays a call stack, with one line for each of the nested subroutine calls (stack frames) in the debugger session. See [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Backtrace][Backtraces]].
+
+On graphical displays, the selected stack frame is indicated by an arrow in the fringe. On text terminals, or when fringes are disabled, the selected stack frame is displayed in reverse contrast. To select a stack frame, move point in its line and type (=gdb-frames-select=), or click mouse-2 on it. Doing so also updates the Locals buffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-GDB-Buffers][Other GDB Buffers]]).
+
+If you want the frame address to be shown each stack frame, customize the variable =gdb-stack-buffer-addresses= to a non-=nil= value.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Watch-Expressions][Watch Expressions]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Stack-Buffer][Stack Buffer]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.6 Other GDB Buffers
+      :PROPERTIES:
+      :CUSTOM_ID: other-gdb-buffers
+      :END:
+
+- Locals Buffer
+
+  This buffer displays the values of local variables of the current frame for simple data types (see [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Frame-Info][Frame Info]]). Press or click mouse-2 on the value if you want to edit it. Arrays and structures display their type only. With GDB 6.4 or later, you can examine the value of the local variable at point by typing , or with a mouse-2 click. With earlier versions of GDB, use or mouse-2 on the type description ('[struct/union]' or '[array]'). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Watch-Expressions][Watch Expressions]].
+
+- Registers Buffer
+
+  This buffer displays the values held by the registers (see [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Registers][Registers]]). Press or click mouse-2 on a register if you want to edit its value. With GDB 6.4 or later, recently changed register values display with =font-lock-warning-face=.
+
+- Assembler Buffer
+
+  The assembler buffer displays the current frame as machine code. An arrow points to the current instruction, and you can set and remove breakpoints as in a source buffer. Breakpoint icons also appear in the fringe or margin.
+
+- Memory Buffer
+
+  The memory buffer lets you examine sections of program memory (see [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Memory][Memory]]). Click mouse-1 on the appropriate part of the header line to change the starting address or number of data items that the buffer displays. Alternatively, use S or N respectively. Click mouse-3 on the header line to select the display format or unit size for these data items.
+
+When =gdb-many-windows= is non-=nil=, the locals buffer shares its window with the registers buffer, just like breakpoints and threads buffers. To switch from one to the other, click with mouse-1 on the relevant button in the header line.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Multithreaded-Debugging][Multithreaded Debugging]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-GDB-Buffers][Other GDB Buffers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.7 Watch Expressions
+      :PROPERTIES:
+      :CUSTOM_ID: watch-expressions
+      :END:
+
+If you want to see how a variable changes each time your program stops, move point into the variable name and click on the watch icon in the tool bar (=gud-watch=) or type C-x C-a C-w. If you specify a prefix argument, you can enter the variable name in the minibuffer.
+
+Each watch expression is displayed in the speedbar (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Speedbar][Speedbar]]). Complex data types, such as arrays, structures and unions are represented in a tree format. Leaves and simple data types show the name of the expression and its value and, when the speedbar frame is selected, display the type as a tooltip. Higher levels show the name, type and address value for pointers and just the name and type otherwise. Root expressions also display the frame address as a tooltip to help identify the frame in which they were defined.
+
+To expand or contract a complex data type, click mouse-2 or press on the tag to the left of the expression. Emacs asks for confirmation before expanding the expression if its number of immediate children exceeds the value of the variable =gdb-max-children=.
+
+To delete a complex watch expression, move point to the root expression in the speedbar and type D (=gdb-var-delete=).
+
+To edit a variable with a simple data type, or a simple element of a complex data type, move point there in the speedbar and type (=gdb-edit-value=). Or you can click mouse-2 on a value to edit it. Either way, this reads the new value using the minibuffer.
+
+If you set the variable =gdb-show-changed-values= to non-=nil= (the default value), Emacs uses =font-lock-warning-face= to highlight values that have recently changed and =shadow= face to make variables which have gone out of scope less noticeable. When a variable goes out of scope you can't edit its value.
+
+If the variable =gdb-delete-out-of-scope= is non-=nil= (the default value), Emacs automatically deletes watch expressions which go out of scope. Sometimes, when your program re-enters the same function many times, it may be useful to set this value to =nil= so that you don't need to recreate the watch expression.
+
+If the variable =gdb-use-colon-colon-notation= is non-=nil=, Emacs uses the 'function::variable' format. This allows the user to display watch expressions which share the same variable name. The default value is =nil=.
+
+To automatically raise the speedbar every time the display of watch expressions updates, set =gdb-speedbar-auto-raise= to non-=nil=. This can be useful if you are debugging with a full screen Emacs frame.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Watch-Expressions][Watch Expressions]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#GDB-Graphical-Interface][GDB Graphical Interface]]
+
+*** 27.6.5.8 Multithreaded Debugging
+      :PROPERTIES:
+      :CUSTOM_ID: multithreaded-debugging
+      :END:
+
+In GDB's all-stop mode, whenever your program stops, all execution threads stop. Likewise, whenever you restart the program, all threads start executing. See [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#All_002dStop-Mode][All-Stop Mode]]. For some multi-threaded targets, GDB supports a further mode of operation, called non-stop mode, in which you can examine stopped program threads in the debugger while other threads continue to execute freely. See [[https://www.gnu.org/software/emacs/manual/html_mono/gdb.html#Non_002dStop-Mode][Non-Stop Mode]]. Versions of GDB prior to 7.0 do not support non-stop mode, and it does not work on all targets.
+
+The variable =gdb-non-stop-setting= determines whether Emacs runs GDB in all-stop mode or non-stop mode. The default is =t=, which means it tries to use non-stop mode if that is available. If you change the value to =nil=, or if non-stop mode is unavailable, Emacs runs GDB in all-stop mode. The variable takes effect when Emacs begins a debugging session; if you change its value, you should restart any active debugging session.
+
+When a thread stops in non-stop mode, Emacs usually switches to that thread. If you don't want Emacs to do this switch if another stopped thread is already selected, change the variable =gdb-switch-when-another-stopped= to =nil=.
+
+Emacs can decide whether or not to switch to the stopped thread depending on the reason which caused the stop. Customize the variable =gdb-switch-reasons= to select the stop reasons which will cause a thread switch.
+
+The variable =gdb-stopped-functions= allows you to execute your functions whenever some thread stops.
+
+In non-stop mode, you can switch between different modes for GUD execution control commands.
+
+​
+
+- Non-stop/A
+
+  When =gdb-gud-control-all-threads= is =t= (the default value), interruption and continuation commands apply to all threads, so you can halt or continue all your threads with one command using =gud-stop-subjob= and =gud-cont=, respectively. The 'Go' button is shown on the tool bar when at least one thread is stopped, whereas 'Stop' button is shown when at least one thread is running.
+
+- Non-stop/T
+
+  When =gdb-gud-control-all-threads= is =nil=, only the current thread is stopped/continued. 'Go' and 'Stop' buttons on the GUD tool bar are shown depending on the state of current thread.
+
+You can change the current value of =gdb-gud-control-all-threads= from the tool bar or from 'GUD->GDB-MI' menu.
+
+Stepping commands always apply to the current thread.
+
+In non-stop mode, you can interrupt/continue your threads without selecting them. Hitting i in threads buffer interrupts thread under point, c continues it, s steps through. More such commands may be added in the future.
+
+Note that when you interrupt a thread, it stops with the 'signal received' reason. If that reason is included in your =gdb-switch-reasons= (it is by default), Emacs will switch to that thread.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Libraries][Lisp Libraries]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Debuggers][Debuggers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.7 Executing Lisp Expressions
+    :PROPERTIES:
+    :CUSTOM_ID: executing-lisp-expressions
+    :END:
+
+Emacs has major modes for several variants of Lisp. They use the same editing commands as other programming language modes (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Programs][Programs]]). In addition, they provide special commands for executing Lisp expressions.
+
+- Emacs Lisp mode
+
+  The mode for editing Emacs Lisp source files. It defines C-M-x to evaluate the current top-level Lisp expression. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Eval][Lisp Eval]].
+
+- Lisp Interaction mode
+
+  The mode for an interactive Emacs Lisp session. It defines C-j to evaluate the expression before point and insert its value in the buffer. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Interaction][Lisp Interaction]].
+
+- Lisp mode
+
+  The mode for editing source files of programs that run in Lisps other than Emacs Lisp. It defines C-M-x to evaluate the current top-level expression in an external Lisp. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#External-Lisp][External Lisp]].
+
+- Inferior Lisp mode
+
+  The mode for an interactive session with an external Lisp which is being run as a subprocess (or inferior process) of Emacs. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#External-Lisp][External Lisp]].
+
+- Scheme mode
+
+  Like Lisp mode, but for Scheme programs.
+
+- Inferior Scheme mode
+
+  Like Inferior Lisp mode, but for Scheme.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Eval][Lisp Eval]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Executing-Lisp][Executing Lisp]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.8 Libraries of Lisp Code for Emacs
+    :PROPERTIES:
+    :CUSTOM_ID: libraries-of-lisp-code-for-emacs
+    :END:
+
+Emacs Lisp code is stored in files whose names conventionally end in .el. Such files are automatically visited in Emacs Lisp mode.
+
+Emacs Lisp code can be compiled into byte-code, which loads faster, takes up less space, and executes faster. By convention, compiled Emacs Lisp code goes in a separate file whose name ends in '.elc'. For example, the compiled code for foo.el goes in foo.elc. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Byte-Compilation][Byte Compilation]].
+
+To load an Emacs Lisp file, type M-x load-file. This command reads a file name using the minibuffer, and executes the contents of that file as Emacs Lisp code. It is not necessary to visit the file first; this command reads the file directly from disk, not from an existing Emacs buffer.
+
+If an Emacs Lisp file is installed in the Emacs Lisp load path (defined below), you can load it by typing M-x load-library, instead of using M-x load-file. The M-x load-library command prompts for a library name rather than a file name; it searches through each directory in the Emacs Lisp load path, trying to find a file matching that library name. If the library name is 'foo', it tries looking for files named foo.elc, foo.el, and foo. The default behavior is to load the first file found. This command prefers .elc files over .el files because compiled files load and run faster. If it finds that lib.el is newer than lib.elc, it issues a warning, in case someone made changes to the .el file and forgot to recompile it, but loads the .elc file anyway. (Due to this behavior, you can save unfinished edits to Emacs Lisp source files, and not recompile until your changes are ready for use.) If you set the option =load-prefer-newer= to a non-=nil= value, however, then rather than the procedure described above, Emacs loads whichever version of the file is newest.
+
+Emacs Lisp programs usually load Emacs Lisp files using the =load= function. This is similar to =load-library=, but is lower-level and accepts additional arguments. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#How-Programs-Do-Loading][How Programs Do Loading]].
+
+The Emacs Lisp load path is specified by the variable =load-path=. Its value should be a list of directories (strings). These directories are searched, in the specified order, by the M-x load-library command, the lower-level =load= function, and other Emacs functions that find Emacs Lisp libraries. An entry in =load-path= can also have the special value =nil=, which stands for the current default directory, but it is almost always a bad idea to use this, because its meaning will depend on the buffer that is current when =load-path= is used by Emacs. (If you find yourself wishing that =nil= were in the list, most likely what you really want is to use M-x load-file.)
+
+The default value of =load-path= is a list of directories where the Lisp code for Emacs itself is stored. If you have libraries of your own in another directory, you can add that directory to the load path. Unlike most other variables described in this manual, =load-path= cannot be changed via the Customize interface (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Easy-Customization][Easy Customization]]), but you can add a directory to it by putting a line like this in your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]):
+
+#+BEGIN_EXAMPLE
+         (add-to-list 'load-path "/path/to/my/lisp/library")
+#+END_EXAMPLE
+
+Some commands are autoloaded; when you run them, Emacs automatically loads the associated library first. For instance, the M-x compile command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Compilation][Compilation]]) is autoloaded; if you call it, Emacs automatically loads the =compile= library first. In contrast, the command M-x recompile is not autoloaded, so it is unavailable until you load the =compile= library.
+
+Automatic loading can also occur when you look up the documentation of an autoloaded command (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Name-Help][Name Help]]), if the documentation refers to other functions and variables in its library (loading the library lets Emacs properly set up the hyperlinks in the /Help/ buffer). To disable this feature, change the variable =help-enable-auto-load= to =nil=.
+
+Automatic loading also occurs when completing names for =describe-variable= and =describe-function=, based on the prefix being completed. To disable this feature, change the variable =help-enable-completion-auto-load= to =nil=.
+
+By default, Emacs refuses to load compiled Lisp files which were compiled with XEmacs, a modified version of Emacs---they can cause Emacs to crash. Set the variable =load-dangerous-libraries= to =t= if you want to try loading them.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Interaction][Lisp Interaction]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Libraries][Lisp Libraries]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.9 Evaluating Emacs Lisp Expressions
+    :PROPERTIES:
+    :CUSTOM_ID: evaluating-emacs-lisp-expressions
+    :END:
+
+Emacs Lisp mode is the major mode for editing Emacs Lisp. Its mode command is M-x emacs-lisp-mode.
+
+Emacs provides several commands for evaluating Emacs Lisp expressions. You can use these commands in Emacs Lisp mode, to test your Emacs Lisp code as it is being written. For example, after re-writing a function, you can evaluate the function definition to make it take effect for subsequent function calls. These commands are also available globally, and can be used outside Emacs Lisp mode.
+
+- M-:
+
+  Read a single Emacs Lisp expression in the minibuffer, evaluate it, and print the value in the echo area (=eval-expression=).
+
+- C-x C-e
+
+  Evaluate the Emacs Lisp expression before point, and print the value in the echo area (=eval-last-sexp=).
+
+- C-M-x (in Emacs Lisp mode)
+
+- M-x eval-defun
+
+  Evaluate the defun containing or after point, and print the value in the echo area (=eval-defun=).
+
+- M-x eval-region
+
+  Evaluate all the Emacs Lisp expressions in the region.
+
+- M-x eval-buffer
+
+  Evaluate all the Emacs Lisp expressions in the buffer.
+
+  M-: (=eval-expression=) reads an expression using the minibuffer, and evaluates it. (Before evaluating the expression, the current buffer switches back to the buffer that was current when you typed M-:, not the minibuffer into which you typed the expression.)
+
+  The command C-x C-e (=eval-last-sexp=) evaluates the Emacs Lisp expression preceding point in the buffer, and displays the value in the echo area. When the result of an evaluation is an integer, it is displayed together with the value in other formats (octal, hexadecimal, and character if =eval-expression-print-maximum-character=, described below, allows it).
+
+If M-: or C-x C-e is given a prefix argument, it inserts the value into the current buffer at point, rather than displaying it in the echo area. If the prefix argument is zero, any integer output is inserted together with its value in other formats (octal, hexadecimal, and character). Such a prefix argument also prevents abbreviation of the output according to the variables =eval-expression-print-level= and =eval-expression-print-length= (see below). Similarly, a prefix argument of =-1= overrides the effect of =eval-expression-print-length=.
+
+The =eval-defun= command is bound to C-M-x in Emacs Lisp mode. It evaluates the top-level Lisp expression containing or following point, and prints the value in the echo area. In this context, a top-level expression is referred to as a "defun", but it need not be an actual =defun= (function definition). In particular, this command treats =defvar= expressions specially. Normally, evaluating a =defvar= expression does nothing if the variable it defines already has a value. But this command unconditionally resets the variable to the initial value specified by the =defvar=; this is convenient for debugging Emacs Lisp programs. =defcustom= and =defface= expressions are treated similarly. Note that the other commands documented in this section do not have this special feature.
+
+With a prefix argument, C-M-x instruments the function definition for Edebug, the Emacs Lisp Debugger. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Instrumenting][Instrumenting for Edebug]].
+
+The command M-x eval-region parses the text of the region as one or more Lisp expressions, evaluating them one by one. M-x eval-buffer is similar but evaluates the entire buffer.
+
+The options =eval-expression-print-level= and =eval-expression-print-length= control the maximum depth and length of lists to print in the result of the evaluation commands before abbreviating them. Supplying a zero prefix argument to =eval-expression= or =eval-last-sexp= causes lists to be printed in full. =eval-expression-debug-on-error= controls whether evaluation errors invoke the debugger when these commands are used; its default is =t=. =eval-expression-print-maximum-character= prevents integers which are larger than it from being displayed as characters.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#External-Lisp][External Lisp]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Eval][Lisp Eval]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.10 Lisp Interaction Buffers
+    :PROPERTIES:
+    :CUSTOM_ID: lisp-interaction-buffers
+    :END:
+
+When Emacs starts up, it contains a buffer named /scratch/, which is provided for evaluating Emacs Lisp expressions interactively. Its major mode is Lisp Interaction mode. You can also enable Lisp Interaction mode by typing M-x lisp-interaction-mode.
+
+In the /scratch/ buffer, and other Lisp Interaction mode buffers, C-j (=eval-print-last-sexp=) evaluates the Lisp expression before point, and inserts the value at point. Thus, as you type expressions into the buffer followed by C-j after each expression, the buffer records a transcript of the evaluated expressions and their values. All other commands in Lisp Interaction mode are the same as in Emacs Lisp mode.
+
+At startup, the /scratch/ buffer contains a short message, in the form of a Lisp comment, that explains what it is for. This message is controlled by the variable =initial-scratch-message=, which should be either a documentation string, or =nil= (which means to suppress the message).
+
+An alternative way of evaluating Emacs Lisp expressions interactively is to use Inferior Emacs Lisp mode, which provides an interface rather like Shell mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Mode][Shell Mode]]) for evaluating Emacs Lisp expressions. Type M-x ielm to create an /ielm/ buffer which uses this mode. For more information, see that command's documentation.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Interaction][Lisp Interaction]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Building][Building]]
+
+* 27.11 Running an External Lisp
+    :PROPERTIES:
+    :CUSTOM_ID: running-an-external-lisp
+    :END:
+
+Lisp mode is the major mode for editing programs written in general-purpose Lisp dialects, such as Common Lisp. Its mode command is M-x lisp-mode. Emacs uses Lisp mode automatically for files whose names end in .l, .lsp, or .lisp.
+
+You can run an external Lisp session as a subprocess or inferior process of Emacs, and pass expressions to it to be evaluated. To begin an external Lisp session, type M-x run-lisp. This runs the program named lisp, and sets it up so that both input and output go through an Emacs buffer named /inferior-lisp/. To change the name of the Lisp program run by M-x run-lisp, change the variable =inferior-lisp-program=.
+
+The major mode for the /lisp/ buffer is Inferior Lisp mode, which combines the characteristics of Lisp mode and Shell mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Mode][Shell Mode]]). To send input to the Lisp session, go to the end of the /lisp/ buffer and type the input, followed by . Terminal output from the Lisp session is automatically inserted in the buffer.
+
+When you edit a Lisp program in Lisp mode, you can type C-M-x (=lisp-eval-defun=) to send an expression from the Lisp mode buffer to a Lisp session that you had started with M-x run-lisp. The expression sent is the top-level Lisp expression at or following point. The resulting value goes as usual into the /inferior-lisp/ buffer. Note that the effect of C-M-x in Lisp mode is thus very similar to its effect in Emacs Lisp mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Lisp-Eval][Lisp Eval]]), except that the expression is sent to a different Lisp environment instead of being evaluated in Emacs.
+
+The facilities for editing Scheme code, and for sending expressions to a Scheme subprocess, are very similar. Scheme source files are edited in Scheme mode, which can be explicitly enabled with M-x scheme-mode. You can initiate a Scheme session by typing M-x run-scheme (the buffer for interacting with Scheme is named /scheme/), and send expressions to it by typing C-M-x.

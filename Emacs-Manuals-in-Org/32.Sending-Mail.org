@@ -1,0 +1,413 @@
+#+TITLE: 32.Sending-Mail
+* 32) Sending Mail
+
+To send an email message from Emacs, type C-x m. This switches to a buffer named /unsent mail/, where you can edit the text and headers of the message. When done, type C-c C-s or C-c C-c to send it.
+
+- C-x m
+
+  Begin composing mail (=compose-mail=).
+
+- C-x 4 m
+
+  Likewise, in another window (=compose-mail-other-window=).
+
+- C-x 5 m
+
+  Likewise, but in a new frame (=compose-mail-other-frame=).
+
+- C-c C-s
+
+  In the mail buffer, send the message (=message-send=).
+
+- C-c C-c
+
+  In the mail buffer, send the message and bury the buffer (=message-send-and-exit=).
+
+The mail buffer is an ordinary Emacs buffer, so you can switch to other buffers while composing the mail. If you want to send another mail before finishing the current one, type C-x m again to open a new mail buffer whose name has a different numeric suffix (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-Buffer][Misc Buffer]]). If you invoke the command with a prefix argument, C-u C-x m, Emacs switches back to the last mail buffer, and asks if you want to erase the message in that buffer; if you answer no, this lets you pick up editing the message where you left off.
+
+The command C-x 4 m (=compose-mail-other-window=) does the same as C-x m, except it displays the mail buffer in a different window. The command C-x 5 m (=compose-mail-other-frame=) does it in a new frame.
+
+When you type C-c C-c or C-c C-s to send the mail, Emacs may ask you how it should deliver the mail---either directly via SMTP, or using some other method. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Sending][Mail Sending]], for details.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Format][Format]]: Format of a mail message.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Headers][Headers]]: Details of some standard mail header fields.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Aliases][Aliases]]: Abbreviating and grouping mail addresses.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Commands]]: Special commands for editing mail being composed.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Signature][Signature]]: Adding a signature to every message.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Amusements][Amuse]]: Distracting the NSA; adding fortune messages.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Methods][Methods]]: Using alternative mail-composition methods.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Headers][Mail Headers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+
+* 32.1 The Format of the Mail Buffer
+    :PROPERTIES:
+    :CUSTOM_ID: the-format-of-the-mail-buffer
+    :END:
+
+Here is an example of the contents of a mail buffer:
+
+#+BEGIN_EXAMPLE
+         To: subotai@example.org
+         Cc: mongol.soldier@example.net, rms@gnu.org
+         Subject: Re: What is best in life?
+         From: conan@example.org
+         --text follows this line--
+         To crush your enemies, see them driven before you, and to
+         hear the lamentation of their women.
+#+END_EXAMPLE
+
+At the top of the mail buffer is a set of header fields, which are used for specifying information about the email's recipient(s), subject, and so on. The above buffer contains header fields for 'To', 'CC', 'Subject', and 'From'. Some header fields are automatically pre-initialized in the mail buffer, when appropriate.
+
+The line that says '--text follows this line--' separates the header fields from the body (or text) of the message. Everything above that line is treated as part of the headers; everything below it is treated as the body. The delimiter line itself does not appear in the message actually sent.
+
+You can insert and edit header fields using ordinary editing commands. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]], for commands specific to editing header fields. Certain headers, such as 'Date' and 'Message-Id', are normally omitted from the mail buffer and are created automatically when the message is sent.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Aliases][Mail Aliases]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Format][Mail Format]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+
+* 32.2 Mail Header Fields
+    :PROPERTIES:
+    :CUSTOM_ID: mail-header-fields
+    :END:
+
+A header field in the mail buffer starts with a field name at the beginning of a line, terminated by a colon. Upper and lower case are equivalent in field names. After the colon and optional whitespace comes the contents of the field.
+
+You can use any name you like for a header field, but normally people use only standard field names with accepted meanings.
+
+The 'From' header field identifies the person sending the email (i.e., you). This should be a valid mailing address, as replies are normally sent there. The default contents of this header field are computed from the variables =user-full-name= (which specifies your full name) and =user-mail-address= (your email address). On some operating systems, Emacs initializes these two variables using environment variables (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#General-Variables][General Variables]]). If this information is unavailable or wrong, you should customize the variables yourself (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Easy-Customization][Easy Customization]]).
+
+The value of the variable =mail-from-style= specifies how to format the contents of the 'From' field:
+
+- =nil=
+
+  Use just the address, as in 'king@grassland.com'.
+
+- =parens=
+
+  Use both address and full name, as in: 'king@grassland.com (Elvis Parsley)'.
+
+- =angles=
+
+  Use both address and full name, as in: 'Elvis Parsley [[mailto:king@grassland.com][king@grassland.com]]'.
+
+- any other value
+
+  Use =angles= normally. But if the address must be quoted to remain syntactically valid under the =angles= format but not under the =parens= format, use =parens= instead. This is the default.
+
+Apart from 'From', here is a table of commonly-used fields:
+
+- 'To'
+
+  The mailing address(es) to which the message is addressed. To list more than one address, use commas to separate them.
+
+- 'Subject'
+
+  The subject of the message.
+
+- 'CC'
+
+  Additional mailing address(es) to send the message to. This is like 'To', except that these readers should not regard the message as directed at them.
+
+- 'BCC'
+
+  Additional mailing address(es) to send the message to, which should not appear in the header of the message actually sent. 'BCC' stands for blind carbon copies.
+
+- 'FCC'
+
+  The name of a file, to which a copy of the sent message should be appended. Emacs writes the message in mbox format, unless the file is in Babyl format (used by Rmail before Emacs 23), in which case Emacs writes in Babyl format. If an Rmail buffer is visiting the file, Emacs updates it accordingly. To specify more than one file, use several 'FCC' fields, with one file name in each field.
+
+- 'Reply-to'
+
+  An address to which replies should be sent, instead of 'From'. This is used if, for some reason, your 'From' address cannot receive replies.
+
+- 'Mail-reply-to'
+
+  This field takes precedence over 'Reply-to'. It is used because some mailing lists set the 'Reply-to' field for their own purposes (a somewhat controversial practice).
+
+- 'Mail-Followup-To'
+
+  One of more address(es) to use as default recipient(s) for follow-up messages. This is typically used when you reply to a message from a mailing list that you are subscribed to, and want replies to go to the list without sending an extra copy to you.
+
+- 'In-reply-to'
+
+  An identifier for the message you are replying to. Most mail readers use this information to group related messages together. Normally, this header is filled in automatically when you reply to a message in any mail program built into Emacs.
+
+- 'References'
+
+  Identifiers for previous related messages. Like 'In-reply-to', this is normally filled in automatically for you.
+
+The 'To', 'CC', and 'BCC' fields can appear any number of times, and each such header field can contain multiple addresses, separated by commas. This way, you can specify any number of places to send the message. These fields can also have continuation lines: one or more lines starting with whitespace, following the starting line of the field, are considered part of the field. Here's an example of a 'To' field with a continuation line:
+
+#+BEGIN_EXAMPLE
+         To: foo@example.net, this@example.net,
+           bob@example.com
+#+END_EXAMPLE
+
+You can direct Emacs to insert certain default headers into the mail buffer by setting the variable =mail-default-headers= to a string. Then C-x m inserts this string into the message headers. For example, here is how to add a 'Reply-to' and 'FCC' header to each message:
+
+#+BEGIN_EXAMPLE
+         (setq mail-default-headers
+               "Reply-to: foo@example.com\nFCC: ~/Mail/sent")
+#+END_EXAMPLE
+
+If the default header fields are not appropriate for a particular message, edit them as necessary before sending the message.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Headers][Mail Headers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+
+* 32.3 Mail Aliases
+    :PROPERTIES:
+    :CUSTOM_ID: mail-aliases
+    :END:
+
+You can define mail aliases, which are short mnemonic names that stand for one or more mailing addresses. By default, mail aliases are defined in the file ~/.mailrc. You can specify a different file name to use, by setting the variable =mail-personal-alias-file=.
+
+To define an alias in ~/.mailrc, write a line like this:
+
+#+BEGIN_EXAMPLE
+         alias nick fulladdresses
+#+END_EXAMPLE
+
+This means that nick should expand into fulladdresses, where fulladdresses can be either a single address, or multiple addresses separated with spaces. For instance, to make =maingnu= stand for =gnu@gnu.org= plus a local address of your own, put in this line:
+
+#+BEGIN_EXAMPLE
+         alias maingnu gnu@gnu.org local-gnu
+#+END_EXAMPLE
+
+If an address contains a space, quote the whole address with a pair of double quotes, like this:
+
+#+BEGIN_EXAMPLE
+         alias jsmith "John Q. Smith <none@example.com>"
+#+END_EXAMPLE
+
+Note that you need not include double quotes around individual parts of the address, such as the person's full name. Emacs puts them in if they are needed. For instance, it inserts the above address as '"John Q. Smith" [[mailto:none@example.com][none@example.com]]'.
+
+Emacs also recognizes include commands in ~/.mailrc. They look like this:
+
+#+BEGIN_EXAMPLE
+         source filename
+#+END_EXAMPLE
+
+The ~/.mailrc file is not unique to Emacs; many other mail-reading programs use it for mail aliases, and it can contain various other commands. However, Emacs ignores everything except alias definitions and include commands.
+
+Mail aliases expand as abbrevs---that is to say, as soon as you type a word-separator character after an alias (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Abbrevs][Abbrevs]]). This expansion takes place only within the 'To', 'From', 'CC', 'BCC', and 'Reply-to' header fields (plus their 'Resent-' variants); it does not take place in other header fields, such as 'Subject'.
+
+You can also insert an aliased address directly, using the command M-x mail-abbrev-insert-alias. This reads an alias name, with completion, and inserts its definition at point.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Signature][Mail Signature]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Aliases][Mail Aliases]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+
+* 32.4 Mail Commands
+    :PROPERTIES:
+    :CUSTOM_ID: mail-commands
+    :END:
+
+The default major mode for the /mail/ buffer is called Message mode. It behaves like Text mode in many ways, but provides several additional commands on the C-c prefix, which make editing a message more convenient.
+
+In this section, we will describe some of the most commonly-used commands available in Message mode. Message mode also has its own manual, where its features are described in greater detail. See [[https://www.gnu.org/software/emacs/manual/html_mono/message.html#Top][Message]].
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Sending][Mail Sending]]: Commands to send the message.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]]: Commands to move to header fields and edit them.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Citing-Mail][Citing Mail]]: Quoting a message you are replying to.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Misc][Mail Misc]]: Attachments, spell checking, etc.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]
+
+** 32.4.1 Mail Sending
+     :PROPERTIES:
+     :CUSTOM_ID: mail-sending
+     :END:
+
+- C-c C-c
+
+  Send the message, and bury the mail buffer (=message-send-and-exit=).
+
+- C-c C-s
+
+  Send the message, and leave the mail buffer selected (=message-send=).
+
+  The usual command to send a message is C-c C-c (=mail-send-and-exit=). This sends the message and then buries the mail buffer, putting it at the lowest priority for reselection. If you want it to kill the mail buffer instead, change the variable =message-kill-buffer-on-exit= to =t=.
+
+  The command C-c C-s (=message-send=) sends the message and leaves the buffer selected. Use this command if you want to modify the message (perhaps with new recipients) and send it again.
+
+  Sending a message runs the hook =message-send-hook=. It also marks the mail buffer as unmodified, except if the mail buffer is also a file-visiting buffer (in that case, only saving the file does that, and you don't get a warning if you try to send the same message twice).
+
+  The variable =send-mail-function= controls how the message is delivered. Its value should be one of the following functions:
+
+- =sendmail-query-once=
+
+  Query for a delivery method (one of the other entries in this list), and use that method for this message; then save the method to =send-mail-function=, so that it is used for future deliveries. This is the default, unless you have already set the variables for sending mail via =smtpmail-send-it= (see below).
+
+- =smtpmail-send-it=
+
+  Send mail through an external mail host, such as your Internet service provider's outgoing SMTP mail server. If you have not told Emacs how to contact the SMTP server, it prompts for this information, which is saved in the =smtpmail-smtp-server= variable and the file ~/.authinfo. See [[https://www.gnu.org/software/emacs/manual/html_mono/smtpmail.html#Top][Emacs SMTP Library]].
+
+- =sendmail-send-it=
+
+  Send mail using the system's default sendmail program, or equivalent. This requires the system to be set up for delivering mail directly via SMTP.
+
+- =mailclient-send-it=
+
+  Pass the mail buffer on to the system's designated mail client. See the commentary section in the file mailclient.el for details.
+
+- =feedmail-send-it=
+
+  This is similar to =sendmail-send-it=, but allows you to queue messages for later sending. See the commentary section in the file feedmail.el for details.
+
+When you send a message containing non-ASCII characters, they need to be encoded with a coding system (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Coding-Systems][Coding Systems]]). Usually the coding system is specified automatically by your chosen language environment (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Language-Environments][Language Environments]]). You can explicitly specify the coding system for outgoing mail by setting the variable =sendmail-coding-system= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recognize-Coding][Recognize Coding]]). If the coding system thus determined does not handle the characters in a particular message, Emacs asks you to select the coding system to use, showing a list of possible coding systems. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Output-Coding][Output Coding]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Citing-Mail][Citing Mail]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Sending][Mail Sending]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]
+
+** 32.4.2 Mail Header Editing
+     :PROPERTIES:
+     :CUSTOM_ID: mail-header-editing
+     :END:
+
+Message mode provides the following special commands to move to particular header fields and to complete addresses in headers.
+
+- C-c C-f C-t
+
+  Move to the 'To' header (=message-goto-to=).
+
+- C-c C-f C-s
+
+  Move to the 'Subject' header (=message-goto-subject=).
+
+- C-c C-f C-c
+
+  Move to the 'CC' header (=message-goto-cc=).
+
+- C-c C-f C-b
+
+  Move to the 'BCC' header (=message-goto-bcc=).
+
+- C-c C-f C-r
+
+  Move to the 'Reply-to' header (=message-goto-reply-to=).
+
+- C-c C-f C-f
+
+  Move to the 'Mail-Followup-To' header field (=message-goto-followup-to=).
+
+- C-c C-f C-w
+
+  Add a new 'FCC' header field, with file-name completion (=message-goto-fcc=).
+
+- C-c C-b
+
+  Move to the start of the message body (=message-goto-body=).
+
+-
+
+  Complete a mailing address (=message-tab=).
+
+  The commands to move point to particular header fields are all based on the prefix C-c C-f ('C-f' is for "field"). If the field in question does not exist, the command creates one (the exception is =mail-fcc=, which creates a new field each time).
+
+  The command C-c C-b (=message-goto-body=) moves point to just after the header separator line---that is, to the beginning of the body.
+
+  While editing a header field that contains addresses, such as 'To:', 'CC:' and 'BCC:', you can complete an address by typing (=message-tab=). This attempts to insert the full name corresponding to the address based on a couple of methods, including EUDC, a library that recognizes a number of directory server protocols (see [[https://www.gnu.org/software/emacs/manual/html_mono/eudc.html#Top][EUDC]]). Failing that, it attempts to expand the address as a mail alias (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Aliases][Mail Aliases]]). If point is on a header field that does not take addresses, or if it is in the message body, then just inserts a tab character.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Misc][Mail Misc]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]
+
+** 32.4.3 Citing Mail
+     :PROPERTIES:
+     :CUSTOM_ID: citing-mail
+     :END:
+
+​
+
+- C-c C-y
+
+  Yank the selected message from the mail reader, as a citation (=message-yank-original=).
+
+- C-c C-q
+
+  Fill each paragraph cited from another message (=message-fill-yanked-message=).
+
+  You can use the command C-c C-y (=message-yank-original=) to cite a message that you are replying to. This inserts the text of that message into the mail buffer. This command works only if the mail buffer is invoked from a mail reader running in Emacs, such as Rmail.
+
+By default, Emacs inserts the string '>' in front of each line of the cited text; this prefix string is specified by the variable =message-yank-prefix=. If you call =message-yank-original= with a prefix argument, the citation prefix is not inserted.
+
+After using C-c C-y, you can type C-c C-q (=message-fill-yanked-message=) to fill the paragraphs of the cited message. One use of C-c C-q fills all such paragraphs, each one individually. To fill a single paragraph of the quoted message, use M-q. If filling does not automatically handle the type of citation prefix you use, try setting the fill prefix explicitly. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filling][Filling]].
+
+You can customize mail citation through the hook =mail-citation-hook=. For example, you can use the Supercite package, which provides more flexible citation (see [[https://www.gnu.org/software/emacs/manual/html_mono/sc.html#Introduction][Introduction]]).
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Citing-Mail][Citing Mail]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]
+
+** 32.4.4 Mail Miscellany
+     :PROPERTIES:
+     :CUSTOM_ID: mail-miscellany
+     :END:
+
+You can attach a file to an outgoing message by typing C-c C-a (=mml-attach-file=) in the mail buffer. Attaching is done using the Multipurpose Internet Mail Extensions (MIME) standard.
+
+The =mml-attach-file= command prompts for the name of the file, and for the attachment's content type, description, and disposition. The content type is normally detected automatically; just type to accept the default. The description is a single line of text that the recipient will see next to the attachment; you may also choose to leave this empty. The disposition is either 'inline', which means the recipient will see a link to the attachment within the message body, or 'attachment', which means the link will be separate from the body.
+
+The =mml-attach-file= command is specific to Message mode; in Mail mode use mail-add-attachment instead. It will prompt only for the name of the file, and will determine the content type and the disposition automatically. If you want to include some description of the attached file, type that in the message body.
+
+The actual contents of the attached file are not inserted into the mail buffer. Instead, some placeholder text is inserted into the mail buffer, like this:
+
+#+BEGIN_EXAMPLE
+         <#part type="text/plain" filename="~/foo.txt" disposition=inline>
+         <#/part>
+#+END_EXAMPLE
+
+When you type C-c C-c or C-c C-s to send the message, the attached file will be delivered with it.
+
+While composing a message, you can do spelling correction on the message text by typing M-x ispell-message. If you have yanked an incoming message into the outgoing draft, this command skips what was yanked, but it checks the text that you yourself inserted (it looks for indentation or =mail-yank-prefix= to distinguish the cited lines from your input). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]].
+
+Turning on Message mode (which C-x m does automatically) runs the normal hooks =text-mode-hook= and =message-mode-hook=. Initializing a new outgoing message runs the normal hook =message-setup-hook=; you can use this hook if you want to make changes to the appearance of the mail buffer. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]].
+
+The main difference between these hooks is just when they are invoked. Whenever you type C-x m, =message-mode-hook= runs as soon as the mail buffer is created. Then the =message-setup= function inserts the default contents of the buffer. After these default contents are inserted, =message-setup-hook= runs.
+
+If you use C-x m to continue an existing composition, =message-mode-hook= runs immediately after switching to the mail buffer. If the buffer is unmodified, or if you decide to erase it and start again, =message-setup-hook= runs after the default contents are inserted.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Amusements][Mail Amusements]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+
+* 32.5 Mail Signature
+    :PROPERTIES:
+    :CUSTOM_ID: mail-signature
+    :END:
+
+You can add a standard piece of text---your mail signature---to the end of every message. This signature may contain information such as your telephone number or your physical location. The variable =message-signature= determines how Emacs handles the mail signature.
+
+The default value of =message-signature= is =t=; this means to look for your mail signature in the file ~/.signature. If this file exists, its contents are automatically inserted into the end of the mail buffer. You can change the signature file via the variable =message-signature-file=.
+
+If you change =message-signature= to a string, that specifies the text of the signature directly.
+
+If you change =message-signature= to =nil=, Emacs will not insert your mail signature automatically. You can insert your mail signature by typing C-c C-w (=message-insert-signature=) in the mail buffer. Emacs will look for your signature in the signature file.
+
+If you use Mail mode rather than Message mode for composing your mail, the corresponding variables that determine how your signature is sent are =mail-signature= and =mail-signature-file= instead.
+
+By convention, a mail signature should be marked by a line whose contents are '--'. If your signature lacks this prefix, it is added for you. The remainder of your signature should be no more than four lines.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Methods][Mail Methods]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Signature][Mail Signature]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+
+* 32.6 Mail Amusements
+    :PROPERTIES:
+    :CUSTOM_ID: mail-amusements
+    :END:
+
+M-x spook adds a line of randomly chosen keywords to an outgoing mail message. The keywords are chosen from a list of words that suggest you are discussing something subversive.
+
+The idea behind this feature is the suspicion that the NSA[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-16][16]] and other intelligence agencies snoop on all electronic mail messages that contain keywords suggesting they might find them interesting. (The agencies say that they don't, but that's what they /would/ say.) The idea is that if lots of people add suspicious words to their messages, the agencies will get so busy with spurious input that they will have to give up reading it all. Whether or not this is true, it at least amuses some people.
+
+You can use the =fortune= program to put a fortune cookie message into outgoing mail. To do this, add =fortune-to-signature= to =mail-setup-hook=:
+
+#+BEGIN_EXAMPLE
+         (add-hook 'mail-setup-hook 'fortune-to-signature)
+#+END_EXAMPLE
+
+You will probably need to set the variable =fortune-file= before using this.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Amusements][Mail Amusements]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+
+* 32.7 Mail-Composition Methods
+    :PROPERTIES:
+    :CUSTOM_ID: mail-composition-methods
+    :END:
+
+In this chapter we have described the usual Emacs mode for editing and sending mail---Message mode. This is only one of several available modes. Prior to Emacs 23.2, the default mode was Mail mode, which is similar to Message mode in many respects but lacks features such as MIME support. Another available mode is MH-E (see [[https://www.gnu.org/software/emacs/manual/html_mono/mh-e.html#Top][MH-E]]).
+
+You can choose any of these mail user agents as your preferred method for editing and sending mail. The commands C-x m, C-x 4 m and C-x 5 m use whichever agent you have specified; so do various other parts of Emacs that send mail, such as the bug reporter (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Bugs][Bugs]]). To specify a mail user agent, customize the variable =mail-user-agent=. Currently, legitimate values include =message-user-agent= (Message mode) =sendmail-user-agent= (Mail mode), =gnus-user-agent=, and =mh-e-user-agent=.
+
+If you select a different mail-composition method, the information in this chapter about the mail buffer and Message mode does not apply; the other methods use a different format of text in a different buffer, and their commands are different as well.
+
+Similarly, to specify your preferred method for reading mail, customize the variable =read-mail-command=. The default is =rmail= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rmail][Rmail]]).

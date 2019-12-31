@@ -1,0 +1,311 @@
+#+TITLE: 20.Windows
+* 20) Multiple Windows
+
+Emacs can split a frame into two or many windows. Multiple windows can display parts of different buffers, or different parts of one buffer. Multiple frames always imply multiple windows, because each frame has its own set of windows. Each window belongs to one and only one frame.
+
+* 20.1 Concepts of Emacs Windows
+    :PROPERTIES:
+    :CUSTOM_ID: concepts-of-emacs-windows
+    :END:
+
+Each Emacs window displays one Emacs buffer at any time. A single buffer may appear in more than one window; if it does, any changes in its text are displayed in all the windows where it appears. But these windows can show different parts of the buffer, because each window has its own value of point.
+
+At any time, one Emacs window is the selected window; the buffer this window is displaying is the current buffer. On graphical displays, the point is indicated by a solid blinking cursor in the selected window, and by a hollow box in non-selected windows. On text terminals, the cursor is drawn only in the selected window. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Cursor-Display][Cursor Display]].
+
+Commands to move point affect the value of point for the selected Emacs window only. They do not change the value of point in other Emacs windows, even those showing the same buffer. The same is true for buffer-switching commands such as C-x b; they do not affect other windows at all. However, there are other commands such as C-x 4 b that select a different window and switch buffers in it. Also, all commands that display information in a window, including (for example) C-h f (=describe-function=) and C-x C-b (=list-buffers=), usually work by displaying buffers in a nonselected window without affecting the selected window.
+
+When multiple windows show the same buffer, they can have different regions, because they can have different values of point. However, they all have the same value for the mark, because each buffer has only one mark position.
+
+Each window has its own mode line, which displays the buffer name, modification status and major and minor modes of the buffer that is displayed in the window. The selected window's mode line appears in a different color. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line][Mode Line]], for details.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Window][Other Window]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Window][Basic Window]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]
+* 20.2 Splitting Windows
+    :PROPERTIES:
+    :CUSTOM_ID: splitting-windows
+    :END:
+
+- C-x 2
+
+  Split the selected window into two windows, one above the other (=split-window-below=).
+
+- C-x 3
+
+  Split the selected window into two windows, positioned side by side (=split-window-right=).
+
+- C-mouse-2
+
+  In the mode line of a window, split that window.
+
+  C-x 2 (=split-window-below=) splits the selected window into two windows, one above the other. After splitting, the selected window is the upper one, and the newly split-off window is below. Both windows have the same value of point as before, and display the same portion of the buffer (or as close to it as possible). If necessary, the windows are scrolled to keep point on-screen. By default, the two windows each get half the height of the original window. A positive numeric argument specifies how many lines to give to the top window; a negative numeric argument specifies how many lines to give to the bottom window.
+
+  If you change the variable =split-window-keep-point= to =nil=, C-x 2 instead adjusts the portion of the buffer displayed by the two windows, as well as the value of point in each window, in order to keep the text on the screen as close as possible to what it was before; furthermore, if point was in the lower half of the original window, the bottom window is selected instead of the upper one.
+
+  C-x 3 (=split-window-right=) splits the selected window into two side-by-side windows. The left window is the selected one; the right window displays the same portion of the same buffer, and has the same value of point. A positive numeric argument specifies how many columns to give the left window; a negative numeric argument specifies how many columns to give the right window.
+
+  When you split a window with C-x 3, each resulting window occupies less than the full width of the frame. If it becomes too narrow, the buffer may be difficult to read if continuation lines are in use (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Continuation-Lines][Continuation Lines]]). Therefore, Emacs automatically switches to line truncation if the window width becomes narrower than 50 columns. This truncation occurs regardless of the value of the variable =truncate-lines= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Line-Truncation][Line Truncation]]); it is instead controlled by the variable =truncate-partial-width-windows=. If the value of this variable is a positive integer (the default is 50), that specifies the minimum total width for a partial-width window before automatic line truncation occurs; if the value is =nil=, automatic line truncation is disabled; and for any other non-=nil= value, Emacs truncates lines in every partial-width window regardless of its width. The total width of a window is in column units as reported by =window-total-width= (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Window-Sizes][Window Sizes]]), it includes the fringes, the continuation and truncation glyphs, the margins, and the scroll bar.
+
+On text terminals, side-by-side windows are separated by a vertical divider which is drawn using the =vertical-border= face.
+
+If you click C-mouse-2 in the mode line of a window, that splits the window, putting a vertical divider where you click. Depending on how Emacs is compiled, you can also split a window by clicking C-mouse-2 in the scroll bar, which puts a horizontal divider where you click (this feature does not work when Emacs uses GTK+ scroll bars).
+
+By default, when you split a window, Emacs gives each of the resulting windows dimensions that are an integral multiple of the default font size of the frame. That might subdivide the screen estate unevenly between the resulting windows. If you set the variable =window-resize-pixelwise= to a non-=nil= value, Emacs will give each window the same number of pixels (give or take one pixel if the initial dimension was an odd number of pixels). Note that when a frame's pixel size is not a multiple of the frame's character size, at least one window may get resized pixelwise even if this option is =nil=.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Pop-Up-Window][Pop Up Window]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Split-Window][Split Window]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]
+* 20.3 Using Other Windows
+    :PROPERTIES:
+    :CUSTOM_ID: using-other-windows
+    :END:
+
+- C-x o
+
+  Select another window (=other-window=).
+
+- C-M-v
+
+  Scroll the next window (=scroll-other-window=).
+
+- mouse-1
+
+  mouse-1, in the text area of a window, selects the window and moves point to the position clicked. Clicking in the mode line selects the window without moving point in it.
+
+With the keyboard, you can switch windows by typing C-x o (=other-window=). That is an o, for "other", not a zero. When there are more than two windows, this command moves through all the windows in a cyclic order, generally top to bottom and left to right. After the rightmost and bottommost window, it goes back to the one at the upper left corner. A numeric argument means to move several steps in the cyclic order of windows. A negative argument moves around the cycle in the opposite order. When the minibuffer is active, the minibuffer window is the last window in the cycle; you can switch from the minibuffer window to one of the other windows, and later switch back and finish supplying the minibuffer argument that is requested. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-Edit][Minibuffer Edit]].
+
+The usual scrolling commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Display][Display]]) apply to the selected window only, but there is one command to scroll the next window. C-M-v (=scroll-other-window=) scrolls the window that C-x o would select. It takes arguments, positive and negative, like C-v. (In the minibuffer, C-M-v scrolls the help window associated with the minibuffer, if any, rather than the next window in the standard cyclic order; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-Edit][Minibuffer Edit]].)
+
+If you set =mouse-autoselect-window= to a non-=nil= value, moving the mouse over a different window selects that window. This feature is off by default.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Change-Window][Change Window]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Window][Other Window]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]
+* 20.4 Displaying in Another Window
+    :PROPERTIES:
+    :CUSTOM_ID: displaying-in-another-window
+    :END:
+
+C-x 4 is a prefix key for a variety of commands that switch to a buffer in a different window---either another existing window, or a new window created by splitting the selected window. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Window-Choice][Window Choice]], for how Emacs picks or creates the window to use.
+
+- C-x 4 b bufname
+
+  Select buffer bufname in another window (=switch-to-buffer-other-window=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Select-Buffer][Select Buffer]].
+
+- C-x 4 C-o bufname
+
+  Display buffer bufname in some window, without trying to select it (=display-buffer=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Displaying-Buffers][Displaying Buffers]], for details about how the window is chosen.
+
+- C-x 4 f filename
+
+  Visit file filename and select its buffer in another window (=find-file-other-window=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]].
+
+- C-x 4 d directory
+
+  Select a Dired buffer for directory directory in another window (=dired-other-window=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]].
+
+- C-x 4 m
+
+  Start composing a mail message, similar to C-x m (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]), but in another window (=compose-mail-other-window=).
+
+- C-x 4 .
+
+  Find the definition of an identifier, similar to M-. (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Xref][Xref]]), but in another window (=xref-find-definitions-other-window=).
+
+- C-x 4 r filename
+
+  Visit file filename read-only, and select its buffer in another window (=find-file-read-only-other-window=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]].
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Displaying-Buffers][Displaying Buffers]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Pop-Up-Window][Pop Up Window]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]
+* 20.5 Deleting and Resizing Windows
+    :PROPERTIES:
+    :CUSTOM_ID: deleting-and-resizing-windows
+    :END:
+
+​
+
+- C-x 0
+
+  Delete the selected window (=delete-window=).
+
+- C-x 1
+
+  Delete all windows in the selected frame except the selected window (=delete-other-windows=).
+
+- C-x 4 0
+
+  Delete the selected window and kill the buffer that was showing in it (=kill-buffer-and-window=). The last character in this key sequence is a zero.
+
+- M-x delete-windows-on buffer
+
+  Delete windows showing the specified buffer.
+
+- C-x \^
+
+  Make selected window taller (=enlarge-window=).
+
+- C-x }
+
+  Make selected window wider (=enlarge-window-horizontally=).
+
+- C-x {
+
+  Make selected window narrower (=shrink-window-horizontally=).
+
+- C-x -
+
+  Shrink this window if its buffer doesn't need so many lines (=shrink-window-if-larger-than-buffer=).
+
+- C-x +
+
+  Make all windows the same height (=balance-windows=).
+
+  To delete the selected window, type C-x 0 (=delete-window=). (That is a zero.) Once a window is deleted, the space that it occupied is given to an adjacent window (but not the minibuffer window, even if that is active at the time). Deleting the window has no effect on the buffer it used to display; the buffer continues to exist, and you can still switch to it with C-x b.
+
+  C-x 4 0 (=kill-buffer-and-window=) is a stronger command than C-x 0; it kills the current buffer and then deletes the selected window.
+
+  C-x 1 (=delete-other-windows=) deletes all the windows, /except/ the selected one; the selected window expands to use the whole frame. (This command cannot be used while the minibuffer window is active; attempting to do so signals an error.)
+
+M-x delete-windows-on deletes windows that show a specific buffer. It prompts for the buffer, defaulting to the current buffer. With prefix argument of zero, C-u 0, this command deletes windows only on the current display's frames.
+
+The command C-x \^ (=enlarge-window=) makes the selected window one line taller, taking space from a vertically adjacent window without changing the height of the frame. With a positive numeric argument, this command increases the window height by that many lines; with a negative argument, it reduces the height by that many lines. If there are no vertically adjacent windows (i.e., the window is at the full frame height), that signals an error. The command also signals an error if you attempt to reduce the height of any window below a certain minimum number of lines, specified by the variable =window-min-height= (the default is 4).
+
+Similarly, C-x } (=enlarge-window-horizontally=) makes the selected window wider, and C-x { (=shrink-window-horizontally=) makes it narrower. These commands signal an error if you attempt to reduce the width of any window below a certain minimum number of columns, specified by the variable =window-min-width= (the default is 10).
+
+Mouse clicks on the mode line (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mode-Line-Mouse][Mode Line Mouse]]) or on window dividers (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Window-Dividers][Window Dividers]]) provide another way to change window heights and to split or delete windows.
+
+C-x - (=shrink-window-if-larger-than-buffer=) reduces the height of the selected window, if it is taller than necessary to show the whole text of the buffer it is displaying. It gives the extra lines to other windows in the frame.
+
+You can also use C-x + (=balance-windows=) to even out the heights of all the windows in the selected frame.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Window-Convenience][Window Convenience]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Change-Window][Change Window]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]
+* 20.6 Displaying a Buffer in a Window
+    :PROPERTIES:
+    :CUSTOM_ID: displaying-a-buffer-in-a-window
+    :END:
+
+It is a common Emacs operation to display or pop up some buffer in response to a user command. There are several different ways in which commands do this.
+
+Many commands, like C-x C-f (=find-file=), by default display the buffer by "taking over" the selected window, expecting that the user's attention will be diverted to that buffer.
+
+Some commands try to display intelligently, trying not to take over the selected window, e.g., by splitting off a new window and displaying the desired buffer there. Such commands, which include the various help commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Help][Help]]), work by calling =display-buffer= internally. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Window-Choice][Window Choice]], for details.
+
+Other commands do the same as =display-buffer=, and additionally select the displaying window so that you can begin editing its buffer. The command C-x =(=next-error=) is one example (see [Compilation Mode](file:///home/me/Desktop/GNU Emacs Manual.html#Compilation-Mode)).  Such commands work by calling the function=pop-to-buffer` internally. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Switching-Buffers][Switching to a Buffer in a Window]].
+
+Commands with names ending in =-other-window= behave like =display-buffer=, except that they never display in the selected window. Several of these commands are bound in the C-x 4 prefix key (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Pop-Up-Window][Pop Up Window]]).
+
+Commands with names ending in =-other-frame= behave like =display-buffer=, except that they (i) never display in the selected window and (ii) prefer to either create a new frame or use a window on some other frame to display the desired buffer. Several of these commands are bound in the C-x 5 prefix key.
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Window-Choice][Window Choice]]: How =display-buffer= works.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Temporary-Displays][Temporary Displays]]: Displaying non-editable buffers.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Temporary-Displays][Temporary Displays]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Displaying-Buffers][Displaying Buffers]]
+
+** 20.6.1 How =display-buffer= works
+     :PROPERTIES:
+     :CUSTOM_ID: how-display-buffer-works
+     :END:
+
+The =display-buffer= command (as well as commands that call it internally) chooses a window to display by following the steps given below. See [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Choosing-Window][Choosing a Window for Displaying a Buffer]], for details about how to alter this sequence of steps.
+
+- If the buffer should be displayed in the selected window regardless of other considerations, reuse the selected window. By default, this step is skipped, but you can tell Emacs not to skip it by adding a regular expression matching the buffer's name together with a reference to the
+
+  #+BEGIN_EXAMPLE
+      display-buffer-same-window
+  #+END_EXAMPLE
+
+  action function (see
+
+  Action Functions for Buffer Display
+
+  ) to the option
+
+  #+BEGIN_EXAMPLE
+      display-buffer-alist
+  #+END_EXAMPLE
+
+  (see
+
+  Choosing a Window for Displaying a Buffer
+
+  ). For example, to display the buffer
+
+  /scratch/
+
+  preferably in the selected window write:
+
+  #+BEGIN_EXAMPLE
+                (customize-set-variable
+                 'display-buffer-alist
+                 '("\\*scratch\\*" (display-buffer-same-window)))
+  #+END_EXAMPLE
+
+  By default, =display-buffer-alist= is =nil=.
+
+- Otherwise, if the buffer is already displayed in an existing window, reuse that window. Normally, only windows on the selected frame are considered, but windows on other frames are also reusable if you use the corresponding =reusable-frames= action alist entry (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Buffer-Display-Action-Alists][Action Alists for Buffer Display]]). See the next step for an example of how to do that.
+
+- Otherwise, optionally create a new frame and display the buffer there. By default, this step is skipped. To enable it, change the value of the option
+
+  #+BEGIN_EXAMPLE
+      display-buffer-base-action
+  #+END_EXAMPLE
+
+  (see
+
+  Choosing a Window for Displaying a Buffer
+
+  ) as follows:
+
+  #+BEGIN_EXAMPLE
+                (customize-set-variable
+                 'display-buffer-base-action
+                 '((display-buffer-reuse-window display-buffer-pop-up-frame)
+                   (reusable-frames . 0)))
+  #+END_EXAMPLE
+
+  This customization will also try to make the preceding step search for a reusable window on all visible or iconified frames.
+
+- Otherwise, try to create a new window by splitting a window on the selected frame, and display the buffer in that new window.
+
+  The split can be either vertical or horizontal, depending on the variables =split-height-threshold= and =split-width-threshold=. These variables should have integer values. If =split-height-threshold= is smaller than the chosen window's height, the split puts the new window below. Otherwise, if =split-width-threshold= is smaller than the window's width, the split puts the new window on the right. If neither condition holds, Emacs tries to split so that the new window is below---but only if the window was not split before (to avoid excessive splitting).
+
+- Otherwise, display the buffer in a window previously showing it. Normally, only windows on the selected frame are considered, but with a suitable =reusable-frames= action alist entry (see above) the window may be also on another frame.
+
+- Otherwise, display the buffer in an existing window on the selected frame.
+
+- If all the above methods fail for whatever reason, create a new frame and display the buffer there.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Window-Choice][Window Choice]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Displaying-Buffers][Displaying Buffers]]
+
+** 20.6.2 Displaying non-editable buffers.
+     :PROPERTIES:
+     :CUSTOM_ID: displaying-non-editable-buffers.
+     :END:
+
+Some buffers are shown in windows for perusal rather than for editing. Help commands (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Help][Help]]) typically use a buffer called /Help/ for that purpose, minibuffer completion (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Completion][Completion]]) uses a buffer called /Completions/, etc. Such buffers are usually displayed only for a short period of time.
+
+Normally, Emacs chooses the window for such temporary displays via =display-buffer=, as described in the previous subsection. The /Completions/ buffer, on the other hand, is normally displayed in a window at the bottom of the selected frame, regardless of the number of windows already shown on that frame.
+
+If you prefer Emacs to display a temporary buffer in a different fashion, customize the variable =display-buffer-alist= (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Choosing-Window][Choosing a Window for Displaying a Buffer]]) appropriately. For example, to display /Completions/ always below the selected window, use the following form in your initialization file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]):
+
+#+BEGIN_EXAMPLE
+         (customize-set-variable
+          'display-buffer-alist
+          '(("\\*Completions\\*" display-buffer-below-selected)))
+#+END_EXAMPLE
+
+The /Completions/ buffer is also special in the sense that Emacs usually tries to make its window just as large as necessary to display all of its contents. To resize windows showing other temporary displays, like, for example, the /Help/ buffer, turn on the minor mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minor-Modes][Minor Modes]]) =temp-buffer-resize-mode= (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Temporary-Displays][Temporary Displays]]).
+
+The maximum size of windows resized by =temp-buffer-resize-mode= can be controlled by customizing the options =temp-buffer-max-height= and =temp-buffer-max-width= (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Temporary-Displays][Temporary Displays]]), and cannot exceed the size of the containing frame.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Displaying-Buffers][Displaying Buffers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Windows][Windows]]
+
+** 20.7 Convenience Features for Window Handling
+    :PROPERTIES:
+    :CUSTOM_ID: convenience-features-for-window-handling
+    :END:
+
+Winner mode is a global minor mode that records the changes in the window configuration (i.e., how the frames are partitioned into windows), so that you can undo them. You can toggle Winner mode with M-x winner-mode, or by customizing the variable =winner-mode=. When the mode is enabled, C-c left (=winner-undo=) undoes the last window configuration change. If you change your mind while undoing, you can redo the changes you had undone using C-c right (=M-x winner-redo=).
+
+Follow mode (M-x follow-mode) synchronizes several windows on the same buffer so that they always display adjacent sections of that buffer. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Follow-Mode][Follow Mode]].
+
+The Windmove package defines commands for moving directionally between neighboring windows in a frame. M-x windmove-right selects the window immediately to the right of the currently selected one, and similarly for the left, up, and down counterparts. M-x windmove-default-keybindings binds these commands to S-right etc.; doing so disables shift selection for those keys (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]]).
+
+The command M-x compare-windows lets you compare the text shown in different windows. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]].
+
+Scroll All mode (M-x scroll-all-mode) is a global minor mode that causes scrolling commands and point motion commands to apply to every single window.
+n commands to apply to every single window.

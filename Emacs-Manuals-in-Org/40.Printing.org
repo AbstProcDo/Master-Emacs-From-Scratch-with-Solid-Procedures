@@ -1,0 +1,136 @@
+#+TITLE: 40.Printing
+* 40) Printing Hard Copies
+   :PROPERTIES:
+   :CUSTOM_ID: printing-hard-copies
+   :END:
+
+Emacs provides commands for printing hardcopies of either an entire buffer or part of one. You can invoke the printing commands directly, as detailed below, or using the 'File' menu on the menu bar.
+
+Aside from the commands described in this section, you can also print hardcopies from Dired (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Operating-on-Files][Operating on Files]]) and the diary (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Displaying-the-Diary][Displaying the Diary]]). You can also "print" an Emacs buffer to HTML with the command M-x htmlfontify-buffer, which converts the current buffer to a HTML file, replacing Emacs faces with CSS-based markup. Furthermore, Org mode allows you to print Org files to a variety of formats, such as PDF (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Org-Mode][Org Mode]]).
+
+- M-x print-buffer
+
+  Print hardcopy of current buffer with page headings containing the file name and page number.
+
+- M-x lpr-buffer
+
+  Print hardcopy of current buffer without page headings.
+
+- M-x print-region
+
+  Like =print-buffer= but print only the current region.
+
+- M-x lpr-region
+
+  Like =lpr-buffer= but print only the current region.
+
+  On most operating systems, the above hardcopy commands submit files for printing by calling the lpr program. To change the printer program, customize the variable =lpr-command=. To specify extra switches to give the printer program, customize the list variable =lpr-switches=. Its value should be a list of option strings, each of which should start with '-' (e.g., the option string ="-w80"= specifies a line width of 80 columns). The default is the empty list, =nil=.
+
+  To specify the printer to use, set the variable =printer-name=. The default, =nil=, specifies the default printer. If you set it to a printer name (a string), that name is passed to lpr with the '-P' switch; if you are not using lpr, you should specify the switch with =lpr-printer-switch=.
+
+  The variable =lpr-headers-switches= similarly specifies the extra switches to use to make page headers. The variable =lpr-add-switches= controls whether to supply '-T' and '-J' options (suitable for lpr) to the printer program: =nil= means don't add them (this should be the value if your printer program is not compatible with lpr).
+
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#PostScript][PostScript]]: Printing buffers or regions as PostScript.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#PostScript-Variables][PostScript Variables]]: Customizing the PostScript printing commands.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Printing-Package][Printing Package]]: An optional advanced printing interface.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#PostScript-Variables][PostScript Variables]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Printing][Printing]]
+
+* 40.1 PostScript Hardcopy
+    :PROPERTIES:
+    :CUSTOM_ID: postscript-hardcopy
+    :END:
+
+These commands convert buffer contents to PostScript, either printing it or leaving it in another Emacs buffer.
+
+- M-x ps-print-buffer
+
+  Print hardcopy of the current buffer in PostScript form.
+
+- M-x ps-print-region
+
+  Print hardcopy of the current region in PostScript form.
+
+- M-x ps-print-buffer-with-faces
+
+  Print hardcopy of the current buffer in PostScript form, showing the faces used in the text by means of PostScript features.
+
+- M-x ps-print-region-with-faces
+
+  Print hardcopy of the current region in PostScript form, showing the faces used in the text.
+
+- M-x ps-spool-buffer
+
+  Generate and spool a PostScript image for the current buffer text.
+
+- M-x ps-spool-region
+
+  Generate and spool a PostScript image for the current region.
+
+- M-x ps-spool-buffer-with-faces
+
+  Generate and spool a PostScript image for the current buffer, showing the faces used.
+
+- M-x ps-spool-region-with-faces
+
+  Generate and spool a PostScript image for the current region, showing the faces used.
+
+- M-x ps-despool
+
+  Send the spooled PostScript to the printer.
+
+- M-x handwrite
+
+  Generate/print PostScript for the current buffer as if handwritten.
+
+  The =ps-print-buffer= and =ps-print-region= commands print buffer contents in PostScript form. One command prints the entire buffer; the other, just the region. The commands =ps-print-buffer-with-faces= and =ps-print-region-with-faces= behave similarly, but use PostScript features to show the faces (fonts and colors) of the buffer text.
+
+Interactively, when you use a prefix argument (C-u), these commands prompt the user for a file name, and save the PostScript image in that file instead of sending it to the printer.
+
+The commands whose names have 'spool' instead of 'print', generate the PostScript output in an Emacs buffer instead of sending it to the printer.
+
+Use the command =ps-despool= to send the spooled images to the printer. This command sends the PostScript generated by '-spool-' commands (see commands above) to the printer. With a prefix argument (C-u), it prompts for a file name, and saves the spooled PostScript image in that file instead of sending it to the printer.
+
+M-x handwrite is more frivolous. It generates a PostScript rendition of the current buffer as a cursive handwritten document. It can be customized in group =handwrite=. This function only supports ISO 8859-1 characters.
+
+Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Printing-Package][Printing Package]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#PostScript][PostScript]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Printing][Printing]]
+
+* 40.2 Variables for PostScript Hardcopy
+    :PROPERTIES:
+    :CUSTOM_ID: variables-for-postscript-hardcopy
+    :END:
+
+All the PostScript hardcopy commands use the variables =ps-lpr-command= and =ps-lpr-switches= to specify how to print the output. =ps-lpr-command= specifies the command name to run, =ps-lpr-switches= specifies command line options to use, and =ps-printer-name= specifies the printer. If you don't set the first two variables yourself, they take their initial values from =lpr-command= and =lpr-switches=. If =ps-printer-name= is =nil=, =printer-name= is used.
+
+The variable =ps-print-header= controls whether these commands add header lines to each page---set it to =nil= to turn headers off.
+
+If your printer doesn't support colors, you should turn off color processing by setting =ps-print-color-p= to =nil=. By default, if the display supports colors, Emacs produces hardcopy output with color information; on black-and-white printers, colors are emulated with shades of gray. This might produce illegible output, even if your screen colors only use shades of gray.
+
+Alternatively, you can set =ps-print-color-p= to =black-white= to print colors on black/white printers.
+
+By default, PostScript printing ignores the background colors of the faces, unless the variable =ps-use-face-background= is non-=nil=. This is to avoid unwanted interference with the zebra stripes and background image/text.
+
+The variable =ps-paper-type= specifies which size of paper to format for; legitimate values include =a4=, =a3=, =a4small=, =b4=, =b5=, =executive=, =ledger=, =legal=, =letter=, =letter-small=, =statement=, =tabloid=. The default is =letter=. You can define additional paper sizes by changing the variable =ps-page-dimensions-database=.
+
+The variable =ps-landscape-mode= specifies the orientation of printing on the page. The default is =nil=, which stands for portrait mode. Any non-=nil= value specifies landscape mode.
+
+The variable =ps-number-of-columns= specifies the number of columns; it takes effect in both landscape and portrait mode. The default is 1.
+
+The variable =ps-font-family= specifies which font family to use for printing ordinary text. Legitimate values include =Courier=, =Helvetica=, =NewCenturySchlbk=, =Palatino= and =Times=. The variable =ps-font-size= specifies the size of the font for ordinary text and defaults to 8.5 points. The value of =ps-font-size= can also be a cons of 2 floats: one for landscape mode, the other for portrait mode.
+
+Emacs supports more scripts and characters than a typical PostScript printer. Thus, some of the characters in your buffer might not be printable using the fonts built into your printer. You can augment the fonts supplied with the printer with those from the GNU Intlfonts package, or you can instruct Emacs to use Intlfonts exclusively. The variable =ps-multibyte-buffer= controls this: the default value, =nil=, is appropriate for printing ASCII and Latin-1 characters; a value of =non-latin-printer= is for printers which have the fonts for ASCII, Latin-1, Japanese, and Korean characters built into them. A value of =bdf-font= arranges for the BDF fonts from the Intlfonts package to be used for /all/ characters. Finally, a value of =bdf-font-except-latin= instructs the printer to use built-in fonts for ASCII and Latin-1 characters, and Intlfonts BDF fonts for the rest.
+
+To be able to use the BDF fonts, Emacs needs to know where to find them. The variable =bdf-directory-list= holds the list of directories where Emacs should look for the fonts; the default value includes a single directory /usr/local/share/emacs/fonts/bdf.
+
+Many other customization variables for these commands are defined and described in the Lisp files ps-print.el and ps-mule.el.
+
+Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#PostScript-Variables][PostScript Variables]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Printing][Printing]]
+
+* 40.3 Printing Package
+    :PROPERTIES:
+    :CUSTOM_ID: printing-package
+    :END:
+
+The basic Emacs facilities for printing hardcopy can be extended using the Printing package. This provides an easy-to-use interface for choosing what to print, previewing PostScript files before printing, and setting various printing options such as print headers, landscape or portrait modes, duplex modes, and so forth. On GNU/Linux or Unix systems, the Printing package relies on the gs and gv utilities, which are distributed as part of the GhostScript program. On MS-Windows, the gstools port of Ghostscript can be used.
+
+To use the Printing package, add =(require 'printing)= to your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]), followed by =(pr-update-menus)=. This function replaces the usual printing commands in the menu bar with a 'Printing' submenu that contains various printing options. You can also type M-x pr-interface ; this creates a /Printing Interface/ buffer, similar to a customization buffer, where you can set the printing options. After selecting what and how to print, you start the print job using the 'Print' button (click mouse-2 on it, or move point over it and type ). For further information on the various options, use the 'Interface Help' button.
