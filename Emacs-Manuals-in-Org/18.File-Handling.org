@@ -32,9 +32,7 @@ In addition to visiting and saving files, Emacs can delete, copy, rename, and ap
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.1 File Names
-    :PROPERTIES:
-    :CUSTOM_ID: file-names
-    :END:
+
 
 Many Emacs commands that operate on a file require you to specify the file name, using the minibuffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-File][Minibuffer File]]).
 
@@ -59,9 +57,7 @@ You can include non-ASCII characters in file names. See [[file:///home/me/Deskto
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.2 Visiting Files
-    :PROPERTIES:
-    :CUSTOM_ID: visiting-files
-    :END:
+
 
 ​
 
@@ -138,9 +134,7 @@ There are several ways to specify automatically the major mode for editing the f
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Reverting][Reverting]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.3 Saving Files
-    :PROPERTIES:
-    :CUSTOM_ID: saving-files
-    :END:
+
 
 Saving a buffer in Emacs means writing its contents back into the file that was visited in the buffer.
 
@@ -741,9 +735,7 @@ See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Emerge][Emerge]], for th
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Copying-and-Naming][Copying and Naming]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.10 Diff Mode
-    :PROPERTIES:
-    :CUSTOM_ID: diff-mode
-    :END:
+
 
 Diff mode is a major mode used for the output of M-x diff and other similar commands. This kind of output is called a patch, because it can be passed to the patch command to automatically apply the specified changes. To select Diff mode manually, type M-x diff-mode.
 
@@ -830,9 +822,7 @@ In addition, Diff mode provides the following commands to navigate, manipulate a
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-File-Ops][Misc File Ops]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Diff-Mode][Diff Mode]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.11 Copying, Naming and Renaming Files
-    :PROPERTIES:
-    :CUSTOM_ID: copying-naming-and-renaming-files
-    :END:
+
 
 Emacs has several commands for copying, naming, and renaming files. All of them read two file names, old (or target) and new, using the minibuffer, and then copy or adjust a file's name accordingly; they do not accept wildcard file names.
 
