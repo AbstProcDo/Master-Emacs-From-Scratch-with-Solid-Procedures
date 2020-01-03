@@ -1,3 +1,5 @@
+
+
 #+TITLE: 14.Display
 * 14) Controlling the Display
 

@@ -107,9 +107,91 @@ M->, to the end of the buffer.
 2) Control keys的语义化, 求根问底Meta的词源, 病以meta的higher(beyond)基石; 不仅可以不费力的记住Cursor操作, 依照同样的逻辑, 可以拆解全部的内置快捷键.
 
 移动Cursor的目的, 一则为浏览阅读, 二则为编辑做准备, 是编辑的前驱步骤.
-当聊起编辑器时候, 一个著名的段子"Emacs不是好的编辑器, 而是一个操作系统"; 如果追问一句"请问, 您对编辑器定义是什么?", 立刻会发现所谓编辑器圣战, 便是茶余饭后的小品或者群口相声, 以"段子", 作为案牍劳累的调剂. (vim作为编辑器, 对用户就如电脑开机键, 难说会不会的问题;  连所有的linux认证, 都只有vim的要求)
+当聊起编辑器时候, 一个著名的段子"Emacs不是好的编辑器, 而是一个操作系统"; 如果追问一句"请问, 您对编辑器定义是什么?", 立刻会发现所谓编辑器圣战, 便是茶余饭后的小品或者群口相声, 以"段子", 调剂案牍劳累. (vim作为编辑器, 对用户就如电脑开机键, 难说会不会的问题; 比如linux认证, 都只有vim的要求)
 
 "When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.", 编辑器的基本功能曲指可数.
+
+编辑器的基本功能:
+以行为单位,
+复制, 黏贴, 增删改查, 其中查是关键, 应该放在前面
+对文本的初始是最关键的一点, Linux基于流管理.
+
++ 最基本
+  - 复制黏贴 (M-w, C-y)
++ 增删改查
+  - insert (C-q quotation)
+  - delete(C M d delele), kill ring
+  - modify(undo, transpose, uppercase, lowercase, title,
+  - Search(Swiper…)
++ Arguments
+  - Numeric arguents C-u
+  - Repeat C-x z
+
++ Completion(yasnippet)
+  - indentation (M-i 缓解小指的负担
+  - white space(C-x C-o)
+  - Filling(global-visual-line-mode)
+  - Spelling-checking
++ Special
+  - Register
+
+详细叙述delte
+键的绑定同样遵循语义化的原则, 比如Delete(killing)
+<delete>键(即backspace退格键, backword);
+与C-<del> 搭配是删除一个字符,
+与M-<del>则是倒退删除一个单词;
+与backwords对应的是forwards,(进格删除)
+C-d M-d分别进格删除一个字符和一个单词.
+
+Killing的范围比delete大;
+C-k是删除到行尾, M-k是删除到句尾, 跟前面一致. 以上是forwards进格删除,
+对行的backwardst退格删除 C-x <del>
+
+*Topic*
+
+这么多的键绑定, 从语义化的理解是一方面, 更重要的一方面可能应该去找捷径, 比如调用直觉和由此带来的强烈满足感和成就感.
+
+编辑过程中对blank-lines的处理,
+
+C-x C-o调用(delete-blank-lines)
+
+C-x C-o的绑定键没有逻辑, o是个洞吗? 一个洞代表空行?
+
+Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股的用下来, 对emacs的热情和兴趣早早磨光了.
+
+回到C-x C-o调用(delete-blank-lines)
+
+假设有这样四行
+
+#+BEGIN_QUOTE
+"The quick brown fox jumps over the lazy dog"
+
+
+"The quick brown fox jumps over the lazy dog"
+#+END_QUOTE
+
+
+当前的光标在第一行上的fox,后 发现两行文字中间的空行是多余的, 因此要删掉.
+
+需要动用人肉劳力这样做:
+
+    C-n 管标移动到下一行
+    连续两次C-k删除空行
+    然后凭借超强的记忆力(记住刚才是在fox的位置, 和导弹一般精确的点位控制回到fox后面.
+
+劳神费力.
+
+应用C-x C-o呢? 可以在第一行的任意位置上调用C-x C-o, 下面的空行会自动删除.
+
+怎样从直觉上理解呢?
+
+    光标在第一行的某个点上, 然后调用一个命令, 在光标之外的另外一个地方会立刻发生某件事情, 这就是远程控制呗;
+    更直觉一点, 这边是"意念移物"呗,
+
+由此从直觉里生发的成就感和兴趣会驱动我们应用更加复杂的命令和组合.
+
+P.S. 作为对"零秒" 这个标题党的补充.
+
 
 * 03.God's Eyes and Hands by Dired and Bookmarks
 * 04.Emacs as a Notebook by Org
@@ -120,3 +202,175 @@ M->, to the end of the buffer.
 * 09.Literate Programming
 
 * Appendix A: Learn by raise quesiton and harvest answer.
+* Appendix B: Git Version Control
+
+|-----------------------+------------------------------+----------------------------------------------|
+| Objects               | Features                     | Actions:                                     |
+|-----------------------+------------------------------+----------------------------------------------|
+| 0.Introduction        |                              |                                              |
+|                       | Faster commands              |                                              |
+|                       | Stability                    |                                              |
+|                       | Isolated Environments        |                                              |
+|                       | Efficient Merging            |                                              |
+|-----------------------+------------------------------+----------------------------------------------|
+| 1.Overview            | Objects:                     | Actions:                                     |
+|                       | 1.working directory          | configure                                    |
+|                       | 2.staging area               | recording                                    |
+|                       | 3.Commit history             | undoing                                      |
+|                       | 4.developmnent branches      | branch (non-linear)                          |
+|                       | 5.remotes                    | remote                                       |
+|-----------------------+------------------------------+----------------------------------------------|
+| 2.Configuration       | 1) User Info:                |                                              |
+|                       |                              | git config --global user.name                |
+|                       |                              | git config --global user.email               |
+|                       | 2) Editor:                   |                                              |
+|                       |                              | git config --global core.editor emacs        |
+|                       | 3) Alias:                    |                                              |
+|                       |                              | git config --global alias.ci commit          |
+|                       | .inspect                     |                                              |
+|                       |                              | git config -l                                |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | help:                        | git help log                                 |
+|                       |                              | man git-log                                  |
+|                       |                              | tldr git-log                                 |
+|-----------------------+------------------------------+----------------------------------------------|
+| 3.Recoding Chaneges   |                              |                                              |
+|                       | Staging area:                |                                              |
+|                       |                              | git add                                      |
+|                       |                              | git rm --cached                              |
+|                       | .inspecting:                 |                                              |
+|                       |                              | git status                                   |
+|                       |                              | git diff (--cached)                          |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | Commits                      |                                              |
+|                       |                              | git commit                                   |
+|                       | .inspecting                  |                                              |
+|                       |                              | git log                                      |
+|                       |                              | git log --oneline  <file>                    |
+|                       |                              | git log <since> ... <until>                  |
+|                       | Tagging commit               |                                              |
+|                       |                              | git tag -a v1.0  'stable version'            |
+|-----------------------+------------------------------+----------------------------------------------|
+| 4.Undoing Changes     | 1) Woriking directory        |                                              |
+|                       |                              |                                              |
+|                       |                              | git reset --hard HEAD                        |
+|                       |                              | git clean -f (git rid of unstaged files)     |
+|                       | .individual file:            |                                              |
+|                       |                              | git checkout HEAD <file> (most frequent)     |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 2) Staging area              |                                              |
+|                       |                              | git reset HEAD <file> (extra staged file)    |
+|                       |                              | (No --hard here)                             |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 3) Commits                   |                                              |
+|                       | .resetting                   |                                              |
+|                       |                              | git reset HEAD~1                             |
+|                       | .reverting                   |                                              |
+|                       |                              | git revert <commit-id> (created new commit ) |
+|                       | .ameding                     |                                              |
+|                       |                              | git commit --amend                           |
+|-----------------------+------------------------------+----------------------------------------------|
+| 5.Branches            | 1) Manipulate brnaches       |                                              |
+|                       | .listing branches            |                                              |
+|                       |                              | git branch                                   |
+|                       | .creating branches           |                                              |
+|                       |                              | git branch <name>                            |
+|                       |                              | git checkout -b <name>                       |
+|                       |                              | .git/refs/heads/develop                      |
+|                       | .deleting branches           |                                              |
+|                       |                              | git branch -d, -D                            |
+|                       |                              |                                              |
+|                       | Checking out branches        |                                              |
+|                       |                              | git checkout  <branch>                       |
+|                       | .detached                    |                                              |
+|                       |                              | git checkout -b <new-branch-name>            |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 2) Merging branches          |                                              |
+|                       | .fast-forward:               |                                              |
+|                       |                              | git checkout master                          |
+|                       |                              | git merge some-feature                       |
+|                       | .3-way merge:                |                                              |
+|                       |                              | same as the above                            |
+|                       | .merge conflicts             |                                              |
+|                       |                              | <<<<<<HEAD                                   |
+|                       |                              | ==================                           |
+|                       |                              | >>>>> some-feature                           |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 3) Branches workflow         |                                              |
+|                       | .types of branches           |                                              |
+|                       |                              | permanent or topic                           |
+|                       | .permanent_branch            |                                              |
+|                       |                              | master(public ), develop,                    |
+|                       | .topic_branch                |                                              |
+|                       |                              | feature and hotfix                           |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 4) Rebasing:                 |                                              |
+|                       |                              | git checkout some-feature                    |
+|                       |                              | git rebase master                            |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | .interactive_rebasing:       |                                              |
+|                       |                              | git rebase -i master                         |
+|                       |                              | (Notice for rewriting)                       |
+|-----------------------+------------------------------+----------------------------------------------|
+| 6.Remote Repositories |                              |                                              |
+|                       | 1) Manipulate remotes:       |                                              |
+|                       | .listing remotes:            |                                              |
+|                       |                              | git remote                                   |
+|                       |                              | git remote -v                                |
+|                       | .creating_remotes:           |                                              |
+|                       |                              | git remote add <name> <path-to-repo.         |
+|                       | .deleting_remotes:           |                                              |
+|                       |                              | git remote rm <remote-name>                  |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 2) Remote branches:          |                                              |
+|                       | .fetching_remote_branches    |                                              |
+|                       |                              | git fetch <remote> <branch>                  |
+|                       |                              | git branch -r                                |
+|                       | .inspecting_remote_branches: |                                              |
+|                       |                              | git log origin/master                        |
+|                       | .merging/rebsing:            |                                              |
+|                       |                              | git checkout some-feature                    |
+|                       |                              | git fetch origin                             |
+|                       |                              | git merge origin/master                      |
+|                       |                              | (littered with meaninglesss merge commits)   |
+|                       |                              |                                              |
+|                       |                              | git checkout some-feature                    |
+|                       |                              | git fetch origin                             |
+|                       |                              | git rebase origin/master                     |
+|                       | .pulling:                    |                                              |
+|                       |                              | git pull origin/master (--rebase )           |
+|                       | .pushing:                    |                                              |
+|                       |                              | git push <remote> <branch>                   |
+|                       |                              |                                              |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 3) Remote workflow:          |                                              |
+|                       | .bare_repository:            |                                              |
+|                       |                              | git init --bare <path>                       |
+|                       | .centralized_workflow:       |                                              |
+|                       |                              | git fetch origin master                      |
+|                       |                              | git rebase origin/master                     |
+|                       |                              | git push                                     |
+|                       | .integrator_workflow:        |                                              |
+|                       |                              | github的模式                                 |
+|-----------------------+------------------------------+----------------------------------------------|
+| Conclusion            |                              |                                              |
+|                       | 1.working directory          |                                              |
+|                       | 2.staging area               |                                              |
+|                       | 3.commit history             |                                              |
+|                       | 4.branches                   |                                              |
+|                       | 5.remotes                    |                                              |
+|-----------------------+------------------------------+----------------------------------------------|
+
+- detached
+Note: checking out '1a'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 613ae49 Chapter 1: initial version (1a)

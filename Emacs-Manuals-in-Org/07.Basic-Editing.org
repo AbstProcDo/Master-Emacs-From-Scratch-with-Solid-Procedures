@@ -44,7 +44,6 @@ A numeric argument to C-q or C-x 8 ... specifies how many copies of the characte
 
 In addition, in some contexts, if you type a quotation using grave accent and apostrophe `like this', it is converted to a form ‘like this’ using single quotation marks, even without C-x 8 commands. Similarly, typing a quotation ``like this'' using double grave accent and apostrophe converts it to a form “like this” using double quotation marks. See Quotation Marks.
 
-
 * 7.2 Changing the Location of Point
 # point的移动, cursor那一部分已经涉及.
 
@@ -393,8 +392,7 @@ onal times, to delete a total of 80 characters, by typing C-x z z z. The first C
 insert: C-q, Filling, Indentation, Completion
 delete:
 modify:
-search:
-undo:
+search: undo:
 blank lines:
 filling(关闭auto-fill-mode, 开启global-visual-line-mode)
 numeric arguments

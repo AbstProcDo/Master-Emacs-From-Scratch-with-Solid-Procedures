@@ -823,7 +823,6 @@ Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Misc-File-Ops][Misc Fi
 
 * 18.11 Copying, Naming and Renaming Files
 
-
 Emacs has several commands for copying, naming, and renaming files. All of them read two file names, old (or target) and new, using the minibuffer, and then copy or adjust a file's name accordingly; they do not accept wildcard file names.
 
 In all these commands, if the argument new is just a directory name (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Directory-Names][Directory Names]]), the real new name is in that directory, with the same non-directory component as old. For example, the command M-x rename-file ~/foo /tmp/ renames ~/foo to /tmp/foo. On GNU and other POSIX-like systems, directory names end in '/'.
@@ -910,9 +909,6 @@ Unlike Tar mode, Archive mode runs the archiving programs to unpack and repack a
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Archives][File Archives]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.15 Remote Files
-    :PROPERTIES:
-    :CUSTOM_ID: remote-files
-    :END:
 
 You can refer to files on other machines using a special file name syntax:
 
@@ -947,9 +943,7 @@ Sometimes you may be unable to access files on a remote machine because a firewa
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Name-Cache][File Name Cache]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Remote-Files][Remote Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.16 Quoted File Names
-    :PROPERTIES:
-    :CUSTOM_ID: quoted-file-names
-    :END:
+
 
 You can quote an absolute file name to prevent special characters and syntax in it from having their special effects. The way to do this is to add '/:' at the beginning.
 
@@ -968,9 +962,7 @@ Another method of getting the same result is to enter /tmp/foo[*]bar, which is a
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Conveniences][File Conveniences]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.17 File Name Cache
-    :PROPERTIES:
-    :CUSTOM_ID: file-name-cache
-    :END:
+
 
 You can use the file name cache to make it easy to locate a file by name, without having to remember exactly where it is located. When typing a file name in the minibuffer, C- (=file-cache-minibuffer-complete=) completes it using the file name cache. If you repeat C-, that cycles through the possible completions of what you had originally typed. (However, note that the C- character cannot be typed on most text terminals.)
 
@@ -1003,9 +995,7 @@ The file name cache is not persistent: it is kept and maintained only for the du
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filesets][Filesets]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Name-Cache][File Name Cache]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.18 Convenience Features for Finding Files
-    :PROPERTIES:
-    :CUSTOM_ID: convenience-features-for-finding-files
-    :END:
+
 
 In this section, we introduce some convenient facilities for finding recently-opened files, reading file names from a buffer, and viewing image files.
 
@@ -1024,9 +1014,6 @@ The Image-Dired package can also be used to view images as thumbnails. See [[fil
 Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Conveniences][File Conveniences]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.19 Filesets
-    :PROPERTIES:
-    :CUSTOM_ID: filesets
-    :END:
 
 If you regularly edit a certain group of files, you can define them as a fileset. This lets you perform certain operations, such as visiting, =query-replace=, and shell commands on all the files at once. To make use of filesets, you must first add the expression =(filesets-init)= to your init file (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Init-File][Init File]]). This adds a 'Filesets' sub-menu to the menu bar's 'File' menu.
 
