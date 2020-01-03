@@ -1,5 +1,5 @@
 
-* 00.引言
+* 00.Preface
 Meta键(键盘上的option/alter键)
 Meta的词源含义是higher, beyond,可以理解为没有最高, 只有更高.
 中文译为"元", 发端处, 源头处; So Meta is source, and it relates to source code.
@@ -191,7 +191,6 @@ Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股
 由此从直觉里生发的成就感和兴趣会驱动我们应用更加复杂的命令和组合.
 
 P.S. 作为对"零秒" 这个标题党的补充.
-
 
 * 03.God's Eyes and Hands by Dired and Bookmarks
 * 04.Emacs as a Notebook by Org
