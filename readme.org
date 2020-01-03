@@ -14,8 +14,8 @@ M-x (x for execucte), 然后可以天马行空的查询要做的事情,
 
 Emacs的第一个策略: 引入Ctrl键
 
-比如help, 可以M-x help, 需要键入六个字符
-Ctrl策略, 可以C-x h. 只需要键入3个字符.
+比如从目录下打开文件, 可以M-x find-file, 需要键入十一个字符
+Ctrl策略, 可以C-x C-f. 只需要键入四个字符.
 "C-x h"成为key sequence, 而这种通过key sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此看到是引入Ctrl
 * 01.Semantic Keybinding
 

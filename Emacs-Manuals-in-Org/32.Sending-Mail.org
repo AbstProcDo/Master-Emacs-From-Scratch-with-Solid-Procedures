@@ -40,9 +40,6 @@ When you type C-c C-c or C-c C-s to send the mail, Emacs may ask you how it shou
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Headers][Mail Headers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
 
 * 32.1 The Format of the Mail Buffer
-    :PROPERTIES:
-    :CUSTOM_ID: the-format-of-the-mail-buffer
-    :END:
 
 Here is an example of the contents of a mail buffer:
 
@@ -62,12 +59,8 @@ The line that says '--text follows this line--' separates the header fields from
 
 You can insert and edit header fields using ordinary editing commands. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]], for commands specific to editing header fields. Certain headers, such as 'Date' and 'Message-Id', are normally omitted from the mail buffer and are created automatically when the message is sent.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Aliases][Mail Aliases]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Format][Mail Format]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
 
 * 32.2 Mail Header Fields
-    :PROPERTIES:
-    :CUSTOM_ID: mail-header-fields
-    :END:
 
 A header field in the mail buffer starts with a field name at the beginning of a line, terminated by a colon. Upper and lower case are equivalent in field names. After the colon and optional whitespace comes the contents of the field.
 
