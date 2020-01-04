@@ -1,5 +1,6 @@
 
 * 00.Preface
+
 Meta键(键盘上的option/alter键)
 Meta的词源含义是higher, beyond,可以理解为没有最高, 只有更高.
 中文译为"元", 发端处, 源头处; So Meta is source, and it relates to source code.
@@ -16,7 +17,8 @@ Emacs的第一个策略: 引入Ctrl键
 
 比如从目录下打开文件, 可以M-x find-file, 需要键入十一个字符
 Ctrl策略, 可以C-x C-f. 只需要键入四个字符.
-"C-x h"成为key sequence, 而这种通过key sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此看到是引入Ctrl
+"C-x C-f"称为key sequence, 而这种通过key sequnces调用functions的过程, 称之为Command. 而Command=Contrl, 是选择Ctrl键的原因.
+
 * 01.Semantic Keybinding
 
 Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义Ctrl的技术, 简化Meta的流程.
@@ -101,6 +103,7 @@ M->, to the end of the buffer.
 # 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
 
 * 02.Emacs as an Editor
+
 [[01.semantic keybinding]] 初窥了Emacs简单易用的特性之一便是语义化键绑定,
 语义化包含两个方面:
 1) Character keys的语义化, 这一点明了易懂, n for next, p for previous; 而非j for next, k for previous.
