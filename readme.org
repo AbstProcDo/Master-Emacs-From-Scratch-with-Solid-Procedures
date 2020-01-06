@@ -1,6 +1,4 @@
-
 * 00.Preface
-
 Meta键(键盘上的option/alter键)
 Meta的词源含义是higher, beyond,可以理解为没有最高, 只有更高.
 中文译为"元", 发端处, 源头处; So Meta is source, and it relates to source code.
@@ -15,10 +13,9 @@ M-x (x for execucte), 然后可以天马行空的查询要做的事情,
 
 Emacs的第一个策略: 引入Ctrl键
 
-比如从目录下打开文件, 可以M-x find-file, 需要键入十一个字符
-Ctrl策略, 可以C-x C-f. 只需要键入四个字符.
-"C-x C-f"称为key sequence, 而这种通过key sequnces调用functions的过程, 称之为Command. 而Command=Contrl, 是选择Ctrl键的原因.
-
+比如help, 可以M-x help, 需要键入六个字符
+Ctrl策略, 可以C-x h. 只需要键入3个字符.
+"C-x h"成为key sequence, 而这种通过key sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此看到是引入Ctrl
 * 01.Semantic Keybinding
 
 Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义Ctrl的技术, 简化Meta的流程.
@@ -103,7 +100,6 @@ M->, to the end of the buffer.
 # 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
 
 * 02.Emacs as an Editor
-
 [[01.semantic keybinding]] 初窥了Emacs简单易用的特性之一便是语义化键绑定,
 语义化包含两个方面:
 1) Character keys的语义化, 这一点明了易懂, n for next, p for previous; 而非j for next, k for previous.
@@ -195,7 +191,25 @@ Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股
 
 P.S. 作为对"零秒" 这个标题党的补充.
 
+目前的流程图 Meta --> Control ---> Cursor ---> Edit
+由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
+在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前,
+光速浏览File的基本操作(读取和保存)
+C-x C-f (M-x find-file) 找到并打开文件
+C-x C-r (r是read-only), 比如浏览自己的配置文件, 要避免无心修改掉东西.
+C-x C-s (s,save) 保存单个文件
+C-x s   保存全部文件, 保存全部文件功能更常用, 因此组合键也少.
+最后在个人配置上添加两行, 设置自动保存文件.
+
+#+begin_src emacs-lisp :session mm :lexical t
+(setq auto-save-visited-mode t)
+(auto-save-visited-mode +1)
+#+end_src
+
+以上完结, 马上进入精彩的部分.
+
 * 03.God's Eyes and Hands by Dired and Bookmarks
+
 * 04.Emacs as a Notebook by Org
 * 05.Emacs as a Agenda by Org
 * 06.Org your life all-in-one as  book manager, database manager, memory manager etc
@@ -216,7 +230,6 @@ P.S. 作为对"零秒" 这个标题党的补充.
 |                       | Efficient Merging            |                                              |
 |-----------------------+------------------------------+----------------------------------------------|
 | 1.Overview            | Objects:                     | Actions:                                     |
-|-----------------------+------------------------------+----------------------------------------------|
 |                       | 1.working directory          | configure                                    |
 |                       | 2.staging area               | recording                                    |
 |                       | 3.Commit history             | undoing                                      |
@@ -363,3 +376,17 @@ P.S. 作为对"零秒" 这个标题党的补充.
 |                       | 4.branches                   |                                              |
 |                       | 5.remotes                    |                                              |
 |-----------------------+------------------------------+----------------------------------------------|
+
+- detached
+Note: checking out '1a'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 613ae49 Chapter 1: initial version (1a)
