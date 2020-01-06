@@ -192,7 +192,21 @@ Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股
 
 P.S. 作为对"零秒" 这个标题党的补充.
 
+目前的流程图 Meta --> Control ---> Cursor ---> Edit
+由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
+在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前,
+光速浏览File的基本操作(读取和保存)
+C-x C-f (M-x find-file) 找到并打开文件
+C-x C-r (r是read-only), 比如浏览自己的配置文件, 要避免无心修改掉东西.
+C-x C-s (s,save) 保存单个文件
+C-x s   保存全部文件, 保存全部文件功能更常用, 因此组合键也少.
+最后在个人配置上添加两行, 设置自动保存文件.
+(setq auto-save-visited-mode t)
+(auto-save-visited-mode +1)
+以上完结, 马上进入精彩的部分.
+
 * 03.God's Eyes and Hands by Dired and Bookmarks
+
 * 04.Emacs as a Notebook by Org
 * 05.Emacs as a Agenda by Org
 * 06.Org your life all-in-one as  book manager, database manager, memory manager etc

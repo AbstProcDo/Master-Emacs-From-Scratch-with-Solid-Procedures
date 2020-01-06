@@ -1,7 +1,4 @@
 * 18) File Handling
-   :PROPERTIES:
-   :CUSTOM_ID: file-handling
-   :END:
 
 The operating system stores data permanently in named files, so most of the text you edit with Emacs comes from a file and is ultimately stored in a file.
 
@@ -29,10 +26,7 @@ In addition to visiting and saving files, Emacs can delete, copy, rename, and ap
 18) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Conveniences][File Conveniences]]: Convenience Features for Finding Files.
 19) [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filesets][Filesets]]: Handling sets of files.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visiting][Visiting]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
-
 * 18.1 File Names
-
 
 Many Emacs commands that operate on a file require you to specify the file name, using the minibuffer (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-File][Minibuffer File]]).
 
@@ -48,18 +42,14 @@ As an example, when you visit the file /u/rms/gnu/gnu.tasks, the default directo
 
 When typing a file name into the minibuffer, you can make use of a couple of shortcuts: a double slash ignores everything before the second slash in the pair, and '~/' is your home directory. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Minibuffer-File][Minibuffer File]].
 
-The character '$’ is used to substitute an environment variable into a file name. The name of the environment variable consists of all the alphanumeric characters after the ‘$'; alternatively, it can be enclosed in braces after the '$’. For example, if you have used the shell command export FOO=rms/hacks to set up an environment variable named FOO, then both /u/$FOO/test.c and /u/${FOO}/test.c are abbreviations for /u/rms/hacks/test.c. If the environment variable is not defined, no substitution occurs, so that the character ‘$' stands for itself. Note that environment variables set outside Emacs affect Emacs only if they are applied before Emacs is started.
+The character '$ is used to substitute an environment variable into a file name. The name of the environment variable consists of all the alphanumeric characters after the ‘$; alternatively, it can be enclosed in braces after the '$’. For example, if you have used the shell command export FOO=rms/hacks to set up an environment variable named FOO, then both /u/$FOO/test.c and /u/${FOO}/test.c are abbreviations for /u/rms/hacks/test.c. If the environment variable is not defined, no substitution occurs, so that the character ‘$' stands for itself. Note that environment variables set outside Emacs affect Emacs only if they are applied before Emacs is started.
 
 To access a file with '$’ in its name, if the ‘$' causes expansion, type '$$’. This pair is converted to a single ‘$' at the same time that variable substitution is performed for a single '$'. Alternatively, quote the whole file name with '/:' (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quoted-File-Names][Quoted File Names]]). File names which begin with a literal '~' should also be quoted with '/:'.
 
 You can include non-ASCII characters in file names. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Name-Coding][File Name Coding]].
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Names][File Names]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
-
 * 18.2 Visiting Files
 
-
-​
 
 - C-x C-f
 
@@ -135,7 +125,6 @@ Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Reverting][Reverting]]
 
 * 18.3 Saving Files
 
-
 Saving a buffer in Emacs means writing its contents back into the file that was visited in the buffer.
 
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Save-Commands][Save Commands]]: Commands for saving files.
@@ -145,12 +134,7 @@ Saving a buffer in Emacs means writing its contents back into the file that was 
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Shadowing][Shadowing]]: Copying files to ``shadows'' automatically.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Time-Stamps][Time Stamps]]: Emacs can update time stamps on saved files.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Backup][Backup]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Saving][Saving]]
-
 ** 18.3.1 Commands for Saving Files
-     :PROPERTIES:
-     :CUSTOM_ID: commands-for-saving-files
-     :END:
 
 These are the commands that relate to saving and writing files.
 
@@ -644,9 +628,6 @@ Emacs records information about interrupted sessions in files named .saves-pid-h
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Directories][Directories]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Auto-Save][Auto Save]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.7 File Name Aliases
-    :PROPERTIES:
-    :CUSTOM_ID: file-name-aliases
-    :END:
 
 Symbolic links and hard links both make it possible for several file names to refer to the same file. Hard links are alternate names that refer directly to the file; all the names are equally valid, and no one of them is preferred. By contrast, a symbolic link is a kind of defined alias: when foo is a symbolic link to bar, you can use either name to refer to the file, but bar is the real name, while foo is just an alias. More complex cases occur when symbolic links point to directories.
 
@@ -663,10 +644,7 @@ Sometimes, a directory is ordinarily accessed through a symbolic link, and you m
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Comparing-Files][Comparing Files]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#File-Aliases][File Aliases]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]]
 
 * 18.8 File Directories
-    :PROPERTIES:
-    :CUSTOM_ID: file-directories
-    :END:
-
+,
 The file system groups files into directories. A directory listing is a list of all the files in a directory. Emacs provides commands to create and delete directories, and to make directory listings in brief format (file names only) and verbose format (sizes, dates, and other attributes included). Emacs also includes a directory browser feature called Dired, which you can invoke with C-x d; see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]].
 
 - C-x C-d dir-or-pattern

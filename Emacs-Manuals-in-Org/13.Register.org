@@ -165,9 +165,6 @@ To execute the keyboard macro in register r, type C-x r j r. (This is the same c
 
 Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Keyboard-Macro-Registers][Keyboard Macro Registers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Registers][Registers]]
 * 13.8 Bookmarks
-    :PROPERTIES:
-    :CUSTOM_ID: bookmarks
-    :END:
 
 Bookmarks are somewhat like registers in that they record positions you can jump to. Unlike registers, they have long names, and they persist automatically from one Emacs session to the next. The prototypical use of bookmarks is to record where you were reading in various files.
 
@@ -206,6 +203,7 @@ Bookmarks are somewhat like registers in that they record positions you can jump
   If you set the variable =bookmark-save-flag= to 1, each command that sets a bookmark will also save your bookmarks; this way, you don't lose any bookmark values even if Emacs crashes. The value, if a number, says how many bookmark modifications should go by between saving. If you set this variable to =nil=, Emacs only saves bookmarks if you explicitly use M-x bookmark-save.
 
   The variable =bookmark-default-file= specifies the file in which to save bookmarks by default.
+  # 修改默认的bookmark-default-file= 2020-01-06 23:32:40
 
   Bookmark position values are saved with surrounding context, so that =bookmark-jump= can find the proper position even if the file is modified slightly. The variable =bookmark-search-size= says how many characters of context to record on each side of the bookmark's position.
 

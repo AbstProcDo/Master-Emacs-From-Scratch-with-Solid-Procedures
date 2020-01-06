@@ -687,7 +687,7 @@ Here's an example of a .dir-locals.el file:
                        . "ChangeLog.local"))))))
 #+END_EXAMPLE
 
-This sets 'indent-tabs-mode' and =fill-column= for any file in the directory tree, and the indentation style for any C source file. The special =subdirs= element is not a variable, but a special keyword which indicates that the C mode settings are only to be applied in the current directory, not in any subdirectories. Finally, it specifies a different ChangeLog file name for any file in the src/imported subdirectory.
+This sets 'indent-tabs-mode' and =fill-column= for any file in the directory tree, and the gindentation style for any C source file. The special =subdirs= element is not a variable, but a special keyword which indicates that the C mode settings are only to be applied in the current directory, not in any subdirectories. Finally, it specifies a different ChangeLog file name for any file in the src/imported subdirectory.
 
 If the .dir-locals.el file contains multiple different values for a variable using different mode names or directories, the values will be applied in an order such that the values for more specific modes take priority over more generic modes. Values specified under a directory have even more priority. For example:
 

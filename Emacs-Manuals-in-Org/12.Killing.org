@@ -365,7 +365,9 @@ The region-rectangle is controlled in much the same way as the region is control
 - M-x delete-whitespace-rectangle
 
   Delete whitespace in each of the lines on the specified rectangle, starting from the left edge column of the rectangle.
-
+# 2020-01-04 11:36:52
+# 这一条太管用了.
+# https://emacs.stackexchange.com/a/45515/21203
 - C-x r t string
 
   Replace rectangle contents with string on each line (=string-rectangle=).
