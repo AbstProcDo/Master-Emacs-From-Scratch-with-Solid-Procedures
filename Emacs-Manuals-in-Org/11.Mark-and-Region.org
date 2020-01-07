@@ -1,5 +1,4 @@
 #+TITLE: 11.Mark-and-Region
-
 * 11) The Mark and the Region
 
 Many Emacs commands operate on an arbitrary contiguous part of the current buffer. To specify the text for such a command to operate on, you set the mark at one end of it, and move point to the other end. The text between point and the mark is called the region. The region always extends between point and the mark, no matter which one comes earlier in the text; each time you move point, the region changes.
@@ -14,10 +13,7 @@ Setting the mark in one buffer has no effect on the marks in other buffers. When
 
 There is another kind of region: the rectangular region. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rectangles][Rectangles]].
 * 11.1 Setting the Mark
-    :PROPERTIES:
-    :CUSTOM_ID: setting-the-mark
-    :END:
-
+    
 Here are some commands for setting the mark:
 
 - C-
@@ -64,9 +60,7 @@ Under X, every time the active region changes, Emacs saves the text in the regio
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Using-Region][Using Region]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Setting-Mark][Setting Mark]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
 * 11.2 Commands to Mark Textual Objects
-    :PROPERTIES:
-    :CUSTOM_ID: commands-to-mark-textual-objects
-    :END:
+
 
 Here are commands for placing point and the mark around a textual object such as a word, list, paragraph or page:
 
@@ -106,9 +100,7 @@ C-x h (=mark-whole-buffer=) sets up the entire buffer as the region, by putting 
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Marking-Objects][Marking Objects]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
 * 11.3 Operating on the Region
-    :PROPERTIES:
-    :CUSTOM_ID: operating-on-the-region
-    :END:
+
 
 Once you have a region, here are some of the ways you can operate on it:
 
@@ -134,9 +126,7 @@ By default, text insertion occurs normally even if the mark is active---for exam
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Global-Mark-Ring][Global Mark Ring]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Using-Region][Using Region]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
 * 11.4 The Mark Ring
-    :PROPERTIES:
-    :CUSTOM_ID: the-mark-ring
-    :END:
+
 
 Each buffer remembers previous locations of the mark, in the mark ring. Commands that set the mark also push the old mark onto this ring. One of the uses of the mark ring is to remember spots that you may want to go back to.
 
@@ -162,9 +152,7 @@ If you want to move back to the same place over and over, the mark ring may not 
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark-Ring][Mark Ring]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
 * 11.5 The Global Mark Ring
-    :PROPERTIES:
-    :CUSTOM_ID: the-global-mark-ring
-    :END:
+
 
 In addition to the ordinary mark ring that belongs to each buffer, Emacs has a single global mark ring. Each time you set a mark, this is recorded in the global mark ring in addition to the current buffer's own mark ring, if you have switched buffers since the previous mark setting. Hence, the global mark ring records a sequence of buffers that you have been in, and, for each buffer, a place where you set the mark. The length of the global mark ring is controlled by =global-mark-ring-max=, and is 16 by default.
 
@@ -172,9 +160,7 @@ The command C-x C- (=pop-global-mark=) jumps to the buffer and position of the l
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Disabled-Transient-Mark][Disabled Transient Mark]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Global-Mark-Ring][Global Mark Ring]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
 * 11.6 Shift Selection
-    :PROPERTIES:
-    :CUSTOM_ID: shift-selection
-    :END:
+
 
 If you hold down the shift key while typing a cursor motion command, this sets the mark before moving point, so that the region extends from the original position of point to its new position. This feature is referred to as shift-selection. It is similar to the way text is selected in other editors.
 
@@ -186,11 +172,8 @@ A mark set via mouse commands behaves the same as a mark set via shift-selection
 
 To turn off shift-selection, set =shift-select-mode= to =nil=. Doing so does not disable setting the mark via mouse commands.
 
-Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mark][Mark]]
 * 11.7 Disabling Transient Mark Mode
-    :PROPERTIES:
-    :CUSTOM_ID: disabling-transient-mark-mode
-    :END:
+
 
 The default behavior of the mark and region, in which setting the mark activates it and highlights the region, is called Transient Mark mode. This is a minor mode that is enabled by default. It can be toggled with M-x transient-mark-mode, or with the 'Highlight Active Region' menu item in the 'Options' menu. Turning it off switches Emacs to an alternative mode of operation:
 
@@ -221,3 +204,9 @@ The default behavior of the mark and region, in which setting the mark activates
 These commands set or activate the mark, and enable Transient Mark mode only until the mark is deactivated. One reason you may want to use them is that some commands operate on the entire buffer instead of the region when Transient Mark mode is off. Enabling Transient Mark mode momentarily gives you a way to use these commands on the region.
 
 When you specify a region with the mouse (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Setting-Mark][Setting Mark]]), or with shift-selection (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shift-Selection][Shift Selection]]), this likewise activates Transient Mark mode temporarily and highlights the region.
+
+* mark-end-of-sentence
+
+Command mark-end-of-sentence does what you request. It's not bound to a key by default, but you can bind it to one. C-h f mark-end-of-sentence tells you:
+
+https://www.emacswiki.org/emacs/ThingAtPointCommands

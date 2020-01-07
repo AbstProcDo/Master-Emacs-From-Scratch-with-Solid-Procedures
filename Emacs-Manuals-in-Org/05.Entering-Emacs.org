@@ -1,5 +1,7 @@
 #+TITLE: 05.Entering-Emacs
 
+
+
 * 5 Entering Emacs
 
 The usual way to invoke Emacs is with the shell command emacs. From a terminal window running a Unix shell on a GUI terminal, you can run Emacs in the background with emacs &; this way, Emacs won't tie up the terminal window, so you can use it to run other shell commands. (For comparable methods of starting Emacs on MS-Windows, see Windows Startup.)

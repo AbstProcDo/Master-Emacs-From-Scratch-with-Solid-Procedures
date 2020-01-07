@@ -1,4 +1,6 @@
 #+TITLE: 02.User-Input
+
+
 * 2 Kinds of User Input
 
 GNU Emacs is primarily designed for use with the keyboard. While it is possible to use the mouse to issue editing commands through the menu bar and tool bar, that is not as efficient as using the keyboard. Therefore, this manual mainly documents how to edit with the keyboard.

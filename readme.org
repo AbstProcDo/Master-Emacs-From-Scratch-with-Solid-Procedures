@@ -1,4 +1,5 @@
 * 00.Preface
+
 Meta键(键盘上的option/alter键)
 Meta的词源含义是higher, beyond,可以理解为没有最高, 只有更高.
 中文译为"元", 发端处, 源头处; So Meta is source, and it relates to source code.
@@ -7,15 +8,14 @@ Meta的词源含义是higher, beyond,可以理解为没有最高, 只有更高.
 M-x (x for execucte), 然后可以天马行空的查询要做的事情,
 比如插入当前的日期:
 
-
 至此, Emacs从战略层面上的所有事情便结束了, 剩下的事情仅仅是战术层面上的高效问题与缝缝补补的实现.
 
+*Emacs的第一个策略: 引入Ctrl键*
 
-Emacs的第一个策略: 引入Ctrl键
+比如从目录中打开一个文件, 可以M-x find-file,
+需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
+sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
 
-比如help, 可以M-x help, 需要键入六个字符
-Ctrl策略, 可以C-x h. 只需要键入3个字符.
-"C-x h"成为key sequence, 而这种通过key sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此看到是引入Ctrl
 * 01.Semantic Keybinding
 
 Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义Ctrl的技术, 简化Meta的流程.
@@ -146,7 +146,7 @@ Killing的范围比delete大;
 C-k是删除到行尾, M-k是删除到句尾, 跟前面一致. 以上是forwards进格删除,
 对行的backwardst退格删除 C-x <del>
 
-*Topic*
+*Topic1*
 
 这么多的键绑定, 从语义化的理解是一方面, 更重要的一方面可能应该去找捷径, 比如调用直觉和由此带来的强烈满足感和成就感.
 
@@ -169,7 +169,6 @@ Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股
 "The quick brown fox jumps over the lazy dog"
 #+END_QUOTE
 
-
 当前的光标在第一行上的fox,后 发现两行文字中间的空行是多余的, 因此要删掉.
 
 需要动用人肉劳力这样做:
@@ -191,6 +190,38 @@ Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股
 
 P.S. 作为对"零秒" 这个标题党的补充.
 
+
+*Topic2 对比Search功能的Emacs操作与命令行操作*
+Emacs的优势是对数据和查询结果的便捷二次处理.
+比如想从宏观上了解下Emacs手册中中全部whitespace操作.
+[[file:images/2.目录界面.png]]
+
+可以从Terminal中完成
+#+BEGIN_SRC bash
+find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} +
+#+END_SRC
+[[file:images/2.terminal界面.png]]
+
+虽然可以看到结果, 但没法做简单的统计.
+即使加上nl
+#+BEGIN_SRC bash
+find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} + | nl
+#+END_SRC
+[[file:images/terminal界面2.png]]
+
+也只能大略了解到’whitespace’在整个文档中, 有95句话提到过.
+
+而在Emacs中执行同样的命令:
+C-x grep-find;
+
+则瞬间眼明心亮, 有95句话有一个或多个whitespace这个单词, 总计有151个. 而且在 Killing.org 这个文件中有6句话, 在 text.org 中有5句, 在 Display,org 中有17句话, 在 Program.org 中也有17句, 等等,
+
+[[file:images/emacs界面.png]]
+
+Emacs中执行命令的突出优势是简单方便的二次处理.
+
+*小结*
+
 目前的流程图 Meta --> Control ---> Cursor ---> Edit
 由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
 在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前,
@@ -205,10 +236,29 @@ C-x s   保存全部文件, 保存全部文件功能更常用, 因此组合键�
 (setq auto-save-visited-mode t)
 (auto-save-visited-mode +1)
 #+end_src
-
 以上完结, 马上进入精彩的部分.
 
 * 03.God's Eyes and Hands by Dired and Bookmarks
+Dired初窥
+在EmacsManual目录下调出Dird后,
+快速略扫各个文件的主要内容.
+从配置中添加下面的代码
+#+begin_src emacs-lisp :session ss :lexical t
+(define-minor-mode dired-follow-mode "Diplay file at point in dired after a move."
+  :lighter " dired-f"
+  :global t
+  (if dired-follow-mode (advice-add 'dired-next-line
+                                    :after (lambda (arg)
+                                             (dired-display-file)))
+    (advice-remove 'dired-next-line (lambda (arg)
+                                      (dired-display-file)))))
+#+end_src
+M-x 调用 =dired-follow-mode=
+
+在目录上C-n和C-p上下移动光标.
+
+#+ATTR_HTML: :width 500px
+[[file:images/pre-dired.gif]]
 
 * 04.Emacs as a Notebook by Org
 * 05.Emacs as a Agenda by Org
