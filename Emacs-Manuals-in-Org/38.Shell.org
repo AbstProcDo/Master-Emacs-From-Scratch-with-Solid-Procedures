@@ -33,7 +33,7 @@ M-x eshell invokes a shell implemented entirely in Emacs. It is documented in it
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Single-Shell][Single Shell]]: How to run one shell command and return.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Interactive-Shell][Interactive Shell]]: Permanent shell taking input via Emacs.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Mode][Shell Mode]]: Special Emacs commands used with permanent shell.
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Prompts][Shell Prompts]]: Two ways to recognize shell prompts.
+- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Prompts][Shell Prompts]]: Two gways to recognize shell prompts.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-History][History]]: Repeating previous commands in a shell buffer.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Directory-Tracking][Directory Tracking]]: Keeping track when the subshell changes directory.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Shell-Options][Options]]: Options for customizing Shell mode.

@@ -1,11 +1,21 @@
 * 00.Preface
+“零秒”乃直觉力,有效应用我们的直觉的巨大力量, 而不必案牍劳形, 悬梁刺股,
+起标题真煞费脑筋, 
+若标题为“应用直觉思维和潜意识的力量, 在Emacs上精进", 则真是啰里啰嗦；
+或者直觉力精通Emacs,则语法不通. 此处的“零秒”即“intuition"而“instant" 灵犀一点通； 非物理概念上的“零秒”；
+步步为营, 仿照曾国藩的战术“结硬寨, 打呆仗”, 初时很慢, 待工事渐成, 则坚不可摧；
+同时努力学习SICP的策略, 首先抛出点滴星火，再看时，已成燎原之势。
+以直觉力为基础，步步为营，稳扎稳打，构筑Emacs技能。
 
+是为序.
+
+Emacs的简单, 则一言以蔽之, Meta键也.
 Meta键(键盘上的option/alter键)
-Meta的词源含义是higher, beyond,可以理解为没有最高, 只有更高.
-中文译为"元", 发端处, 源头处; So Meta is source, and it relates to source code.
-既然Meta关联src-code, 而function又是code的first-class-citizen;
-那么Meta便可直接调用function.
-M-x (x for execucte), 然后可以天马行空的查询要做的事情,
+Meta的词源含义是higher, beyond,可以理解为没有最高,只有更高.
+中文译为"元", 发端处, 源头处;
+So Meta is source, and it relates to source code.
+Meta关联src-code, 而function又是code的first-class-citizen; 设置Meta直接调用function顺理成章.
+M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事情,
 比如插入当前的日期:
 
 至此, Emacs从战略层面上的所有事情便结束了, 剩下的事情仅仅是战术层面上的高效问题与缝缝补补的实现.
@@ -27,7 +37,6 @@ Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义C
 C-x, C-h的区别, 一级绑定, 将C-x中的x去掉, 只剩下
 从character讲起, meta的词源是higher,
 
-python的快捷键绑定.
 
 与vim的关键区别是绑定的键是有具体含义,可逻辑, 可推导.
 
@@ -39,14 +48,14 @@ python的快捷键绑定.
 character, word, line, sentence, (*paragragh),
 page, buffer.
 
-1.character and word
+1. Character and Word
 C-f (M-x forward-char) 向前移动一个字符的位置
 C-b (M-x backword-char) 向后移动一个字符的位置
 char是最小的操作单元, char之上则是word, 回顾上文阐述的meta的词源含义是higher,因此Meta绑定相同的键, 范围要比Ctrl更大一点, 由此, 比char大一级的是word
 M-f (M-x forward-word) 向前移动一个单词的位置.
 M-b (M-x backword-word) 向后移动一个单词的位置.
 
-2.line and sentence.
+2. line and sentence.
 C-e (e for end) move to end of line,
 C-a (a for ahead) move to ahead of line
 同样的逻辑,Meta比Ctrl的范围高一个等级
@@ -55,7 +64,7 @@ M-e move to end of the sentence.
 
 以上两点为光标在水平方向的移动(horizontal), 与之相对应的纵向(Vertiallly)移动的操作.
 
-3.Vertical Movement between lines
+3. Vertical Movement between lines
 C-n (调用function next-line), 向下移动一行
 C-p (previous-line)
 接下来, 有意思的事情来了.
@@ -65,7 +74,7 @@ M-n
 发现Emacs没有定义这两个key-sequnces, 根据前面的逻辑, M-p应该向上移动更多行, 至少比一行要多; Emacs竟然没有定义, 这真是千载难逢的良机.
 暂时按下不表, 先小结Ctrl的光标操作. Ctrl能操作的最大单位是line, 更大范围的光标动作交由Meta完成.
 
-4.Vertically Page Down and Up
+4. Vertically Page Down and Up
 向上翻页M-v, v当然是vertical, 而Meta是higher, 往更高处纵向移动, 当然便是UP,
 那么向下呢? 既然Meta相对于Ctrl而higher, 反过来Ctrl则是Lower;
 因此向下翻页是C-v.
