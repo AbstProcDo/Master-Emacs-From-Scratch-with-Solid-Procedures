@@ -1,6 +1,6 @@
 * 00.Preface
 “零秒”乃直觉力,有效应用我们的直觉的巨大力量, 而不必案牍劳形, 悬梁刺股,
-起标题真煞费脑筋, 
+起标题真煞费脑筋,
 若标题为“应用直觉思维和潜意识的力量, 在Emacs上精进", 则真是啰里啰嗦；
 或者直觉力精通Emacs,则语法不通. 此处的“零秒”即“intuition"而“instant" 灵犀一点通； 非物理概念上的“零秒”；
 步步为营, 仿照曾国藩的战术“结硬寨, 打呆仗”, 初时很慢, 待工事渐成, 则坚不可摧；
@@ -25,7 +25,6 @@ M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事�
 比如从目录中打开一个文件, 可以M-x find-file,
 需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
 sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
-
 * 01.Semantic Keybinding
 
 Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义Ctrl的技术, 简化Meta的流程.
@@ -107,7 +106,6 @@ M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏�
 M-<, to the biginning of the buffer
 M->, to the end of the buffer.
 # 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
-
 * 02.Emacs as an Editor
 [[01.semantic keybinding]] 初窥了Emacs简单易用的特性之一便是语义化键绑定,
 语义化包含两个方面:
@@ -246,9 +244,64 @@ C-x s   保存全部文件, 保存全部文件功能更常用, 因此组合键�
 (auto-save-visited-mode +1)
 #+end_src
 以上完结, 马上进入精彩的部分.
-
 * 03.God's Eyes and Hands by Dired and Bookmarks
-Dired初窥
+** Dired操作一览:
+
+1. Entering Dired: C-x d
+2. Navigation: C-n C-p
+3. Delete files: d, x, D
+4. Flagging many files at once:
+   1) # (file start with #)
+   2) ~ (flag all backup files whose name end with ~)
+   3) % d regexp (delete all match regex)
+
+5. Visiting Files
+   - f or e (visit current file)
+   - o (another window to display and switch fucus)
+   - C-o (visit but not switch focus)
+   - v (view-mode)
+   - ^ (dired-up)
+
+6. Dired Marks vs. Flags
+   - * * excutable files
+   - * m mark
+   - * @ symbolic link
+   - * / directory
+   - * u remove the current
+   - U remove all
+   - % m regex
+7. Operatons on files
+   - C copy
+   - D delete
+   - R rename
+   - H hardlink
+   - S symblic link
+   - Z, c
+8. Shell Commands in Dired
+   - 这次阅读最大的收获, 可以直接 & 和 X
+9. Transform files names
+   - % u Uppper-case
+   - % l lowercase
+10. File comparision
+   - dired-diff
+11. Subdirectory in Dired
+   - i
+12. Subdirectories switch in Dired
+   -
+13. Moving Over Subdirectories
+    -
+14. Hiding Subdirectories
+    -
+15. Updating the Dired Buffer
+    g
+16. Dired and find
+   find-name-dired
+17. Editing the dired Buffer
+    wdired
+18. View Images thumbnails
+    image-dired-display-thumb
+
+** Dired初窥
 在EmacsManual目录下调出Dird后,
 快速略扫各个文件的主要内容.
 从配置中添加下面的代码
@@ -263,11 +316,14 @@ Dired初窥
                                       (dired-display-file)))))
 #+end_src
 M-x 调用 =dired-follow-mode=
-
+x
 在目录上C-n和C-p上下移动光标.
 
 #+ATTR_HTML: :width 500px
 [[file:images/pre-dired.gif]]
+
+
+
 
 * 04.Emacs as a Notebook by Org
 * 05.Emacs as a Agenda by Org
@@ -449,3 +505,4 @@ do so (now or later) by using -b with the checkout command again. Example:
   git checkout -b <new-branch-name>
 
 HEAD is now at 613ae49 Chapter 1: initial version (1a)
+
