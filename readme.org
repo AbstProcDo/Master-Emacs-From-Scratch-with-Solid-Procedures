@@ -266,7 +266,6 @@ x
 #+ATTR_HTML: :width 500px
 [[file:images/pre-dired.gif]]
 
-
 ** Dired操作归纳:
 
 1. Entering Dired: C-x d
