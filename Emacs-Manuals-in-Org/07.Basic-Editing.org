@@ -2,10 +2,9 @@
 * 7) Basic Editing Commands
 
 Here we explain the basics of how to enter text, make corrections, and save the text in a file. If this material is new to you, we suggest you first run the Emacs learn-by-doing tutorial, by typing C-h t (=help-with-tutorial=).
+
 * 7.1 Inserting Text
-    :PROPERTIES:
-    :CUSTOM_ID: inserting-text
-    :END:
+
 
 You can insert an ordinary graphic character (e.g., 'a', 'B', '3', and '=') by typing the associated key. This adds the character to the buffer at point. Insertion moves point forward, so that point remains just after the inserted text. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Point][Point]].
 
@@ -19,17 +18,8 @@ To insert a non-graphic character, or a character that your keyboard does not su
 
 - C-q followed by any non-graphic character (even C-g) inserts that character. For instance, C-q inserts a literal 'DEL' character.
 
-- C-q
+- C-q followed by a sequence of octal digits inserts the character with the specified octal character code. You can use any number of octal digits; any non-digit terminates the sequence. If the terminating character is , that serves only to terminate the sequence. Any other non-digit terminates the sequence and then acts as normal input---thus, C-q 1 0 1 B   inserts 'AB'.
 
-  followed by a sequence of octal digits inserts the character with the specified octal character code. You can use any number of octal digits; any non-digit terminates the sequence. If the terminating character is , that serves only to terminate the sequence. Any other non-digit terminates the sequence and then acts as normal input---thus,
-
-  C-q 1 0 1 B
-
-  inserts ‘
-
-  AB
-
-  '.
 
   The use of octal sequences is disabled in ordinary non-binary Overwrite mode, to give you a convenient way to insert a digit instead of overwriting with it.
 
@@ -52,13 +42,10 @@ For example, the following all insert the same character:
 
 A numeric argument to C-q or C-x 8 ... specifies how many copies of the character to insert (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Arguments][Arguments]]).
 
-In addition, in some contexts, if you type a quotation using grave accent and apostrophe =like this', it is converted to a form='like this'=using single quotation marks, even without C-x 8 commands.  Similarly, typing a quotation ``like this'' using double grave accent and apostrophe converts it to a form="like this"` using double quotation marks. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quotation-Marks][Quotation Marks]].
+In addition, in some contexts, if you type a quotation using grave accent and apostrophe `like this', it is converted to a form ‘like this’ using single quotation marks, even without C-x 8 commands. Similarly, typing a quotation ``like this'' using double grave accent and apostrophe converts it to a form “like this” using double quotation marks. See Quotation Marks.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Erasing][Erasing]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Inserting-Text][Inserting Text]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.2 Changing the Location of Point
-    :PROPERTIES:
-    :CUSTOM_ID: changing-the-location-of-point
-    :END:
+# point的移动, cursor那一部分已经涉及.
 
 To do more than insert characters, you have to know how to move point (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Point][Point]]). The keyboard commands C-f, C-b, C-n, and C-p move point to the right, left, down, and up, respectively. You can also move point using the arrow keys present on most keyboards: , , , and ; however, many Emacs users find that it is slower to use the arrow keys than the control keys, because you need to move your hand to the area of the keyboard where those keys are located.
 
@@ -68,7 +55,7 @@ You can also click the left mouse button to move point to the position clicked. 
 
   Move forward one character (=forward-char=).
 
--
+- <Right>
 
   This command (=right-char=) behaves like C-f, except when point is in a right-to-left paragraph (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Bidirectional-Editing][Bidirectional Editing]]).
 
@@ -76,41 +63,34 @@ You can also click the left mouse button to move point to the position clicked. 
 
   Move backward one character (=backward-char=).
 
--
+- <Left>
 
   This command (=left-char=) behaves like C-b, except if the current paragraph is right-to-left (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Bidirectional-Editing][Bidirectional Editing]]).
 
 - C-n
-
--
+- <Down>
 
   Move down one screen line (=next-line=). This command attempts to keep the horizontal position unchanged, so if you start in the middle of one line, you move to the middle of the next.
 
 - C-p
-
--
+- <UP>
 
   Move up one screen line (=previous-line=). This command preserves position within the line, like C-n.
 
 - C-a
-
--
+- <Home>
 
   Move to the beginning of the line (=move-beginning-of-line=).
 
 - C-e
-
--
-
   Move to the end of the line (=move-end-of-line=).
 
 - M-f
 
   Move forward one word (=forward-word=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Words][Words]].
 
-- C-
-
-- M-
+- C-<RIGHT>
+- M-<RIGHT>
 
   This command (=right-word=) behaves like M-f, except it moves /backward/ by one word if the current paragraph is right-to-left. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Bidirectional-Editing][Bidirectional Editing]].
 
@@ -138,17 +118,9 @@ You can also click the left mouse button to move point to the position clicked. 
 
 - C-v
 
--
-
--
-
   Scroll the display one screen forward, and move point onscreen if necessary (=scroll-up-command=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Scrolling][Scrolling]].
 
 - M-v
-
--
-
--
 
   Scroll one screen backward, and move point onscreen if necessary (=scroll-down-command=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Scrolling][Scrolling]].
 
@@ -182,25 +154,15 @@ When =line-move-visual= is =nil=, you can also set the variable =track-eol= to a
 
 C-n normally stops at the end of the buffer when you use it on the last line in the buffer. However, if you set the variable =next-line-add-newlines= to a non-=nil= value, C-n on the last line of a buffer creates an additional line at the end and moves down into it.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Undo][Basic Undo]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Moving-Point][Moving Point]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.3 Erasing Text
-    :PROPERTIES:
-    :CUSTOM_ID: erasing-text
-    :END:
 
 ​
-
--
-
-  #+BEGIN_HTML
-    <DEL>
-  #+END_HTML
-
--
+- <DEL>
+- <BACKSPACE>退格键．
 
   Delete the character before point, or the region if it is active (=delete-backward-char=).
 
--
+- <DELETE>
 
   Delete the character after point, or the region if it is active (=delete-forward-char=).
 
@@ -216,11 +178,11 @@ Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Undo][Basic Undo
 
   Kill forward to the end of the next word (=kill-word=).
 
-- M-
-
-- M-
+- M-<DEL>
 
   Kill back to the beginning of the previous word (=backward-kill-word=).
+# 得到: M-<DEL> 从后面删除.
+# 所以都是删除前面, 所以删除操作很简单, 与delete搭配是退格, backwords, 向后删除; 与字母键d,k搭配是向前删除, forword.
 
 The (=delete-backward-char=) command removes the character before point, moving the cursor and the characters after it backwards. If point was at the beginning of a line, this deletes the preceding newline, joining this line to the previous one.
 
@@ -238,11 +200,8 @@ C-k (=kill-line=) erases (kills) a line at a time. If you type C-k at the beginn
 
 See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]], for more information about C-k and related commands.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Files][Basic Files]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Erasing][Erasing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
+# 总结, 删除操作.
 * 7.4 Undoing Changes
-    :PROPERTIES:
-    :CUSTOM_ID: undoing-changes
-    :END:
 
 - C-/
 
@@ -260,11 +219,7 @@ If you repeat C-/ (or its aliases), each repetition undoes another, earlier chan
 
 To learn more about the =undo= command, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Undo][Undo]].
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Help][Basic Help]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Undo][Basic Undo]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.5 Files
-    :PROPERTIES:
-    :CUSTOM_ID: files
-    :END:
 
 Text that you insert in an Emacs buffer lasts only as long as the Emacs session. To keep any text permanently, you must put it in a file.
 
@@ -282,11 +237,7 @@ To create a file, just visit it with C-x C-f as if it already existed. This crea
 
 To learn more about using files in Emacs, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Files][Files]].
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Blank-Lines][Blank Lines]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Files][Basic Files]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.6 Help
-    :PROPERTIES:
-    :CUSTOM_ID: help
-    :END:
 
 If you forget what a key does, you can find out by typing C-h k (=describe-key=), followed by the key of interest; for example, C-h k C-n tells you what C-n does.
 
@@ -294,11 +245,8 @@ The prefix key C-h stands for "help". The key serves as an alias for C-h. Apart 
 
 See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Help][Help]], for details.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Continuation-Lines][Continuation Lines]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic-Help][Basic Help]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.7 Blank Lines
-    :PROPERTIES:
-    :CUSTOM_ID: blank-lines
-    :END:
+
 
 Here are special commands and techniques for inserting and deleting blank lines.
 
@@ -315,14 +263,11 @@ Here are special commands and techniques for inserting and deleting blank lines.
 You can make several blank lines by typing C-o several times, or by giving it a numeric argument specifying how many blank lines to make. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Arguments][Arguments]], for how. If you have a fill prefix, the C-o command inserts the fill prefix on the new line, if typed at the beginning of a line. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fill-Prefix][Fill Prefix]].
 
 The easy way to get rid of extra blank lines is with the command C-x C-o (=delete-blank-lines=). If point lies within a run of several blank lines, C-x C-o deletes all but one of them. If point is on a single blank line, C-x C-o deletes it. If point is on a nonblank line, C-x C-o deletes all following blank lines, if any exists.
+# 总结, 对bla
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Position-Info][Position Info]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Blank-Lines][Blank Lines]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.8 Continuation Lines
-    :PROPERTIES:
-    :CUSTOM_ID: continuation-lines
-    :END:
 
-Sometimes, a line of text in the buffer---a logical line---is too long to fit in the window, and Emacs displays it as two or more screen lines. This is called line wrapping or continuation, and the long logical line is called a continued line. On a graphical display, Emacs indicates line wrapping with small bent arrows in the left and right window fringes. On a text terminal, Emacs indicates line wrapping by displaying a ‘' character at the right margin.
+Sometimes, a line of text in the buffer---a logical line---is too long to fit in the window, and Emacs displays it as two or more screen lines. This is called line wrapping or continuation, and the long logical line is called a continued line. On a graphical display, Emacs indicates line wrapping with small bent arrows in the left and right window ~fringes~. On a text terminal, Emacs indicates line wrapping by displaying a ‘' character at the right margin.
 
 Most commands that act on lines act on logical lines, not screen lines. For instance, C-k kills a logical line. As described earlier, C-n (=next-line=) and C-p (=previous-line=) are special exceptions: they move point down and up, respectively, by one screen line (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Moving-Point][Moving Point]]).
 
@@ -332,11 +277,8 @@ By default, continued lines are wrapped at the right window edge. Since the wrap
 
 Sometimes, you may need to edit files containing many long logical lines, and it may not be practical to break them all up by adding newlines. In that case, you can use Visual Line mode, which enables word wrapping: instead of wrapping long lines exactly at the right window edge, Emacs wraps them at the word boundaries (i.e., space or tab characters) nearest to the right window edge. Visual Line mode also redefines editing commands such as C-a, C-n, and C-k to operate on screen lines rather than logical lines. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Visual-Line-Mode][Visual Line Mode]].
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Arguments][Arguments]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Continuation-Lines][Continuation Lines]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
+# 总结：global-visual-line-mode
 * 7.9 Cursor Position Information
-    :PROPERTIES:
-    :CUSTOM_ID: cursor-position-information
-    :END:
 
 Here are commands to get information about the size and position of parts of the buffer, and to count words and lines.
 
@@ -393,39 +335,25 @@ If the buffer has been narrowed, making some of the text at the beginning and th
 where the two extra numbers give the smallest and largest character position that point is allowed to assume. The characters between those two positions are the accessible ones. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Narrowing][Narrowing]].
 
 Related, but different feature is =display-line-numbers-mode= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Display-Custom][Display Custom]]).
+# Cursor information这一点倒是有意思.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Repeating][Repeating]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Position-Info][Position Info]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.10 Numeric Arguments
-    :PROPERTIES:
-    :CUSTOM_ID: numeric-arguments
-    :END:
 
 In the terminology of mathematics and computing, argument means "data provided to a function or operation". You can give any Emacs command a numeric argument (also called a prefix argument). Some commands interpret the argument as a repetition count. For example, giving C-f an argument of ten causes it to move point forward by ten characters instead of one. With these commands, no argument is equivalent to an argument of one, and negative arguments cause them to move or act in the opposite direction.
 
-The easiest way to specify a numeric argument is to type a digit and/or a minus sign while holding down the
-
-#+BEGIN_HTML
-  <Meta>
-#+END_HTML
-
-key. For example,
+The easiest way to specify a numeric argument is to type a digit and/or a minus sign while holding down the <Meta> key. For example,
 
 #+BEGIN_EXAMPLE
-         M-5 C-n
+M-5 C-n
 #+END_EXAMPLE
 
 moves down five lines. The keys M-1, M-2, and so on, as well as M--, are bound to commands (=digit-argument= and =negative-argument=) that set up an argument for the next command. M-- without digits normally means −1.
 
-If you enter more than one digit, you need not hold down the
-
-#+BEGIN_HTML
-  <Meta>
-#+END_HTML
-
+If you enter more than one digit, you need not hold down the <Meta>
 key for the second and subsequent digits. Thus, to move down fifty lines, type
 
 #+BEGIN_EXAMPLE
-         M-5 0 C-n
+M-5 0 C-n
 #+END_EXAMPLE
 
 Note that this /does not/ insert five copies of '0' and move down one line, as you might expect---the '0' is treated as part of the prefix argument.
@@ -450,9 +378,6 @@ On graphical displays, C-0, C-1, etc. act the same as M-0, M-1, etc.
 
 Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Arguments][Arguments]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Basic][Basic]]
 * 7.11 Repeating a Command
-    :PROPERTIES:
-    :CUSTOM_ID: repeating-a-command
-    :END:
 
 Many simple commands, such as those invoked with a single key or with M-x command-name , can be repeated by invoking them with a numeric argument that serves as a repeat count (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Arguments][Arguments]]). However, if the command you want to repeat prompts for input, or uses a numeric argument in another way, that method won't work.
 
@@ -462,3 +387,13 @@ To repeat the command more than once, type additional z's: each z repeats the co
 
 For example, suppose you type C-u 2 0 C-d to delete 20 characters. You can repeat that command (including its argument) three additional times, to delete a total of 80 characters, by typing C-x z z z. The first C-x z repeats the command once, and each subsequent z repeats it once again.
 onal times, to delete a total of 80 characters, by typing C-x z z z. The first C-x z repeats the command once, and each subsequent z repeats it once again.
+* 总结：
+# 总结:
+insert: C-q, Filling, Indentation, Completion
+delete:
+modify:
+search: undo:
+blank lines:
+filling(关闭auto-fill-mode, 开启global-visual-line-mode)
+numeric arguments
+repeat C-x z

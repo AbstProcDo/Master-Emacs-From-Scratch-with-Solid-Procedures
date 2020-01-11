@@ -12,9 +12,6 @@ Emacs has other major modes for text which contains embedded commands, such as T
 If you need to edit ASCII art pictures made out of text characters, use Picture mode, a special major mode for editing such pictures. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Picture-Mode][Picture Mode]].
 
 * 25.1 Words
-    :PROPERTIES:
-    :CUSTOM_ID: words
-    :END:
 
 Emacs defines several commands for moving over or operating on words:
 
@@ -67,9 +64,6 @@ In addition, see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Position-In
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Paragraphs][Paragraphs]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Words][Words]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text][Text]]
 
 * 25.2 Sentences
-    :PROPERTIES:
-    :CUSTOM_ID: sentences
-    :END:
 
 The Emacs commands for manipulating sentences and paragraphs are mostly on Meta keys, like the word-handling commands.
 
@@ -108,9 +102,6 @@ Some languages, such as Thai, do not use periods to indicate the end of a senten
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Pages][Pages]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sentences][Sentences]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text][Text]]
 
 * 25.3 Paragraphs
-    :PROPERTIES:
-    :CUSTOM_ID: paragraphs
-    :END:
 
 The Emacs commands for manipulating paragraphs are also on Meta keys.
 
@@ -143,9 +134,7 @@ Note that =paragraph-start= and =paragraph-separate= are matched against the tex
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quotation-Marks][Quotation Marks]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Paragraphs][Paragraphs]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text][Text]]
 
 * 25.4 Pages
-    :PROPERTIES:
-    :CUSTOM_ID: pages
-    :END:
+
 
 Within some text files, text is divided into pages delimited by the formfeed character (ASCII code 12, also denoted as 'control-L'), which is displayed in Emacs as the escape sequence '\^L' (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text-Display][Text Display]]). Traditionally, when such text files are printed to hardcopy, each formfeed character forces a page break. Most Emacs commands treat it just like any other character, so you can insert it with C-q C-l, delete it with , etc. In addition, Emacs provides commands to move over pages and operate on them.
 
@@ -204,12 +193,7 @@ You can customize the behavior of Electric Quote mode by customizing variables t
 
 Electric Quote mode is disabled by default. To toggle it in a single buffer, use M-x electric-quote-local-mode. To toggle it globally, type M-x electric-quote-mode. To suppress it for a single use, type C-q =or C-q ' instead of= or '. To insert a curved quote even when Electric Quote is disabled or inactive, you can type C-x 8 [ for =‘=, C-x 8 ] for =’=, C-x 8 { for ", and C-x 8 } for". See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Inserting-Text][Inserting Text]]. Note that the value of =electric-quote-chars= does not affect these keybindings, they are not keybindings of =electric-quote-mode= but bound in =global-map=.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Case][Case]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Quotation-Marks][Quotation Marks]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text][Text]]
-
 * 25.6 Filling Text
-    :PROPERTIES:
-    :CUSTOM_ID: filling-text
-    :END:
 
 Filling text means breaking it up into lines that fit a specified width. Emacs does filling in two ways. In Auto Fill mode, inserting text with self-inserting characters also automatically fills it. There are also explicit fill commands that you can use when editing text.
 
@@ -376,9 +360,7 @@ You can specify more complex ways of choosing a fill prefix automatically by set
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text-Mode][Text Mode]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Filling][Filling]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text][Text]]
 
 * 25.7 Case Conversion Commands
-    :PROPERTIES:
-    :CUSTOM_ID: case-conversion-commands
-    :END:
+
 
 Emacs has commands for converting either a single word or any arbitrary range of text to upper case or to lower case.
 
@@ -415,9 +397,7 @@ The region case conversion commands =upcase-region= and =downcase-region= are no
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Outline-Mode][Outline Mode]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Case][Case]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text][Text]]
 
 * 25.8 Text Mode
-    :PROPERTIES:
-    :CUSTOM_ID: text-mode
-    :END:
+
 
 Text mode is a major mode for editing files of text in a human language. Files which have names ending in the extension .txt are usually opened in Text mode (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Choosing-Modes][Choosing Modes]]). To explicitly switch to Text mode, type M-x text-mode.
 
@@ -438,9 +418,7 @@ The following sections describe several major modes that are derived from Text m
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Org-Mode][Org Mode]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text-Mode][Text Mode]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Text][Text]]
 
 * 25.9 Outline Mode
-    :PROPERTIES:
-    :CUSTOM_ID: outline-mode
-    :END:
+
 
 Outline mode is a major mode derived from Text mode, which is specialized for editing outlines. It provides commands to navigate between entries in the outline structure, and commands to make parts of a buffer temporarily invisible, so that the outline structure may be more easily viewed. Type M-x outline-mode to switch to Outline mode. Entering Outline mode runs the hook =text-mode-hook= followed by the hook =outline-mode-hook= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Hooks][Hooks]]).
 

@@ -8,9 +8,6 @@ In Emacs, killing means erasing text and copying it into the kill ring. Yanking 
 Killing and yanking are the most common way to move or copy text within Emacs. It is very versatile, because there are commands for killing many different types of syntactic units.
 
 * 12.1 Deletion and Killing
-    :PROPERTIES:
-    :CUSTOM_ID: deletion-and-killing
-    :END:
 
 Most commands which erase text from the buffer save it in the kill ring (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Kill-Ring][Kill Ring]]). These are known as kill commands, and their names normally contain the word 'kill' (e.g., =kill-line=). The kill ring stores several recent kills, not just the last one, so killing is a very safe operation: you don't have to worry much about losing text that you previously killed. The kill ring is shared by all buffers, so text that is killed in one buffer can be yanked into another buffer.
 
@@ -30,62 +27,34 @@ You can also use the mouse to kill and yank. See [[file:///home/me/Desktop/GNU%2
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing-by-Lines][Killing by Lines]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Deletion-and-Killing][Deletion and Killing]]
 
 ** 12.1.1 Deletion
-     :PROPERTIES:
-     :CUSTOM_ID: deletion
-     :END:
 
 Deletion means erasing text and not saving it in the kill ring. For the most part, the Emacs commands that delete text are those that erase just one character or only whitespace.
 
--
-
-  #+BEGIN_HTML
-    <DEL>
-  #+END_HTML
-
--
-
+<DEL>
+<BACKSPACE>
   Delete the previous character, or the text in the region if it is active (=delete-backward-char=).
 
 -
-
   Delete the next character, or the text in the region if it is active (=delete-forward-char=).
-
 - C-d
-
   Delete the next character (=delete-char=).
-
-- M-\\
-
-  Delete spaces and tabs around point (=delete-horizontal-space=).
-
 - M-
-
+  Delete spaces and tabs around point (=delete-horizontal-space=).
   Delete spaces and tabs around point, leaving one space (=just-one-space=).
-
 - C-x C-o
-
   Delete blank lines around the current line (=delete-blank-lines=).
-
-- M-\^
-
+- M-^
   Join two lines by deleting the intervening newline, along with any indentation following it (=delete-indentation=).
-
 We have already described the basic deletion commands (=delete-backward-char=), (=delete-forward-char=), and C-d (=delete-char=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Erasing][Erasing]]. With a numeric argument, they delete the specified number of characters. If the numeric argument is omitted or one, and delete all the text in the region if it is active (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Using-Region][Using Region]]).
-
 The other delete commands are those that delete only whitespace characters: spaces, tabs and newlines. M- (=delete-horizontal-space=) deletes all the spaces and tab characters before and after point. With a prefix argument, this only deletes spaces and tab characters before point. M- (=just-one-space=) does likewise but leaves a single space before point, regardless of the number of spaces that existed previously (even if there were none before). With a numeric argument n, it leaves n spaces before point if n is positive; if n is negative, it deletes newlines in addition to spaces and tabs, leaving −n spaces before point. The command =cycle-spacing= acts like a more flexible version of =just-one-space=. It does different things if you call it repeatedly in succession. The first call acts like =just-one-space=, the next removes all whitespace, and a third call restores the original whitespace.
-
 C-x C-o (=delete-blank-lines=) deletes all blank lines after the current line. If the current line is blank, it deletes all blank lines preceding the current line as well (leaving one blank line, the current line). On a solitary blank line, it deletes that line.
-
-M-\^ (=delete-indentation=) joins the current line and the previous line, by deleting a newline and all surrounding spaces, usually leaving a single space. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Indentation][M-\^]].
+# 得到: 这里应该成为我的常用命令.
+# 实现对空行的远程控制与处理.
+M-^ (=delete-indentation=) joins the current line and the previous line, by deleting a newline and all surrounding spaces, usually leaving a single space. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Indentation][M-^]].
 
 The command =delete-duplicate-lines= searches the region for identical lines, and removes all but one copy of each. Normally it keeps the first instance of each repeated line, but with a C-u prefix argument it keeps the last. With a C-u C-u prefix argument, it only searches for adjacent identical lines. This is a more efficient mode of operation, useful when the lines have already been sorted. With a C-u C-u C-u prefix argument, it retains repeated blank lines.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Kill-Commands][Other Kill Commands]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Deletion][Deletion]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Deletion-and-Killing][Deletion and Killing]]
-
 ** 12.1.2 Killing by Lines
-     :PROPERTIES:
-     :CUSTOM_ID: killing-by-lines
-     :END:
 
 - C-k
 
@@ -107,12 +76,7 @@ If the variable =kill-whole-line= is non-=nil=, C-k at the very beginning of a l
 
 C-S-backspace (=kill-whole-line=) kills a whole line including its newline, regardless of the position of point within the line. Note that many text terminals will prevent you from typing the key sequence C-S-backspace.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Kill-Options][Kill Options]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing-by-Lines][Killing by Lines]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Deletion-and-Killing][Deletion and Killing]]
-
 ** 12.1.3 Other Kill Commands
-     :PROPERTIES:
-     :CUSTOM_ID: other-kill-commands
-     :END:
 
 - C-w
 
@@ -126,7 +90,7 @@ Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Kill-Options][Kill Opt
 
   Kill the next word (=kill-word=). See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Words][Words]].
 
-- M-
+- M-<DEL>
 
   Kill one word backwards (=backward-kill-word=).
 
@@ -155,9 +119,6 @@ The command M-z (=zap-to-char=) combines killing with searching: it reads a char
 Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Other-Kill-Commands][Other Kill Commands]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Deletion-and-Killing][Deletion and Killing]]
 
 ** 12.1.4 Options for Killing
-     :PROPERTIES:
-     :CUSTOM_ID: options-for-killing
-     :END:
 
 Some specialized buffers contain read-only text, which cannot be modified and therefore cannot be killed. The kill commands work specially in a read-only buffer: they move over text and copy it to the kill ring, without actually deleting it from the buffer. Normally, they also beep and display an error message when this happens. But if you set the variable =kill-read-only-ok= to a non-=nil= value, they just print a message in the echo area to explain why the text has not been erased.
 
@@ -165,9 +126,6 @@ If you change the variable =kill-do-not-save-duplicates= to a non-=nil= value, i
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Cut-and-Paste][Cut and Paste]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Deletion-and-Killing][Deletion and Killing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]]
 * 12.2 Yanking
-    :PROPERTIES:
-    :CUSTOM_ID: yanking
-    :END:
 
 Yanking means reinserting text previously killed. The usual way to move or copy text is to kill it and then yank it elsewhere.
 
@@ -192,8 +150,6 @@ On graphical displays, C-y first checks if another application has placed any te
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Kill-Ring][Kill Ring]]: Where killed text is stored.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Earlier-Kills][Earlier Kills]]: Yanking something killed some time ago.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Appending-Kills][Appending Kills]]: Several kills in a row all yank together.
-
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Earlier-Kills][Earlier Kills]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Yanking][Yanking]]
 
 ** 12.2.1 The Kill Ring
      :PROPERTIES:
@@ -269,9 +225,6 @@ By default, Emacs uses UTF-8 as the coding system for inter-program text transfe
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Primary-Selection][Primary Selection]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Cut-and-Paste][Cut and Paste]]
 
 ** 12.3.1 Using the Clipboard
-     :PROPERTIES:
-     :CUSTOM_ID: using-the-clipboard
-     :END:
 
 The clipboard is the facility that most graphical applications use for "cutting and pasting". When the clipboard exists, the kill and yank commands in Emacs make use of it.
 
@@ -287,16 +240,13 @@ To prevent kill and yank commands from accessing the clipboard, change the varia
 
 Many X desktop environments support a feature called the clipboard manager. If you exit Emacs while it is the current "owner" of the clipboard data, and there is a clipboard manager running, Emacs transfers the clipboard data to the clipboard manager so that it is not lost. In some circumstances, this may cause a delay when exiting Emacs; if you wish to prevent Emacs from transferring data to the clipboard manager, change the variable =x-select-enable-clipboard-manager= to =nil=.
 
-Since strings containing NUL bytes are usually truncated when passed through the clipboard, Emacs replaces such characters with "\0" before transferring them to the system's clipboard.
+Since strings containing NUL bytes are usually truncated when passed through the clipboard, Emacs replaces such characters with "0" before transferring them to the system's clipboard.
 
 Prior to Emacs 24, the kill and yank commands used the primary selection (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Primary-Selection][Primary Selection]]), not the clipboard. If you prefer this behavior, change =select-enable-clipboard= to =nil=, =select-enable-primary= to =t=, and =mouse-drag-copy-region= to =t=. In this case, you can use the following commands to act explicitly on the clipboard: =clipboard-kill-region= kills the region and saves it to the clipboard; =clipboard-kill-ring-save= copies the region to the kill ring and saves it to the clipboard; and =clipboard-yank= yanks the contents of the clipboard at point.
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Secondary-Selection][Secondary Selection]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Clipboard][Clipboard]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Cut-and-Paste][Cut and Paste]]
 
 ** 12.3.2 Cut and Paste with Other Window Applications
-     :PROPERTIES:
-     :CUSTOM_ID: cut-and-paste-with-other-window-applications
-     :END:
 
 Under the X Window System, there exists a primary selection containing the last stretch of text selected in an X application (usually by dragging the mouse). Typically, this text can be inserted into other X applications by mouse-2 clicks. The primary selection is separate from the clipboard. Its contents are more fragile; they are overwritten each time you select text with the mouse, whereas the clipboard is only overwritten by explicit cut or copy commands.
 
@@ -311,9 +261,7 @@ MS-Windows provides no primary selection, but Emacs emulates it within a single 
 Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Primary-Selection][Primary Selection]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Cut-and-Paste][Cut and Paste]]
 
 ** 12.3.3 Secondary Selection
-     :PROPERTIES:
-     :CUSTOM_ID: secondary-selection
-     :END:
+# 弄这些乱七八糟的概念干嘛呢?
 
 In addition to the primary selection, the X Window System provides a second similar facility known as the secondary selection. Nowadays, few X applications make use of the secondary selection, but you can access it using the following Emacs commands:
 
@@ -339,9 +287,6 @@ If =mouse-yank-at-point= is non-=nil=, M-mouse-2 yanks at point. Then it does no
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rectangles][Rectangles]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Cut-and-Paste][Cut and Paste]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]]
 * 12.4 Accumulating Text
-    :PROPERTIES:
-    :CUSTOM_ID: accumulating-text
-    :END:
 
 Usually we copy or move text by killing it and yanking it, but there are other convenient methods for copying one block of text in many places, or for copying many scattered blocks of text into one place. Here we describe the commands to accumulate scattered pieces of text into a buffer or into a file.
 
@@ -381,9 +326,7 @@ Another way to move text around is to store it in a register. See [[file:///home
 
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#CUA-Bindings][CUA Bindings]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Accumulating-Text][Accumulating Text]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]]
 * 12.5 Rectangles
-    :PROPERTIES:
-    :CUSTOM_ID: rectangles
-    :END:
+
 
 Rectangle commands operate on rectangular areas of the text: all the characters between a certain pair of columns, in a certain range of lines. Emacs has commands to kill rectangles, yank killed rectangles, clear them out, fill them with blanks or text, or delete them. Rectangle commands are useful with text in multicolumn formats, and for changing text into or out of such formats.
 
@@ -422,7 +365,9 @@ The region-rectangle is controlled in much the same way as the region is control
 - M-x delete-whitespace-rectangle
 
   Delete whitespace in each of the lines on the specified rectangle, starting from the left edge column of the rectangle.
-
+# 2020-01-04 11:36:52
+# 这一条太管用了.
+# https://emacs.stackexchange.com/a/45515/21203
 - C-x r t string
 
   Replace rectangle contents with string on each line (=string-rectangle=).
@@ -465,11 +410,8 @@ Unlike the standard region, the region-rectangle can have its corners extended p
 
 When the region is in rectangle-mark-mode, C-x C-x runs the command =rectangle-exchange-point-and-mark=, which cycles between the four corners of the region-rectangle. This comes in handy if you want to modify the dimensions of the region-rectangle before invoking an operation on the marked text.
 
-Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Rectangles][Rectangles]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Killing][Killing]]
 * 12.6 CUA Bindings
-    :PROPERTIES:
-    :CUSTOM_ID: cua-bindings
-    :END:
+# 没有啥意思.
 
 The command M-x cua-mode sets up key bindings that are compatible with the Common User Access (CUA) system used in many other applications.
 
@@ -496,4 +438,3 @@ r than at the current position.
 
 For example, to copy words from various buffers into a word list in a given buffer, set the global mark in the target buffer, then navigate to each of the words you want in the list, mark it (e.g., with S-M-f), copy it to the list with C-c or M-w, and insert a newline after the word in the target list by pressing .
 
-Next

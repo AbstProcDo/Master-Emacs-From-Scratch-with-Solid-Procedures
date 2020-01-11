@@ -2,14 +2,11 @@
 
 * 16) Commands for Fixing Typos
 
-In this chapter we describe commands that are useful when you catch a mistake while editing. The most fundamental of these commands is the undo command C-/ (also bound to C-x u and C-\_). This undoes a single command, or a part of a command (as in the case of =query-replace=), or several consecutive character insertions. Consecutive repetitions of C-/ undo earlier and earlier changes, back to the limit of the undo information available.
+In this chapter we describe commands that are useful when you catch a mistake while editing. The most fundamental of these commands is the undo command C-/ (also bound to C-x u and C-_). This undoes a single command, or a part of a command (as in the case of =query-replace=), or several consecutive character insertions. Consecutive repetitions of C-/ undo earlier and earlier changes, back to the limit of the undo information available.
 
 Aside from the commands described here, you can erase text using deletion commands such as (=delete-backward-char=). These were described earlier in this manual. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Erasing][Erasing]].
 
 * 16.1 Undo
-    :PROPERTIES:
-    :CUSTOM_ID: undo
-    :END:
 
 The undo command reverses recent changes in the buffer's text. Each buffer records changes individually, and the undo command always applies to the current buffer. You can undo all the changes in a buffer for as far back as the buffer's records go. Usually, each editing command makes a separate entry in the undo records, but some commands such as =query-replace= divide their changes into multiple entries for flexibility in undoing. Consecutive character insertion commands are usually grouped together into a single undo record, to make undoing less tedious.
 
@@ -17,11 +14,11 @@ The undo command reverses recent changes in the buffer's text. Each buffer recor
 
 - C-x u
 
-- C-\_
+- C-_
 
   Undo one entry in the current buffer's undo records (=undo=).
 
-  To begin to undo, type C-/ (or its aliases, C-\_ or C-x u)[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-6][6]]. This undoes the most recent change in the buffer, and moves point back to where it was before that change. Consecutive repetitions of C-/ (or its aliases) undo earlier and earlier changes in the current buffer. If all the recorded changes have already been undone, the undo command signals an error.
+  To begin to undo, type C-/ (or its aliases, C-_ or C-x u)[[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#fn-6][6]]. This undoes the most recent change in the buffer, and moves point back to where it was before that change. Consecutive repetitions of C-/ (or its aliases) undo earlier and earlier changes in the current buffer. If all the recorded changes have already been undone, the undo command signals an error.
 
   Any command other than an undo command breaks the sequence of undo commands. Starting from that moment, the entire sequence of undo commands that you have just performed are themselves placed into the undo record. Therefore, to re-apply changes you have undone, type C-f or any other command that harmlessly breaks the sequence of undoing; then type C-/ one or more times to undo some of the undo commands.
 
@@ -41,27 +38,20 @@ The variable =undo-limit= sets a soft limit: Emacs keeps undo data for enough co
 
 Regardless of the values of those variables, the most recent change is never discarded unless it gets bigger than =undo-outer-limit= (normally 12,000,000). At that point, Emacs discards the undo data and warns you about it. This is the only situation in which you cannot undo the last command. If this happens, you can increase the value of =undo-outer-limit= to make it even less likely to happen in the future. But if you didn't expect the command to create such large undo data, then it is probably a bug and you should report it. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Bugs][Reporting Bugs]].
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fixing-Case][Fixing Case]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Undo][Undo]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fixit][Fixit]]
 
 * 16.2 Transposing Text
-    :PROPERTIES:
-    :CUSTOM_ID: transposing-text
-    :END:
+  
 
 - C-t
-
   Transpose two characters (=transpose-chars=).
 
 - M-t
-
   Transpose two words (=transpose-words=).
 
 - C-M-t
-
   Transpose two balanced expressions (=transpose-sexps=).
 
 - C-x C-t
-
   Transpose two lines (=transpose-lines=).
 
   The common error of transposing two characters can be fixed, when they are adjacent, with the C-t command (=transpose-chars=). Normally, C-t transposes the two characters on either side of point. When given at the end of a line, rather than transposing the last character of the line with the newline, which would be useless, C-t transposes the last two characters on the line. So, if you catch your transposition error right away, you can fix it with just a C-t. If you don't catch it so fast, you must move the cursor back between the two transposed characters before you type C-t. If you transposed a space with the last character of the word before it, the word motion commands (M-f, M-b, etc.) are a good way of getting there. Otherwise, a reverse search (C-r) is often the best way. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Search][Search]].
@@ -74,12 +64,7 @@ A numeric argument to a transpose command serves as a repeat count: it tells the
 
 A numeric argument of zero is assigned a special meaning (because otherwise a command with a repeat count of zero would do nothing): to transpose the character (or word or expression or line) ending after point with the one ending after the mark.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Transpose][Transpose]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fixit][Fixit]]
-
 * 16.3 Case Conversion
-    :PROPERTIES:
-    :CUSTOM_ID: case-conversion
-    :END:
 
 - M-- M-l
 
@@ -95,12 +80,7 @@ Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Spelling][Spelling]], 
 
   A very common error is to type words in the wrong case. Because of this, the word case-conversion commands M-l, M-u, and M-c have a special feature when used with a negative argument: they do not move the cursor. As soon as you see you have mistyped the last word, you can simply case-convert it and go on typing. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Case][Case]].
 
-Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fixing-Case][Fixing Case]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Fixit][Fixit]]
-
 * 16.4 Checking and Correcting Spelling
-    :PROPERTIES:
-    :CUSTOM_ID: checking-and-correcting-spelling
-    :END:
 
 This section describes the commands to check the spelling of a single word or of a portion of a buffer. These commands only work if a spelling checker program, one of Hunspell, Aspell, Ispell or Enchant, is installed. These programs are not part of Emacs, but one of them is usually installed on GNU/Linux and other free operating systems. See [[https://www.gnu.org/software/emacs/manual/html_mono/aspell.html#Top][Aspell]].
 

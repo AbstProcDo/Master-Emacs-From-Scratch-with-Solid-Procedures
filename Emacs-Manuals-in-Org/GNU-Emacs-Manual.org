@@ -1,0 +1,3524 @@
+* ##Emacs######################################################
+* The Emacs Editor
+
+Emacs is the extensible, customizable, self-documenting real-time display editor. This manual describes how to edit with Emacs and some of the ways to customize it; it corresponds to GNU Emacs version 26.3.
+
+The homepage for GNU Emacs is at https://www.gnu.org/software/emacs/. To view this manual in other formats, click [[https://www.gnu.org/software/emacs/manual/emacs.html][here]]. You can also purchase a printed copy from the [[https://shop.fsf.org/product/emacs-manual/][FSF store]].
+
+For information on extending Emacs, see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Top][Emacs Lisp]].
+
+This is the GNU Emacs Manual, updated for Emacs version 26.3.
+
+Copyright © 1985--1987, 1993--2019 Free Software Foundation, Inc.
+
+#+BEGIN_QUOTE
+  Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation; with the Invariant Sections being "The GNU Manifesto," "Distribution" and "GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU Manual," and with the Back-Cover Texts as in (a) below. A copy of the license is included in the section entitled "GNU Free Documentation License."
+
+  1) The FSF's Back-Cover Text is: "You have the freedom to copy and modify this GNU manual. Buying copies from the FSF supports it in developing GNU and promoting software freedom."
+|--------------------------------------------+-------------------------------------------------------------|
+| [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Distrib][Distrib]]                                    | How to get the latest Emacs distribution.                   |
+|--------------------------------------------+-------------------------------------------------------------|
+| [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Intro][Intro]]                                      | An introduction to Emacs concepts.                          |
+| One> Important General Concepts            |                                                             |
+| 1.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Screen][Screen]]                                   | How to interpret what you see on the screen.                |
+| 2.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#User-Input][User Input]]                               | Kinds of input events (characters, buttons, function keys). |
+| 3.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Keys][Keys]]                                     | Key sequences: what you type to request one editing action. |
+| 4.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Commands][Commands]]                                 | Named functions run by key sequences to do editing.         |
+| 5.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Entering-Emacs][Entering Emacs]]                           | Starting Emacs from the shell.                              |
+| 6.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Exiting][Exiting]]                                  | Stopping or killing Emacs.                                  |
+| Two> Fundamental Editing Commands          |                                                             |
+| 7.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Basic][Basic]]                                    | The most basic editing commands.                            |
+| 8.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Minibuffer][Minibuffer]]                               | Entering arguments that are prompted for.                   |
+| 9.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#M_002dx][M-x]]                                      | Invoking commands by their names.                           |
+| 10. [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Help][Help]]                                   | Commands for asking Emacs about its commands.               |
+| Three> Important Text-Changing Commands    |                                                             |
+| 11.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Mark][Mark]]                                    | The mark: how to delimit a region of text.                  |
+| 12.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Killing][Killing]]                                 | Killing (cutting) and yanking (copying) text.               |
+| 13.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Registers][Registers]]                               | Saving a text string or a location in the buffer.           |
+| 14.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Display][Display]]                                 | Controlling what text is displayed.                         |
+| 15.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Search][Search]]                                  | Finding or replacing occurrences of a string.               |
+| 16 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Fixit][Fixit]]                                   | Commands especially useful for fixing typos.                |
+| 17 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Keyboard-Macros][Keyboard Macros]]                         | Recording a sequence of keystrokes to be replayed.          |
+| Four> Major Structures of Emacs            |                                                             |
+| 18 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Files][Files]]                                   | All about handling files.                                   |
+| 19 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Buffers][Buffers]]                                 | Multiple buffers; editing several files at once.            |
+| 20 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Windows][Windows]]                                 | Viewing multiple pieces of text in one frame.               |
+| 21 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Frames][Frames]]                                  | Using multiple windows on your display.                     |
+| 22 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#International][International]]                           | Using non-ASCII character sets.                             |
+| Five> Advanced Features                    |                                                             |
+| 23 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Modes][Modes]]                                   | Major and minor modes alter Emacs's basic behavior.         |
+| 24 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Indentation][Indentation]]                             | Editing the white space at the beginnings of lines.         |
+| 25 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Text][Text]]                                    | Commands and modes for editing human languages.             |
+| 26 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Programs][Programs]]                                | Commands and modes for editing programs.                    |
+| 27 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Building][Building]]                                | Compiling, running and debugging programs.                  |
+| 28 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Maintaining][Maintaining]]                             | Features for maintaining large programs.                    |
+| 29 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Abbrevs][Abbrevs]]                                 | Defining text abbreviations to reduce typing.               |
+| 30 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Dired][Dired]]  [X]                              | Directory and file manager.                                 |
+| 31 ==[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Calendar_002fDiary][Calendar/Diary]]  [X]                     | Calendar and diary facilities.                              |
+| 32 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Sending-Mail][Sending Mail]]                            | Sending mail in Emacs.                                      |
+| 33 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Rmail][Rmail]]                                   | Reading mail in Emacs.                                      |
+| 34 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Gnus][Gnus]]                                    | A flexible mail and news reader.                            |
+| 35 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Host-Security][Host Security]]                           | Security issues on a single computer.                       |
+| 36 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Network-Security][Network Security]]                        | Managing the network security.                              |
+| 37 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Document-View][Document View]]                           | Viewing PDF, PS and DVI files.                              |
+| 38 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Shell][Shell]]                                   | Executing shell commands from Emacs.                        |
+| 39 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Emacs-Server][Emacs Server]]                            | Using Emacs as an editing server.                           |
+| 40 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Printing][Printing]]                                | Printing hardcopies of buffers or regions.                  |
+| 41 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Sorting][Sorting]]                                 | Sorting lines, paragraphs or pages within Emacs.            |
+| 42 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Picture-Mode][Picture Mode]]                            | Editing pictures made up of text characters.                |
+| 43 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Editing-Binary-Files][Editing Binary Files]]                    | Editing binary files with Hexl mode.                        |
+| 44 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Saving-Emacs-Sessions][Saving Emacs Sessions]]                   | Saving Emacs state from one session to the next.            |
+| 45 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Recursive-Edit][Recursive Edit]]                          | Performing edits while within another command.              |
+| 46 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Hyperlinking][Hyperlinking]]                            | Following links in buffers.                                 |
+| 47 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Amusements][Amusements]]                              | Various games and hacks.                                    |
+| 48 [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Packages][Packages]]                                | Installing additional features.                             |
+| 49.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Customization][Customization]]                           | Modifying the behavior of Emacs.                            |
+| Six> Recovery from Problems                |                                                             |
+| 50.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Quitting][Quitting]]                                | Quitting and aborting.                                      |
+| 51.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Lossage][Lossage]]                                 | What to do if Emacs is hung or malfunctioning.              |
+| 52.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Bugs][Bugs]]                                    | How and when to report a bug.                               |
+| 53.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Contributing][Contributing]]                            | How to contribute improvements to Emacs.                    |
+| 54.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Service][Service]]                                 | How to get help for your own Emacs needs.                   |
+| Appendices                                 |                                                             |
+| A.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Copying][Copying]]                                  | The GNU General Public License gives you permission         |
+| B.[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#GNU-Free-Documentation-License][GNU Free Documentation License]]           | The license for this documentation.                         |
+| C [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Emacs-Invocation][Emacs Invocation]]                         | Hairy startup options.                                      |
+| D [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#X-Resources][X Resources]]                              | X resources for customizing Emacs.                          |
+| E [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Antinews][Antinews]]                                 | Information about Emacs version 25.                         |
+| F [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Mac-OS-_002f-GNUstep][Mac OS / GNUstep]]                         | Using Emacs under macOS and GNUstep.                        |
+| G [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Microsoft-Windows][Microsoft Windows]]                        | Using Emacs on Microsoft Windows and MS-DOS.                |
+| F [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Manifesto][Manifesto]]                                | What's GNU? Gnu's Not Unix!                                 |
+| I [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Glossary][Glossary]]                                 | Terms used in this manual.                                  |
+| J [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Acknowledgments][Acknowledgments]]                          | Major contributors to GNU Emacs.                            |
+| Indexes (each index contains a large menu) |                                                             |
+| [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Key-Index][Key Index]]                                  | An item for each standard Emacs key sequence.               |
+| [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Option-Index][Option Index]]                               | An item for every command-line option.                      |
+| [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Command-Index][Command Index]]                              | An item for each standard command name.                     |
+| [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Variable-Index][Variable Index]]                             | An item for each variable documented in this manual.        |
+| [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Concept-Index][Concept Index]]                              | An item for concepts and other general subjects.            |
+|--------------------------------------------+-------------------------------------------------------------|
+* Reference and TODOs
+** DONE 系统学习emacs [1/1]
+:LOGBOOK:
+- State "DONE"       from              [2019-05-23 Thu 14:03]
+CLOCK: [2019-05-23 Thu 07:49]--[2019-05-23 Thu 07:51] =>  0:02
+:END:
+**** DONE Todo 整理文档的目录结构.[2/2]
+CLOSED: [2019-05-23 Thu 14:03]
+:PROPERTIES:
+:Effort:   3:00
+:END:
+:LOGBOOK:
+CLOCK: [2019-05-23 Thu 07:51]--[2019-05-23 Thu 08:21] =>  0:30
+:END:
+- [X] 逐个归档目录,
+- [X] 发布的博客中,
+** Emacs Refrenece
+- [GNU Emacs Manual](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Files)
+- 整理的笔记[Emacs' Official Manual |
+  DummyHead](https://alphaalgorithms.github.io/2019/05/23/emacs-manual/)
+
+** 使用总结
+用操作系统的思路总结.
+
+emacs就是操作系统, 因此做成一个国中之国.
+现在终于将所有的内容都各就其位了.
+  Windows的窗口数量，最好只开两个，多个会头脑混乱。
+- 1. 多用buffer切换即可呀。
+- 2. 二进制，二分法， 简单清晰
+- 学习manual(临时性总结)
+- user input, 键盘的三种内容, (simple, control, modifier)
+- key, commands, enter and exit emacs,
+- edit,Plain  text processing的重要一点是edit, 关键概念pointer,关键点移动cursor, seek功能.
+  - 区分基本重要的基本概念.
+  - mark and regiion, kill yanking,(复制黏贴)
+  - search and replace,(查找与替换)
+  - sorting text (排序)
+  - project management(编辑器的功能)
+- 基本概念: minibuffer, buffer, window, frame, mode,
+- orgmode and outline,
+- Projects
+  - Testing, programs,grep, Version control,
+- calendar and diary
+- mail,
+- shell and server, host security,
+- picture, binary file,
+- Program (文本的处理分为这两个部分)
+  - edit
+  - testing
+  - version control
+整理之后按照Kernel的四大功能分类. a
+
+** 重点:
+分类的时候, 1, 4归类为一组, 2, 3归类为一组.
+display narrow, regsiter, rectangle,
+** 結構圖
+1.Objects and Concepts:
+2.Text Processing Methods
+
+3.Advanced Features
+4.Programming_Aid
+
+* 0.初学总结
+** Four Basic Concepts
+frame, window, buffer, minibuffer, echo area(属于gui)的部分, 也是核心的四个基本概念.
+1.frame, window, buffer, line-mode, echo area,(这里才是归类)
+2.line,
+   - M-x M-x (by default) invokes the command execute-extended-command.
+   - M Meta 赋予key新的含义
+     - C Control Control + x是执行键盘绑定的function
+     - M Meta + x 是执行原函数, meta or original function.
+*** 1) Windows（按照四个基本概念分类．）
+- Windows Layout, transpose vertical to horizontal.
+  * Install package transpose-frame
+  * [EmacsWiki: Transpose Frame](https://www.emacswiki.org/emacs/TransposeFrame)
+*** 2) Buffer
+- global-auto-revert-mode t) in your .emacs.
+[elisp - How to have Emacs auto-refresh all buffers when files have changed on disk? - Stack Overflow](https://stackoverflow.com/questions/1480572/how-to-have-emacs-auto-refresh-all-buffers-when-files-have-changed-on-disk)
+
+*** 3) linemode
+*** 4) echo-erea and mini-buffer
+** [[Edit:]] (redirect to 3.2.3 )
+edit就是呈现数来给眼睛.
+
+** Workspace
+For non-evil users
+You can switch workspaces with C-cw1..9
+You can switch workspaces by name (with completion) with C-cww
+Create a new workspace: C-cwc
+Delete the current workspace: C-cwk
+Rename the current workspace: C-cwr
+A comprehensive list of keybinds is available here and here
+- [start up - Launch doom-emacs with options of main and #1 - Emacs Stack Exchange](https://emacs.stackexchange.com/questions/51473/launch-doom-emacs-with-options-of-main-and-1/51583#51583)
+* I).Important General Concepts
+开机就是输入设备(keyboard)和输出设备(screen)
+只要一打开emacs就要立刻想到这三点.
+#+ATTR_HTML: :width 700px
+[[file:~/Documents/OrgMode/ORG/images/important_concepts_fishbone.jpeg]]
+
+* 1.The Organization of the Screen
+正好是三个部分.
+** Point:
+: The place in the text where editing commands operate.
+输入的部分.
+** Mode Line:
+: Interpreting the mode line.
+** Echo Area:
+: Short messages appear at the bottom of the screen.
+
+** Menu Bar: (可以删掉)
+: How to use the menu bar.
+Menu bar, 很少会用到.
+
+* 2.Kinds  of User Input
+# 此处便是针对 point或者说是cursor
+GNU Emacs is primarily designed for use with the keyboard. While it is possible to use the mouse to issue editing commands through the menu bar and tool bar, that is not as efficient as using the keyboard. Therefore, this manual mainly documents how to edit with the keyboard.
+
+Keyboard input into Emacs is based on a heavily-extended version of ASCII. Simple characters, like ‘a’, ‘B’, ‘3’, ‘=’, and the space character (denoted as <SPC>), are entered by typing the corresponding key. Control characters, such as <RET>, <TAB>, <DEL>, <ESC>, <F1>, <Home>, and <LEFT>, are also entered this way, as are certain characters found on non-English keyboards (see International).
+
+Emacs also recognizes control characters that are entered using modifier keys. Two commonly-used modifier keys are <Control> (usually labeled <Ctrl>), and <Meta> (usually labeled <Alt>)3. For example, Control-a is entered by holding down the <Ctrl> key while pressing a; we will refer to this as C-a for short. Similarly, <Meta>-a, or M-a for short, is entered by holding down the <Alt> key and pressing a. Modifier keys can also be applied to non-alphanumerical characters, e.g., C-<F1> or M-<LEFT>.
+
+You can also type Meta characters using two-character sequences starting with <ESC>. Thus, you can enter M-a by typing <ESC> a. You can enter C-M-a (holding down both <Ctrl> and <Alt>, then pressing a) by typing <ESC> C-a. Unlike <Meta>, <ESC> is entered as a separate character. You don't hold down <ESC> while typing the next character; instead, press <ESC> and release it, then enter the next character. This feature is useful on certain text terminals where the <Meta> key does not function reliably.
+
+On graphical displays, the window manager might block some keyboard inputs, including M-<TAB>, M-<SPC>, C-M-d and C-M-l. If you have this problem, you can either customize your window manager to not block those keys, or rebind the affected Emacs commands (see Customization).
+
+Simple characters and control characters, as well as certain non-keyboard inputs such as mouse clicks, are collectively referred to as input events. For details about how Emacs internally handles input events, see Input Events.
+
+* 3.Keys
+Some Emacs commands are invoked by just one input event; for example, C-f moves forward one character in the buffer. Other commands take two or more input events to invoke, such as C-x C-f and C-x 4 C-f.
+
+A key sequence, or key for short, is a sequence of one or more input events that is meaningful as a unit. If a key sequence invokes a command, we call it a complete key; for example, C-f, C-x C-f and C-x 4 C-f are all complete keys. If a key sequence isn't long enough to invoke a command, we call it a prefix key; from the preceding example, we see that C-x and C-x 4 are prefix keys. Every key sequence is either a complete key or a prefix key.
+
+A prefix key combines with the following input event to make a longer key sequence. For example, C-x is a prefix key, so typing C-x alone does not invoke a command; instead, Emacs waits for further input (if you pause for longer than a second, it echoes the C-x key to prompt for that input; see Echo Area). C-x combines with the next input event to make a two-event key sequence, which could itself be a prefix key (such as C-x 4), or a complete key (such as C-x C-f). There is no limit to the length of key sequences, but in practice they are seldom longer than three or four input events.
+
+You can't add input events onto a complete key. For example, because C-f is a complete key, the two-event sequence C-f C-k is two key sequences, not one.
+
+By default, the prefix keys in Emacs are C-c, C-h, C-x, C-x <RET>, C-x @, C-x a, C-x n, C-x r, C-x v, C-x 4, C-x 5, C-x 6, <ESC>, M-g, and M-o. (<F1> and <F2> are aliases for C-h and C-x 6.) This list is not cast in stone; if you customize Emacs, you can make new prefix keys. You could even eliminate some of the standard ones, though this is not recommended for most users; for example, if you remove the prefix definition of C-x 4, then C-x 4 C-f becomes an invalid key sequence. See Key Bindings.
+
+Typing the help character (C-h or <F1>) after a prefix key displays a list of the commands starting with that prefix. The sole exception to this rule is <ESC>: <ESC> C-h is equivalent to C-M-h, which does something else entirely. You can, however, use <F1> to display a list of commands starting with <ESC>.
+
+* 4.Keys and Commands
+This manual is full of passages that tell you what particular keys do. But Emacs does not assign meanings to keys directly. Instead, Emacs assigns meanings to named commands, and then gives keys their meanings by binding them to commands.
+
+Every command has a name chosen by a programmer. The name is usually made of a few English words separated by dashes; for example, next-line or forward-word. Internally, each command is a special type of Lisp function, and the actions associated with the command are performed by running the function. See What Is a Function.
+
+The bindings between keys and commands are recorded in tables called keymaps. See Keymaps.
+
+When we say that “C-n moves down vertically one line” we are glossing over a subtle distinction that is irrelevant in ordinary use, but vital for Emacs customization. The command next-line does a vertical move downward. C-n has this effect because it is bound to next-line. If you rebind C-n to the command forward-word, C-n will move forward one word instead.
+
+In this manual, we will often speak of keys like C-n as commands, even though strictly speaking the key is bound to a command. Usually, we state the name of the command which really does the work in parentheses after mentioning the key that runs it. For example, we will say that “The command C-n (next-line) moves point vertically down”, meaning that the command next-line moves vertically down, and the key C-n is normally bound to it.
+
+Since we are discussing customization, we should tell you about variables. Often the description of a command will say, “To change this, set the variable mumble-foo.” A variable is a name used to store a value. Most of the variables documented in this manual are meant for customization: some command or other part of Emacs examines the variable and behaves differently according to the value that you set. You can ignore the information about variables until you are interested in customizing them. Then read the basic information on variables (see Variables) and the information about specific variables will make sense.
+
+* 5.Entering Emacs
+The usual way to invoke Emacs is with the shell command emacs.  From a terminal window running a Unix shell on a GUI terminal, you can run Emacs in the background with emacs &; this way, Emacs won't tie up the terminal window, so you can use it to run other shell commands.  (For comparable methods of starting Emacs on MS-Windows, see [Windows Startup](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Windows-Startup).)
+
+  When Emacs starts up, the initial frame displays a special buffer named ‘*GNU Emacs*’.  This startup screen contains information about Emacs and links to common tasks that are useful for beginning users.  For instance, activating the ‘Emacs Tutorial’ link opens the Emacs tutorial; this does the same thing as the command C-h t (`help-with-tutorial`).  To activate a link, either move point onto it and type <RET>, or click on it with mouse-1 (the left mouse button).
+
+Using a command line argument, you can tell Emacs to visit one or more files as soon as it starts up.  For example, emacs foo.txt starts Emacs with a buffer displaying the contents of the file ‘foo.txt’.  This feature exists mainly for compatibility with other editors, which are designed to be launched from the shell for short editing sessions.  If you call Emacs this way, the initial frame is split into two windows—one showing the specified file, and the other showing the startup screen.  See [Windows](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Windows).
+
+Generally, it is unnecessary and wasteful to start Emacs afresh each time you want to edit a file.  The recommended way to use Emacs is to start it just once, just after you log in, and do all your editing in the same Emacs session.  See [Files](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Files), for information on visiting more than one file.  If you use Emacs this way, the Emacs session accumulates valuable context, such as the kill ring, registers, undo history, and mark ring data, which together make editing more convenient.  These features are described later in the manual.
+
+To edit a file from another program while Emacs is running, you can use the emacsclient helper program to open a file in the existing Emacs session.  See [Emacs Server](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Emacs-Server).
+
+Emacs accepts other command line arguments that tell it to load certain Lisp files, where to put the initial frame, and so forth.  See [Emacs Invocation](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Emacs-Invocation).
+
+  If the variable `inhibit-startup-screen` is non-`nil`, Emacs does not display the startup screen.  In that case, if one or more files were specified on the command line, Emacs simply displays those files; otherwise, it displays a buffer named *scratch*, which can be used to evaluate Emacs Lisp expressions interactively.  See [Lisp Interaction](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Lisp-Interaction).  You can set the variable `inhibit-startup-screen` using the Customize facility (see [Easy Customization](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Easy-Customization)), or by editing your initialization file (see [Init File](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Init-File)).[4](https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#fn-4)
+
+You can also force Emacs to display a file or directory at startup by setting
+the variable `initial-buffer-choice` to a string naming that file or directory.
+The value of `initial-buffer-choice` may also be a function (of no arguments)
+that should return a buffer which is then displayed.  If `initial-buffer-choice`
+is non-`nil`, then if you specify any files on the command line, Emacs still
+visits them, but does not display them initially.
+* 6.Exiting
+
+* II).Fundamental Editing Commands
+* 7.Basic Editing Commands
+数字8
+编辑过程中的关键点是cursor
+总结一点: w是这么来的.
+Here we explain the basics of how to enter text, make corrections, and save the text in a file. If this material is new to you, we suggest you first run the Emacs learn-by-doing tutorial, by typing C-h t (help-with-tutorial).f
+增删改查, 四个方面.
+ blank lines的概念单独拿了出来.
+# Keyboard
+1. Inserting Text: Inserting text by simply typing it.
+   C-q, insert的部分.键盘的部分
+# Keyboard Funtions
+3. Erasing: Deleting and killing text.
+4. Basic Undo: Undoing recent changes in the text.
+# Cursor
+2. Moving Point: Moving the cursor to the place where you want to change something.
+9. Position Info: What line, row, or column is point on?
+
+# 将blank line与Continuation lines单独拿出来.
+7. Blank Lines: Making and deleting blank lines. (处理blank lines)
+8. Continuation Lines: How Emacs displays lines too wide for the screen.
+
+10. Arguments: Numeric arguments for repeating a command N times.
+11. Repeating: Repeating the previous command quickly.
+
+5. Files: Visiting, creating, and saving files.
+6. Help: Asking what a character does.
+
+#+ATTR_HTML: :width 700px
+[[file:~/Documents/OrgMode/ORG/images/editing_fishbone_map.jpeg]]
+
+
+
+# 这些都要尽量背诵下来
+* 8.Minibuffer
+
+The minibuffer is where Emacs commands read complicated arguments, such as file names, buffer names, Emacs command names, or Lisp expressions. We call it the “minibuffer” because it's a special-purpose buffer with a small amount of screen space. You can use the usual Emacs editing commands in the minibuffer to edit the argument text.
+
+1. Basic Minibuffer: Basic usage of the minibuffer.
+2. Minibuffer File: Entering file names with the minibuffer.
+3. Minibuffer Edit: How to edit in the minibuffer.
+   重点, mini-buffer中输入特殊字符C-q
+4. Completion: An abbreviation facility for minibuffer input.
+5. Minibuffer History: Reusing recent minibuffer arguments.
+   M-p, M-n调用history
+6. Repetition: Re-executing commands that used the minibuffer.
+   M-x list-command-history
+
+7. Passwords: Entering passwords in the echo area.
+8. Yes or No Prompts: Replying yes or no in the echo area.
+
+* 9.Running Commands by Name
+* 10.Help
+C-h a topics
+C-h C-f
+C-h p # 查看package这一条很有意思.
+* III.Important Text-Changing Commands
+* Summary
+Cursor的操作, point, mark, 光标的移动, location
+增删改查,
+- 选, rectangele
+- 增, insert,涉及到coding system, 比如在minibuffer中, 应用C-q
+  register, 增里面
+- 删, kill and YANK
+- 改, fix typo; undo
+- 查, search and replace
+- Format, repeat
+- Display narrow wide
+* 11 The Mark and the Region
+Transient Mode
+To specify a rectangle for a command to work on, set the mark at one corner and point at the opposite corner.
+Mark is the end of a region
+
+there is another kind of region: the rectangular region. see rectangles.
+
+1) setting mark: commands to set the mark. set这个单词用的好呀.
+   C-@
+2) Marking Objects: Commands to put region around textual units.
+   C-x h
+3) Using Region: Summary of ways to operate on contents of the region.
+   Convert case with C-x C-l or C-x C-u (see Case).
+   大小写的操作.
+   fill-region
+4) Mark Ring: Previous mark positions saved so you can go back there.
+5) Global Mark Ring: Previous mark positions in various buffers.
+6) Shift Selection: Using shifted cursor motion keys.
+7) Disabled Transient Mark: Leaving regions unhighlighted by default.
+* 12.Killing and Moving Text
+
+1) Deletion and Killing: Commands that remove text.
+_2) Yanking: Commands that insert text.
+3) Cut and Paste: Clipboard and selections on graphical displays.
+4) Accumulating Text: Other methods to add text to the buffer.
+5) Rectangles: Operating on text in rectaqngular areas.
+   point and mark的概念 C-@是Mark
+   C-x r t string <RET>
+6) CUA Bindings: Using C-x/C-c/C-v to kill and yank.
+   # 无关紧要的点
+
+* 13 Registers
+Emacs registers are compartments where you can save text, rectangles, positions, and other things for later use.
+M-x view-register <RET> r
+
+1) Position Registers: Saving positions in registers.
+   C-x r <SPC> r # 第一个r是register
+   C-x r j r
+2) Text Reegisters: Saving text in registers.
+   C-x r s r (text)
+   C-x r i r
+   M-x append-to-register <RET> r
+   M-x prepend-to-register <RET> r
+   使用的经验:
+   w for 单词, q for遇到的有意思的句子, i for idea, c for code
+   当天收尾回顾的时候清理.
+
+3) Rectangle Registers: Saving rectangles in registers.
+    C-x r r r
+    C-x r i rcc
+4) Configuration Registers: Saving window configurations in registers.
+    没有想明白window configurations是干啥子的呢?
+
+5) Number Registers: Numbers in registers.
+　C-u number C-x r n r
+　C-u number C-x r + r
+　C-x r i r
+　＃太无聊了
+1) File Registers: File names in registers.
+  #+BEGIN_SRC elisp
+  (set-register r '(file . name))
+  (set-register ?z '(file . "/gd/gnu/emacs/19.0/src/ChangeLog"))
+  #+END_SRC
+2) Keyboard Macro Registers: Keyboard macros in registers.
+
+3) Bookmarks: Bookmarks are like registers, but persisten.
+  C-x r m <RET>
+  Set the bookmark for the visited file, at point.
+  C-x r m bookmark <RET>
+  Set the bookmark named bookmark at point (bookmark-set).
+  C-x r M bookmark <RET>
+  Like C-x r m, but don't overwrite an existing bookmarkqq.
+  C-x r b bookmark <RET>
+  Jump to the bookmark named bookmark (bookmark-jump).
+  C-x r l
+  List all bookmarks (list-bookmarks).
+  M-x bookmark-save
+  ‘C-x r m’ – set a bookmark at the current location (e.g. in a file)
+  ‘C-x r b’ – jump to a bookmark
+  ‘C-x r l’ – list your bookmarks
+  ‘M-x bookmark-delete’ – delete a bookmark by name
+  更进一步需要学习bookmarks+ :stodo:
+
+* 14.Controlling the Display
+Since only part of a large buffer fits in the window, Emacs has to show only a part of it. This chapter describes commands and variables that let you specify which part of the text you want to see, and how the text is displayed.
+
+1) Scrolling: Commands to move text up and down in a window.
+    C-v, M-v
+2) Recentering: A scroll command that centers the current line.
+    C-l # 好棒，Ｍx recenter , C-M-l
+    可以理解为recenter-line　
+    display是刚学到的重点概念.
+3) Auto Scrolling: Redisplay scrolls text automatically when needed.
+   没啥用
+4) Horizontal Scrolling: Moving text left and right in a window.
+   C-x < C-x >
+5) Narrowing: Restricting display and editing to a portion of the buffer.
+   C-x n n; C-x n w; C-x n p; C-x n d
+   # focus的好工具.
+
+6) View Mode: Viewing read-only buffers # 没用
+7) Follow Mode: Follow mode lets two windows scroll as one. #有点意思
+8) Faces: How to change the display style using faces.
+   Emacs can display text in several different styles, called faces. Each face can specify various face attributes,
+    such as the font, height, weight, slant, foreground and background color, and underlining or overlining.
+    Most major modes assign faces to the text automatically, via Font Lock mode. See Font Lock, for more information about how these faces are assigned.
+    frame-background-mode,
+9) Colors: Specifying colors for faces.
+   M-x list-colors-display
+10) Standard Faces: The main predefined faces.
+     C-x C-+ or C-x C-=. To decrease it, type C-x C--
+     A numeric argument of 0 to the text-scale-adjust command restores the default height, the same as typing C-x C-0. # 回到默认值.
+
+11) Text Scale: Increasing or decreasing text size in a buffer.
+    C-x C-+ or C-x C-=. To decrease it, type C-x C--
+12) Font Lock: Minor mode for syntactic highlighting using faces.
+
+#+BEGIN_SRC elisp
+(global-font-lock-mode 0)
+(add-hook 'c-mode-hook 'font-lock-mode)
+ M-x customize-group <RET> font-lock-faces <RET>.
+'((c-mode . 1) (c++-mode . 1)))
+     (add-hook 'c-mode-hook
+               (lambda ()
+                (font-lock-add-keywords nil
+                 '(("\\<\\(FIXME\\):" 1
+                    font-lock-warning-face t)))))
+
+#+END_SRC
+
+13) Highlight Interactively: Tell Emacs what text to highlight.
+    有用, 但是用不着我来操心.
+14) Fringes: Enabling or disabling window fringes.
+    M-x fringe-mode
+
+15) Displaying Boundaries: Displaying top and bottom of the buffer.
+16) Useless Whitespace: Showing possibly spurious trailing whitespace.
+    M-x delete-trailing-whitespace
+17) Selective Display: Hiding lines with lots of indentation.
+18) Optional Mode Line: Optional mode line display features.
+19) Text Display: How text characters are normally displayed.
+20) Cursor Display: Features for displaying the cursor.
+21) Line Truncation: Truncating lines to fit the screen width instead of continuing them to multiple screen lines.
+22) Visual Line Mode: Word wrap and screen line-based editing.
+23) Display Custom: Information on variables for customizing display.
+
+* 15 Searching and Replacement
+Like other editors, Emacs has commands to search for occurrences of a string. Emacs also has commands to replace occurrences of a string with a different string. There are also commands that do the same thing, but search for patterns instead of fixed strings.
+
+You can also search multiple files under the control of xref (see Identifier Search) or through the Dired A command (see Operating on Files), or ask the grep program to do it (see Grep Searching).
+
+1) Incremental Search: Search happens as you type the string.
+   C-s C-r
+2) Nonincremental Search: Specify entire string and then search.
+
+3) Word Search: Search for sequence of words.
+   M-s w, M-s <ret> words <ret>
+4) Symbol Search: Search for a source code symbol.
+
+5) Regexp Search: Search for match for a regexp.
+6) Regexps: Syntax of regular expressions.
+7) Regexp Backslash: Regular expression constructs starting with `\'.
+   \(?: ... \)
+    specifies a shy group that does not record the matched substring;
+
+8) Regexp Example: A complex regular expression explained.
+        [.?!][]\"')}]*
+9) Lax Search: Search ignores some distinctions among similar characters, like letter-case.
+
+10) Replace: Search, and replace some or all matches.
+11) Other Repeating Search: Operating on all matches for some regexp.
+12) Search Customizations: Various search customizations.
+
+** Delete Blank Lines
+https://www.masteringemacs.org/article/removing-blank-lines-buffer
+Mark what you want to change (or use C-x h to mark the whole buffer) and run this:
+M-x flush-lines RET ^$ RET
+C-q C-j ^J line feed
+* 16.Commands for Fixing Typos
+In this chapter we describe commands that are useful when you catch a mistake while editing. The most fundamental of these commands is the undo command C-/ (also bound to C-x u and C-_). This undoes a single command, or a part of a command (as in the case of query-replace), or several consecutive character insertions. Consecutive repetitions of C-/ undo earlier and earlier changes, back to the limit of the undo information available.
+
+Aside from the commands described here, you can erase text using deletion commands such as <DEL> (delete-backward-char). These were described earlier in this manual. See Erasing.
+
+1) Undo: The Undo commands.
+2) Transpose: Exchanging two characters, words, lines, lists...
+   C-t; M-t; C-M-t; C-x C-t(line)
+3) Fixing Case: Correcting case of last word entered.
+
+4) Spelling: Apply spelling checker to a word, or a whole hel.
+   都是内置的,
+
+* 17.Keybord Macros (depreciated)
+For example, if you discover that you are about to type C-n M-d C-d forty times, you can speed your work by defining a keyboard macro to do C-n M-d C-d, and then executing it 39 more times.
+
+Keyboard macros differ from ordinary Emacs commands in that they are written in the Emacs command language rather than in Lisp. This makes it easier for the novice to write them, and makes them more convenient as temporary hacks. However, the Emacs command language is not powerful enough as a programming language to be useful for writing anything intelligent or general. For such things, Lisp must be used.
+
+#+BEGIN_QUOTE
+what are called MACROS to enhance Emacs to suit your needs. A MACRO is a tool
+that you can create and use to perform a specific function according to your personal
+needs. Macros can be used for just about anything you can imagine, from simple
+#+END_QUOTE
+1) Basic Keyboard Macro: Defining and running keyboard macros.
+  <F3>
+  C-x (
+  Start defining a keyboard macro (kmacro-start-macro-or-insert-counter).
+  <F4>
+  C-x e
+  If a keyboard macro is being defined, end the definition; otherwise, execute the most recent keyboard macro (kmacro-end-or-call-macro).
+  C-u <F3>
+  C-u C-x (
+  Re-execute last keyboard macro, then append keys to its definition.
+
+  Append keys to the last keyboard macro without re-executing it.
+
+  Append keys to the last keyboard macro without re-executing it.
+
+  C-u C-u <F3>
+  C-u C-u C-x (
+  C-x C-k r
+  Run the last keyboard macro on each line that begins in the region (apply-macro-to-region-lines).
+
+2) Keyboard Macro Ring: Where previous keyboard macros are saved.
+  C-x C-k C-k
+  Execute the keyboard macro at the head of the ring (kmacro-end-or-call-macro-repeat).
+  C-x C-k C-n
+  Rotate the keyboard macro ring to the next macro (defined earlier) (kmacro-cycle-ring-next).
+  C-x C-k C-p
+  Rotate the keyboard macro ring to the previous macro (defined later) (kmacro-cycle-ring-previous).
+3) Keyboard Macro Counter: Inserting incrementing numbers in macros.
+4) Keyboard Macro Query: Making keyboard macros do different things each time.
+5) Save Keyboard Macro: Giving keyboard macros names; saving them in files.
+6) Edit Keyboard Macro: Editing keyboard macros.
+7) Keyboard Macro Step-Edit: Interactively executing and editing a keyboard macro.
+
+* 30 Dired, the Directory Editor
+
+Dired makes an Emacs buffer containing a listing of a directory, and optionally some of its subdirectories as well. You can use the normal Emacs commands to move around in this buffer, and special Dired commands to operate on the listed files. Dired works with both local and remote directories.
+
+The Dired buffer is normally read-only, and inserting text in it is not allowed (however, the Wdired mode allows that, see Wdired). Ordinary printing characters such as d and x are redefined for special Dired commands. Some Dired commands mark or flag the current file (that is, the file on the current line); other commands operate on the marked files or on the flagged files. You first mark certain files in order to operate on all of them with one command.
+
+The Dired-X package provides various extra features for Dired mode. See Dired-X.
+
+You can also view a list of files in a directory with C-x C-d (list-directory). Unlike Dired, this command does not allow you to operate on the listed files. See Directories.
+
+    1) Enter: How to invoke Dired.
+    2) Navigation: Special motion commands in the Dired buffer.
+    3) Deletion: Deleting files with Dired.
+    4) Flagging Many Files: Flagging files based on their names.
+    5) Visit: Other file operations through Dired.
+    6) Marks vs Flags: Flagging for deletion vs marking.
+    7) Operating on Files: How to copy, rename, print, compress, etc. either one file or several files.
+    8) Shell Commands in Dired: Running a shell command on the marked files.
+    9) Transforming File Names: Using patterns to rename multiple files.
+    10) Comparison in Dired: Running diff by way of Dired.
+    11) Subdirectories in Dired: Adding subdirectories to the Dired buffer.
+    12) Subdir Switches: Subdirectory switches in Dired.
+    13) Subdirectory Motion: Moving across subdirectories, and up and down.
+    14) Hiding Subdirectories: Making subdirectories visible or invisible.
+    15) Updating: Discarding lines for files of no interest.
+    16) Find: Using find to choose the files for Dired.
+    17) Wdired: Operating on files by editing the Dired buffer.
+    18) Image-Dired: Viewing image thumbnails in Dired.
+    19) Misc: Various other features.
+
+** [[https://emacs.stackexchange.com/questions/5603/how-to-quickly-copy-move-file-in-emacs-dired][How to quickly copy/move file in Emacs Dired?]]
+
+From the documentation:
+
+#+BEGIN_QUOTE
+    dired-dwim-target is a variable defined in `dired.el'. Its value is nil
+
+    Documentation: If non-nil, Dired tries to guess a default target directory. This means: if there is a Dired buffer displayed in the next window, use its current directory, instead of this Dired buffer's current directory.
+
+    The target is used in the prompt for file copy, rename etc.
+#+END_QUOTE
+
+
+Put this in your init file: (setq dired-dwim-target t)xotxo. Then, go to dired, split your window, split-window-vertically & go to another dired directory. When you will press C to copy, the other dir in the split pane will be default destination.
+
+* [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Calendar_002fDiary][31.The Calendar and the Diary]]
+:LOGBOOK:
+CLOCK: [2019-11-12 Tue 00:22]--[2019-11-12 Tue 10:06] =>  9:44
+:END:
+
+#+ATTR_HTML: :width 600px
+[[file:../images/emacs-calendars-structure.jpeg]]
+
+上图分为三个部分:
+1)基本的操作
+2)与社会的互动, holidays and calendars
+3)与天地四时的互动, sunrise-sunset
+因此需要再加上两个时间点, sunrise and sunset
+
+Emacs provides the functions of a desk calendar, with a diary of planned
+or past events. It also has facilities for managing your appointments,
+and keeping track of how much time you spend working on certain
+projects.
+
+To enter the calendar, type M-x calendar. This displays a three-month
+calendar centered on the current month, with point on the current date.
+With a numeric argument, as in C-u M-x calendar, it prompts you for the
+month and year to be the center of the three-month calendar. The
+calendar uses its own buffer, whose major mode is Calendar mode.
+# 这一点值得拿出来说, 还有calendar-mode这样一个mode.
+
+mouse-3 in the calendar brings up a menu of operations on a particular
+date; mouse-2 brings up a menu of commonly used calendar features that
+are independent of any particular date. To exit the calendar, type q.
+# 对mouse的操作不了解.
+我想要一个类似在桌面操作系统中, 可以操作任务的日历.
+
+** 31.1 Movement in the Calendar
+
+Calendar mode provides commands to move through the calendar =in logical units=
+# 抽象得好logic unit
+of time such as days, weeks, months, and years. If you move
+outside the three months originally displayed, the calendar display
+scrolls automatically through time to make the selected date visible.
+Moving to a date lets you view its holidays or diary entries, or convert
+it to other calendars; moving by long time periods is also useful simply
+to scroll the calendar.
+
+#+begin_src emacs-lisp :tangle yes
+;;修改calendar-week-start-day
+(setq calendar-week-start-day 1)
+#+end_src
+
+对movement的总结, span, 按照四个logical unit, day, week, month, year
+1) backwords and forwards with specified lenghts
+2) selector, begin and end
+3) specified dates
+
+*** 31.1.1 Motion by Standard Lengths of Time
+
+The commands for movement in the calendar buffer parallel the commands
+for movement in text. You can move forward and backward by days, weeks,
+months, and years.
+
+- C-f
+
+  Move point one day forward (=calendar-forward-day=).
+
+- C-b
+
+  Move point one day backward (=calendar-backward-day=).
+
+- C-n
+
+  Move point one week forward (=calendar-forward-week=).
+
+- C-p
+
+  Move point one week backward (=calendar-backward-week=).
+
+- M-}
+
+  Move point one month forward (=calendar-forward-month=).
+
+- M-{
+
+  Move point one month backward (=calendar-backward-month=).
+# 此处有意思, 按照月份移动.
+
+in logical
+unit- C-x ]
+
+  Move point one year forward (=calendar-forward-year=).
+
+- C-x [
+
+  Move point one year backward (=calendar-backward-year=).
+# 也可以按照年份移动．
+
+ The day and week commands are natural analogues of the usual Emacs
+ commands for moving by characters and by lines. Just as C-n usually
+ moves to the same column in the following line, in Calendar mode it
+ moves to the same day in the following week. And C-p moves to the same
+ day in the previous week.
+
+The arrow keys are equivalent to C-f, C-b, C-n and C-p, just as they
+normally are in other modes.
+
+The commands for motion by months and years work like those for weeks,
+but move a larger distance. The month commands M-} and M-{ move forward
+or backward by an entire month. The year commands C-x ] and C-x [ move
+forward or backward a whole year.
+
+The easiest way to remember these commands is to consider months and
+years analogous to paragraphs and pages of text, respectively. But the
+calendar movement commands themselves do not quite parallel those for
+movement through text: the ordinary Emacs paragraph commands move to the
+beginning or end of a paragraph, whereas these month and year commands
+move by an entire month or an entire year, keeping the same date within
+the month or year.
+
+All these commands accept a numeric argument as a repeat count. For
+convenience, the digit keys and the minus sign specify numeric arguments
+in Calendar mode even without the Meta modifier. For example, 100 C-f
+moves point 100 days forward from its present location.
+
+#  100 C-f 对日历自由的控制.
+
+*** 31.1.2 Beginning or End of Week, Month or Year
+# 概念提出的好, supress逐项移动的细节.
+
+A week (or month, or year) is not just a quantity of days; we think of
+weeks (months, years) as starting on particular dates. So Calendar mode
+provides commands to move to the start or end of a week, month or year:
+
+- C-a
+
+  Move point to start of week (=calendar-beginning-of-week=).
+
+- C-e
+
+  Move point to end of week (=calendar-end-of-week=).
+
+- M-a
+
+  Move point to start of month (=calendar-beginning-of-month=).
+
+- M-e
+
+  Move point to end of month (=calendar-end-of-month=).
+
+- M-<
+
+  Move point to start of year (=calendar-beginning-of-year=).
+
+- M->
+
+  Move point to end of year (=calendar-end-of-year=).
+# 竟然有这么多可用的快捷键, 对月份和年份实行控制.
+
+These commands also take numeric arguments as repeat counts, with the
+repeat count indicating how many weeks, months, or years to move
+backward or forward.
+
+By default, weeks begin on Sunday. To make them begin on Monday instead,
+set the variable =calendar-week-start-day= to 1. To change which day
+headers are highlighted as weekend days, set the variable
+=calendar-weekend-days=.
+# 这就跟queue的first and end 一样.
+
+*** 31.1.3 Specified Dates
+
+Calendar mode provides commands for moving to a particular date
+specified in various ways.
+
+- g d
+
+  Move point to specified date (=calendar-goto-date=).
+
+- g D
+
+  Move point to specified day of year (=calendar-goto-day-of-year=).
+
+- g w
+
+  Move point to specified week of year (=calendar-iso-goto-week=).
+
+- o
+
+  Center calendar around specified month (=calendar-other-month=).
+# 这个命令比较有用.
+
+- .
+
+  Move point to today's date (=calendar-goto-today=).
+
+  g d (=calendar-goto-date=) prompts for a year, a month, and a day of
+  the month, and then moves to that date. Because the calendar includes
+  all dates from the beginning of the current era, you must type the
+  year in its entirety; that is, type '2010', not '10'.
+
+  g D (=calendar-goto-day-of-year=) prompts for a year and day number,
+  and moves to that date. Negative day numbers count backward from the
+  end of the year. g w (=calendar-iso-goto-week=) prompts for a year and
+  week number, and moves to that week.
+
+  o (=calendar-other-month=) prompts for a month and year, then centers
+  the three-month calendar around that month.
+
+  You can return to today's date with . (=calendar-goto-today=).
+
+** 31.2 Scrolling in the Calendar
+
+The calendar display scrolls automatically through time when you move
+out of the visible portion. You can also scroll it manually. Imagine
+that the calendar window contains a long strip of paper with the months
+on it. Scrolling the calendar means moving the strip horizontally, so
+that new months become visible in the window.
+
+- >
+
+  Scroll calendar one month forward (=calendar-scroll-left=).
+
+- <
+
+  Scroll calendar one month backward (=calendar-scroll-right=).
+
+- C-v
+  Scroll forward by three months (=calendar-scroll-left-three-months=).
+
+- M-v
+  Scroll backward by three months
+  (=calendar-scroll-right-three-months=).
+# 比较有意思的是M-v,三个月三个月的移动
+
+  The most basic calendar scroll commands scroll by one month at a time.
+  This means that there are two months of overlap between the display
+  before the command and the display after. > scrolls the calendar
+  contents one month forward in time. < scrolls the contents one month
+  backwards in time.
+
+  The commands C-v and M-v scroll the calendar by an entire
+  screenful---three months---in analogy with the usual meaning of these
+  commands. C-v makes later dates visible and M-v makes earlier dates
+  visible. These commands take a numeric argument as a repeat count; in
+  particular, since C-u multiplies the next command by four, typing C-u
+  C-v scrolls the calendar forward by a year and typing C-u M-v scrolls
+  the calendar backward by a year.
+
+The function keys (or ) and (or ) are equivalent to C-v and M-v, just as
+they are in other modes.
+# 提出的TPF系统挺不错, task, property and filter
+
+# movement是在当前的display中move, 而scroll是outside of the current buffer.
+# out of the visiable portion
+** 31.3 Counting Days
+
+- M-=
+
+  Display the number of days in the current region
+  (=calendar-count-days-region=).
+
+  To determine the number of days in a range, set the mark on one date
+  using C-, move point to another date, and type M-=
+  (=calendar-count-days-region=). The numbers of days shown is
+  /inclusive/; that is, it includes the days specified by mark and
+  point.
+# what's this functions for ?
+
+** 31.4 Miscellaneous Calendar Commands
+# 有用的命令是从本地控制other-window=
+
+  Display day-in-year (=calendar-print-day-of-year=).
+# 有意思的命令查看当天的信息.
+- C-c C-l
+
+  Regenerate the calendar window (=calendar-redraw=).
+# 用不大着
+
+- <SPC>
+
+  Scroll the next window up (=scroll-other-window=).
+# 比较有用, 在calendar-buffer中控制.
+
+- <DEL>
+
+  Scroll the next window down (=scroll-other-window-down=).
+
+- q
+
+  Exit from calendar (=calendar-exit=).
+#
+
+  To display the number of days elapsed since the start of the year, or
+  the number of days remaining in the year, type the p d command
+  (=calendar-print-day-of-year=). This displays both of those numbers in
+  the echo area. The count of days elapsed includes the selected date.
+  The count of days remaining does not include that date.
+
+  If the calendar window text gets corrupted, type C-c C-l
+  (=calendar-redraw=) to redraw it. (This can only happen if you use
+  non-Calendar-mode editing commands.)
+
+  In Calendar mode, you can use (=scroll-other-window=) and
+  (=scroll-other-window-down=) to scroll the other window (if there is
+  one) up or down, respectively. This is handy when you display a list
+  of holidays or diary entries in another window.
+
+  To exit from the calendar, type q (=calendar-exit=). This buries all
+  buffers related to the calendar, selecting other buffers. (If a frame
+  contains a dedicated calendar window, exiting from the calendar
+  deletes or iconifies that frame depending on the value of
+  =calendar-remove-frame-by-deleting=.)
+
+** 31.5 Writing Calendar Files
+
+You can write calendars and diary entries to HTML and LaTeX files.
+
+The Calendar HTML commands produce files of HTML code that contain
+calendar, holiday, and diary entries. Each file applies to one month,
+and has a name of the format yyyy-mm.html, where yyyy and mm are the
+four-digit year and two-digit month, respectively. The variable
+=cal-html-directory= specifies the default output directory for the HTML
+files. To prevent holidays from being shown, customize
+=cal-html-holidays=.
+
+Diary entries enclosed by =<= and =>= are interpreted as HTML tags (for
+example: this is a diary entry with some red text). You can change the
+overall appearance of the displayed HTML pages (for example, the color
+of various page elements, header styles) via a stylesheet cal.css in the
+directory containing the HTML files (see the value of the variable
+=cal-html-css-default= for relevant style settings).
+
+
+- H m
+
+  Generate a one-month calendar (=cal-html-cursor-month=).
+
+- H y
+
+  Generate a calendar file for each month of a year, as well as an index
+  page (=cal-html-cursor-year=). By default, this command writes files
+  to a yyyy subdirectory---if this is altered some hyperlinks between
+  years will not work.
+
+If the variable =cal-html-print-day-number-flag= is non-=nil=, then the
+monthly calendars show the day-of-the-year number. The variable
+=cal-html-year-index-cols= specifies the number of columns in the yearly
+index page.
+
+The Calendar LaTeX commands produce a buffer of LaTeX code that prints
+as a calendar. Depending on the command you use, the printed calendar
+covers the day, week, month or year that point is in.
+
+​
+
+- t m
+
+  Generate a one-month calendar (=cal-tex-cursor-month=).
+
+- t M
+
+  Generate a sideways-printing one-month calendar
+  (=cal-tex-cursor-month-landscape=).
+
+- t d
+
+  Generate a one-day calendar (=cal-tex-cursor-day=).
+
+- t w 1
+
+  Generate a one-page calendar for one week, with hours
+  (=cal-tex-cursor-week=).
+
+- t w 2
+
+  Generate a two-page calendar for one week, with hours
+  (=cal-tex-cursor-week2=).
+
+- t w 3
+
+  Generate an ISO-style calendar for one week, without hours
+  (=cal-tex-cursor-week-iso=).
+
+- t w 4
+
+  Generate a calendar for one Monday-starting week, with hours
+  (=cal-tex-cursor-week-monday=).
+
+- t w W
+
+  Generate a two-page calendar for one week, without hours
+  (=cal-tex-cursor-week2-summary=).
+
+- t f w
+
+  Generate a Filofax-style two-weeks-at-a-glance calendar
+  (=cal-tex-cursor-filofax-2week=).
+
+- t f W
+
+  Generate a Filofax-style one-week-at-a-glance calendar
+  (=cal-tex-cursor-filofax-week=).
+
+- t y
+
+  Generate a calendar for one year (=cal-tex-cursor-year=).
+
+- t Y
+
+  Generate a sideways-printing calendar for one year
+  (=cal-tex-cursor-year-landscape=).
+
+- t f y
+
+  Generate a Filofax-style calendar for one year
+  (=cal-tex-cursor-filofax-year=).
+
+Some of these commands print the calendar sideways (in landscape mode),
+so it can be wider than it is long. Some of them use Filofax paper size
+(3.75in x 6.75in). All of these commands accept a prefix argument, which
+specifies how many days, weeks, months or years to print (starting
+always with the selected one).
+
+If the variable =cal-tex-holidays= is non-=nil= (the default), then the
+printed calendars show the holidays in =calendar-holidays=. If the
+variable =cal-tex-diary= is non-=nil= (the default is =nil=), diary
+entries are included also (in monthly, Filofax, and iso-week calendars
+only). If the variable =cal-tex-rules= is non-=nil= (the default is
+=nil=), the calendar displays ruled pages in styles that have sufficient
+room. Consult the documentation of the individual cal-tex functions to
+see which calendars support which features.
+
+You can use the variable =cal-tex-preamble-extra= to insert extra LaTeX
+commands in the preamble of the generated document if you need to.
+# 这些命令暂时永不大着.
+
+** 31.6 Holidays
+
+The Emacs calendar knows about many major and minor holidays, and can
+display them. You can add your own holidays to the default list.
+
+- mouse-3 Holidays
+
+- h
+
+  Display holidays for the selected date (=calendar-cursor-holidays=).
+
+- x
+
+  Mark holidays in the calendar window (=calendar-mark-holidays=).
+# 这个命令有意思.
+
+- u
+
+  Unmark calendar window (=calendar-unmark=).
+
+- a
+
+  List all holidays for the displayed three months in another window
+  (=calendar-list-holidays=).
+
+- M-x holidays
+
+  List all holidays for three months around today's date in another
+  window.
+#+BEGIN_QUOTE
+Define: Veterans' day 老兵
+Etymology:
+Old Lithuanian vetušas "old, aged;" and compare wether).
+助记: Veterans day
+
+#+END_QUOTE
+
+
+#+begin_src emacs-lisp :tangle yes
+;;(sunrise-sunset)
+(lunar-phases)
+#+end_src
+
+#+RESULTS:
+: Computing phases of the moon...done
+
+- M-x list-holidays
+
+  List holidays in another window for a specified range of years.
+
+  To see if any holidays fall on a given date, position point on that
+  date in the calendar window and use the h command. Alternatively,
+  click on that date with mouse-3 and then choose Holidays from the menu
+  that appears. Either way, this displays the holidays for that date, in
+  the echo area if they fit there, otherwise in a separate window.
+
+  To view the distribution of holidays for all the dates shown in the
+  calendar, use the x command. This displays the dates that are holidays
+  in a different face. See
+  [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Calendar-Customizing][calendar-holiday-marker]].
+  The command applies both to the currently visible months and to other
+  months that subsequently become visible by scrolling. To turn marking
+  off and erase the current marks, type u, which also erases any diary
+  marks (see
+  [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Diary][Diary]]).
+  If the variable =calendar-mark-holidays-flag= is non-=nil=, creating
+  or updating the calendar marks holidays automatically.
+
+  To get even more detailed information, use the a command, which
+  displays a separate buffer containing a list of all holidays in the
+  current three-month range. You can use and in the calendar window to
+  scroll that list up and down, respectively.
+
+  The command M-x holidays displays the list of holidays for the current
+  month and the preceding and succeeding months; this works even if you
+  don't have a calendar window. If the variable
+  =calendar-view-holidays-initially-flag= is non-=nil=, creating the
+  calendar displays holidays in this way. If you want the list of
+  holidays centered around a different month, use C-u M-x holidays,
+  which prompts for the month and year.
+
+The holidays known to Emacs include United States holidays and the major
+Bahá'í, Chinese, Christian, Islamic, and Jewish holidays; also the
+solstices  and equinoxes.
+#+BEGIN_QUOTE
+Define: solstices  /ˈsɑːl.stɪs/ 至日, 至点
+Etymology:
+Middle English: from Old French, from Latin solstitium, from sol ‘sun’ + stit- ‘stopped, stationary’ (from the verb sistere).
+助记:sol(sun) stice, stand, 停止的点.
+
+Define: equinox /ˈek.wə.nɑːks/
+Etymology: late Middle English: from Old French equinoxe or Latin aequinoctium, from aequi- ‘equal’ + nox, noct- ‘night’.
+助记: equal好说,nox是night
+#+END_QUOTE
+
+
+The command M-x holiday-list displays the list of holidays for a range
+of years. This function asks you for the starting and stopping years,
+and allows you to choose all the holidays or one of several categories
+of holidays. You can use this command even if you don't have a calendar
+window.
+
+The dates used by Emacs for holidays are based on /current practice/,
+not historical fact. For example Veteran's Day began in 1919, but is
+shown in earlier years.
+
+** 31.7 Times of Sunrise and Sunset
+
+Special calendar commands can tell you, to within a minute or two, the
+times of sunrise and sunset for any date.
+# 与天地四时的关联.
+
+- mouse-3 Sunrise/sunset
+
+- S
+
+  Display times of sunrise and sunset for the selected date
+  (=calendar-sunrise-sunset=).
+
+- M-x sunrise-sunset
+
+  Display times of sunrise and sunset for today's date.
+
+- C-u M-x sunrise-sunset
+
+  Display times of sunrise and sunset for a specified date.
+
+- M-x calendar-sunrise-sunset-month
+
+  Display times of sunrise and sunset for the selected month.
+
+  Within the calendar, to display the /local times/ of sunrise and
+  sunset in the echo area, move point to the date you want, and type S.
+  Alternatively, click mouse-3 on the date, then choose 'Sunrise/sunset'
+  from the menu that appears. The command M-x sunrise-sunset is
+  available outside the calendar to display this information for today's
+  date or a specified date. To specify a date other than today, use C-u
+  M-x sunrise-sunset, which prompts for the year, month, and day.
+
+You can display the times of sunrise and sunset for any location and any
+date with C-u C-u M-x sunrise-sunset. This asks you for a longitude,
+latitude, number of minutes difference from Coordinated Universal Time,
+and date, and then tells you the times of sunrise and sunset for that
+location on that date.
+
+Because the times of sunrise and sunset depend on the location on earth,
+you need to tell Emacs your latitude, longitude, and location name
+before using these commands. Here is an example of what to set:
+
+#+BEGIN_EXAMPLE
+         (setq calendar-latitude 40.1)
+         (setq calendar-longitude -88.2)
+         (setq calendar-location-name "Urbana, IL")
+#+END_EXAMPLE
+
+Use one decimal place in the values of =calendar-latitude= and
+=calendar-longitude=.
+
+Your time zone also affects the local time of sunrise and sunset. Emacs
+usually gets time zone information from the operating system, but if
+these values are not what you want (or if the operating system does not
+supply them), you must set them yourself. Here is an example:
+
+#+BEGIN_EXAMPLE
+         (setq calendar-time-zone -360)
+         (setq calendar-standard-time-zone-name "CST")
+         (setq calendar-daylight-time-zone-name "CDT")
+#+END_EXAMPLE
+
+The value of =calendar-time-zone= is the number of minutes difference
+between your local standard time and Coordinated Universal Time
+(Greenwich time). The values of =calendar-standard-time-zone-name= and
+=calendar-daylight-time-zone-name= are the abbreviations used in your
+time zone. Emacs displays the times of sunrise and sunset /corrected for
+daylight saving time/. See[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Daylight-Saving][Daylight Saving]], for how daylight saving time is determined.
+
+As a user, you might find it convenient to set the calendar location
+variables for your usual physical location in your .emacs file. If you
+are a system administrator, you may want to set these variables for all
+users in a default.el file. See [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Init-File][Init File]].
+
+** 31.8 Phases of the Moon
+# 7与8这两条是我喜欢calendar的地方.
+
+These calendar commands display the dates and times of the phases of the
+moon (new moon, first quarter, full moon, last quarter). This feature is
+useful for debugging problems that depend on the phase of the moon.
+
+- M
+  Display the dates and times for all the quarters of the moon for the
+  three-month period shown (=calendar-lunar-phases=).
+
+- M-x lunar-phases
+
+  Display dates and times of the quarters of the moon for three months
+  around today's date.
+
+  Within the calendar, use the M command to display a separate buffer of
+  the phases of the moon for the current three-month range. The dates
+  and times listed are accurate to within a few minutes.
+
+  Outside the calendar, use the command M-x lunar-phases to display the
+  list of the phases of the moon for the current month and the preceding
+  and succeeding months. For information about a different month, use
+  C-u M-x lunar-phases, which prompts for the month and year.
+
+The dates and times given for the phases of the moon are given in local
+time (corrected for daylight saving, when appropriate). See the
+discussion in the previous section. See [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Sunrise_002fSunset][Sunrise/Sunset]].
+
+** 31.9 Conversion To and From Other Calendars
+
+# 目前用不大着.
+The Emacs calendar displayed is /always/ the Gregorian calendar,
+sometimes called the New Style calendar, which is used in most of the
+world today. However, this calendar did not exist before the sixteenth
+century and was not widely used before the eighteenth century; it did
+not fully displace the Julian calendar and gain universal acceptance
+until the early twentieth century. The Emacs calendar can display any
+month since January, year 1 of the current era, but the calendar
+displayed is always the Gregorian, even for a date at which the
+Gregorian calendar did not exist.
+
+While Emacs cannot display other calendars, it can convert dates to and
+from several other calendars.
+
+- [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Calendar-Systems][Calendar Systems]]: The calendars Emacs understands (aside from Gregorian).\\
+- [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#To-Other-Calendar][To Other Calendar]]: Converting the selected date to various calendars.\\
+- [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#From-Other-Calendar][From Other Calendar]]: Moving to a date specified in another calendar.
+
+*** 31.9.1 Supported Calendar Systems
+
+
+The ISO commercial calendar is often used in business.
+
+The Julian calendar, named after Julius Caesar, was the one used in
+Europe throughout medieval times, and in many countries up until the
+nineteenth century.
+
+Astronomers use a simple counting of days elapsed since noon, Monday,
+January 1, 4713 B.C. on the Julian calendar. The number of days elapsed
+is called the Julian day number or the Astronomical day number.
+
+The Hebrew calendar is used by tradition in the Jewish religion. The
+Emacs calendar program uses the Hebrew calendar to determine the dates
+of Jewish holidays. Hebrew calendar dates begin and end at sunset.
+
+The Islamic calendar is used in many predominantly Islamic countries.
+Emacs uses it to determine the dates of Islamic holidays. There is no
+universal agreement in the Islamic world about the calendar; Emacs uses
+a widely accepted version, but the precise dates of Islamic holidays
+often depend on proclamation by religious authorities, not on
+calculations. As a consequence, the actual dates of observance can vary
+slightly from the dates computed by Emacs. Islamic calendar dates begin
+and end at sunset.
+
+The French Revolutionary calendar was created by the Jacobins after the
+1789 revolution, to represent a more secular and nature-based view of
+the annual cycle, and to install a 10-day week in a rationalization
+measure similar to the metric system. The French government officially
+abandoned this calendar at the end of 1805.
+
+The Maya of Central America used three separate, overlapping calendar
+systems, the /long count/, the /tzolkin/, and the /haab/. Emacs knows
+about all three of these calendars. Experts dispute the exact
+correlation between the Mayan calendar and our calendar; Emacs uses the
+Goodman-Martinez-Thompson correlation in its calculations.
+
+The Copts use a calendar based on the ancient Egyptian solar calendar.
+Their calendar consists of twelve 30-day months followed by an extra
+five-day period. Once every fourth year they add a leap day to this
+extra period to make it six days. The Ethiopic calendar is identical in
+structure, but has different year numbers and month names.
+
+The Persians use a solar calendar based on a design of Omar Khayyam.
+Their calendar consists of twelve months of which the first six have 31
+days, the next five have 30 days, and the last has 29 in ordinary years
+and 30 in leap years. Leap years occur in a complicated pattern every
+four or five years. The calendar implemented here is the arithmetical
+Persian calendar championed by Birashk, based on a 2,820-year cycle. It
+differs from the astronomical Persian calendar, which is based on
+astronomical events. As of this writing the first future discrepancy is
+projected to occur on March 20, 2025. It is currently not clear what the
+official calendar of Iran will be at that time.
+
+The Chinese calendar is a complicated system of lunar months arranged
+into solar years. The years go in cycles of sixty, each year containing
+either twelve months in an ordinary year or thirteen months in a leap
+year; each month has either 29 or 30 days. Years, ordinary months, and
+days are named by combining one of ten celestial stems with one of
+twelve terrestrial branches for a total of sixty names that are repeated
+in a cycle of sixty.
+# 此处终于介绍到中文日历
+
+The Bahá'í calendar system is based on a solar cycle of 19 months with
+19 days each. The four remaining intercalary days are placed between the
+18th and 19th months.
+
+
+
+*** 31.9.2 Converting To Other Calendars
+
+The following commands describe the selected date (the date at point) in
+various other calendar systems:
+# 用的是p而非display
+
+- mouse-3 Other calendars
+
+- p o
+
+  Display the selected date in various other calendars.
+  (=calendar-print-other-dates=).
+
+- p c
+  # print commercial
+  Display ISO commercial calendar equivalent for selected day
+  (=calendar-iso-print-date=).
+
+- p j
+
+  Display Julian date for selected day (=calendar-julian-print-date=).
+
+- p a
+
+  Display astronomical (Julian) day number for selected day
+  (=calendar-astro-print-day-number=).
+
+- p h
+
+  Display Hebrew date for selected day (=calendar-hebrew-print-date=).
+
+- p i
+
+  Display Islamic date for selected day (=calendar-islamic-print-date=).
+
+- p f
+
+  Display French Revolutionary date for selected day
+  (=calendar-french-print-date=).
+
+- p b
+
+  Display Bahá'í date for selected day (=calendar-bahai-print-date=).
+
+- p C
+
+  Display Chinese date for selected day (=calendar-chinese-print-date=).
+# 只需要记住这一个命令即可.
+- p k
+
+  Display Coptic date for selected day (=calendar-coptic-print-date=).
+
+- p e
+
+  Display Ethiopic date for selected day
+  (=calendar-ethiopic-print-date=).
+
+- p p
+
+  Display Persian date for selected day (=calendar-persian-print-date=).
+
+- p m
+
+  Display Mayan date for selected day (=calendar-mayan-print-date=).
+
+Otherwise, move point to the date you want to convert, then type the
+appropriate command starting with p from the table above. The prefix p
+is a mnemonic for "print", since Emacs "prints" the equivalent date in
+the echo area. p o displays the date in all forms known to Emacs. You
+can also use mouse-3 and then choose Other calendars from the menu that
+appears. This displays the equivalent forms of the date in all the
+calendars Emacs understands, in the form of a menu. (Choosing an
+alternative from this menu doesn't actually do anything---the menu is
+used only for display.)
+
+
+*** 31.9.3 Converting From Other Calendars
+
+You can use the other supported calendars to specify a date to move to.
+This section describes the commands for doing this using calendars other
+than Mayan; for the Mayan calendar, see the following section.
+
+- g c
+
+  Move to a date specified in the ISO commercial calendar
+  (=calendar-iso-goto-date=).
+
+- g w
+
+  Move to a week specified in the ISO commercial calendar
+  (=calendar-iso-goto-week=).
+
+- g j
+
+  Move to a date specified in the Julian calendar
+  (=calendar-julian-goto-date=).
+
+- g a
+
+  Move to a date specified with an astronomical (Julian) day number
+  (=calendar-astro-goto-day-number=).
+
+- g b
+
+  Move to a date specified in the Bahá'í calendar
+  (=calendar-bahai-goto-date=).
+
+- g h
+
+  Move to a date specified in the Hebrew calendar
+  (=calendar-hebrew-goto-date=).
+
+- g i
+
+  Move to a date specified in the Islamic calendar
+  (=calendar-islamic-goto-date=).
+
+- g f
+
+  Move to a date specified in the French Revolutionary calendar
+  (=calendar-french-goto-date=).
+
+- g C
+
+  Move to a date specified in the Chinese calendar
+  (=calendar-chinese-goto-date=).
+  # 查看中国日历.
+
+- g p
+
+  Move to a date specified in the Persian calendar
+  (=calendar-persian-goto-date=).
+
+- g k
+
+  Move to a date specified in the Coptic calendar
+  (=calendar-coptic-goto-date=).
+
+- g e
+
+  Move to a date specified in the Ethiopic calendar
+  (=calendar-ethiopic-goto-date=).
+
+These commands ask you for a date on the other calendar, move point to
+the Gregorian calendar date equivalent to that date, and display the
+other calendar's date in the echo area. Emacs uses strict completion
+(see [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Completion-Exit][Completion Exit]]) whenever it asks you to type a month name, so you don't have to
+worry about the spelling of Hebrew, Islamic, or French names.
+
+One common issue concerning the Hebrew calendar is the computation of
+the anniversary of a date of death, called a yahrzeit. The Emacs
+calendar includes a facility for such calculations. If you are in the
+calendar, the command M-x calendar-hebrew-list-yahrzeits asks you for a
+range of years and then displays a list of the yahrzeit dates for those
+years for the date given by point. If you are not in the calendar, this
+command first asks you for the date of death and the range of years, and
+then displays the list of yahrzeit dates.
+
+** 31.10 The Diary
+
+The Emacs diary keeps track of appointments or other events on a daily
+basis, in =conjunction= with the calendar. To use the diary feature, you
+must first create a diary file containing a list of events and their
+dates. Then Emacs can automatically pick out and display the events for
+today, for the immediate future, or for any specified date.
+
+Although you probably will start by creating a diary manually, Emacs
+provides a number of commands to let you view, add, and change diary
+entries.
+
+*** 31.10.1 The Diary File
+
+# 介绍diary file的基本格式.
+Your diary file is a file that records events associated with particular
+dates. The name of the diary file is specified by the variable
+=diary-file=. The default is =~/.emacs.d/diary=, though for compatibility
+with older versions Emacs will use ~/diary if it exists.
+
+Each entry in the diary file describes one event and consists of one or
+more lines. An entry always begins with a date specification at the left
+margin. The rest of the entry is simply text to describe the event. If
+the entry has more than one line, then the lines after the first must
+begin with whitespace to indicate they continue a previous entry. Lines
+that do not begin with valid dates and do not continue a preceding entry
+are ignored. Here's an example:
+
+#+BEGIN_EXAMPLE
+         12/22/2015  Twentieth wedding anniversary!
+         10/22       Ruth's birthday.
+         * 21, *:    Payday
+         Tuesday--weekly meeting with grad students at 10am
+                  Supowit, Shen, Bitner, and Kapoor to attend.
+         1/13/89     Friday the thirteenth!!
+         thu 4pm     squash game with Lloyd.
+         mar 16      Dad's birthday
+         April 15, 2016 Income tax due.
+         * 15        time cards due.
+#+END_EXAMPLE
+
+This example uses extra spaces to align the event descriptions of most
+of the entries. Such formatting is purely a matter of taste.
+
+You can also use a format where the first line of a diary entry consists
+only of the date or day name (with no following blanks or punctuation).
+For example:
+
+#+BEGIN_EXAMPLE
+         02/11/2012
+               Bill B. visits Princeton today
+               2pm Cognitive Studies Committee meeting
+               2:30-5:30 Liz at Lawrenceville
+               4:00pm Dentist appt
+               7:30pm Dinner at George's
+               8:00-10:00pm concert
+#+END_EXAMPLE
+
+This entry will have a different appearance if you use the simple diary
+display (see[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Diary-Display][Diary Display]]). The simple diary display omits the date line at the beginning; only the continuation lines appear. This style of entry looks
+neater when you display just a single day's entries, but can cause
+confusion if you ask for more than one day's entries.
+
+*** 31.10.2 Displaying the Diary
+
+Once you have created a diary file, you can use the calendar to view it.
+You can also view today's events outside of Calendar mode. In the
+following, key bindings refer to the Calendar buffer.
+
+- mouse-3 Diary
+
+- d
+
+  Display all diary entries for the selected date
+  (=diary-view-entries=).
+
+- s
+
+  Display the entire diary file (=diary-show-all-entries=).
+
+- m
+
+  Mark all visible dates that have diary entries (=diary-mark-entries=).
+
+- u
+
+  Unmark the calendar window (=calendar-unmark=).
+
+- M-x diary-print-entries
+
+  Print hard copy of the diary display as it appears.
+
+- M-x diary
+
+  Display all diary entries for today's date.
+
+- M-x diary-mail-entries
+
+  Mail yourself email reminders about upcoming diary entries.
+
+Displaying the diary entries with d shows in a separate buffer the diary entries for the selected date in the calendar. The mode line of
+the new buffer shows the date of the diary entries. Holidays are shown
+either in the buffer or in the mode line, depending on the display
+method you choose (see [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Diary-Display][Diary  Display]]). If you specify a numeric argument with d, it shows all the
+diary entries for that many successive days. Thus, 2 d displays all
+the entries for the selected date and for the following day.
+
+Another way to display the diary entries for a date is to click mouse-3
+on the date, and then choose Diary entries from the menu that appears.
+If the variable =calendar-view-diary-initially-flag= is non-=nil=,
+creating the calendar lists the diary entries for the current date
+(provided the current date is visible).
+
+To get a broader view of which days are mentioned in the diary, use the
+m command. This marks the dates that have diary entries in a different
+face. See
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Calendar-Customizing][diary-entry-marker]].
+
+This command applies both to the months that are currently visible and
+to those that subsequently become visible after scrolling. To turn
+marking off and erase the current marks, type u, which also turns off
+holiday marks (see
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Holidays][Holidays]]).
+If the variable =calendar-mark-diary-entries-flag= is non-=nil=,
+creating or updating the calendar marks diary dates automatically.
+
+To prevent an individual diary entry from being marked in the calendar,
+insert the string that =diary-nonmarking-symbol= specifies (the default
+is '&') at the beginning of the entry, before the date. This has no
+effect on display of the entry in the diary buffer; it only affects
+marks on dates in the calendar. Nonmarking entries can be useful for
+generic entries that would otherwise mark many different dates.
+
+To see the full diary file, rather than just some of the entries, use
+the s command.
+
+The command M-x diary displays the diary entries for the current date,
+independently of the calendar display, and optionally for the next few
+days as well; the variable =diary-number-of-entries= specifies how many
+days to include. See
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Diary-Customizing][diary-number-of-entries]].
+
+If you put =(diary)= in your .emacs file, this automatically displays a
+window with the day's diary entries when you start Emacs.
+
+Some people like to receive email notifications of events in their
+diary. To send such mail to yourself, use the command M-x
+diary-mail-entries. A prefix argument specifies how many days (starting
+with today) to check; otherwise, the variable =diary-mail-days= says how
+many days.
+
+*** 31.10.3 Date Formats
+
+
+Here are some sample diary entries, illustrating different ways of
+formatting a date. The examples all show dates in American order (month,
+day, year), but Calendar mode supports European order (day, month, year)
+and ISO order (year, month, day) as options.
+# 所以采用的标准格式是ISO
+
+#+BEGIN_EXAMPLE
+         4/20/12  Switch-over to new tabulation system
+         apr. 25  Start tabulating annual results
+         4/30  Results for April are due
+         */25  Monthly cycle finishes
+         Friday  Don't leave without backing up files
+#+END_EXAMPLE
+
+The first entry appears only once, on April 20, 2012. The second and
+third appear every year on the specified dates, and the fourth uses a
+wildcard (asterisk) for the month, so it appears on the 25th of every
+month. The final entry appears every week on Friday.
+
+You can use just numbers to express a date, as in 'month/day' or
+'month/day/year'. This must be followed by a nondigit. In the date
+itself, month and day are numbers of one or two digits. The optional
+year is also a number, and may be abbreviated to the last two digits;
+that is, you can use '11/12/2012' or '11/12/12'.
+
+Dates can also have the form 'monthname day' or 'monthname day, year',
+where the month's name can be spelled in full or abbreviated (with or
+without a period). The preferred abbreviations for month and day names
+can be set using the variables =calendar-abbrev-length=,
+=calendar-month-abbrev-array=, and =calendar-day-abbrev-array=. The
+default is to use the first three letters of a name as its abbreviation.
+Case is not significant.
+# 大小写均可.
+A date may be generic; that is, partially unspecified. Then the entry
+applies to all dates that match the specification. If the date does not
+contain a year, it is generic and applies to any year. Alternatively,
+month, day, or year can be '/'; this matches any month, day, or year,
+respectively. Thus, a diary entry ‘3////' matches any day in March of
+any year; so does ‘march /'.
+
+If you prefer the European style of writing dates (in which the day
+comes before the month), or the ISO style (in which the order is year,
+month, day), type M-x calendar-set-date-style while in the calendar, or
+customize the variable =calendar-date-style=. This affects how diary
+dates are interpreted, date display, and the order in which some
+commands expect their arguments to be given.
+
+You can use the name of a day of the week as a generic date which
+applies to any date falling on that day of the week. You can abbreviate
+the day of the week as described above, or spell it in full; case is not
+significant.
+
+# calendar style是可以变更的..
+
+*** 31.10.4 Commands to Add to the Diary
+
+
+While in the calendar, there are several commands to create diary
+entries. The basic commands are listed here; more sophisticated commands
+are in the next section (see [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Special-Diary-Entries][Special Diary Entries]]). Entries can also be based on non-Gregorian calendars.
+See [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Non_002dGregorian-Diary][Non-Gregorian Diary]].
+
+- i d
+
+  Add a diary entry for the selected date (=diary-insert-entry=).
+
+- i w
+
+  Add a diary entry for the selected day of the week
+  (=diary-insert-weekly-entry=).
+
+- i m
+
+  Add a diary entry for the selected day of the month
+  (=diary-insert-monthly-entry=).
+
+- i y
+
+  Add a diary entry for the selected day of the year
+  (=diary-insert-yearly-entry=).
+
+# 这些命令,从org中修改了.
+  You can make a diary entry for a specific date by selecting that date
+  in the calendar window and typing the i d command. This command
+  displays the end of your diary file in another window and inserts the
+  date; you can then type the rest of the diary entry.
+
+  If you want to make a diary entry that applies to a specific day of
+  the week, select that day of the week (any occurrence will do) and
+  type i w. This inserts the day-of-week as a generic date; you can then
+  type the rest of the diary entry. You can make a monthly diary entry
+  in the same fashion: select the day of the month, use the i m command,
+  and type the rest of the entry. Similarly, you can insert a yearly
+  diary entry with the i y command.
+
+All of the above commands make marking diary entries by default. To make
+a nonmarking diary entry, give a prefix argument to the command. For
+example, C-u i w makes a nonmarking weekly diary entry.
+
+When you modify the diary file, be sure to save the file before exiting
+Emacs. Saving the diary file after using any of the above insertion
+commands will automatically update the diary marks in the calendar
+window, if appropriate. You can use the command =calendar-redraw= to
+force an update at any time.
+
+
+*** 31.10.5 Special Diary Entries
+ # 所有的更改都从org中实现.
+In addition to entries based on calendar dates, the diary file can
+contain sexp entries for regular events such as anniversaries. These
+entries are based on Lisp expressions (sexps) that Emacs evaluates as it
+scans the diary file. Instead of a date, a sexp entry contains '%%'
+followed by a Lisp expression which must begin and end with parentheses.
+The Lisp expression determines which dates the entry applies to.
+
+Calendar mode provides commands to insert certain commonly used sexp
+entries:
+
+- i a
+
+  Add an anniversary diary entry for the selected date
+  (=diary-insert-anniversary-entry=).
+
+- i b
+
+  Add a block diary entry for the current region
+  (=diary-insert-block-entry=).
+
+- i c
+
+  Add a cyclic diary entry starting at the date
+  (=diary-insert-cyclic-entry=).
+
+  If you want to make a diary entry that applies to the anniversary of a
+  specific date, move point to that date and use the i a command. This
+  displays the end of your diary file in another window and inserts the
+  anniversary description; you can then type the rest of the diary
+  entry. The entry looks like this:
+
+#+BEGIN_EXAMPLE
+         %%(diary-anniversary 10 31 1988) Arthur's birthday
+#+END_EXAMPLE
+
+This entry applies to October 31 in any year after 1988; '10 31 1988'
+specifies the date. (If you are using the European or ISO calendar
+style, the input order of month, day and year is different.) The reason
+this expression requires a beginning year is that advanced diary
+functions can use it to calculate the number of elapsed years.
+
+A block diary entry applies to a specified range of consecutive dates.
+Here is a block diary entry that applies to all dates from June 24, 2012
+through July 10, 2012:
+
+#+BEGIN_EXAMPLE
+         %%(diary-block 6 24 2012 7 10 2012) Vacation
+#+END_EXAMPLE
+
+The '6 24 2012' indicates the starting date and the '7 10 2012'
+indicates the stopping date. (Again, if you are using the European or
+ISO calendar style, the input order of month, day and year is
+different.)
+
+To insert a block entry, place point and the mark on the two dates that
+begin and end the range, and type i b. This command displays the end of
+your diary file in another window and inserts the block description; you
+can then type the diary entry.
+
+Cyclic diary entries repeat after a fixed interval of days. To create
+one, select the starting date and use the i c command. The command
+prompts for the length of interval, then inserts the entry, which looks
+like this:
+
+#+BEGIN_EXAMPLE
+         %%(diary-cyclic 50 3 1 2012) Renew medication
+#+END_EXAMPLE
+
+This entry applies to March 1, 2012 and every 50th day following; '3 1
+2012' specifies the starting date. (If you are using the European or ISO
+calendar style, the input order of month, day and year is different.)
+
+All three of these commands make marking diary entries. To insert a
+nonmarking entry, give a prefix argument to the command. For example,
+C-u i a makes a nonmarking anniversary diary entry.
+
+Marking sexp diary entries in the calendar can be time-consuming, since
+every date visible in the calendar window must be individually checked.
+So it's a good idea to make sexp diary entries nonmarking (with '&')
+when possible.
+
+Another sophisticated kind of sexp entry, a floating diary entry,
+specifies a regularly occurring event by offsets specified in days,
+weeks, and months. It is comparable to a crontab entry interpreted by
+the =cron= utility. Here is a nonmarking, floating diary entry that
+applies to the fourth Thursday in November:
+
+#+BEGIN_EXAMPLE
+         &%%(diary-float 11 4 4) American Thanksgiving
+#+END_EXAMPLE
+
+The 11 specifies November (the eleventh month), the 4 specifies Thursday
+(the fourth day of the week, where Sunday is numbered zero), and the
+second 4 specifies the fourth Thursday (1 would mean "first", 2 would
+mean "second", −2 would mean "second-to-last", and so on). The month can
+be a single month or a list of months. Thus you could change the 11
+above to ‘'(1 2 3)' and have the entry apply to the last Thursday of
+January, February, and March. If the month is =t=, the entry applies to
+all months of the year.
+
+Each of the standard sexp diary entries takes an optional parameter
+specifying the name of a face or a single-character string to use when
+marking the entry in the calendar. Most generally, sexp diary entries
+can perform arbitrary computations to determine when they apply.
+*** 31.10.6 Appointments
+
+If you have a diary entry for an appointment, and that diary entry
+begins with a recognizable time of day, Emacs can warn you in advance
+that an appointment is pending. Emacs alerts you to the appointment by
+displaying a message in your chosen format, as specified by the variable
+=appt-display-format=. If the value of =appt-audible= is non-=nil=, the
+warning includes an audible reminder. In addition, if
+=appt-display-mode-line= is non-=nil=, Emacs displays the number of
+minutes to the appointment on the mode line.
+
+If =appt-display-format= has the value =window=, then the variable
+=appt-display-duration= controls how long the reminder window is visible
+for; and the variables =appt-disp-window-function= and
+=appt-delete-window-function= give the names of functions used to create
+and destroy the window, respectively.
+
+To enable appointment notification, type M-x appt-activate. With a
+positive argument, it enables notification; with a negative argument, it
+disables notification; with no argument, it toggles. Enabling
+notification also sets up an appointment list for today from the diary
+file, giving all diary entries found with recognizable times of day, and
+reminds you just before each of them.
+
+For example, suppose the diary file contains these lines:
+
+#+BEGIN_EXAMPLE
+         Monday
+           9:30am Coffee break
+          12:00pm Lunch
+#+END_EXAMPLE
+
+Then on Mondays, you will be reminded at around 9:20am about your coffee
+break and at around 11:50am about lunch. The variable
+=appt-message-warning-time= specifies how many minutes (default 12) in
+advance to warn you. This is a default warning time. Each appointment
+can specify a different warning time by adding a piece matching
+=appt-warning-time-regexp= (see that variable's documentation for
+details).
+
+You can write times in am/pm style (with '12:00am' standing for midnight
+and '12:00pm' standing for noon), or 24-hour European/military style.
+You need not be consistent; your diary file can have a mixture of the
+two styles. Times must be at the beginning of diary entries if they are
+to be recognized.
+
+Emacs updates the appointments list from the diary file automatically
+just after midnight. You can force an update at any time by re-enabling
+appointment notification. Both these actions also display the day's
+diary buffer, unless you set =appt-display-diary= to =nil=. The
+appointments list is also updated whenever the diary file (or a file it
+includes; see
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Fancy-Diary-Display][Fancy Diary Display]]) is saved. If you use the Org Mode and keep appointments
+in your Org agenda files, you can add those appointments to the list
+using the =org-agenda-to-appt= command. See
+[[https://www.gnu.org/software/emacs/manual/html_mono/org.html#Weekly_002fdaily-agenda][Appointment reminders]], for more about that command.
+
+You can also use the appointment notification facility like an alarm
+clock. The command M-x appt-add adds entries to the appointment list
+without affecting your diary file. You delete entries from the
+appointment list with M-x appt-delete.
+
+*** 31.10.7 Importing and Exporting Diary Entries
+
+You can transfer diary entries between Emacs diary files and a variety
+of other formats.
+
+You can import diary entries from Outlook-generated appointment
+messages. While viewing such a message in Rmail or Gnus, do M-x
+diary-from-outlook to import the entry. You can make this command
+recognize additional appointment message formats by customizing the
+variable =diary-outlook-formats=. Other mail clients can set
+=diary-from-outlook-function= to an appropriate value.
+
+The icalendar package allows you to transfer data between your Emacs
+diary file and iCalendar files, which are defined in RFC 2445---Internet
+Calendaring and Scheduling Core Object Specification (iCalendar) (as
+well as the earlier vCalendar format).
+
+The command =icalendar-import-buffer= extracts iCalendar data from the
+current buffer and adds it to your diary file. This function is also
+suitable for automatic extraction of iCalendar data; for example with
+the Rmail mail client one could use:
+
+#+BEGIN_EXAMPLE
+         (add-hook 'rmail-show-message-hook 'icalendar-import-buffer)
+#+END_EXAMPLE
+
+The command =icalendar-import-file= imports an iCalendar file and adds
+the results to an Emacs diary file. For example:
+
+#+BEGIN_EXAMPLE
+         (icalendar-import-file "/here/is/calendar.ics"
+                                "/there/goes/ical-diary")
+#+END_EXAMPLE
+
+You can use an =#include= directive to add the import file contents to
+the main diary file, if these are different files. See
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Fancy-Diary-Display][Fancy Diary Display]].
+
+Use =icalendar-export-file= to interactively export an entire Emacs
+diary file to iCalendar format. To export only a part of a diary file,
+mark the relevant area, and call =icalendar-export-region=. In both
+cases, Emacs appends the result to the target file.
+
+
+** 31.11 Daylight Saving Time
+# daylight saveing time可以略掉, 因为与我的日常生活无关.
+Emacs understands the difference between standard time and daylight
+saving time---the times given for sunrise, sunset, solstices, equinoxes,
+and the phases of the moon take that into account. The rules for
+daylight saving time vary from place to place and have also varied
+historically from year to year. To do the job properly, Emacs needs to
+know which rules to use.
+
+Some operating systems keep track of the rules that apply to the place
+where you are; on these systems, Emacs gets the information it needs
+from the system automatically. If some or all of this information is
+missing, Emacs fills in the gaps with the rules currently used in
+Cambridge, Massachusetts. If the resulting rules are not what you want,
+you can tell Emacs the rules to use by setting certain variables:
+=calendar-daylight-savings-starts= and =calendar-daylight-savings-ends=.
+
+These values should be Lisp expressions that refer to the variable
+=year=, and evaluate to the Gregorian date on which daylight saving time
+starts or (respectively) ends, in the form of a list =(=month day
+year=)=. The values should be =nil= if your area does not use daylight
+saving time.
+
+Emacs uses these expressions to determine the starting date of daylight
+saving time for the holiday list and for correcting times of day in the
+solar and lunar calculations.
+
+The values for Cambridge, Massachusetts are as follows:
+
+#+BEGIN_EXAMPLE
+         (calendar-nth-named-day 2 0 3 year)
+         (calendar-nth-named-day 1 0 11 year)
+#+END_EXAMPLE
+
+That is, the second 0th day (Sunday) of the third month (March) in the
+year specified by =year=, and the first Sunday of the eleventh month
+(November) of that year. If daylight saving time were changed to start
+on October 1, you would set =calendar-daylight-savings-starts= to this:
+
+#+BEGIN_EXAMPLE
+         (list 10 1 year)
+#+END_EXAMPLE
+
+If there is no daylight saving time at your location, or if you want all
+times in standard time, set =calendar-daylight-savings-starts= and
+=calendar-daylight-savings-ends= to =nil=.
+
+The variable =calendar-daylight-time-offset= specifies the difference
+between daylight saving time and standard time, measured in minutes. The
+value for Cambridge, Massachusetts is 60.
+
+Finally, the two variables =calendar-daylight-savings-starts-time= and
+=calendar-daylight-savings-ends-time= specify the number of minutes
+after midnight local time when the transition to and from daylight
+saving time should occur. For Cambridge, Massachusetts both variables'
+values are 120.
+
+** 31.12 Summing Time Intervals
+# timeclock的功能, 去org中使用.
+
+The timeclock package adds up time intervals, so you can (for instance)
+keep track of how much time you spend working on particular projects. (A
+more advanced alternative is to use the Org Mode's facilities for
+clocking time, see
+[[https://www.gnu.org/software/emacs/manual/html_mono/org.html#Clocking-work-time][Clocking work time]]).
+
+Use the M-x timeclock-in command when you start working on a project,
+and M-x timeclock-out command when you're done. Each time you do this,
+it adds one time interval to the record of the project. You can change
+to working on a different project with M-x timeclock-change.
+
+Once you've collected data from a number of time intervals, you can use
+M-x timeclock-workday-remaining to see how much time is left to work
+today (assuming a typical average of 8 hours a day), and M-x
+timeclock-when-to-leave which will calculate when you're done.
+
+If you want Emacs to display the amount of time left of your workday in
+the mode line, either customize the =timeclock-modeline-display=
+variable and set its value to =t=, or invoke the M-x
+timeclock-modeline-display command.
+
+Terminating the current Emacs session might or might not mean that you
+have stopped working on the project and, by default, Emacs asks you. You
+can, however, customize the value of the variable
+=timeclock-ask-before-exiting= to =nil= to avoid the question; then,
+only an explicit M-x timeclock-out or M-x timeclock-change will tell
+Emacs that the current interval is over.
+
+The timeclock functions work by accumulating the data in a file called
+~/.emacs.d/timelog. You can specify a different name for this file by
+customizing the variable =timeclock-file=. If you edit the timeclock
+file manually, or if you change the value of any of timeclock's
+customizable variables, you should run the command M-x
+timeclock-reread-log to update the data in Emacs from the file.
+
+** 31.13 More advanced features of the Calendar and Diary
+
+This section describes some of the more advanced/specialized features of
+the calendar and diary. It starts with some of the many ways in which
+you can customize the calendar and diary to suit your personal tastes.
+
+*** 31.13.1 Customizing the Calendar
+
+The calendar display unfortunately cannot be changed from three months,
+but you can customize the whitespace used by setting the variables:
+=calendar-left-margin=, =calendar-day-header-width=,
+=calendar-day-digit-width=, =calendar-column-width=, and
+=calendar-intermonth-spacing=. To display text /between/ the months, for
+example week numbers, customize the variables
+=calendar-intermonth-header= and =calendar-intermonth-text= as described
+in their documentation.
+
+The variable =calendar-month-header= controls the text that appears
+above each month in the calendar. By default, it shows the month and
+year. The variable =calendar-day-header-array= controls the text that
+appears above each day's column in every month. By default, it shows the
+first two letters of each day's name.
+
+The variable =calendar-holiday-marker= specifies how to mark a date that
+is a holiday. Its value may be a single-character string to insert next
+to the date, or a face name to use for displaying the date. Likewise,
+the variable =diary-entry-marker= specifies how to mark a date that has
+diary entries. The function =calendar-mark-today= uses
+=calendar-today-marker= to mark today's date. By default, the calendar
+uses faces named =holiday=, =diary=, and =calendar-today= for these
+purposes.
+
+Starting the calendar runs the normal hook
+=calendar-initial-window-hook=. Recomputation of the calendar display
+does not run this hook. But if you leave the calendar with the q command
+and reenter it, the hook runs again.
+
+The variable =calendar-today-visible-hook= is a normal hook run after
+the calendar buffer has been prepared with the calendar, when the
+current date is visible in the window. One use of this hook is to mark
+today's date; to do that use either of the functions
+=calendar-mark-today= or =calendar-star-date=:
+
+#+BEGIN_EXAMPLE
+         (add-hook 'calendar-today-visible-hook 'calendar-mark-today)
+#+END_EXAMPLE
+
+A similar normal hook, =calendar-today-invisible-hook= is run if the
+current date is /not/ visible in the window.
+
+Each of the calendar cursor motion commands runs the hook
+=calendar-move-hook= after it moves the cursor.
+
+*** 31.13.2 Customizing the Holidays
+
+There are several variables listing the default holidays that Emacs
+knows about. These are: =holiday-general-holidays=,
+=holiday-local-holidays=, =holiday-solar-holidays=,
+=holiday-bahai-holidays=, =holiday-christian-holidays=,
+=holiday-hebrew-holidays=, =holiday-islamic-holidays=,
+=holiday-oriental-holidays=, and =holiday-other-holidays=. The names
+should be self-explanatory; e.g., =holiday-solar-holidays= lists sun-
+and moon-related holidays.
+# 修改为holiday-general-holidays
+You can customize these lists of holidays to your own needs, deleting or
+adding holidays as described below. Set any of them to =nil= to not show
+the associated holidays.
+
+The general holidays are, by default, holidays common throughout the
+United States. In contrast, =holiday-local-holidays= and
+=holiday-other-holidays= are both empty by default. These are intended
+for system-wide settings and your individual use, respectively.
+
+By default, Emacs does not include all the holidays of the religions
+that it knows, only those commonly found in secular calendars. For a
+more extensive collection of religious holidays, you can set any (or
+all) of the variables =calendar-bahai-all-holidays-flag=,
+=calendar-christian-all-holidays-flag=,
+=calendar-hebrew-all-holidays-flag=, or
+=calendar-islamic-all-holidays-flag= to =t=.
+
+Each of the holiday variables is a list of holiday forms, each form
+describing a holiday (or sometimes a list of holidays). Here is a table
+of the possible kinds of holiday form. Day numbers and month numbers
+count starting from 1, but dayname numbers count Sunday as 0. The
+argument string is always the description of the holiday, as a string.
+
+- =(holiday-fixed=month day string=)=
+
+  A fixed date on the Gregorian calendar.
+
+- =(holiday-float=month dayname k string
+
+  ​ &optional day) The kth dayname (dayname=0 for Sunday, and so on)
+  after or before Gregorian date month, day. Negative k means count back
+  from the end of the month. Optional day defaults to 1 if k is
+  positive, and the last day of month otherwise.
+
+- =(holiday-chinese=month day string=)=
+
+  A fixed date on the Chinese calendar.
+
+- =(holiday-hebrew=month day string=)=
+
+  A fixed date on the Hebrew calendar.
+
+- =(holiday-islamic=month day string=)=
+
+  A fixed date on the Islamic calendar.
+
+- =(holiday-julian=month day string=)=
+
+  A fixed date on the Julian calendar.
+
+- =(holiday-sexp=sexp string=)=
+
+  A date calculated by the Lisp expression sexp. The expression should
+  use the variable =year= to compute and return the date of a holiday in
+  the form of a list =(=month day year=)=, or =nil= if the holiday
+  doesn't happen this year.
+
+- =(if=condition holiday-form=)=
+
+  A holiday that happens only if condition is true.
+
+- =(=function [args]=)=
+
+  A list of dates calculated by the function function, called with
+  arguments args.
+
+For example, suppose you want to add Bastille Day, celebrated in France
+on July 14 (i.e., the fourteenth day of the seventh month). You can do
+this as follows:
+
+#+BEGIN_EXAMPLE
+         (setq holiday-other-holidays '((holiday-fixed 7 14 "Bastille Day")))
+#+END_EXAMPLE
+
+Many holidays occur on a specific day of the week, at a specific time of
+month. Here is a holiday form describing Hurricane Supplication Day,
+celebrated in the Virgin Islands on the fourth Monday in July:
+
+#+BEGIN_EXAMPLE
+         (holiday-float 7 1 4 "Hurricane Supplication Day")
+#+END_EXAMPLE
+
+Here the 7 specifies July, the 1 specifies Monday (Sunday is 0, Tuesday
+is 2, and so on), and the 4 specifies the fourth occurrence in the month
+(1 specifies the first occurrence, 2 the second occurrence, −1 the last
+occurrence, −2 the second-to-last occurrence, and so on).
+
+You can specify holidays that occur on fixed days of the Bahá'í,
+Chinese, Hebrew, Islamic, and Julian calendars too. For example,
+
+#+BEGIN_EXAMPLE
+         (setq holiday-other-holidays
+               '((holiday-hebrew 10 2 "Last day of Hanukkah")
+                 (holiday-islamic 3 12 "Mohammed's Birthday")
+                 (holiday-julian 4 2 "Jefferson's Birthday")))
+#+END_EXAMPLE
+
+adds the last day of Hanukkah (since the Hebrew months are numbered with
+1 starting from Nisan), the Islamic feast celebrating Mohammed's
+birthday (since the Islamic months are numbered from 1 starting with
+Muharram), and Thomas Jefferson's birthday, which is 2 April 1743 on the
+Julian calendar.
+
+To include a holiday conditionally, use either Emacs Lisp's =if= or the
+=holiday-sexp= form. For example, American presidential elections occur
+on the first Tuesday after the first Monday in November of years
+divisible by 4:
+
+#+BEGIN_EXAMPLE
+         (holiday-sexp '(if (zerop (% year 4))
+                            (calendar-gregorian-from-absolute
+                             (1+ (calendar-dayname-on-or-before
+                                   1 (+ 6 (calendar-absolute-from-gregorian
+                                           (list 11 1 year)))))))
+                       "US Presidential Election")
+#+END_EXAMPLE
+
+or
+
+#+BEGIN_EXAMPLE
+         (if (zerop (% displayed-year 4))
+             (holiday-fixed 11
+                    (calendar-extract-day
+                      (calendar-gregorian-from-absolute
+                        (1+ (calendar-dayname-on-or-before
+                              1 (+ 6 (calendar-absolute-from-gregorian
+                                       (list 11 1 displayed-year)))))))
+                    "US Presidential Election"))
+#+END_EXAMPLE
+
+Some holidays just don't fit into any of these forms because special
+calculations are involved in their determination. In such cases you must
+write a Lisp function to do the calculation. To include eclipses, for
+example, add =(eclipses)= to =holiday-other-holidays= and write an Emacs
+Lisp function =eclipses= that returns a (possibly empty) list of the
+relevant Gregorian dates among the range visible in the calendar window,
+with descriptive strings, like this:
+
+#+BEGIN_EXAMPLE
+         (((6 4 2012) "Lunar Eclipse") ((11 13 2012) "Solar Eclipse") ... )
+#+END_EXAMPLE
+
+*** 31.13.3 Converting from the Mayan Calendar
+
+Here are the commands to select dates based on the Mayan calendar:
+
+- g m l
+
+  Move to a date specified by the long count calendar
+  (=calendar-mayan-goto-long-count-date=).
+
+- g m n t
+
+  Move to the next occurrence of a place in the tzolkin calendar
+  (=calendar-mayan-next-tzolkin-date=).
+
+- g m p t
+
+  Move to the previous occurrence of a place in the tzolkin calendar
+  (=calendar-mayan-previous-tzolkin-date=).
+
+- g m n h
+
+  Move to the next occurrence of a place in the haab calendar
+  (=calendar-mayan-next-haab-date=).
+
+- g m p h
+
+  Move to the previous occurrence of a place in the haab calendar
+  (=calendar-mayan-previous-haab-date=).
+
+- g m n c
+
+  Move to the next occurrence of a place in the calendar round
+  (=calendar-mayan-next-calendar-round-date=).
+
+- g m p c
+
+  Move to the previous occurrence of a place in the calendar round
+  (=calendar-mayan-previous-calendar-round-date=).
+
+  To understand these commands, you need to understand the Mayan
+  calendars. The long count is a counting of days with these units:
+
+#+BEGIN_EXAMPLE
+         1 kin = 1 day   1 uinal = 20 kin   1 tun = 18 uinal
+         1 katun = 20 tun   1 baktun = 20 katun
+#+END_EXAMPLE
+
+Thus, the long count date 12.16.11.16.6 means 12 baktun, 16 katun, 11
+tun, 16 uinal, and 6 kin. The Emacs calendar can handle Mayan long count
+dates as early as 7.17.18.13.3, but no earlier. When you use the g m l
+command, type the Mayan long count date with the baktun, katun, tun,
+uinal, and kin separated by periods.
+
+The Mayan tzolkin calendar is a cycle of 260 days formed by a pair of
+independent cycles of 13 and 20 days. Since this cycle repeats
+endlessly, Emacs provides commands to move backward and forward to the
+previous or next point in the cycle. Type g m p t to go to the previous
+tzolkin date; Emacs asks you for a tzolkin date and moves point to the
+previous occurrence of that date. Similarly, type g m n t to go to the
+next occurrence of a tzolkin date.
+
+The Mayan haab calendar is a cycle of 365 days arranged as 18 months of
+20 days each, followed by a 5-day monthless period. Like the tzolkin
+cycle, this cycle repeats endlessly, and there are commands to move
+backward and forward to the previous or next point in the cycle. Type g
+m p h to go to the previous haab date; Emacs asks you for a haab date
+and moves point to the previous occurrence of that date. Similarly, type
+g m n h to go to the next occurrence of a haab date.
+
+The Maya also used the combination of the tzolkin date and the haab
+date. This combination is a cycle of about 52 years called a /calendar
+round/. If you type g m p c, Emacs asks you for both a haab and a
+tzolkin date and then moves point to the previous occurrence of that
+combination. Use g m n c to move point to the next occurrence of a
+combination. These commands signal an error if the haab/tzolkin date
+combination you have typed is impossible.
+
+Emacs uses strict completion (see
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Completion-Exit][Completion
+Exit]]) whenever it asks you to type a Mayan name, so you don't have to
+worry about spelling.
+
+
+*** 31.13.4 Date Display Format
+
+
+You can customize the way dates are displayed in the diary, mode lines,
+and messages by setting =calendar-date-display-form=. This variable
+holds a list of expressions that can involve the variables =month=,
+=day=, and =year=, which are all numbers in string form, and =monthname=
+and =dayname=, which are both alphabetic strings. In the American style,
+the default value of this list is as follows:
+
+#+BEGIN_EXAMPLE
+         ((if dayname (concat dayname ", ")) monthname " " day ", " year)
+#+END_EXAMPLE
+
+while in the European style this value is the default:
+
+#+BEGIN_EXAMPLE
+         ((if dayname (concat dayname ", ")) day " " monthname " " year)
+#+END_EXAMPLE
+
+The default ISO date representation is:
+
+#+BEGIN_EXAMPLE
+         ((format "%s-%.2d-%.2d" year (string-to-number month)
+                  (string-to-number day)))
+#+END_EXAMPLE
+
+Another typical American format is:
+
+#+BEGIN_EXAMPLE
+         (month "/" day "/" (substring year -2))
+#+END_EXAMPLE
+
+
+*** 31.13.5 Time Display Format
+
+The calendar and diary by default display times of day in the
+conventional American style with the hours from 1 through 12, minutes,
+and either 'am' or 'pm'. If you prefer the European style, also known in
+the US as military, in which the hours go from 00 to 23, you can alter
+the variable =calendar-time-display-form=. This variable is a list of
+expressions that can involve the variables =12-hours=, =24-hours=, and
+=minutes=, which are all numbers in string form, and =am-pm= and
+=time-zone=, which are both alphabetic strings. The default value is:
+
+#+BEGIN_EXAMPLE
+         (12-hours ":" minutes am-pm
+                   (if time-zone " (") time-zone (if time-zone ")"))
+#+END_EXAMPLE
+
+Here is a value that provides European style times:
+
+#+BEGIN_EXAMPLE
+         (24-hours ":" minutes
+                   (if time-zone " (") time-zone (if time-zone ")"))
+#+END_EXAMPLE
+
+Note that few calendar functions return a time of day (at present, only
+solar functions).
+
+
+*** 31.13.6 Customizing the Diary
+     :PROPERTIES:
+     :CUSTOM_ID: customizing-the-diary
+     :END:
+
+Ordinarily, the diary window indicates any holidays that fall on the
+date of the diary entries, either in the mode line or the buffer itself.
+The process of checking for holidays can be slow, depending on the
+defined holidays. In that case, setting =diary-show-holidays-flag= to
+=nil= will speed up the diary display.
+
+The variable =diary-number-of-entries= controls the number of days of
+diary entries to be displayed at one time. It affects the initial
+display when =calendar-view-diary-initially-flag= is =t=, as well as the
+command M-x diary. For example, a value of 1 (the default) displays only
+the current day's diary entries, whereas a value of 2 will also show the
+next day's entries. The value can also be a vector of seven integers:
+for example, if the value is =[0 2 2 2 2 4 1]= then no diary entries
+appear on Sunday, the current date's and the next day's diary entries
+appear Monday through Thursday, Friday through Monday's entries appear
+on Friday, while on Saturday only that day's entries appear.
+
+You can customize the form of dates in your diary file by setting the
+variable =diary-date-forms=. This variable is a list of patterns for
+recognizing a date. Each date pattern is a list whose elements may be
+regular expressions (see [[https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Regular-Expressions][Regular Expressions]]) or the symbols =month=, =day=, =year=, =monthname=, and
+=dayname=. All these elements serve as patterns that match certain kinds
+of text in the diary file. In order for the date pattern as a whole to
+match, all of its elements must match consecutively.
+
+A regular expression in a date pattern matches in its usual fashion,
+using the standard syntax table altered so that ‘*' is a word
+constituent.
+
+The symbols =month=, =day=, =year=, =monthname=, and =dayname= match the
+month number, day number, year number, month name, and day name of the
+date being considered. The symbols that match numbers allow leading
+zeros; those that match names allow capitalization and abbreviation (as
+specified by =calendar-month-abbrev-array= and
+=calendar-day-abbrev-array=). All the symbols can match '/'; since ‘/'
+in a diary entry means "any day", "any month", and so on, it should
+match regardless of the date being considered.
+
+The default value of =diary-date-forms= in the American style is
+provided by =diary-american-date-forms=:
+
+#+BEGIN_EXAMPLE
+         ((month "/" day "[^/0-9]")
+          (month "/" day "/" year "[^0-9]")
+          (monthname " *" day "[^,0-9]")
+          (monthname " *" day ", *" year "[^0-9]")
+          (dayname "\\W"))
+#+END_EXAMPLE
+
+The variables =diary-european-date-forms= and =diary-iso-date-forms=
+provide other default styles.
+
+The date patterns in the list must be /mutually exclusive/ and must not
+match any portion of the diary entry itself, just the date and one
+character of whitespace. If, to be mutually exclusive, the pattern must
+match a portion of the diary entry text---beyond the whitespace that
+ends the date---then the first element of the date pattern /must/ be
+=backup=. This causes the date recognizer to back up to the beginning of
+the current word of the diary entry, after finishing the match. Even if
+you use =backup=, the date pattern must absolutely not match more than a
+portion of the first word of the diary entry. For example, the default
+value of =diary-european-date-forms= is:
+
+#+BEGIN_EXAMPLE
+         ((day "/" month "[^/0-9]")
+          (day "/" month "/" year "[^0-9]")
+          (backup day " *" monthname "\\W+\\<\\([^*0-9]\\|\\([0-9]+[:aApP]\\)\\)")
+          (day " *" monthname " *" year "[^0-9]")
+          (dayname "\\W"))
+#+END_EXAMPLE
+
+Notice the use of =backup= in the third pattern, because it needs to
+match part of a word beyond the date itself to distinguish it from the
+fourth pattern.
+
+
+*** 31.13.7 Diary Entries Using non-Gregorian Calendars
+     :PROPERTIES:
+     :CUSTOM_ID: diary-entries-using-non-gregorian-calendars
+     :END:
+
+As well as entries based on the standard Gregorian calendar, your diary
+can have entries based on Bahá'í, Chinese, Hebrew, or Islamic dates.
+Recognition of such entries can be time-consuming, however, and since
+most people don't use them, you must explicitly enable their use. If you
+want the diary to recognize Hebrew-date diary entries, for example, you
+must do this:
+
+#+BEGIN_EXAMPLE
+         (add-hook 'diary-nongregorian-listing-hook 'diary-hebrew-list-entries)
+         (add-hook 'diary-nongregorian-marking-hook 'diary-hebrew-mark-entries)
+#+END_EXAMPLE
+
+Similarly, for Islamic, Bahá'í and Chinese entries, add
+=diary-islamic-list-entries= and =diary-islamic-mark-entries=,
+=diary-bahai-list-entries= and =diary-bahai-mark-entries=, or
+=diary-chinese-list-entries= and =diary-chinese-mark-entries=.
+
+These diary entries have the same formats as Gregorian-date diary
+entries; except that =diary-bahai-entry-symbol= (default 'B') must
+precede a Bahá'í date, =diary-chinese-entry-symbol= (default 'C') a
+Chinese date, =diary-hebrew-entry-symbol= (default 'H') a Hebrew date,
+and =diary-islamic-entry-symbol= (default 'I') an Islamic date.
+Moreover, non-Gregorian month names may not be abbreviated (because the
+first three letters are often not unique). (Note also that you must use
+"Adar I" if you want Adar of a common Hebrew year.) For example, a diary
+entry for the Hebrew date Heshvan 25 could look like this:
+
+#+BEGIN_EXAMPLE
+         HHeshvan 25 Happy Hebrew birthday!
+#+END_EXAMPLE
+
+and would appear in the diary for any date that corresponds to Heshvan
+25 on the Hebrew calendar. And here is an Islamic-date diary entry that
+matches Dhu al-Qada 25:
+
+#+BEGIN_EXAMPLE
+         IDhu al-Qada 25 Happy Islamic birthday!
+#+END_EXAMPLE
+
+As with Gregorian-date diary entries, non-Gregorian entries are
+nonmarking if preceded by =diary-nonmarking-symbol= (default '&').
+
+Here is a table of commands used in the calendar to create diary entries
+that match the selected date and other dates that are similar in the
+Bahá'í, Chinese, Hebrew, or Islamic calendars:
+
+- i h d
+
+  =diary-hebrew-insert-entry=
+
+- i h m
+
+  =diary-hebrew-insert-monthly-entry=
+
+- i h y
+
+  =diary-hebrew-insert-yearly-entry=
+
+- i i d
+
+  =diary-islamic-insert-entry=
+
+- i i m
+
+  =diary-islamic-insert-monthly-entry=
+
+- i i y
+
+  =diary-islamic-insert-yearly-entry=
+
+- i B d
+
+  =diary-bahai-insert-entry=
+
+- i B m
+
+  =diary-bahai-insert-monthly-entry=
+
+- i B y
+
+  =diary-bahai-insert-yearly-entry=
+
+- i C d
+
+  =diary-chinese-insert-entry=
+
+- i C m
+
+  =diary-chinese-insert-monthly-entry=
+
+- i C y
+
+  =diary-chinese-insert-yearly-entry=
+
+- i C a
+
+  =diary-chinese-insert-anniversary-entry=
+
+  These commands work much like the corresponding commands for ordinary
+  diary entries: they apply to the date that point is on in the calendar
+  window, and what they do is insert just the date portion of a diary
+  entry at the end of your diary file. You must then insert the rest of
+  the diary entry. The basic commands add an entry for the specific
+  non-Gregorian date, the 'monthly' commands for the given non-Gregorian
+  day-within-month in every month, and the 'yearly' commands for the
+  given non-Gregorian day and month in every year.
+
+Next:
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Fancy-Diary-Display][Fancy
+Diary Display]], Previous:
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Non_002dGregorian-Diary][Non-Gregorian
+Diary]], Up:
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Advanced-Calendar_002fDiary-Usage][Advanced
+Calendar/Diary Usage]]
+
+*** 31.13.8 Diary Display
+
+
+Diary display works by preparing the list of diary entries and then
+running the function specified by the variable =diary-display-function=.
+The default value =diary-fancy-display= displays diary entries and
+holidays by copying them into a special buffer that exists only for the
+sake of display. Copying diary entries to a separate buffer provides an
+opportunity to change the displayed text to make it prettier---for
+example, to sort the entries by the dates they apply to.
+
+Ordinarily, the fancy diary buffer does not show days for which there
+are no diary entries, even if that day is a holiday. If you want such
+days to be shown in the fancy diary buffer, set the variable
+=diary-list-include-blanks= to =t=.
+
+The fancy diary buffer enables View mode (see [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#View-Mode][View Mode]]).
+
+The alternative display method =diary-simple-display= shows the actual
+diary buffer, and uses invisible text to hide entries that don't apply.
+Holidays are shown in the mode line. The advantage of this method is
+that you can edit the buffer and save your changes directly to the diary
+file. This method is not as flexible as the fancy method, however. For
+example, it cannot sort entries. Another disadvantage is that invisible
+text can be confusing. For example, if you copy a region of text in
+order to paste it elsewhere, invisible text may be included. Similarly,
+since the diary buffer as you see it is an illusion, simply printing the
+buffer may not print what you see on your screen.
+
+For this reason, there is a special command to print hard copy of the
+diary buffer /as it appears/; this command is M-x diary-print-entries.
+It works with either display method, although with the fancy display you
+can also print the buffer like any other. To print a hard copy of a
+day-by-day diary for a week, position point on the first day of the
+week, type 7 d, and then do M-x diary-print-entries. As usual, the
+inclusion of the holidays slows down the display slightly; you can speed
+things up by setting the variable =diary-show-holidays-flag= to =nil=.
+
+This command prepares a temporary buffer that contains only the diary
+entries currently visible in the diary buffer. Unlike with the simple
+display, the other irrelevant entries are really absent, not just
+hidden. After preparing the buffer, it runs the hook
+=diary-print-entries-hook=. The default value of this hook sends the
+data directly to the printer with the command =lpr-buffer= (see
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Printing][Printing]]).
+If you want to use a different command to do the printing, just change
+the value of this hook. Other uses might include, for example,
+rearranging the lines into order by day and time.
+
+You can edit the diary entries as they appear in the simple diary
+window, but it is important to remember that the buffer displayed
+contains the /entire/ diary file, with portions of it concealed from
+view. This means, for instance, that the C-f (=forward-char=) command
+can put point at what appears to be the end of the line, but what is in
+reality the middle of some concealed line.
+
+/Be careful when editing the diary entries in the simple display!/
+Inserting additional lines or adding/deleting characters in the middle
+of a visible line cannot cause problems, but editing at the end of a
+line may not do what you expect. Deleting a line may delete other
+invisible entries that follow it. Before editing the simple diary
+buffer, it is best to display the entire file with s
+(=diary-show-all-entries=).
+
+
+*** 31.13.9 Fancy Diary Display
+
+
+The following features only work with the fancy diary display.
+
+You can use the normal hook =diary-list-entries-hook= to sort each day's
+diary entries by their time of day. Here's how:
+
+#+BEGIN_EXAMPLE
+         (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
+#+END_EXAMPLE
+
+For each day, this sorts diary entries that begin with a recognizable
+time of day according to their times. Diary entries without times come
+first within each day. Note how the sort command is placed at the end of
+the hook list, in case earlier members of the list change the order of
+the diary entries, or add items.
+
+You can write 'comments' in diary entries, by setting the variables
+=diary-comment-start= and =diary-comment-end= to strings that delimit
+comments. The fancy display does not print comments. You might want to
+put meta-data for the use of other packages (e.g., the appointment
+package, see [[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Appointments][Appointments]]) inside comments.
+
+Your main diary file can include other files. This permits a group of
+people to share a diary file for events that apply to all of them. Lines
+in the diary file starting with =diary-include-string=:
+
+#+BEGIN_EXAMPLE
+         #include "filename"
+#+END_EXAMPLE
+
+include the diary entries from the file filename in the fancy diary
+buffer. The include mechanism is recursive, so that included files can
+include other files, and so on (you must be careful not to have a cycle
+of inclusions, of course). Here is how to enable the include facility:
+
+#+BEGIN_EXAMPLE
+         (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
+         (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
+#+END_EXAMPLE
+
+The include mechanism works only with the fancy diary display, because
+simple diary display shows the entries directly from your diary file.
+
+Previous:
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Fancy-Diary-Display][Fancy
+Diary Display]], Up:
+[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Advanced-Calendar_002fDiary-Usage][Advanced
+Calendar/Diary Usage]]
+
+*** 31.13.10 Sexp Entries and the Fancy Diary Display
+
+Sexp diary entries allow you to do more than just have complicated
+conditions under which a diary entry applies. Sexp entries should be
+preceded by =diary-sexp-entry-symbol= (default '%%') in the diary file.
+With the fancy diary display, sexp entries can generate the text of the
+entry depending on the date itself.
+
+For example, an anniversary diary entry can insert the number of years
+since the anniversary date into the text of the diary entry. Thus the
+'%d' in this diary entry:
+
+#+BEGIN_EXAMPLE
+         %%(diary-anniversary 10 31 1948) Arthur's birthday (%d years old)
+#+END_EXAMPLE
+
+gets replaced by the age, so on October 31, 1990 the entry appears in
+the fancy diary buffer like this:
+
+#+BEGIN_EXAMPLE
+         Arthur's birthday (42 years old)
+#+END_EXAMPLE
+
+If the diary file instead contains this entry:
+
+#+BEGIN_EXAMPLE
+         %%(diary-anniversary 10 31 1948) Arthur's %d%s birthday
+#+END_EXAMPLE
+
+the entry in the fancy diary buffer for October 31, 1990 appears like
+this:
+
+#+BEGIN_EXAMPLE
+         Arthur's 42nd birthday
+#+END_EXAMPLE
+
+Similarly, cyclic diary entries can interpolate the number of
+repetitions that have occurred:
+
+#+BEGIN_EXAMPLE
+         %%(diary-cyclic 50 1 1 2012) Renew medication (%d%s time)
+#+END_EXAMPLE
+
+looks like this:
+
+#+BEGIN_EXAMPLE
+         Renew medication (5th time)
+#+END_EXAMPLE
+
+in the fancy diary display on September 7, 2012.
+
+There is an early-reminder diary sexp that includes its entry in the
+diary not only on the date of occurrence, but also on earlier dates. For
+example, if you want a reminder a week before your anniversary, you can
+use
+
+#+BEGIN_EXAMPLE
+         %%(diary-remind '(diary-anniversary 12 22 1968) 7) Ed's anniversary
+#+END_EXAMPLE
+
+and the fancy diary will show 'Ed's anniversary' both on December 15 and
+on December 22.
+
+The function =diary-date= applies to dates described by a month, day,
+year combination, each of which can be an integer, a list of integers,
+or =t= (meaning all values). For example,
+
+#+BEGIN_EXAMPLE
+         %%(diary-date '(10 11 12) 22 t) Rake leaves
+#+END_EXAMPLE
+
+causes the fancy diary to show
+
+#+BEGIN_EXAMPLE
+         Rake leaves
+#+END_EXAMPLE
+
+on October 22, November 22, and December 22 of every year.
+
+The function =diary-float= allows you to describe diary entries that
+apply to dates like the third Friday of November, or the last Tuesday in
+April. The parameters are the month, dayname, and an index n. The entry
+appears on the nth dayname after the first day of month, where dayname=0
+means Sunday, 1 means Monday, and so on. If n is negative it counts
+backward from the end of month. The value of month can be a list of
+months, a single month, or =t= to specify all months. You can also use
+an optional parameter day to specify the nth dayname on or after/before
+day of month; the value of day defaults to 1 if n is positive and to the
+last day of month if n is negative. For example,
+
+#+BEGIN_EXAMPLE
+         %%(diary-float t 1 -1) Pay rent
+#+END_EXAMPLE
+
+causes the fancy diary to show
+
+#+BEGIN_EXAMPLE
+         Pay rent
+#+END_EXAMPLE
+
+on the last Monday of every month.
+
+The generality of sexp diary entries lets you specify any diary entry
+that you can describe algorithmically. A sexp diary entry contains an
+expression that computes whether the entry applies to any given date. If
+its value is non-=nil=, the entry applies to that date; otherwise, it
+does not. The expression can use the variable =date= to find the date
+being considered; its value is a list (month day year) that refers to
+the Gregorian calendar.
+
+The sexp diary entry applies to a date when the expression's value is
+non-=nil=, but some values have more specific meanings. If the value is
+a string, that string is a description of the event which occurs on that
+date. The value can also have the form =(=mark=.=string=)=; then mark
+specifies how to mark the date in the calendar, and string is the
+description of the event. If mark is a single-character string, that
+character appears next to the date in the calendar. If mark is a face
+name, the date is displayed in that face. If mark is =nil=, that
+specifies no particular highlighting for the date.
+
+Suppose you get paid on the 21st of the month if it is a weekday, and on
+the Friday before if the 21st is on a weekend. Here is how to write a
+sexp diary entry that matches those dates:
+
+#+BEGIN_EXAMPLE
+         &%%(let ((dayname (calendar-day-of-week date))
+                  (day (cadr date)))
+               (or (and (= day 21) (memq dayname '(1 2 3 4 5)))
+                   (and (memq day '(19 20)) (= dayname 5)))
+                  ) Pay check deposited
+#+END_EXAMPLE
+
+The following sexp diary entries take advantage of the ability (in the
+fancy diary display) to concoct diary entries whose text varies based on
+the date:
+
+​
+
+- =%%(diary-sunrise-sunset)=
+
+  Make a diary entry for today's local times of sunrise and sunset.
+
+- =%%(diary-lunar-phases)=
+
+  Make a diary entry for the phases (quarters) of the moon.
+
+- =%%(diary-day-of-year)=
+
+  Make a diary entry with today's day number in the current year and the
+  number of days remaining in the current year.
+
+- =%%(diary-iso-date)=
+
+  Make a diary entry with today's equivalent ISO commercial date.
+
+- =%%(diary-julian-date)=
+
+  Make a diary entry with today's equivalent Julian calendar date.
+
+- =%%(diary-astro-day-number)=
+
+  Make a diary entry with today's equivalent astronomical (Julian) day
+  number.
+
+- =%%(diary-bahai-date)=
+
+  Make a diary entry with today's equivalent Bahá'í calendar date.
+
+- =%%(diary-chinese-date)=
+
+  Make a diary entry with today's equivalent Chinese calendar date.
+
+- =%%(diary-coptic-date)=
+
+  Make a diary entry with today's equivalent Coptic calendar date.
+
+- =%%(diary-ethiopic-date)=
+
+  Make a diary entry with today's equivalent Ethiopic calendar date.
+
+- =%%(diary-french-date)=
+
+  Make a diary entry with today's equivalent date on the French
+  Revolutionary calendar.
+
+- =%%(diary-hebrew-date)=
+
+  Make a diary entry with today's equivalent Hebrew calendar date.
+
+- =%%(diary-islamic-date)=
+
+  Make a diary entry with today's equivalent Islamic calendar date.
+
+- =%%(diary-mayan-date)=
+
+  Make a diary entry with today's equivalent Mayan calendar date.
+
+- =%%(diary-persian-date)=
+
+  Make a diary entry with today's equivalent Persian calendar date.
+
+For example, including the diary entry
+
+#+BEGIN_EXAMPLE
+         &%%(diary-hebrew-date)
+#+END_EXAMPLE
+
+causes every day's diary display to contain the equivalent date on the
+Hebrew calendar, if you are using the fancy diary display. (With simple
+diary display, the literal line '&%%(diary-hebrew-date)' appears in the
+diary for any date.)
+
+This function has been used to construct certain standard Hebrew sexp
+diary entries:
+
+​
+
+- =%%(diary-hebrew-rosh-hodesh)=
+
+  Make a diary entry that tells the occurrence and ritual announcement
+  of each new Hebrew month.
+
+- =%%(diary-hebrew-parasha)=
+
+  Make a Saturday diary entry that tells the weekly synagogue scripture
+  reading.
+
+- =%%(diary-hebrew-sabbath-candles)=
+
+  Make a Friday diary entry that tells the /local time/ of Sabbath
+  candle lighting.
+
+- =%%(diary-hebrew-omer)=
+
+  Make a diary entry that gives the omer count, when appropriate.
+
+- =%%(diary-hebrew-yahrzeit=month day year=)=name
+
+  Make a diary entry marking the anniversary of a date of death. The
+  date is the /Gregorian/ (civil) date of death. The diary entry appears
+  on the proper Hebrew calendar anniversary and on the day before. (The
+  order of the parameters changes according to the calendar date style;
+  for example in the European style to day, month, year.)
+
+- =%%(diary-hebrew-birthday=month day year=)=
+
+  Make a diary entry for a birthday on the Hebrew calendar.
+
+All the functions documented above take an optional argument mark which
+specifies how to mark the date in the calendar display. If one of these
+functions decides that it applies to a certain date, it returns a value
+that contains mark, as described above.
+
+
+
+** Scripts
+*** 农历生日提醒
+后面再慢慢调整.
+#+begin_src emacs-lisp :tangle yes
+(defun me-birthday-p ()
+  "Return t if today is my birthday, i.e., 农历五月十九."
+  ;; Adapted from `calendar-chinese-date-string'
+  (require 'cal-china)
+  (pcase-let ((`(_ _ ,m ,d) (calendar-chinese-from-absolute
+                             (calendar-absolute-from-gregorian
+                              (calendar-current-date)))))
+    ;; Note: For leap months M is a float.
+    (equal (list (floor m) d) '(5 19))))
+
+(defun me-happy-birthday ()
+  ;; Avoid slowing down Emacs startup
+  (run-with-idle-timer
+   1
+   nil
+   (lambda ()
+     (when (gawei-birthday-p)
+       (let ((cursor-type nil))
+         (animate-birthday-present 'Gaowei))))))
+
+(add-hook 'emacs-startup-hook #'me-happy-birthday)
+#+end_src
+
+
+* GUI
+** Theme
+*** 写代码应用gruvboxtheme, zenburn
+*** org文件用leuven themes
+*** 闲来无事便去尝试不同的themes
+- [Popular Emacs Themes Charts](https://emacsthemes.com/popular/index.html)
+doom-city-lights，对比主打的doom-one更偏向冷色系一点
+[hlissner/emacs-doom-themes: An opinionated pack of modern color-themes](https://github.com/hlissner/emacs-doom-themes)
+- 尝试新的主题doom-nova
+x
+*** src code隐藏header
+- [Pretty Org babel blocks](https://pank.eu/blog/pretty-babel-src-blocks.html)
+
+*** Emacs的配色
+其实也不是什么神奇的技巧(´▽`)ﾉ
+一般终端的色彩主题都会有一个 16 色的调色盘，分别是
+black, red, green, yellow, blue, magenta, cyan, white
+和它们各自对应的 bright 版本
+brightblack, brightred, brightgreen, brightyellow, brightblue, brightmagenta,
+brightcyan, brightwhite
+
+还有前景色和背景色。
+这些色彩 Emacs 可以在定制主题的时候用名字直接引用，另外前景色是unspecified-fg、
+背景色是 unspecified-bg。
+
+Emacs 支持的色彩远比一般的终端模拟器要多——最常见的是 16 色和 256 色的终端。所以
+如果某些色彩主题用上了超出 256 色的颜色的话，可以策略地把这些颜色定义到终端色彩
+主题的调色盘里，然后通过调色盘引用。
+- [Emacs: disable theme background color in terminal - Stack
+  Overflow](https://stackoverflow.com/questions/19054228/emacs-disable-theme-background-color-in-terminal)
+
+** Fonts
+https://superuser.com/questions/422968/how-to-find-out-current-font-used-in-my-emacs
+查看字体:
+M-x describe-font
+C-u C-x =
+
+* Kernel and shell
+按照操作系统分类,各就其位.
+** 0. Administer the System
+:PROPERTIES:
+:Effort:   120
+:END:
+*** DONE Calendar and datetime service
+CLOSED: [2019-06-03 Mon 20:33]
+:LOGBOOK:
+- State "DONE"       from "NEXT"       [2019-06-03 Mon 20:33]
+:END:
+[Calendar/Diary - GNU Emacs Manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/Calendar_002fDiary.html#Calendar_002fDiary)
+** 1.Process Manager
+*** Shell
+**** Shell Basics
+[Shell - GNU Emacs Manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/Shell.html)
+38 Running Shell Commands from Emacs
+Emacs has commands for passing single command lines to shell subprocesses, and for running a shell interactively with input and output to an Emacs buffer, and for running a shell in a terminal emulator window.
+
+M-! cmd <RET>
+Run the shell command cmd and display the output (shell-command).
+M-| cmd <RET>
+Run the shell command cmd with region contents as input; optionally replace the region with the output (shell-command-on-region).
+M-& cmd <RET>
+Run the shell command cmd asynchronously, and display the output (async-shell-command).
+M-x shell
+Run a subshell with input and output through an Emacs buffer. You can then give commands interactively.
+M-x term
+Run a subshell with input and output through an Emacs buffer. You can then give commands interactively. Full terminal emulation is available.
+Whenever you specify a relative file name for an executable program (either in the cmd argument to one of the above commands, or in other contexts), Emacs searches for the program in the directories specified by the variable exec-path. The value of this variable must be a list of directories; the default value is initialized from the environment variable PATH when Emacs is started (see General Variables).
+
+**** Open from bash terminal
+emacs -nw -Q
+*** Server, host
+*** Package management
+1. [elpa - Updating packages in Emacs - Stack Overflow](https://stackoverflow.com/questions/14836958/updating-packages-in-emacs)
+2. [Helm | Emacs incremental completion and selection narrowing framework](https://emacs-helm.github.io/helm/#recommended-helm-extensions)
+3. [MELPA](https://melpa.org/#/?q=mel)
+4. [abo-abo/swiper: Ivy - a generic completion frontend for Emacs, Swiper - isearch with an overview, and more. Oh, man!](https://github.com/abo-abo/swiper)
+5. Install Pacakges
+   - 1) [EmacsWiki: Installing Packages](https://www.emacswiki.org/emacs/InstallingPackages)
+     Type M-x list-packages to open the package list. Press ‘i’ to mark for
+     installation, ‘u’ to unmark, and ‘x’ to perform the installation. Press
+     ‘RET’ to read more about installing and using each package.x
+- 包管理的下载地址
+#+BEGIN_SRC elisp
+(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                         ("melpa" . "http://elpa.emacs-china.org/melpa/")
+                         ("org"   . "http://elpa.emacs-china.org/org/")))
+#+END_SRC
+
+** 2.1 File Handling
+*** [EmacsWiki: Open Files In Different Ways](https://www.emacswiki.org/emacs/OpenFilesInDifferentWays)
+*** Open Files
+**** with sudo authority
+[Edit file with super-user rights - Emacs Stack Exchange](https://emacs.stackexchange.com/questions/52/edit-file-with-super-user-rights)
+C-x C-f `/sudo::/ect/hostname`
+sudo权限打开和修改文件.
+*** Neotree
+**** Reference
+ -  [jaypei/emacs-neotree: A emacs tree plugin like NerdTree for Vim.](https://github.com/jaypei/emacs-neotree)
+- Keybinding 这些只在local buffer下有效.
+    Only in Neotree Buffer:
+    n next line, p previous line。
+    SPC or RET or TAB Open current item if it is a file. Fold/Unfold current item if it is a directory.
+    U Go up a directory
+    g Refresh (这个键很特别)
+    A Maximize/Minimize the NeoTree Window
+    H Toggle display hidden files
+    O Recursively open a directory
+    C-c C-n Create a file or create a directory if filename ends with a ‘/’
+    C-c C-d Delete a file or a directory.
+    C-c C-r Rename a file or a directory.
+    C-c C-c Change the root directory.
+    C-c C-p Copy a file or a directory.
+*** 文件的种类:
+1) plain 2) picture 3) binary file
+
+** 2.2 Text Editing and  Processing (Data Stream)
+数据流的处理分为两个部分, edit and process.
+增删改查, format, repeat, undo
+*** Coding systems
+[Working with Coding Systems and Unicode in Emacs - Mastering Emacs](https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs)
+*** Edit:
+edit是从内部处理, 而text-processing可能指的是从外部处理.
+edit的目的是为了ex-do发表出来.
+1. pointer的概念, cursor的移动
+2. 基本的本质黏贴工作,(register的概念) copy, cut, paste
+3. select, kill, blank line, undo
+Editing(Alignment, Indentation, Filling; Parentheses, Spelling, Comments; 以及template)
+# 此处整理出来了所有的edit
+*** Search and Replace
+**** regex
+- delete the blank lines
+  # M-x flush-lines RET ^$ RET
+  # M-x flush-lines RET ^[[:space:]]*$ RET
+[regex - How to delete empty lines in a file by Emacs? - Stack
+Overflow](https://stackoverflow.com/questions/26478594/how-to-delete-empty-lines-in-a-file-by-emacs)
+#+BEGIN_SRC elisp
+^[[:space:]]*^J
+M-x flush-lines RET ^[[:space:]]*$ RET
+#+END_SRC
+
+- [Swiper-isearch - a more isearch-like swiper · (or
+  emacs](https://oremacs.com/2019/04/07/swiper-isearch/)
+  swiper的替代.
+*** Sorting
+*** Killing
+- [Killing - GNU Emacs Manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/Killing.html#Killing)
+*** Anki
+# 文字处理, 所以放在此处.
+**** DONE 学习anki的使用以提高工作效率
+
+
+
+
+** 2.3 Program Editing and Project Management
+*** Testing
+grep
+*** file:os.org::Git and Magit
+:PROPERTIES:
+:Effort:   120
+:END:
+:LOGBOOK:
+CLOCK: [2019-05-24 Fri 19:24]--[2019-05-24 Fri 20:11] =>  0:47
+:END:
+***** DONE 解决多用户登录github的问题,
+CLOSED: [2019-05-24 Fri 21:21]
+:PROPERTIES:
+:Effort:   30
+:END:
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2019-05-24 Fri 21:21]
+CLOCK: [2019-05-24 Fri 20:11]--[2019-05-24 Fri 21:21] =>  1:10
+:END:
+解决方案是设置collaborators.
+** 3. Memory Management
+** 4. Networking(git tools)
+编号为4更好一些,
+*** TCP
+*** email
+*** webbrowser
+** 5. Device Managetment
+*** Keyborad
+**** User Input
+1) Simple (charater, number, space)
+2) Control
+3) Modifier(M-, C-, S-)
+*** Keyboard Binding Cheatsheet
+**** Orgmode
+q Rotate todo status
+C-c C-t
+**** Keyboard operations:
+关键点， D K 是向前删除， del是向后删除。
+基本的pointer操作.[[Keyboard]]
+       1.character, word
+       2.line, sentence, function: C-M-a
+         goto line M-g g
+       3.page:C-x ], paragraph: M-},
+       4.buffer, screen
+       | C                   | M                         |
+       |---------------------+---------------------------|
+qqqqqqqqqqqqqqqq       | Character           | Word                      |
+       |---------------------+---------------------------|
+       | Line                | Sentence (a,e)            |
+       |---------------------+---------------------------|
+       | Function C-M-a      | Paragraph M-{             |
+       |---------------------+---------------------------|
+       | Page C-X [          | Buffer                    |
+       |---------------------+---------------------------|
+       | Next Screen C-v     | Previous Screen M-v       |
+       |---------------------+---------------------------|
+       | Go to Line          |                           |
+       |---------------------+---------------------------|
+       | Back to indentation | M-m                       |
+       |---------------------+---------------------------|
+       |                     | M-< move to top of buffer |
+       |                     | M-> move to end           |
+       |                     | M-g g g is g              |
+
+**** Keybinding
+***** Details
+:LOGBOOK:
+:END:
+#+begin_src markdown
+# vscode-emacs-friendly
+
+This plugin provides emacs keybindings and workflow for Visual Studio Code and is a fork of the great vscode extension by [hiro-sun](https://github.com/hiro-sun/vscode-emacs).
+
+It merges some of the pull requests in the original and other external
+ helpers that make the extension a little less an exact copy of emacs behavior, and a little more friendly in interacting with the system clipboard and normal vscode interactions.
+
+The following are some of the changes and enhancements from the original:
+
+- The clipboard handling is simplified by the removal of the emacs-only kill ring (which was also an unfinished implementation in the original). Copy, Cut, Yank and C-K work with the system clipboard now.
+- C+x k to close tab, C+x C-k all tabs
+- C+l centers screen on the cursor line
+- C+x C+f bound to quick open file
+- yank overwrites selection
+
+### Move commands
+
+| Command | Desc                            |
+| ------- | ------------------------------- |
+| `C-f`   | Move forward                    |
+| `C-b`   | Move backward                   |
+| `C-n`   | Move to the next line           |
+| `C-p`   | Move to the previous line       |
+| `C-a`   | Move to the beginning of line   |
+| `C-e`   | Move to the end of line         |
+| `M-f`   | Move forward by one word unit   |
+| `M-b`   | Move backward by one word unit  |
+| `M->`   | Move to the end of buffer       |
+| `M-<`   | Move to the beginning of buffer |
+| `C-v`   | Scroll down by one screen unit  |
+| `M-v`   | Scroll up by one screen unit    |
+| `M-g g` | Jump to line (command palette)  |
+| `M-g n` | Jump to next error              |
+| `M-g p` | Jump to previous error          |
+| `C-l`   | Center screen on current line   |
+
+### Search Commands
+
+| Command   | Desc                                  |
+| --------- | ------------------------------------- |
+| `C-s`     | Search forward                        |
+| `C-r`     | Search backward                       |
+| `A-%`     | Replace                               |
+| `C-Enter` | Replace One Match (In replace dialog) |
+| `C-M-n`   | Add selection to next find match      |
+
+### Edit commands
+
+| Command         | Desc                             |
+| --------------- | -------------------------------- |
+| `C-d`           | Delete right (DEL)               |
+| `C-h`           | Delete left (BACKSPACE)          |
+| `M-d`           | Delete word                      |
+| `M-Bksp`        | Delete word left                 |
+| `C-k`           | Kill to line end                 |
+| `C-S-Bksp`      | Kill entire line                 |
+| `C-w`           | Kill region                      |
+| `M-w`           | Copy region to kill ring         |
+| `C-y`           | Yank                             |
+| `C-j`           | Enter                            |
+| `C-m`           | Enter                            |
+| `C-x C-o`       | Delete blank lines around        |
+| `C-x h`         | Select All                       |
+| `C-x u` (`C-/`) | Undo                             |
+| `C-;`           | Toggle line comment in and out   | comment用的是;
+| `M-;`           | Toggle region comment in and out |
+| `C-x C-l`       | Convert to lower case            |
+| `C-x C-u`       | Convert to upper case            |
+
+### Other Commands
+
+| Command   | Desc                      |
+| --------- | ------------------------- |
+| `C-g`     | Cancel                    |
+| `C-space` | Set mark                  |
+| `C-quote` | IntelliSense Suggestion   |
+| `M-x`     | Open command palette      |
+| `C-M-SPC` | Toggle SideBar visibility |
+| `C-x z`   |                           |
+
+### File Commands
+
+| Command   | Desc            |
+| --------- | --------------- |
+| `C-x C-s` | Save            |
+| `C-x C-w` | Save as         |
+| `C-x C-n` | Open new window |
+
+### Tab / Buffer Manipulation Commands
+
+| Command   | Desc                                         |
+| --------- | -------------------------------------------- |
+| `C-x b`   | Switch to another open buffer                |
+| `C-x C-f` | QuickOpen a file                             |
+| `C-x k`   | Close current tab (buffer)                   |
+| `C-x C-k` | Close all tabs                               |
+| `C-x 1`   | Close editors in other (split) group.        |
+| `C-x 2`   | Split editor                                 |
+| `C-x 3`   | Toggle split layout (vertical to horizontal) |
+| `C-x o`   | Focus other split editor                     |
+
+## Conflicts with default key bindings
+
+- `ctrl+d`: editor.action.addSelectionToNextFindMatch => Use ctrl+alt+n instead;
+- `ctrl+g`: workbench.action.gotoLine => Use alt+g g instead;
+- `ctrl+b`: workbench.action.toggleSidebarVisibility => Use ctrl+alt+space instead;
+- `ctrl+space`: toggleSuggestionDetails, editor.action.triggerSuggest => Use ctrl+' instead;
+- `ctrl+x`: editor.action.clipboardCutAction => Use ctrl+w instead;
+- `ctrl+v`: editor.action.clipboardPasteAction => Use ctrl+y instead;
+- `ctrl+k`: editor.debug.action.showDebugHover, editor.action.trimTrailingWhitespace, editor.action.showHover, editor.action.removeCommentLine, editor.action.addCommentLine, editor.action.openDeclarationToTheSide;
+- `ctrl+k z`: workbench.action.toggleZenMode => Use ctrl+x z instead;
+- `ctrl+y`: redo;
+- `ctrl+m`: editor.action.toggleTabFocusMode;
+- `ctrl+/`: editor.action.commentLine => Use ctrl+; instead;
+- `ctrl+p` & `ctrl+e`: workbench.action.quickOpen => Use ctrl+x b instead;
+- `ctrl+p`: workbench.action.quickOpenNavigateNext => Use ctrl+n instead.
+
+# More information
+#+end_src
+*** Printer
+* configuration.emacs.d
+- [How can I reload .emacs after changing it? - Stack Overflow](https://stackoverflow.com/questions/2580650/how-can-i-reload-emacs-after-changing-it)
+  M-x load-file
+- 编码的问题: [emacs自动选择编码 - Emacs-general - Emacs
+  China](https://emacs-china.org/t/emacs/7814
+- Coding System
+  #+BEGIN_SRC elisp
+;;--------------------------------------------------
+;;Coding system
+;;--------------------------------------------------
+(when (fboundp 'set-charset-priority)
+  (set-charset-priority 'unicode))
+(prefer-coding-system        'utf-8)
+(set-terminal-coding-system  'utf-8)
+(set-keyboard-coding-system  'utf-8)
+(set-selection-coding-system 'utf-8)
+(setq locale-coding-system   'utf-8)
+(setq-default buffer-file-coding-system 'utf-8)
+
+(add-to-list 'file-coding-system-alist '("\\.org\\'" . utf-8))
+  #+END_SRC
+
+
+** 参考配置
+- [emacs配置 - 小幻的博客 - CSDN博
+  客](https://blog.csdn.net/xh_acmagic/article/details/78939246)
+- [jwiegley/dot-emacs: My .emacs.el file and other personal Emacs
+  goodies](https://github.com/jwiegley/dot-emacs)
+
+* Troubleshooting
+** 启动emacs
+emacs -nw -Q
+** Insert time stamp
+[datetime - How can I insert current date and time into a file using Emacs? - Stack Overflow](https://stackoverflow.com/questions/251908/how-can-i-insert-current-date-and-time-into-a-file-using-emacs)
+- C-u M-! date
+- M-x org-time-stamp
+- C-u M-x org-time-stamp
+** Go to certain line given its number:
+M-g g,
+** Debugging frozen&p emacs
+假死
+- [debugging - What do I do when Emacs is frozen? - Emacs Stack Exchange](https://emacs.stackexchange.com/questions/21643/what-do-i-do-when-emacs-is-frozen)
+Sending a USR2 signal to Emacs does really help in certain situations, where C-g is useless. But, leware that it also sets debug-on-quit.
+#+begin_src  bash
+pkill -SIGUSR2 emacs
+To do this, call M-x toggle-debug-on-quit.
+#+end_src
+** view-lossage
+** tmux eterm-color
+*** emacs中使用tmux, 256color的问题
+apt-get install ncurses-term
+https://stackoverflow.com/questions/22083177/eterm-color-unknown-terminal-type
+
+
+
+
+* ##Plugins####################################################
+* Programming Aid
+* Elisp Formatter
+** aggressive indent mode
+https://github.com/Malabarba/aggressive-indent-mode
+
+electric-indent-mode is enough to keep your code nicely aligned when all you do is type. However, once you start shifting blocks around, transposing lines, or slurping and barfing sexps, indentation is bound to go wrong.
+
+aggressive-indent-mode is a minor mode that keeps your code always indented. It reindents after every change, making it more reliable than electric-indent-mode.
+
+#+BEGIN_SRC shell
+M-x package-install RET aggressive-indent
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(add-hook 'css-mode-hook #'aggressive-indent-mode)
+#+END_SRC
+** pretty-printer formatter
+https://emacs-china.org/t/topic/125/4
+搜到了一些自动格式化 Emacs Lisp 的工具，这里的格式化涉及到断行，Emacs 本身已经能够正确的缩进，semantic-refactor 4、lispy 8 和 elisp-format.el 5，三个都没用过，不清楚能聪明到什么程度。
+
+写代码的时候，只要注意什么时候应该换行（RET）了，Emacs 会自动缩进（因为 electric-indent-mode 默认是开启的），只做到这一点，我觉得 Emacs Lisp 代码就不会出现不整齐的问题。另外这两个命令也很有用：移动至缩进处用 M-m、取消缩进用 M-^，。
+
+#+BEGIN_SRC shell
+pp-buffer
+#+END_SRC
+** [[https://github.com/zenozeng/yafolding.el][yafolding - Yet another folding extension for Emacs]] :python:emacs:
+
+** ielm mode
+https://emacs-china.org/t/emacs-lisp-repl/1984
+这还有个：M-x ielm IELM: Inferior Emacs Lisp Mode
+* plantuml
+- https://www.yuque.com/yuque/help/iye6si
+* themes
+- Dark
+ - doom-city-lights
+- Light
+  - doom-opera-light
+
+* Calendar and time
+https://www.emacswiki.org/emacs/Calfw
+
+* 词典解决方案
+Dictionary and thesaurus in Emacs
+
+https://www.emacswiki.org/emacs/merriam.el
+#+begin_src emacs-lisp :tangle yes
+;;; Code:
+
+(require 'w3m)
+
+(defvar webster-url "http://www.m-w.com/cgi-bin/dictionary?book=Dictionary&va=")
+
+(defun merriam (word)
+        (interactive "sLook up a word: ")
+                (let ((start (point)))
+                        (w3m-goto-url (concat webster-url word))))
+
+(provide 'merriam)
+
+;;; merriam.el ends here
+#+end_src
+
+
+* Questions I Raised
+** [[https://stackoverflow.com/questions/3669511/the-function-to-show-current-files-full-path-in-mini-buffer][The function to show current file's full path in mini buffer]]
+To borrow from Jérôme Radix's answer, if you just want to quickly see the file path of the current buffer, you can do =M-: buffer-file-name=.
+=(eval-expression EXP &optional INSERT-VALUE NO-TRUNCATE CHAR-PRINT-LIMIT)=
+# 原来选中是这样的. 使用mark and point
+** [[https://www.emacswiki.org/emacs/HalfScrolling][Half Scroll]]
+I’ve used:
+#+begin_src emacs-lisp :session sicp :lexical t
+  move-to-window-line (moves the point to center by default)
+  recenter-top-bottom
+  recenter-top-bottom (second invocation scrolls line with point to top)
+#+end_src
+
+which in most cases is bound to M-r C-l C-l
+
+(note, recenter-top-bottom seems only to exhibit the desired behavior when invoked using a key binding)
+** [[https://stackoverflow.com/questions/14151777/how-to-clear-the-emacs-buffer-history][how-to-clear-the-emacs-buffer-history]]
+#+begin_src emacs-lisp :tangle yes
+;;(setq ido-use-virtual-buffers nil)
+(setq ido-virtual-buffers '())
+(setq recentf-list '())
+#+end_src
+
+#+RESULTS:
+
+* FAQ
+** Show org-mode outline up to a certain heading level
+
+Just stumbled on this question. One year later but what the heck.. There are commands for this that allows you to show headings to a certain level.
+One command is C-<n> C-c tab will show subheadings up to level <n> (<n>=1,2,3...).
+Another command is C-<n> S-tab which will operate on the whole buffer. It shows all headings up to level <n> (<n>=1,2,3...)
+** Best Way to Select a word
+I usually use C-M-SPC or, with easy-kill installed, M-w w.
+https://emacs.stackexchange.com/questions/35069/best-way-to-select-a-word
+lect-a-word
