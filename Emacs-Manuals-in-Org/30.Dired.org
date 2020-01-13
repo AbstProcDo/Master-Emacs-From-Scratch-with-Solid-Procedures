@@ -374,7 +374,6 @@ You can also tag a file directly from the thumbnail buffer by typing t t and you
 Image-Dired also provides simple image manipulation. In the thumbnail buffer, type L to rotate the original image 90 degrees anti clockwise, and R to rotate it 90 degrees clockwise. This rotation is lossless, and uses an external utility called jpegtran, which you need to install first.
 Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Image_002dDired][Image-Dired]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Dired][Dired]]
 
-
 * 30.19 Other Dired Features
 
 The command + (=dired-create-directory=) reads a directory's name, and creates that directory. It signals an error if the directory already exists.

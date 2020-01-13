@@ -1,20 +1,23 @@
+
 * 00.Preface
-“零秒”乃直觉力,有效应用我们的直觉的巨大力量, 而不必案牍劳形, 悬梁刺股,
-起标题真煞费脑筋,
-若标题为“应用直觉思维和潜意识的力量, 在Emacs上精进", 则真是啰里啰嗦；
-或者直觉力精通Emacs,则语法不通. 此处的“零秒”即“intuition"而“instant" 灵犀一点通； 非物理概念上的“零秒”；
-步步为营, 仿照曾国藩的战术“结硬寨, 打呆仗”, 初时很慢, 待工事渐成, 则坚不可摧；
+
+步步为营一步一个脚印, "零秒"乃调用直觉力, 非物理概念上的“零秒”；
+
+一个以讹传讹的观念"Emacs很难且耗费时间", 标题"零秒"有意打消对Emacs学习的成见. 通过点出Emacs中的关键点的方式, 心有灵犀一点通, 举一反三, 一通百通. 而不必案牍劳形, 悬梁刺股.
+曾国藩的战术“结硬寨, 打呆仗”, 初时很慢, 待工事渐成, 则坚不可摧；
 同时努力学习SICP的策略, 首先抛出点滴星火，再看时，已成燎原之势。
 以直觉力为基础，步步为营，稳扎稳打，构筑Emacs技能。
 
+
 是为序.
 
-Emacs的简单, 则一言以蔽之, Meta键也.
+Emacs的简单, 则一言以蔽之, 只是一个Meta键.
 Meta键(键盘上的option/alter键)
-Meta的词源含义是higher, beyond,可以理解为没有最高,只有更高.
+Meta的词源含义是higher, beyond,没有最高,只有更高.
 中文译为"元", 发端处, 源头处;
-So Meta is source, and it relates to source code.
-Meta关联src-code, 而function又是code的first-class-citizen; 设置Meta直接调用function顺理成章.
+So Meta is Source, and it relates to source code.
+Meta关联Source-Code, 在Source-Code中, Function又是的一等公民.
+Emacs的简单策略便是将Meta键i绑定到Function上..
 M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事情,
 比如插入当前的日期:
 
@@ -25,6 +28,7 @@ M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事�
 比如从目录中打开一个文件, 可以M-x find-file,
 需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
 sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
+
 * 01.Semantic Keybinding
 
 Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义Ctrl的技术, 简化Meta的流程.
@@ -365,7 +369,6 @@ M-x view-register r
    M-x bookmark-write filename
    M-x bookmark-delete bookmark
    M-x bookmark-insert-location bookmark
-
 * 04.Emacs as a Notebook by Org
 * 05.Emacs as a Agenda by Org
 * 06.Org your life all-in-one as  book manager, database manager, memory manager etc
