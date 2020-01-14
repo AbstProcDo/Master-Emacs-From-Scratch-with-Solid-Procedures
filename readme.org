@@ -410,7 +410,7 @@ M-x view-register r
 **** 方法一: C-n S(shift)-tab
 控制目录显示的深度,比如C-2 S-tab显示到2级目录,
 #+ATTR_HTML: :width 300px
-[[file:../images/启动-显示到二级目录.png]]
+[[file:images/启动-显示到二级目录.png]]
 方法的优点是可以自定义控制目录显示的深度
 
 **** 方法二:
@@ -422,24 +422,24 @@ M-x view-register r
 **** 方法三:
 TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成目录
 #+ATTR_HTML: :width 300px
-[[file:../images/启动-toc-2.png]]
+[[file:images/启动-toc-2.png]]
 
 **** 方法四
 推荐的方案,纸笔绘制, 放在手边参阅.
-[[file:../images/sicp-04.metalinguistic.jpeg]]
+[[file:images/sicp-04.metalinguistic.jpeg]]
 ** 过程控制
 *** Clock-in and Clocxk-out
 当前章节下调用  =M-x org-clock-in=,
 - 一方面可以计时,
 - 再者则随时提醒当前所处的位置和任务, 及时跳转到其他的buffer中, 也会看到, 比如从4.4.1 Deductive Information Retrieval中激发了clock-in, 则即使在这篇文章的编辑页面, 依然能看到当下的任务, 随时提醒你回去执行.
 #+ATTR_HTML: :width 500px
-[[file:../images/过程-clock-in.png]]
+[[file:images/过程-clock-in.png]]
 - clock-in置顶当前任务, 为后文"阅读管理"添加标签提供便利.
 
 *** 随手建立todo任务
 比如阅读过程中,发现svg的图片格式在black模式下, 认读需要眼睛对到屏幕上仔细得瞧个清楚, 因此设置任务将inline的图片逐步去掉, 修改成文本格式.
 #+ATTR_HTML: :width 500px
-[[file:../images/过程-设置todo.png]]
+[[file:images/过程-设置todo.png]]
 任务完成后变更todo为done
 
 *** 提出问题?
@@ -448,9 +448,9 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 另一方面, 当一年后在读这本书的时候, 可以了解当时的水平, 当时的思考脉络.
 问题统一设置成 =问题?= 的格式, 如此, 不仅是在正文的行首, 或者和在代码的内部, 都能方便查到; 又不会多余查到正常使用的"问题"这个词汇.
 #+ATTR_HTML: :width 500px
-[[file:../images/过程-问题.png]]
+[[file:images/过程-问题.png]]
 问题解决后, 在后面标注v,v当做是对号.
-[[file:../images/过程-问题v.png]]
+[[file:images/过程-问题v.png]]
 如图, 刚才的12个问题解决了7个, 剩下的可能需要发到stackoverflow上.
 
 *** 小结：
@@ -473,12 +473,12 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 无拘无束, 不给大脑是否要分类, 分类到哪里的负担.
 待到二读, 三读的时候再适当"短评"的内容归类, "短评"为后面的动作提供原材料.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-短评.png]]
+[[file:images/阅读-短评.png]]
 
 *** 洞见
 读着读着, 对作者的阐述生发共鸣, 或者比"绘制大纲"阶段中"编造"的内容阐述的精彩, 又或者在胸中困顿许久没想明白的点, 在此处豁然开朗.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-洞见.png]]
+[[file:images/阅读-洞见.png]]
 举例比如 assignment and definition这一段, 从evaluator的角度, 赋值(assignment)与定义(definition)的本质是一样的, 都是set!, 这也完全符合直觉.
 此处标注为洞见, 是因为刚从python入门编程的时候, 学习赋值与函数定义.
 #+begin_src ipython :session SICP :results output
@@ -493,7 +493,7 @@ def foo(x): return x * x
 *** 拍案
 "拍案"是"洞见"的升级, 给感情发挥的空间, 没有规则, 就是突然醍醐灌顶,拍案叫绝.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-洞见.png]]
+[[file:images/阅读-洞见.png]]
 
 比如这一章的开头, 作者引述的一段话
 #+BEGIN_QUOTE
@@ -512,7 +512,7 @@ def foo(x): return x * x
 **** 得到-概念:
 标注文中新阐述的概念.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-概念.png]]
+[[file:images/阅读-得到-概念.png]]
 
 比如文中的一个角度对CS的定义
 #+BEGIN_QUOTE
@@ -521,18 +521,18 @@ def foo(x): return x * x
 **** 得到-语法：
 标注语言的语法
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-语法.png]]
+[[file:images/阅读-得到-语法.png]]
 上图标注if-predicate, 是因为我的潜意识里, if总是两个predicates.
 
 **** 得到-八股
 从文章中学习到的行文技巧, 起承转合, 类比比喻等等.
 而八股文有着严谨的起承转合的结构.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-八股.png]]
+[[file:images/阅读-得到-八股.png]]
 
 再看第三章的第一段,承接前两章然后引出下文.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-八股2.png]]
+[[file:images/阅读-得到-八股2.png]]
 
 **** 得到:
 新的知识点, 没想好归类, 直接用得到.
@@ -546,7 +546,7 @@ def foo(x): return x * x
 利用org的规则, 词汇标注有两种方式.
 其一:
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-词汇.png]]
+[[file:images/阅读-词汇.png]]
 比如本章节中的两个单词, evaluate与apply.
 eval便是输入expression, 输出value;
 拆解evaluate这个单词,
@@ -556,7 +556,7 @@ apply就献丑了.
 其二:
 应用 ~vacabulary~ 标注单词
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-词汇2.png]]
+[[file:images/阅读-词汇2.png]]
 标注了14个词汇.
 
 
