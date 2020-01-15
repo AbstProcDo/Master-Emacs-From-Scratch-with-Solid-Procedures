@@ -370,6 +370,70 @@ M-x view-register r
    M-x bookmark-delete bookmark
    M-x bookmark-insert-location bookmark
 * 04.Emacs as a Notebook by Org
+** Org Notebook操作总结:
+*** Document Structure
+- Headlines
+  A cleaner outline view
+- Visibility Cycling
+  S-TAB =org-global-cycle=
+  C-u C-u TAB (=org-set-startup-visibility=)
+  C-u C-u C-u TAB
+  (=outline-show-all=)
+  # 替代反复设置fundermantal-mode的用法.
+  C-c C-k
+  (=outline-show-branches=)
+  # 新学到一个方便的操作
+　C-c C-x b
+  (=org-tree-to-indirect-buffer=)
+  # 不如直接使用narrow
+- Initial visibility
+#+BEGIN_EXAMPLE
+    #+STARTUP: overview
+    #+STARTUP: content
+    #+STARTUP: showall
+    #+STARTUP: showeverything
+#+END_EXAMPLE
+- Motion
+  (略)
+- Structure Editing
+  M-LEFT org-do-promote
+  M-RIGHT org-do-demote
+  M-S-LEFT org-demote-subtree
+  M-s-RIGHT org-promote-subtree
+- Sparse Tree
+  C-c / r
+  查询使用swiper
+- Plain List
+  kbd(M-RET) (=org-insert-heading=)
+
+  kbd(M-S-RET)
+  org-insert-checkbox
+
+  C-c ^ 排序
+- Drawers
+  a =PROPERTIES= drawer
+- Blocks:
+  =#+BEGIN= ... =#+END=
+** Tables
+** Hyperlinks
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
 * 04-Case:如何"严肃"阅读一本书
 ** 序
 本文为项目"步步为营, 零秒精通Emacs"的第四章"Emacs as a Notebook by Org"
