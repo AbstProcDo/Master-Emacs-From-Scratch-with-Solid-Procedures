@@ -28,16 +28,7 @@ The mail buffer is an ordinary Emacs buffer, so you can switch to other buffers 
 The command C-x 4 m (=compose-mail-other-window=) does the same as C-x m, except it displays the mail buffer in a different window. The command C-x 5 m (=compose-mail-other-frame=) does it in a new frame.
 
 When you type C-c C-c or C-c C-s to send the mail, Emacs may ask you how it should deliver the mail---either directly via SMTP, or using some other method. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Sending][Mail Sending]], for details.
-
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Format][Format]]: Format of a mail message.
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Headers][Headers]]: Details of some standard mail header fields.
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Aliases][Aliases]]: Abbreviating and grouping mail addresses.
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Commands]]: Special commands for editing mail being composed.
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Signature][Signature]]: Adding a signature to every message.
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Amusements][Amuse]]: Distracting the NSA; adding fortune messages.
-- [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Methods][Methods]]: Using alternative mail-composition methods.
-
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Headers][Mail Headers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
+# 问题? 发送不了呀.
 
 * 32.1 The Format of the Mail Buffer
 
@@ -53,12 +44,13 @@ Here is an example of the contents of a mail buffer:
          hear the lamentation of their women.
 #+END_EXAMPLE
 
+
 At the top of the mail buffer is a set of header fields, which are used for specifying information about the email's recipient(s), subject, and so on. The above buffer contains header fields for 'To', 'CC', 'Subject', and 'From'. Some header fields are automatically pre-initialized in the mail buffer, when appropriate.
 
 The line that says '--text follows this line--' separates the header fields from the body (or text) of the message. Everything above that line is treated as part of the headers; everything below it is treated as the body. The delimiter line itself does not appear in the message actually sent.
 
 You can insert and edit header fields using ordinary editing commands. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]], for commands specific to editing header fields. Certain headers, such as 'Date' and 'Message-Id', are normally omitted from the mail buffer and are created automatically when the message is sent.
-
+# 短评: 稍后再看
 
 * 32.2 Mail Header Fields
 
@@ -74,7 +66,7 @@ The value of the variable =mail-from-style= specifies how to format the contents
 
   Use just the address, as in 'king@grassland.com'.
 
-- =parens=
+p- =parens=
 
   Use both address and full name, as in: 'king@grassland.com (Elvis Parsley)'.
 
@@ -103,6 +95,7 @@ Apart from 'From', here is a table of commonly-used fields:
 - 'BCC'
 
   Additional mailing address(es) to send the message to, which should not appear in the header of the message actually sent. 'BCC' stands for blind carbon copies.
+  # 短评: blind Copy
 
 - 'FCC'
 
@@ -131,8 +124,7 @@ Apart from 'From', here is a table of commonly-used fields:
 The 'To', 'CC', and 'BCC' fields can appear any number of times, and each such header field can contain multiple addresses, separated by commas. This way, you can specify any number of places to send the message. These fields can also have continuation lines: one or more lines starting with whitespace, following the starting line of the field, are considered part of the field. Here's an example of a 'To' field with a continuation line:
 
 #+BEGIN_EXAMPLE
-         To: foo@example.net, this@example.net,
-           bob@example.com
+         To: foo@example.net, this@example.net, bob@example.com
 #+END_EXAMPLE
 
 You can direct Emacs to insert certain default headers into the mail buffer by setting the variable =mail-default-headers= to a string. Then C-x m inserts this string into the message headers. For example, here is how to add a 'Reply-to' and 'FCC' header to each message:
@@ -144,12 +136,7 @@ You can direct Emacs to insert certain default headers into the mail buffer by s
 
 If the default header fields are not appropriate for a particular message, edit them as necessary before sending the message.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Headers][Mail Headers]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
-
 * 32.3 Mail Aliases
-    :PROPERTIES:
-    :CUSTOM_ID: mail-aliases
-    :END:
 
 You can define mail aliases, which are short mnemonic names that stand for one or more mailing addresses. By default, mail aliases are defined in the file ~/.mailrc. You can specify a different file name to use, by setting the variable =mail-personal-alias-file=.
 
@@ -185,12 +172,7 @@ Mail aliases expand as abbrevs---that is to say, as soon as you type a word-sepa
 
 You can also insert an aliased address directly, using the command M-x mail-abbrev-insert-alias. This reads an alias name, with completion, and inserts its definition at point.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Signature][Mail Signature]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Aliases][Mail Aliases]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
-
 * 32.4 Mail Commands
-    :PROPERTIES:
-    :CUSTOM_ID: mail-commands
-    :END:
 
 The default major mode for the /mail/ buffer is called Message mode. It behaves like Text mode in many ways, but provides several additional commands on the C-c prefix, which make editing a message more convenient.
 
@@ -201,7 +183,6 @@ In this section, we will describe some of the most commonly-used commands availa
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Citing-Mail][Citing Mail]]: Quoting a message you are replying to.
 - [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Misc][Mail Misc]]: Attachments, spell checking, etc.
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]
 
 ** 32.4.1 Mail Sending
      :PROPERTIES:
@@ -246,12 +227,7 @@ Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header
 
 When you send a message containing non-ASCII characters, they need to be encoded with a coding system (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Coding-Systems][Coding Systems]]). Usually the coding system is specified automatically by your chosen language environment (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Language-Environments][Language Environments]]). You can explicitly specify the coding system for outgoing mail by setting the variable =sendmail-coding-system= (see [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Recognize-Coding][Recognize Coding]]). If the coding system thus determined does not handle the characters in a particular message, Emacs asks you to select the coding system to use, showing a list of possible coding systems. See [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Output-Coding][Output Coding]].
 
-Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Citing-Mail][Citing Mail]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Sending][Mail Sending]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]
-
 ** 32.4.2 Mail Header Editing
-     :PROPERTIES:
-     :CUSTOM_ID: mail-header-editing
-     :END:
 
 Message mode provides the following special commands to move to particular header fields and to complete addresses in headers.
 
@@ -300,10 +276,6 @@ Message mode provides the following special commands to move to particular heade
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Misc][Mail Misc]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Header-Editing][Header Editing]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]]
 
 ** 32.4.3 Citing Mail
-     :PROPERTIES:
-     :CUSTOM_ID: citing-mail
-     :END:
-
 ​
 
 - C-c C-y
@@ -355,9 +327,6 @@ If you use C-x m to continue an existing composition, =message-mode-hook= runs i
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Amusements][Mail Amusements]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Commands][Mail Commands]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
 
 * 32.5 Mail Signature
-    :PROPERTIES:
-    :CUSTOM_ID: mail-signature
-    :END:
 
 You can add a standard piece of text---your mail signature---to the end of every message. This signature may contain information such as your telephone number or your physical location. The variable =message-signature= determines how Emacs handles the mail signature.
 
@@ -374,9 +343,6 @@ By convention, a mail signature should be marked by a line whose contents are '-
 Next: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Methods][Mail Methods]], Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Signature][Mail Signature]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
 
 * 32.6 Mail Amusements
-    :PROPERTIES:
-    :CUSTOM_ID: mail-amusements
-    :END:
 
 M-x spook adds a line of randomly chosen keywords to an outgoing mail message. The keywords are chosen from a list of words that suggest you are discussing something subversive.
 
@@ -393,9 +359,6 @@ You will probably need to set the variable =fortune-file= before using this.
 Previous: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Mail-Amusements][Mail Amusements]], Up: [[file:///home/me/Desktop/GNU%20Emacs%20Manual.html#Sending-Mail][Sending Mail]]
 
 * 32.7 Mail-Composition Methods
-    :PROPERTIES:
-    :CUSTOM_ID: mail-composition-methods
-    :END:
 
 In this chapter we have described the usual Emacs mode for editing and sending mail---Message mode. This is only one of several available modes. Prior to Emacs 23.2, the default mode was Mail mode, which is similar to Message mode in many respects but lacks features such as MIME support. Another available mode is MH-E (see [[https://www.gnu.org/software/emacs/manual/html_mono/mh-e.html#Top][MH-E]]).
 

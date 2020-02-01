@@ -377,14 +377,11 @@ M-x view-register r
 - Visibility Cycling
   S-TAB =org-global-cycle=
   C-u C-u TAB (=org-set-startup-visibility=)
-  C-u C-u C-u TAB
-  (=outline-show-all=)
+  C-u C-u C-u TAB (=outline-show-all=)
   # 替代反复设置fundermantal-mode的用法.
-  C-c C-k
-  (=outline-show-branches=)
+  C-c C-k (=outline-show-branches=)
   # 新学到一个方便的操作
-　C-c C-x b
-  (=org-tree-to-indirect-buffer=)
+　C-c C-x b (=org-tree-to-indirect-buffer=)
   # 不如直接使用narrow
 - Initial visibility
 #+BEGIN_EXAMPLE
@@ -396,18 +393,16 @@ M-x view-register r
 - Motion
   (略)
 - Structure Editing
-  M-LEFT org-do-promote
-  M-RIGHT org-do-demote
-  M-S-LEFT org-demote-subtree
-  M-s-RIGHT org-promote-subtree
+  M-LEFT =org-do-promote=
+  M-RIGHT =org-do-demote=
+  M-S-LEFT =org-demote-subtree=
+  M-s-RIGHT =org-promote-subtree=
 - Sparse Tree
   C-c / r
   查询使用swiper
 - Plain List
   kbd(M-RET) (=org-insert-heading=)
-
-  kbd(M-S-RET)
-  org-insert-checkbox
+  kbd(M-S-RET) (=org-insert-checkbox=)
 
   C-c ^ 排序
 - Drawers
@@ -817,3 +812,28 @@ HEAD is now at 613ae49 Chapter 1: initial version (1a)
 <<<<<<< HEAD
 =======
 
+* Appendix C: Install Extensions
+** Plantuml
+*** 安装
+- [[https://github.com/skuro/plantuml-mode][plantUML-mode-in-github]]
+#+BEGIN_SRC bash
+sudo apt install plantuml
+M-x package-install<RET>
+plantuml-mode<RET>
+#+END_SRC
+或者从 =.doom.d/init.el= 中去掉 =plantuml= 的Comments
+*** 配置
+- [[https://plantuml.com/download][plantuml-download]]
+下载"plantuml.jar"到相应文件夹.
+#+begin_src emacs-lisp :session sicp :lexical t
+;;PlantUML
+(setq org-plantuml-jar-path "~/.doom.d/extensions/plantuml.jar")
+(setq plantuml-jar-path "~/.doom.d/extensions/plantuml.jar")
+(setq plantuml-default-exec-mode 'jar)
+#+end_src
+
+#+RESULTS:
+: jar
+
+Note: 不要使用 =M-x plantuml-download-jar<RET>=
+下载的非最新版本.

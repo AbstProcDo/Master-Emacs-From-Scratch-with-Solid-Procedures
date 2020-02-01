@@ -1,4 +1,4 @@
-* 31 The Calendar and the Diary
+i* 31 The Calendar and the Diary
 
 Emacs provides the functions of a desk calendar, with a diary of planned or past events. It also has facilities for managing your appointments, and keeping track of how much time you spend working on certain projects.
 
