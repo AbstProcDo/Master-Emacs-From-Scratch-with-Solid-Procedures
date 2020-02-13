@@ -417,7 +417,6 @@ M-x view-register r
 
 
 
-
 * 04-Case:如何"严肃"阅读一本书
 ** 序
 本文为项目"步步为营, 零秒精通Emacs"的第四章"Emacs as a Notebook by Org"
@@ -1391,4 +1390,137 @@ highlight的部分值得一看, 但是在第三部分article中.
 *Block Ads*
 #+begin_src emacs-lisp :session gnus :lexical t
 (setq gnus-blocked-images "ads")
+#+end_src
+** Gnus: 6.Completed Configuration in Progress
+
+#+begin_src emacs-lisp :session gnus :lexical t
+;;; Package --- gnus
+;;;
+
+(setq user-mail-address "abst.proc.do@qq.com"
+      user-full-name "abst.proc.do")
+
+(setq gnus-select-method
+      '(nnimap "qq.com"
+               (nnimap-address "imap.qq.com")
+               (nnimap-inbox "INBOX")
+               (nnimap-split-methods default)
+               (nnimap-expunge t)
+               (nnimap-server-port 993)
+               (nnimap-stream ssl)))
+
+(setq send-mail-function 'smtpmail-send-it
+      smtpmail-smtp-server "smtp.qq.com"
+      smtpmail-smtp-service 465
+      smtpmail-stream-type 'ssl
+      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+
+;;(setq gnus-permanently-visible-groups "INBOX")
+
+
+;; Configuration Following Gnus Manual
+;; 2.1.3 Group Highlighting
+(cond (window-system
+       (setq custom-background-mode 'light)
+       (defface my-group-face-1
+         '((t (:foreground "Red" :bold t))) "First group face")
+       (defface my-group-face-2
+         '((t (:foreground "DarkSeaGreen4" :bold t)))
+         "Second group face")
+       (defface my-group-face-3
+         '((t (:foreground "Green4" :bold t))) "Third group face")
+       (defface my-group-face-4
+         '((t (:foreground "SteelBlue" :bold t))) "Fourth group face")
+       (defface my-group-face-5
+         '((t (:foreground "Blue" :bold t))) "Fifth group face")))
+
+(setq gnus-group-highlight
+      '(((> unread 200) . my-group-face-1)
+        ((and (< level 3) (zerop unread)) . my-group-face-2)
+        ((< level 3) . my-group-face-3)
+        ((zerop unread) . my-group-face-4)
+        (t . my-group-face-5)))
+
+;;2.18.3 Group Timestamp
+(add-hook 'gnus-select-group-hook 'gnus-group-set-timestamp)
+;;(setq gnus-group-line-format
+;;"%M%S%p%P%5y: %(%-40,40g%) %6,6~(cut 2)dn")
+
+;; (setq gnus-group-line-format
+;;       "%M%S%p%P%5y: %(%-40,40g%) %udn")
+;; (defun gnus-user-format-function-d (headers)
+;;   (let ((time (gnus-group-timestamp gnus-tmp-group)))
+;;     (if time
+;;         (format-time-string "%b %d  %H:%M" time)
+;;       "")))
+
+;;3.6 Delayed Articles
+(gnus-delay-initialize)
+
+
+;;3.10 Sorting the Summary Buffer
+(setq gnus-thread-sort-functions
+      '((not gnus-thread-sort-by-number)
+        gnus-thread-sort-by-score))
+
+;;3.11 Asynchronous Article Fetching
+(setq gnus-asynchronous t)
+;;pre-fetch only unread articles shorter than 100 lines, you could say something like:
+(defun my-async-short-unread-p (data)
+  "Return non-nil for short, unread articles."
+  (and (gnus-data-unread-p data)
+       (< (mail-header-lines (gnus-data-header data))
+          100)))
+(setq gnus-async-prefetch-article-p 'my-async-short-unread-p)
+
+;;3.13 Persistent Articles
+(setq gnus-use-cache 'passive)
+
+;; 3.25 Tree Display
+(setq gnus-use-trees nil)
+;; (setq gnus-use-trees t
+;;       gnus-generate-tree-function 'gnus-generate-horizontal-tree
+;;       gnus-tree-minimize-window nil)
+;; (gnus-add-configuration
+;;  '(article
+;;    (vertical 1.0
+;;              (horizontal 0.25
+;;                          (summary 0.75 point)
+;;                          (tree 1.0))
+;;              (article 1.0))))
+
+
+;;4.3 HTML
+(setq gnus-blocked-images "ads")
+
+;;5.4 Mail and Post
+(add-hook 'message-send-hook 'ispell-message)
+
+;;5.5 Archived Messages
+(setq gnus-message-archive-group nil)
+
+
+;;6.4.9 Expiring Mail
+(remove-hook 'gnus-mark-article-hook              'gnus-summary-mark-read-and-unread-as-read)
+(add-hook 'gnus-mark-article-hook 'gnus-summary-mark-unread-as-read)
+;; Delele mail
+(setq nnmail-expiry-wait 'never)
+(setq nnmail-expiry-target "Deleted Messages")
+
+;;9.5 Window Layout
+(setq gnus-use-full-window nil)
+;;((group (vertical 1.0 (group 1.0 point)))
+;; (article (vertical 1.0 (summary 0.25 point)
+;;                    (article 1.0))))
+
+;; (gnus-configure-frame
+;;  '(frame 1.0
+;;          (vertical 1.0
+;;                    (summary 0.25 point frame-focus)
+;;                    (article 1.0))
+;;          (vertical ((height . 5) (width . 15)
+;;                     (user-position . t)
+;;                     (left . -1) (top . 1))
+;;                    (picon 1.0))))
+
 #+end_src
