@@ -1288,7 +1288,6 @@ M-&
 
 G G :: =nnir= is a Gnus interface to a number of tools for searching through mail and news repositories. Different backends (like =nnimap= and =nntp=) work with different tools (called engines in =nnir= lingo), but all use the same basic search interface.
 
-
 *** Frequent Commands
 *回复邮件*
 - S r
