@@ -36,10 +36,8 @@ Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义C
 正文从语义化快捷键入手, 辅助在5分钟之内永久记忆(Never have a second look), 20多个一级快捷键(高频), 30几个二级绑定键(中频), 闲看三级快捷键(低频); 以及按照功能, 按照目的, 按照插件分类的表格.
 答题区上表格和秒记方法.
 
-
 C-x, C-h的区别, 一级绑定, 将C-x中的x去掉, 只剩下
 从character讲起, meta的词源是higher,
-
 
 与vim的关键区别是绑定的键是有具体含义,可逻辑, 可推导.
 
@@ -51,14 +49,14 @@ C-x, C-h的区别, 一级绑定, 将C-x中的x去掉, 只剩下
 character, word, line, sentence, (*paragragh),
 page, buffer.
 
-1. Character and Word
+** 1. Character and Word
 C-f (M-x forward-char) 向前移动一个字符的位置
 C-b (M-x backword-char) 向后移动一个字符的位置
 char是最小的操作单元, char之上则是word, 回顾上文阐述的meta的词源含义是higher,因此Meta绑定相同的键, 范围要比Ctrl更大一点, 由此, 比char大一级的是word
 M-f (M-x forward-word) 向前移动一个单词的位置.
 M-b (M-x backword-word) 向后移动一个单词的位置.
 
-2. line and sentence.
+** 2. line and sentence.
 C-e (e for end) move to end of line,
 C-a (a for ahead) move to ahead of line
 同样的逻辑,Meta比Ctrl的范围高一个等级
@@ -67,7 +65,7 @@ M-e move to end of the sentence.
 
 以上两点为光标在水平方向的移动(horizontal), 与之相对应的纵向(Vertiallly)移动的操作.
 
-3. Vertical Movement between lines
+** 3. Vertical Movement between lines
 C-n (调用function next-line), 向下移动一行
 C-p (previous-line)
 接下来, 有意思的事情来了.
@@ -77,7 +75,7 @@ M-n
 发现Emacs没有定义这两个key-sequnces, 根据前面的逻辑, M-p应该向上移动更多行, 至少比一行要多; Emacs竟然没有定义, 这真是千载难逢的良机.
 暂时按下不表, 先小结Ctrl的光标操作. Ctrl能操作的最大单位是line, 更大范围的光标动作交由Meta完成.
 
-4. Vertically Page Down and Up
+** 4. Vertically Page Down and Up
 向上翻页M-v, v当然是vertical, 而Meta是higher, 往更高处纵向移动, 当然便是UP,
 那么向下呢? 既然Meta相对于Ctrl而higher, 反过来Ctrl则是Lower;
 因此向下翻页是C-v.
@@ -111,7 +109,7 @@ M-<, to the biginning of the buffer
 M->, to the end of the buffer.
 # 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
 * 02.Emacs as an Editor
-[[01.semantic keybinding]] 初窥了Emacs简单易用的特性之一便是语义化键绑定,
+前一章 [[01.semantic keybinding]], 初窥了Emacs简单易用的特性之一便是语义化键绑定,
 语义化包含两个方面:
 1) Character keys的语义化, 这一点明了易懂, n for next, p for previous; 而非j for next, k for previous.
 2) Control keys的语义化, 求根问底Meta的词源, 病以meta的higher(beyond)基石; 不仅可以不费力的记住Cursor操作, 依照同样的逻辑, 可以拆解全部的内置快捷键.
@@ -121,10 +119,10 @@ M->, to the end of the buffer.
 
 "When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.", 编辑器的基本功能曲指可数.
 
-编辑器的基本功能:
+** 编辑器的基本功能:
 以行为单位,
 复制, 黏贴, 增删改查, 其中查是关键, 应该放在前面
-对文本的初始是最关键的一点, Linux基于流管理.
+对文本的初始是最关键的一点, Linux基于文本流管理.
 
 + 最基本
   - 复制黏贴 (M-w, C-y)
@@ -145,7 +143,7 @@ M->, to the end of the buffer.
 + Special
   - Register
 
-详细叙述delte
+** 详细叙述delte
 键的绑定同样遵循语义化的原则, 比如Delete(killing)
 <delete>键(即backspace退格键, backword);
 与C-<del> 搭配是删除一个字符,
@@ -157,7 +155,7 @@ Killing的范围比delete大;
 C-k是删除到行尾, M-k是删除到句尾, 跟前面一致. 以上是forwards进格删除,
 对行的backwardst退格删除 C-x <del>
 
-*Topic1*
+** Topic1: 调用直觉
 
 这么多的键绑定, 从语义化的理解是一方面, 更重要的一方面可能应该去找捷径, 比如调用直觉和由此带来的强烈满足感和成就感.
 
@@ -202,7 +200,7 @@ Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股
 P.S. 作为对"零秒" 这个标题党的补充.
 
 
-*Topic2 对比Search功能的Emacs操作与命令行操作*
+** Topic2: 对比Search功能的Emacs操作与命令行操作
 Emacs的优势是对数据和查询结果的便捷二次处理.
 比如想从宏观上了解下Emacs手册中中全部whitespace操作.
 [[file:images/2.目录界面.png]]
@@ -370,8 +368,7 @@ M-x view-register r
    M-x bookmark-delete bookmark
    M-x bookmark-insert-location bookmark
 * 04.Emacs as a Notebook by Org
-** Org Notebook操作总结:
-*** Document Structure
+** Document Structure
 - Headlines
   A cleaner outline view
 - Visibility Cycling
@@ -410,14 +407,41 @@ M-x view-register r
 - Blocks:
   =#+BEGIN= ... =#+END=
 ** Tables
+
+  - Built-in Table Editor
+    + C-c | :: org-table-create-or-convert-from-region
+  - Column Width and Alignment
+    + C-c C-c :: org-table-align
+    + M-LEFT and M-RIGHT :: org-table-move-column-right
+    + M-S-LEFT and M-S-RIGHT :: org-table-delete-column and org-table-insert-column
+    + M-UP and M-DOWN :: org-table-move-row-up and org-table-move-row-down
+    + S-UP and S-DOWN :: org-table-move-cell-up and org-table-move-cell-down
+    + M-S-UP :: org-table-kill-row
+    + M-S-DOWN :: org-table-insert-row
+    + C-c - :: org-table-insert-hline
+    + C-c RET :: org-table-hline-and-move
+    + C-c ^ :: org-table-sort-lines
+    + C-c +  :: org-table-sum
+    + S-RET :: org-table-copy-down √
+    + C-c TAB :: org-table-toggle-column-widt
+    + C-u C-c TAB :: org-table-shrink
+    + C-u C-u C-c TAB :: org-table-expand
+  - Column Groups
+    + <>  :: Column Groups
+  - The Orgtbl Minor Mode
+    + M-x orgtbl-mode ::
+  - The Spreadsheet
+    略
+  - Org Plot
+    略
 ** Hyperlinks
-  
-
-
-
-
-
-* 04-Case:如何"严肃"阅读一本书
+  + internal link :: =[[internal-link]]=
+  + file:projects.org::regex
+  + gnus:group
+  + shell:ls
+  + elisp:(find_file "elisp.org")
+  + elisp:org-agenda
+* 04.Case:如何"严肃"阅读一本书
 ** 序
 本文为项目"步步为营, 零秒精通Emacs"的第四章"Emacs as a Notebook by Org"
 
@@ -618,6 +642,71 @@ apply就献丑了.
 ** 案例与习题
 ** 收尾
 * 05.Emacs as a Agenda by Org
+# 总结
+关键概念摘要,
+types与workflow, 只有Workflow用得上,
+priorities的概念.
+todo里面需要补充的一项是efforts
+** 05.Items
+  - 5.1.Basic TODO Functionality
+  - C-c C-t Cycling
+  - S-RIGHT
+  - C-c / t sparse tree
+  - S-M-RET insert new todo
+  - 5.2.Extended Use of TODO Keywords
+  - Workflow states
+  - keywords as types
+  - 5.3.Progress Logging
+  - habits
+  - 5.4.Priorities
+  - C-c \,  :: org-priority
+  - S-UP  org-priority-up
+  - 5.5.Breaking Down Tasks into Subtasks
+  - Subtasks [0/0]  C-c C-c
+  - 5.6.Checkboxes
+  - lightweight
+  - [ ] [-] [X] 三种状态
+** 06.Tags
+  + 只有一项查询需要注意, tag search
+** 07.Properties and Columns
+  + Property Syntax
+    C-c C-x p
+  + Property Search
+    Columns的部分没有什么用处.
+** 08.Dates and Times
+  + 8.1.Timestamps
+    基本概念便是, appointment, event,
+    active and inactive,
+  + 8.2.Creating Timestamps
+    C-c !
+    C-c .
+    org-evaluate-time-range
+  + 8.3.Deadlines and Scheduling
+    DEADLINE
+    SCHEDULED
+    org-check-deadlines
+    org-check-before-date
+    org-check-after-date
+    repeat tasks
+  + 8.4.Clocking Work Time
+    没有实质的内容,
+    org-resolve-clocks
+  + 8.5.Effort Estimates　
+    org-clock-modify-effort-estimate
+** 09.Refiling and Archiving
+  + Refile and Copy
+  + Archiving
+** 10.Capture and Attachments
+  + Capture
+  + Attachments
+** 11.Agenda Views
+  + 11.1.Agendva Files
+    C-' :: org-cycle-agenda-files
+  + 11.2.The Agenda Dispatcher
+    m :: mark
+  + 11.3.The Built-in Agenda Views
+# 没有多少实质的东西.
+
 * 06.Org your life all-in-one as  book manager, database manager, memory manager etc
 * 07.Programming
 * 08.Assistance to Programming
@@ -815,7 +904,7 @@ HEAD is now at 613ae49 Chapter 1: initial version (1a)
 <<<<<<< HEAD
 =======
 
-* Appendix C: Install Extensions
+* Appendix C: Install  Extensions
 ** Plantuml
 *** 安装
 - [[https://github.com/skuro/plantuml-mode][plantUML-mode-in-github]]
@@ -1405,7 +1494,7 @@ highlight的部分值得一看, 但是在第三部分article中.
 *Block Ads*
 #+begin_src emacs-lisp :session gnus :lexical t
 (setq gnus-blocked-images "ads")
-#+end_src
+#+end_srcx
 ** Gnus: 6.Completed Configuration in Progress
 
 #+begin_src emacs-lisp :session gnus :lexical t

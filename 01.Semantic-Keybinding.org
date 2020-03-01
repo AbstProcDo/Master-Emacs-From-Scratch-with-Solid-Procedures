@@ -1,0 +1,81 @@
+#+TITLE: 01.Semantic-Keybinding
+* 01.Semantic Keybinding
+
+Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义Ctrl的技术, 简化Meta的流程.
+
+正文从语义化快捷键入手, 辅助在5分钟之内永久记忆(Never have a second look), 20多个一级快捷键(高频), 30几个二级绑定键(中频), 闲看三级快捷键(低频); 以及按照功能, 按照目的, 按照插件分类的表格.
+答题区上表格和秒记方法.
+
+C-x, C-h的区别, 一级绑定, 将C-x中的x去掉, 只剩下
+从character讲起, meta的词源是higher,
+
+与vim的关键区别是绑定的键是有具体含义,可逻辑, 可推导.
+
+ character, word, line, sentence, page, article.
+
+一级绑定之cursor光标的移动: (高频)
+在一级绑定中, C-x, M-x中的x(execute)省略, 简化为C-与M-x;
+光标操作的对象:
+character, word, line, sentence, (*paragragh),
+page, buffer.
+
+* 1. Character and Word
+C-f (M-x forward-char) 向前移动一个字符的位置
+C-b (M-x backword-char) 向后移动一个字符的位置
+char是最小的操作单元, char之上则是word, 回顾上文阐述的meta的词源含义是higher,因此Meta绑定相同的键, 范围要比Ctrl更大一点, 由此, 比char大一级的是word
+M-f (M-x forward-word) 向前移动一个单词的位置.
+M-b (M-x backword-word) 向后移动一个单词的位置.
+
+* 2. line and sentence.
+C-e (e for end) move to end of line,
+C-a (a for ahead) move to ahead of line
+同样的逻辑,Meta比Ctrl的范围高一个等级
+M-a move to ahead of the sentence
+M-e move to end of the sentence.
+
+以上两点为光标在水平方向的移动(horizontal), 与之相对应的纵向(Vertiallly)移动的操作.
+
+* 3. Vertical Movement between lines
+C-n (调用function next-line), 向下移动一行
+C-p (previous-line)
+接下来, 有意思的事情来了.
+由character和line操作可知, 绑定相同的键, Meta的作用范围总是比Ctrl更高一级, 但是此时查看:
+M-p
+M-n
+发现Emacs没有定义这两个key-sequnces, 根据前面的逻辑, M-p应该向上移动更多行, 至少比一行要多; Emacs竟然没有定义, 这真是千载难逢的良机.
+暂时按下不表, 先小结Ctrl的光标操作. Ctrl能操作的最大单位是line, 更大范围的光标动作交由Meta完成.
+
+* 4. Vertically Page Down and Up
+向上翻页M-v, v当然是vertical, 而Meta是higher, 往更高处纵向移动, 当然便是UP,
+那么向下呢? 既然Meta相对于Ctrl而higher, 反过来Ctrl则是Lower;
+因此向下翻页是C-v.
+此处的心思, 一级绑定, 始终用最少的动作, 最少的触发键, 如果绑定三个键, 则不需要Ctrl的参与.
+M-v-u(up), M-v-d(down)向下.
+M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏地翻页, 大多数时候, 这不是我们想要的. 我要半屏半屏的翻页.
+
+现在重新回到M-p与M-n, 绑定半屏翻页.
+
+#+begin_src emacs-lisp :session sicp :lexical t
+(defun scroll-half-page-down ()
+  "scroll down half the page"
+  (interactive)
+  (scroll-down (/ (window-body-height) 2)))
+
+(defun scroll-half-page-up ()
+  "scroll up half the page"
+  (interactive)
+  (scroll-up (/ (window-body-height) 2)))
+
+(global-set-key "\M-n" 'scroll-half-page-up)
+(global-set-key "\M-p" 'scroll-half-page-down)
+#+end_src
+
+#+BEGIN_QUOTE 备注
+因为设置了触控板(或者鼠标)Invert scroll direction(Natural Scrolling), 因此up与down是反着映射到next和previous的
+#+END_QUOTE
+
+5.Buffer
+M-<, to the biginning of the buffer
+M->, to the end of the buffer.
+# 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
+

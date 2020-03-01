@@ -1,0 +1,139 @@
+#+TITLE: 02.Emacs-As-an-Editor
+* 02.Emacs as an Editor
+前一章 [[01.semantic keybinding]], 初窥了Emacs简单易用的特性之一便是语义化键绑定,
+语义化包含两个方面:
+1) Character keys的语义化, 这一点明了易懂, n for next, p for previous; 而非j for next, k for previous.
+2) Control keys的语义化, 求根问底Meta的词源, 病以meta的higher(beyond)基石; 不仅可以不费力的记住Cursor操作, 依照同样的逻辑, 可以拆解全部的内置快捷键.
+
+移动Cursor的目的, 一则为浏览阅读, 二则为编辑做准备, 是编辑的前驱步骤.
+当聊起编辑器时候, 一个著名的段子"Emacs不是好的编辑器, 而是一个操作系统"; 如果追问一句"请问, 您对编辑器定义是什么?", 立刻会发现所谓编辑器圣战, 便是茶余饭后的小品或者群口相声, 以"段子", 调剂案牍劳累.
+
+"When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.", 编辑器的基本功能曲指可数.
+
+* 编辑器的基本功能:
+以行为单位,
+复制, 黏贴, 增删改查, 其中查是关键, 应该放在前面
+对文本的初始是最关键的一点, Linux基于文本流管理.
+
++ 最基本
+  - 复制黏贴 (M-w, C-y)
++ 增删改查
+  - insert (C-q quotation)
+  - delete(C M d delele), kill ring
+  - modify(undo, transpose, uppercase, lowercase, title,
+  - Search(Swiper…)
++ Arguments
+  - Numeric arguents C-u
+  - Repeat C-x z
+
++ Completion(yasnippet)
+  - indentation (M-i 缓解小指的负担
+  - white space(C-x C-o)
+  - Filling(global-visual-line-mode)
+  - Spelling-checking
++ Special
+  - Register
+
+* 详细叙述delte
+键的绑定同样遵循语义化的原则, 比如Delete(killing)
+<delete>键(即backspace退格键, backword);
+与C-<del> 搭配是删除一个字符,
+与M-<del>则是倒退删除一个单词;
+与backwords对应的是forwards,(进格删除)
+C-d M-d分别进格删除一个字符和一个单词.
+
+Killing的范围比delete大;
+C-k是删除到行尾, M-k是删除到句尾, 跟前面一致. 以上是forwards进格删除,
+对行的backwardst退格删除 C-x <del>
+
+* Topic1: 调用直觉
+
+这么多的键绑定, 从语义化的理解是一方面, 更重要的一方面可能应该去找捷径, 比如调用直觉和由此带来的强烈满足感和成就感.
+
+编辑过程中对blank-lines的处理,
+
+C-x C-o调用(delete-blank-lines)
+
+C-x C-o的绑定键没有逻辑, o是个洞吗? 一个洞代表空行?
+
+Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股的用下来, 对emacs的热情和兴趣早早磨光了.
+
+回到C-x C-o调用(delete-blank-lines)
+
+假设有这样四行
+
+#+BEGIN_QUOTE
+"The quick brown fox jumps over the lazy dog"
+
+
+"The quick brown fox jumps over the lazy dog"
+#+END_QUOTE
+
+当前的光标在第一行上的fox,后 发现两行文字中间的空行是多余的, 因此要删掉.
+
+需要动用人肉劳力这样做:
+
+    C-n 管标移动到下一行
+    连续两次C-k删除空行
+    然后凭借超强的记忆力(记住刚才是在fox的位置, 和导弹一般精确的点位控制回到fox后面.
+
+劳神费力.
+
+应用C-x C-o呢? 可以在第一行的任意位置上调用C-x C-o, 下面的空行会自动删除.
+
+怎样从直觉上理解呢?
+
+    光标在第一行的某个点上, 然后调用一个命令, 在光标之外的另外一个地方会立刻发生某件事情, 这就是远程控制呗;
+    更直觉一点, 这边是"意念移物"呗,
+
+由此从直觉里生发的成就感和兴趣会驱动我们应用更加复杂的命令和组合.
+
+P.S. 作为对"零秒" 这个标题党的补充.
+
+* Topic2: 对比Search功能的Emacs操作与命令行操作
+Emacs的优势是对数据和查询结果的便捷二次处理.
+比如想从宏观上了解下Emacs手册中中全部whitespace操作.
+[[file:images/2.目录界面.png]]
+
+可以从Terminal中完成
+#+BEGIN_SRC bash
+find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} +
+#+END_SRC
+[[file:images/2.terminal界面.png]]
+
+虽然可以看到结果, 但没法做简单的统计.
+即使加上nl
+#+BEGIN_SRC bash
+find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} + | nl
+#+END_SRC
+[[file:images/terminal界面2.png]]
+
+也只能大略了解到’whitespace’在整个文档中, 有95句话提到过.
+
+而在Emacs中执行同样的命令:
+C-x grep-find;
+
+则瞬间眼明心亮, 有95句话有一个或多个whitespace这个单词, 总计有151个. 而且在 Killing.org 这个文件中有6句话, 在 text.org 中有5句, 在 Display,org 中有17句话, 在 Program.org 中也有17句, 等等,
+
+[[file:images/emacs界面.png]]
+
+Emacs中执行命令的突出优势是简单方便的二次处理.
+
+*小结*
+
+目前的流程图 Meta --> Control ---> Cursor ---> Edit
+由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
+在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前,
+光速浏览File的基本操作(读取和保存)
+C-x C-f (M-x find-file) 找到并打开文件
+C-x C-r (r是read-only), 比如浏览自己的配置文件, 要避免无心修改掉东西.
+C-x C-s (s,save) 保存单个文件
+C-x s   保存全部文件, 保存全部文件功能更常用, 因此组合键也少.
+最后在个人配置上添加两行, 设置自动保存文件.
+
+#+begin_src emacs-lisp :session mm :lexical t
+(setq auto-save-visited-mode t)
+(auto-save-visited-mode +1)
+#+end_src
+以上完结, 马上进入精彩的部分.
+
