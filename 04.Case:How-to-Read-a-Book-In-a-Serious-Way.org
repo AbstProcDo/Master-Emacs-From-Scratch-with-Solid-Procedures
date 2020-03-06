@@ -1,5 +1,5 @@
-#+TITLE: 04.Case:如何严肃阅读一本书
-* 04.Case:如何"严肃"阅读一本书
+#+TITLE: 04.Case如何严肃阅读一本书
+
 * 序
 本文为项目"步步为营, 零秒精通Emacs"的第四章"Emacs as a Notebook by Org"
 

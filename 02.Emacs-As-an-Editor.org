@@ -1,4 +1,3 @@
-#+TITLE: 02.Emacs-As-an-Editor
 * 02.Emacs as an Editor
 前一章 [[01.semantic keybinding]], 初窥了Emacs简单易用的特性之一便是语义化键绑定,
 语义化包含两个方面:
@@ -40,12 +39,13 @@
 与C-<del> 搭配是删除一个字符,
 与M-<del>则是倒退删除一个单词;
 与backwords对应的是forwards,(进格删除)
-C-d M-d分别进格删除一个字符和一个单词.
+C-d M-d分别进格删除一个字符和一个单词,
+# 短评: 一段时间不浏览, 还是能忘记, 不再使用.
 
 Killing的范围比delete大;
 C-k是删除到行尾, M-k是删除到句尾, 跟前面一致. 以上是forwards进格删除,
-对行的backwardst退格删除 C-x <del>
-
+对行的backwardst退格删除
+C-x <del> 对句子的退格删除.
 * Topic1: 调用直觉
 
 这么多的键绑定, 从语义化的理解是一方面, 更重要的一方面可能应该去找捷径, 比如调用直觉和由此带来的强烈满足感和成就感.
@@ -119,7 +119,7 @@ C-x grep-find;
 
 Emacs中执行命令的突出优势是简单方便的二次处理.
 
-*小结*
+* 小结
 
 目前的流程图 Meta --> Control ---> Cursor ---> Edit
 由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.

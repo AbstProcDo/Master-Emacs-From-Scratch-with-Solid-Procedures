@@ -1,5 +1,5 @@
 #+TITLE: 05.Emacs as a Agenda by Org
-* 05.Emacs as a Agenda by Org
+* 05.Emacs as a Agenda by Orgs
 * 归纳基本操作
 # 总结
 关键概念摘要,
@@ -69,3 +69,35 @@ todo里面需要补充的一项是efforts
     m :: mark
   + 11.3.The Built-in Agenda Views
 # 没有多少实质的东西.
+* Diary的配置
+# elisp基本配置
+#+begin_src emacs-lisp :session sicp :lexical t
+(setq org-agenda-include-diary t)
+(setq org-agenda-diary-file "~/Documents/OrgMode/ORG/src/standard-diary") ;;2020-03-02 10:47:06
+(setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
+#+end_src
+
+* Time 
+* Integrated with a Diary
+sunrise and sunset在这里.
+* Calendar
+按照
+日, 周,
+月,三月(季度),
+一年
+
+- C-f :: Move point one day forward (=calendar-forward-day=).
+
+- C-b :: Move point one day backward (=calendar-backward-day=).
+
+- C-n :: Move point one week forward (=calendar-forward-week=).
+
+- C-p :: Move point one week backward (=calendar-backward-week=).
+
+- M-} :: Move point one month forward (=calendar-forward-month=).
+
+- M-{ :: Move point one month backward (=calendar-backward-month=).
+
+- C-x ] :: Move point one year forward (=calendar-forward-year=).
+
+- C-x [ :: Move point one year backward (=calendar-backward-year=).
