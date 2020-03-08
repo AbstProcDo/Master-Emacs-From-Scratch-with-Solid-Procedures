@@ -34,9 +34,9 @@ C-p (previous-line)
 M-p
 M-n
 发现Emacs没有定义这两个key-sequnces, 根据前面的逻辑, M-p应该向上移动更多行, 至少比一行要多; Emacs竟然没有定义, 这真是千载难逢的良机.
-暂时按下不表, 先小结Ctrl的光标操作. Ctrl能操作的最大单位是line, 更大范围的光标动作交由Meta完成.
+此节按下不表, 先小结Ctrl的光标操作. Ctrl能操作的最大单位是line, 更大范围的光标动作交由Meta完成.
 
-* 4.Vertically Page Down and Up
+s* 4.Vertically Page Down and Up
 向上翻页M-v, v当然是vertical, 而Meta是higher, 往更高处纵向移动, 当然便是UP,
 那么向下呢? 既然Meta相对于Ctrl而higher, 反过来Ctrl则是Lower;
 因此向下翻页是C-v.
@@ -70,7 +70,7 @@ M-<, to the biginning of the buffer
 M->, to the end of the buffer.
 # 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
 # 短评: 这个命令都快忘记了.
-* 6.Logical Segmemnt
+* 6.Logical Segment
 - *Paragraph*
   - M-{ ::  Move back to previous paragraph beginning (=backward-paragraph=).
 
@@ -87,3 +87,7 @@ M->, to the end of the buffer.
   - C-x C-p :: Put point and mark around this page (or another page) (=mark-page=).
 
   - C-x l :: Count the lines in this page (=count-lines-page=).
+* 想法
+对backward, forward, scroll的新理解
+行内的位移是backwards与forwards
+而上下行的移动则是scroll.

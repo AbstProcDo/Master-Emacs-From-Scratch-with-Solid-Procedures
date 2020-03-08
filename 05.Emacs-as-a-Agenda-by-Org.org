@@ -77,27 +77,180 @@ todo里面需要补充的一项是efforts
 (setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
 #+end_src
 
-* Time 
+* Agenda Time Grid
+** 默认agenda-time-grid的不足之处
+Emacs-agenda的Time Grid, 默认设置每两个小时为一个时间段.
+开启方法:
+time-grid =setq agenda-use-time-grid t=,
+默认配置:
+#+begin_src emacs-lisp :session agenda  :lexical t
+(setq org-agenda-time-grid (quote (((daily today require-timed)
+                                    (800 1000 1200 1400 1600 1800 2000)
+                                    "......" "----------------"))))
+#+end_src
+显示为:
+#+BEGIN_EXAMPLE
+     8:00...... ------------------
+     8:30-13:00 Arthur Dent lies in front of the bulldozer
+    10:00...... ------------------
+    12:00...... ------------------
+    12:45...... Ford Prefect arrives and takes Arthur to the pub
+    14:00...... ------------------
+    16:00...... ------------------
+    18:00...... ------------------
+    19:00...... The Vogon reads his poem
+    20:00...... ------------------
+    20:30-22:15 Marvin escorts the Hitchhikers to the bridge
+#+END_EXAMPLE
+
+默认配置有以下三个问题:
+1. 两个小时的时间间隔太短, 每两个小时一总结工作, 则过于频繁;
+2. 起始时间与终止时间的跨度为"早晨8点"到"晚上8点", 人所共知, "晚上8点至11点"正是精力旺盛的时间段;
+3. 如果每两小时一间隔, 十二等分24小时, 则agenda-time-grid拉的过长
+
+** 八分图时间段划分
+
+*解决方案*
+解决方案, "八分图"切割24小时, 每三个小时为一间隔, 工作中尽量做到三个小时一总结.
+显示为:
+#+BEGIN_EXAMPLE
+Day-agenda (W10):
+Sunday      8 March 2020
+               3:00...... -----------------------------------------------------
+               6:00...... -----------------------------------------------------
+  Diary:       6:39...... Sunrise
+               6:45...... now - - - - - - - - - - - - - - - - - - - - - - - - -
+  Diary:       8:00...... Review the week
+               9:00...... -----------------------------------------------------
+              12:00...... -----------------------------------------------------
+              15:00...... -----------------------------------------------------
+              18:00...... -----------------------------------------------------
+  Diary:      18:13...... Sunset
+              21:00...... -----------------------------------------------------
+              24:00...... -----------------------------------------------------
+  Diary:      ISO date: Day 7 of week 10 of 2020
+#+END_EXAMPLE
+配置如下:
+#+begin_src emacs-lisp :session agenda :lexical t
+(setq org-agenda-time-grid (quote (((daily today require-timed)
+                                    (300 600 900 1200 1500 1800 2100 2400)
+                                    "......" "----------------"))))
+#+end_src
+
+*思维概念*
+单单从agenda这个工具中设置好, 显然是不够的, 劳神费力的设置一番, 也未必用得得心应手,
+因此不仅要设置emacs-agenda这个工具, 还要设置头脑的思维模式,不仅身体里要有"生物钟", 思维中也要有"逻辑钟"/"概念钟".
+
+#+tblname: 八分图时间段的概念命名
+|----+-----------+----------+------------------|
+| No | 时间段    | 维基命名 | 自定义命名       |
+|----+-----------+----------+------------------|
+|  1 | 0时~3时   | 凌晨     | 午夜(夜)         |
+|  2 | 3时~6时   | 拂晓     | 破晓(破,dawn)    |
+|  3 | 6时~9时   | 早晨     | 早晨(早,morning) |
+|  4 | 9时~12时  | 午前     | 明昼(明)         |
+|  5 | 12时~15时 | 午后     | 午后(午)         |
+|  6 | 15时~18时 | 傍晚     | 下午(下)         |
+|  7 | 18时~21时 | 薄暮     | 向晚(向,Dusk)    |
+|  8 | 21时~24时 | 深夜     | 深夜(深,Night)   |
+|----+-----------+----------+------------------|
+时间段的命名取自中文(日文)维基百科(搜"早晨"),
+- 修改"3时至6时"的"拂晓"为"破晓", 是因为"拂"字是"杨柳岸晓风残月", "破"字是精神焕发的日出(起床)动作；　
+# 对"拂"的形容没有问题, 对"破晓"的阐述, 日出, 天体运动, 势不可挡的力量, "日出江花红胜火"则过分热烈.
+- 修改"9时至12时"的"午前"为"明昼", 考虑到"午前"的字节读起来不响亮, 该时间段"心明眼亮", "神清气爽"正是效率最高的阶段, 因此取响亮的单字"明",
+  后面的"昼"是附会.
+- 修改"15时至18时"的"傍晚"为"下午", 考虑到下午三点之后正是第二个高效工作的阶段, 添加一个"晚"字进来, 着实会潜移默化影响工作效率.
+
+*头脑呈现*
+历史缘故, 时间在头脑中的具象是"圆形表盘",
+因此八个时间段的具象呈现, 在思考过程中的形象,
+1) 可以是agenda呈现的表格或者子弹列表
+2) 可以是24小时八分图
+3) 也可以是两个紧挨着的12小时的四分图.
+
+
+
 * Integrated with a Diary
 sunrise and sunset在这里.
 * Calendar
-按照
-日, 周,
-月,三月(季度),
-一年
+对"日历"的操作, 分为三个层次:
+- Day, Week 日/周/
+- Month, Season(3-months)
+- Year 
+大脑中构建思维模式.
+从calendar中, 串联起来org-agenda与emacs-manual的calendar.
 
-- C-f :: Move point one day forward (=calendar-forward-day=).
+日历的基本操作与文本的操作一一对应.
 
-- C-b :: Move point one day backward (=calendar-backward-day=).
+** 文本命令与日历命令的对比:
+The day and week commands are natural analogues of the usual Emacs commands for moving by characters and by lines. 
+基本思路是将Calendar作为文本处理.
+character与word不存在首尾的问题, 规律与问题都可以从比较中发现, 对比中
+会慢慢发现真相.
+快捷键有两点: 1) 前后移动 2) 首尾的问题.
+|-------+---------------------+------------------------------------|
+| Keys  | Text                | Calendar                           |
+|-------+---------------------+------------------------------------|
+|       | *character*         | *day*                              |
+| C-f   | forward-char        | calendar-forward-day               |
+| C-b   | backward-char       | calendar-backward-day              |
+|-------+---------------------+------------------------------------|
+|       | *word*              |                                    |
+| M-f   | forward-word        | 突破月份的限制的scroll.            |
+| M-b   | backward-word       |                                    |
+|-------+---------------------+------------------------------------|
+|       | *line*              | *week*                             |
+| C-a   | beginning-of-line   | calendar-beginning-of-week         |
+| C-e   | end-of-line         | calendar-end-of-week               |
+| C-p   | previous-line       | calendar-backward-day              |
+| C-n   | next-line           | calendar-forward-week              |
+|-------+---------------------+------------------------------------|
+|       | *sentence*          | *month*                            |
+| M-a   | backward-sentence   | calendar-beginning-of-month        |
+| M-e   | forward-sentence    | calendar-end-of-month              |
+|-------+---------------------+------------------------------------|
+| >     |                     | calendar-scroll-left               |
+| <     |                     | calendar-scroll-right              |
+|-------+---------------------+------------------------------------|
+|       | *paragraph*         |                                    |
+| M-{   | backward-paragraph  | calendar-forward-month             |
+| M-}   | forward-paragrap    | calendar-backward-month            |
+|-------+---------------------+------------------------------------|
+|       |                     | *3-months*                         |
+| C-v   | scroll-down         | calendar-scroll-left-three-months  |
+| M-v   | scroll-up           | calendar-scroll-right-three-months |
+|-------+---------------------+------------------------------------|
+|       | *page*              | *year*                             |
+| C-x [ | backward-page       | calendar-forward-year              |
+| C-x ] | forward-page        | calendar-backward-year             |
+|-------+---------------------+------------------------------------|
+|       | *buffer*            |                                    |
+| M-<   | beginning-of-buffer | calendar-beginning-of-year         |
+| M->   | end-of-buffer       | calendar-end-of-year               |
+|-------+---------------------+------------------------------------|
 
-- C-n :: Move point one week forward (=calendar-forward-week=).
+backward
+# 问题?
+backward-paragraph与forward-paragraph, 但是没有首尾的操作,
+是因为backward与forward是按照"段首".
+# 问题?
+C-x 用得不频繁, 涉及大幅度动作的时候, 使用此命令.
 
-- C-p :: Move point one week backward (=calendar-backward-week=).
+# 思考
+从概念上总结完calendar的基本操作之后, 大脑豁然开朗,
+1) calendar作为text操作
+2) 掌控操作"时间", 或者日月星辰的感觉
+3) 简要讲, 大脑中再涉及时间问题的时候, 异常的清晰.
+** 便捷的命令
+- g d :: Move point to specified date (=calendar-goto-date=).
 
-- M-} :: Move point one month forward (=calendar-forward-month=).
+- g D :: Move point to specified day of year (=calendar-goto-day-of-year=).
 
-- M-{ :: Move point one month backward (=calendar-backward-month=).
+- g w :: Move point to specified week of year (=calendar-iso-goto-week=).
 
-- C-x ] :: Move point one year forward (=calendar-forward-year=).
+- o   :: Center calendar around specified month (=calendar-other-month=).
 
-- C-x [ :: Move point one year backward (=calendar-backward-year=).
+- .   :: Move point to today's date (=calendar-goto-today=).
+# 短评: 此处比较常用.
+** 为什么要介绍日历的操作？
+因为要将"日历"与"Agenda"结合起来.
