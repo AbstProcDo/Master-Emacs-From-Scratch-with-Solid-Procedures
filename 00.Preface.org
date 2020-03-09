@@ -11,6 +11,7 @@
 是为序.
 
 *简单的Emacs*
+
 Emacs的简单, 则一言以蔽之, 只是一个Meta键.
 Meta键(键盘上的option/alter键)
 Meta的词源含义是higher, beyond,没有最高,只有更高.

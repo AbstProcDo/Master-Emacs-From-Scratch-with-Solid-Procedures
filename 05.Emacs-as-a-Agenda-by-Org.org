@@ -71,13 +71,13 @@ todo里面需要补充的一项是efforts
 # 没有多少实质的东西.
 * Diary的配置
 # elisp基本配置
-#+begin_src emacs-lisp :session sicp :lexical t
+#+begin_src emacs-lisp :session agenda :lexical t
 (setq org-agenda-include-diary t)
 (setq org-agenda-diary-file "~/Documents/OrgMode/ORG/src/standard-diary") ;;2020-03-02 10:47:06
 (setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
 #+end_src
 
-* Agenda Time Grid
+* 1.Agenda Time Grid
 ** 默认agenda-time-grid的不足之处
 Emacs-agenda的Time Grid, 默认设置每两个小时为一个时间段.
 开启方法:
@@ -109,9 +109,9 @@ time-grid =setq agenda-use-time-grid t=,
 3. 如果每两小时一间隔, 十二等分24小时, 则agenda-time-grid拉的过长
 
 ** 八分图时间段划分
-
 *解决方案*
-解决方案, "八分图"切割24小时, 每三个小时为一间隔, 工作中尽量做到三个小时一总结.
+
+"八分图"切割24小时, 每三个小时为一间隔, 工作中尽量做到三个小时一总结.
 显示为:
 #+BEGIN_EXAMPLE
 Day-agenda (W10):
@@ -138,6 +138,7 @@ Sunday      8 March 2020
 #+end_src
 
 *思维概念*
+
 单单从agenda这个工具中设置好, 显然是不够的, 劳神费力的设置一番, 也未必用得得心应手,
 因此不仅要设置emacs-agenda这个工具, 还要设置头脑的思维模式,不仅身体里要有"生物钟", 思维中也要有"逻辑钟"/"概念钟".
 
@@ -156,23 +157,142 @@ Sunday      8 March 2020
 |----+-----------+----------+------------------|
 时间段的命名取自中文(日文)维基百科(搜"早晨"),
 - 修改"3时至6时"的"拂晓"为"破晓", 是因为"拂"字是"杨柳岸晓风残月", "破"字是精神焕发的日出(起床)动作；　
-# 对"拂"的形容没有问题, 对"破晓"的阐述, 日出, 天体运动, 势不可挡的力量, "日出江花红胜火"则过分热烈.
+# 对"拂"的形容没有问题, 对"破晓"的阐述, 日出, 天体运动, 势不可挡的力量, "日出江花红胜火"则过分热烈. 
 - 修改"9时至12时"的"午前"为"明昼", 考虑到"午前"的字节读起来不响亮, 该时间段"心明眼亮", "神清气爽"正是效率最高的阶段, 因此取响亮的单字"明",
   后面的"昼"是附会.
 - 修改"15时至18时"的"傍晚"为"下午", 考虑到下午三点之后正是第二个高效工作的阶段, 添加一个"晚"字进来, 着实会潜移默化影响工作效率.
 
 *头脑呈现*
+
 历史缘故, 时间在头脑中的具象是"圆形表盘",
 因此八个时间段的具象呈现, 在思考过程中的形象,
 1) 可以是agenda呈现的表格或者子弹列表
 2) 可以是24小时八分图
 3) 也可以是两个紧挨着的12小时的四分图.
 
+* 2.Integrated with a Diary
+在agenda-time-grid上, 添加四个时间锚点,
+- 日出日落
+- 月相
+- ISO日期
+- 中国农历日期
 
+显示为:
+#+BEGIN_EXAMPLE
+Day-agenda (W11):
+Tuesday    10 March 2020
+  Diary:       1:44...... Full Moon (CST)
+               3:00...... -----------------------------------------------------
+               6:00...... -----------------------------------------------------
+  Diary:       6:35...... Sunrise
+               9:00...... -----------------------------------------------------
+              12:00...... -----------------------------------------------------
+              15:00...... -----------------------------------------------------
+              18:00...... -----------------------------------------------------
+  Diary:      18:16...... Sunset
+              21:00...... -----------------------------------------------------
+              24:00...... -----------------------------------------------------
+  Diary:      Chinese date: Cycle 78, year 37 (庚子), month 2 (己卯), day 17 (壬子)
+  Diary:      ISO date: Day 2 of week 11 of 2020
+#+END_EXAMPLE
 
-* Integrated with a Diary
-sunrise and sunset在这里.
-* Calendar
+** "日月之行, 若出其里"
+单纯的agenda-time-grid单薄而孤独, 仅仅是列出来8个时间序列, 孑然一身, 与万事万物没有一丝牵割与联系.
+引入日出日落和月相的时刻到agenda-time-grid中, agenda-view瞬间活了起来, 不再只是孤立的表格文本, 而是与天地四时构建了物理关联.
+
+时间的本质是什么? 我们观测天体的运行规律, 获得对时间的直观认知与准确测量.
+
+此处引用"曹丞相"在<观沧海>中的两句诗文.
+"日月之行, 若出其里; 星汉灿烂, 若出其中."
+心驰神往之间, 描绘的正是是将sunrise-and-sunset整合进agenda-time-grid的功能.
+
+** 整合diary到org-agenda
+整合diary-file到org-agenda中的配置:
+#+begin_src emacs-lisp :session agenda :lexical t
+(setq org-agenda-include-diary t)
+(setq org-agenda-diary-file "~/Documents/OrgMode/ORG/src/standard-diary") ;;2020-03-02 10:47:06
+(setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
+#+end_src
+我的diary-file放置在"~/Documents/OrgMode/ORG/src/standard-diary"
+** Diary的基本内容
+写入内容:
+#+BEGIN_EXAMPLE
+;;Day info
+;; 日出而作, 日落而息
+%%(diary-sunrise)
+%%(diary-sunset)
+%%(diary-lunar-phases)
+;;
+%%(diary-iso-date)
+;;中国农历
+%%(diary-chinese-date)
+#+END_EXAMPLE
+
+其中 =diary-sunrise= 与 =diary-sunset= 需要自定义:
+
+** 自定义日出与日落时间序列
+#+begin_src emacs-lisp :session agenda  :lexical t
+;;Sunrise and Sunset
+;;日出而作, 日落而息
+(defun diary-sunrise ()
+  (let ((dss (diary-sunrise-sunset)))
+    (with-temp-buffer
+      (insert dss)
+      (goto-char (point-min))
+      (while (re-search-forward " ([^)]*)" nil t)
+        (replace-match "" nil nil))
+      (goto-char (point-min))
+      (search-forward ",")
+      (buffer-substring (point-min) (match-beginning 0)))))
+
+(defun diary-sunset ()
+  (let ((dss (diary-sunrise-sunset))
+        start end)
+    (with-temp-buffer
+      (insert dss)
+      (goto-char (point-min))
+      (while (re-search-forward " ([^)]*)" nil t)
+        (replace-match "" nil nil))
+      (goto-char (point-min))
+      (search-forward ", ")
+      (setq start (match-end 0))
+      (search-forward " at")
+      (setq end (match-beginning 0))
+      (goto-char start)
+      (capitalize-word 1)
+      (buffer-substring start end))))
+#+end_src
+
+配置完毕, 显示为:
+
+#+BEGIN_EXAMPLE
+Day-agenda (W27):
+Sunday      5 July 2020
+               3:00...... -----------------------------------------------------
+  Diary:       4:53...... Sunrise
+               6:00...... -----------------------------------------------------
+  Diary:       8:00...... Review the week
+               9:00...... -----------------------------------------------------
+              12:00...... -----------------------------------------------------
+  Diary:      12:40...... Full Moon (CST)
+              15:00...... -----------------------------------------------------
+              18:00...... -----------------------------------------------------
+  Diary:      19:46...... Sunset
+              21:00...... -----------------------------------------------------
+              24:00...... -----------------------------------------------------
+  Diary:      Chinese date: Cycle 78, year 37 (庚子), month 5 (壬午), day 15 (己酉)
+  Diary:      ISO date: Day 7 of week 27 of 2020
+#+END_EXAMPLE
+
+** 与时间构筑物理关系
+
+人类基因里对时间的理解就是日出日落与月相的变化.
+观察"天体"的运动是人类测量与记录时间的的起点, 我们对时间的理解根植于此.
+在agenda中添加sunrise and sunset或许可以帮助思维回归到对时间最直觉和原始的理解, 唤醒体内原初的生命力与觉察力.
+agenda中的日出日落不仅帮助界定有意义的时间范围, 而且构建个人与天体间的物理关系, 尤其是在雾霾严重, 少见星星月亮的城市.
+这种"随四时而动", 与自然融为一体的关系或许值得珍惜. (差点想说天人合一)
+(备注:这一段需要以后逐步完善, 想法没有很好的表述出来, 当早起看到agenda中显示sunrise与sunset, 而且作为计时锚点的时候, 感觉体内对时间的本能被激活)
+* 3.Calendar
 对"日历"的操作, 分为三个层次:
 - Day, Week 日/周/
 - Month, Season(3-months)
@@ -254,3 +374,7 @@ C-x 用得不频繁, 涉及大幅度动作的时候, 使用此命令.
 # 短评: 此处比较常用.
 ** 为什么要介绍日历的操作？
 因为要将"日历"与"Agenda"结合起来.
+
+* 4.分别记录事件,笔记与任务
+* 参考资料
+# 描写日出的诗文资料
