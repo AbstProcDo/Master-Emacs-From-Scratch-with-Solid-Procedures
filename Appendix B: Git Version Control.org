@@ -1,0 +1,177 @@
+#+TITLE: Appendix B: Git Version Control
+
+|-----------------------+------------------------------+----------------------------------------------|
+| Objects               | Features                     | Actions:                                     |
+|-----------------------+------------------------------+----------------------------------------------|
+| 0.Introduction        |                              |                                              |
+|                       | Faster commands              |                                              |
+|                       | Stability                    |                                              |
+|                       | Isolated Environments        |                                              |
+|                       | Efficient Merging            |                                              |
+|-----------------------+------------------------------+----------------------------------------------|
+| 1.Overview            | Objects:                     | Actions:                                     |
+|                       | 1.working directory          | configure                                    |
+|                       | 2.staging area               | recording                                    |
+|                       | 3.Commit history             | undoing                                      |
+|                       | 4.developmnent branches      | branch (non-linear)                          |
+|                       | 5.remotes                    | remote                                       |
+|-----------------------+------------------------------+----------------------------------------------|
+| 2.Configuration       | 1) User Info:                |                                              |
+|                       |                              | git config --global user.name                |
+|                       |                              | git config --global user.email               |
+|                       | 2) Editor:                   |                                              |
+|                       |                              | git config --global core.editor emacs        |
+|                       | 3) Alias:                    |                                              |
+|                       |                              | git config --global alias.ci commit          |
+|                       | .inspect                     |                                              |
+|                       |                              | git config -l                                |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | help:                        | git help log                                 |
+|                       |                              | man git-log                                  |
+|                       |                              | tldr git-log                                 |
+|-----------------------+------------------------------+----------------------------------------------|
+| 3.Recoding Chaneges   |                              |                                              |
+|                       | Staging area:                |                                              |
+|                       |                              | git add                                      |
+|                       |                              | git rm --cached                              |
+|                       | .inspecting:                 |                                              |
+|                       |                              | git status                                   |
+|                       |                              | git diff (--cached)                          |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | Commits                      |                                              |
+|                       |                              | git commit                                   |
+|                       | .inspecting                  |                                              |
+|                       |                              | git log                                      |
+|                       |                              | git log --oneline  <file>                    |
+|                       |                              | git log <since> ... <until>                  |
+|                       | Tagging commit               |                                              |
+|                       |                              | git tag -a v1.0  'stable version'            |
+|-----------------------+------------------------------+----------------------------------------------|
+| 4.Undoing Changes     | 1) Woriking directory        |                                              |
+|                       |                              |                                              |
+|                       |                              | git reset --hard HEAD                        |
+|                       |                              | git clean -f (git rid of unstaged files)     |
+|                       | .individual file:            |                                              |
+|                       |                              | git checkout HEAD <file> (most frequent)     |
+|-----------------------+------------------------------+----------------------------------------------|b
+|                       | 2) Staging area              |                                              |
+|                       |                              | git reset HEAD <file> (extra staged file)    |
+|                       |                              | (No --hard here)                             |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 3) Commits                   |                                              |
+|                       | .resetting                   |                                              |
+|                       |                              | git reset HEAD~1                             |
+|                       | .reverting                   |                                              |
+|                       |                              | git revert <commit-id> (created new commit ) |
+|                       | .ameding                     |                                              |
+|                       |                              | git commit --amend                           |
+|-----------------------+------------------------------+----------------------------------------------|
+| 5.Branches            | 1) Manipulate brnaches       |                                              |
+|                       | .listing branches            |                                              |
+|                       |                              | git branch                                   |
+|                       | .creating branches           |                                              |
+|                       |                              | git branch <name>                            |
+|                       |                              | git checkout -b <name>                       |
+|                       |                              | .git/refs/heads/develop                      |
+|                       | .deleting branches           |                                              |
+|                       |                              | git branch -d, -D                            |
+|                       |                              |                                              |
+|                       | Checking out branches        |                                              |
+|                       |                              | git checkout  <branch>                       |
+|                       | .detached                    |                                              |
+|                       |                              | git checkout -b <new-branch-name>            |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 2) Merging branches          |                                              |
+|                       | .fast-forward:               |                                              |
+|                       |                              | git checkout master                          |
+|                       |                              | git merge some-feature                       |
+|                       | .3-way merge:                |                                              |
+|                       |                              | same as the above                            |
+|                       | .merge conflicts             |                                              |
+|                       |                              | <<<<<<HEAD                                   |
+|                       |                              | ==================                           |
+|                       |                              | >>>>> some-feature                           |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 3) Branches workflow         |                                              |
+|                       | .types of branches           |                                              |
+|                       |                              | permanent or topic                           |
+|                       | .permanent_branch            |                                              |
+|                       |                              | master(public ), develop,                    |
+|                       | .topic_branch                |                                              |
+|                       |                              | feature and hotfix                           |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 4) Rebasing:                 |                                              |
+|                       |                              | git checkout some-feature                    |
+|                       |                              | git rebase master                            |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | .interactive_rebasing:       |                                              |
+|                       |                              | git rebase -i master                         |
+|                       |                              | (Notice for rewriting)                       |
+|-----------------------+------------------------------+----------------------------------------------|
+| 6.Remote Repositories |                              |                                              |
+|                       | 1) Manipulate remotes:       |                                              |
+|                       | .listing remotes:            |                                              |
+|                       |                              | git remote                                   |
+|                       |                              | git remote -v                                |
+|                       | .creating_remotes:           |                                              |
+|                       |                              | git remote add <name> <path-to-repo.         |
+|                       | .deleting_remotes:           |                                              |
+|                       |                              | git remote rm <remote-name>                  |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 2) Remote branches:          |                                              |
+|                       | .fetching_remote_branches    |                                              |
+|                       |                              | git fetch <remote> <branch>                  |
+|                       |                              | git branch -r                                |
+|                       | .inspecting_remote_branches: |                                              |
+|                       |                              | git log origin/master                        |
+|                       | .merging/rebsing:            |                                              |
+|                       |                              | git checkout some-feature                    |
+|                       |                              | git fetch origin                             |
+|                       |                              | git merge origin/master                      |
+|                       |                              | (littered with meaninglesss merge commits)   |
+|                       |                              |                                              |
+|                       |                              | git checkout some-feature                    |
+|                       |                              | git fetch origin                             |
+|                       |                              | git rebase origin/master                     |
+|                       | .pulling:                    |                                              |
+|                       |                              | git pull origin/master (--rebase )           |
+|                       | .pushing:                    |                                              |
+|                       |                              | git push <remote> <branch>                   |
+|                       |                              |                                              |
+|-----------------------+------------------------------+----------------------------------------------|
+|                       | 3) Remote workflow:          |                                              |
+|                       | .bare_repository:            |                                              |
+|                       |                              | git init --bare <path>                       |
+|                       | .centralized_workflow:       |                                              |
+|                       |                              | git fetch origin master                      |
+|                       |                              | git rebase origin/master                     |
+|                       |                              | git push                                     |
+|                       | .integrator_workflow:        |                                              |
+|                       |                              | github的模式                                 |
+|-----------------------+------------------------------+----------------------------------------------|
+| Conclusion            |                              |                                              |
+|                       | 1.working directory          |                                              |
+|                       | 2.staging area               |                                              |
+|                       | 3.commit history             |                                              |
+|                       | 4.branches                   |                                              |
+|                       | 5.remotes                    |                                              |
+|-----------------------+------------------------------+----------------------------------------------|
+
+- detached
+Note: checking out '1a'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 613ae49 Chapter 1: initial version (1a)
+
+<<<<<<< HEAD
+=======
+
+

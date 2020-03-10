@@ -1,268 +1,10 @@
-#+TITLE: Master Emacs
-* 00.Preface
-
-步步为营一步一个脚印, "零秒"乃调用直觉力, 非物理概念上的“零秒”；
-
-一个以讹传讹的观念"Emacs很难且耗费时间", 标题"零秒"有意打消对Emacs学习的成见. 通过点出Emacs中的关键点的方式, 心有灵犀一点通, 举一反三, 一通百通. 而不必案牍劳形, 悬梁刺股.
-曾国藩的战术“结硬寨, 打呆仗”, 初时很慢, 待工事渐成, 则坚不可摧；
-同时努力学习SICP的策略, 首先抛出点滴星火，再看时，已成燎原之势。
-以直觉力为基础，步步为营，稳扎稳打，构筑Emacs技能。
-
-
-是为序.
-
-Emacs的简单, 则一言以蔽之, 只是一个Meta键.
-Meta键(键盘上的option/alter键)
-Meta的词源含义是higher, beyond,没有最高,只有更高.
-中文译为"元", 发端处, 源头处;
-So Meta is Source, and it relates to source code.
-Meta关联Source-Code, 在Source-Code中, Function又是的一等公民.
-Emacs的简单策略便是将Meta键i绑定到Function上..
-M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事情,
-比如插入当前的日期:
-
-至此, Emacs从战略层面上的所有事情便结束了, 剩下的事情仅仅是战术层面上的高效问题与缝缝补补的实现.
-
-*Emacs的第一个策略: 引入Ctrl键*
-
-比如从目录中打开一个文件, 可以M-x find-file,
-需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
-sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
-
-* Contents
-** 01.Semantic Keybinding
-** 02.Emacs as an Editor
-** 03.God's Eyes and Hands by Dired and Bookmarks
-** 04.Emacs as a Notebook by Org
-** 04.Case:如何"严肃"阅读一本书
-** 05.Emacs as a Agenda by Org
-** 06.Org your life all-in-one as  book manager, database manager, memory manager etc
-** 07.Programming
-** 08.Assistance to Programming
-** 09.Literate Programming
-
-** Appendix A: Ask and Harvest Answers
-StackOverflow突破10k, 抛一个问题, 提问还是搜索?
-答案:
-只提问不搜索, 原因如下:
-1. 提问的过程, 也是梳理思路的过程, 往往问题还没写完, 答案便有了. 遇事便搜索, 有碍于良好思维习惯的养成;
-2. 搜索时, 注意力比较容易被操纵, 原本只是简单的问题,  过程中却被野花野草所吸引, 浪费大量时间;
-3. 提问能够钓到在当前知识水平与认知水平之上的解答, 更进一步可以裁判不同高手的答案; 而去搜索往往使用局限在当下的水平.
-4. 大部分问题, 并非直接挡住当前去路, 略过之后, 完全可以继续做事; 因此可以将问题抛出去;
-5. 提问更高效, 一个上午遇到5个问题, 全部提出来; 11:30的时候, 收割到4个答案, 投入时间解决最后一个问题.
-6. 傻瓜才去读鸟How to ask a question.
-
-提问的心态:
-1. 本来就占用别人时间, 所以没脸没皮, 不要在乎难听的话与个人面子
-回答的新题
-1. 作为个人的查漏补缺, 只回答自己感兴趣的问题, 这一条也可以作为提问者的心态.
-** Appendix B: Git Version Control
-
-|-----------------------+------------------------------+----------------------------------------------|
-| Objects               | Features                     | Actions:                                     |
-|-----------------------+------------------------------+----------------------------------------------|
-| 0.Introduction        |                              |                                              |
-|                       | Faster commands              |                                              |
-|                       | Stability                    |                                              |
-|                       | Isolated Environments        |                                              |
-|                       | Efficient Merging            |                                              |
-|-----------------------+------------------------------+----------------------------------------------|
-| 1.Overview            | Objects:                     | Actions:                                     |
-|                       | 1.working directory          | configure                                    |
-|                       | 2.staging area               | recording                                    |
-|                       | 3.Commit history             | undoing                                      |
-|                       | 4.developmnent branches      | branch (non-linear)                          |
-|                       | 5.remotes                    | remote                                       |
-|-----------------------+------------------------------+----------------------------------------------|
-| 2.Configuration       | 1) User Info:                |                                              |
-|                       |                              | git config --global user.name                |
-|                       |                              | git config --global user.email               |
-|                       | 2) Editor:                   |                                              |
-|                       |                              | git config --global core.editor emacs        |
-|                       | 3) Alias:                    |                                              |
-|                       |                              | git config --global alias.ci commit          |
-|                       | .inspect                     |                                              |
-|                       |                              | git config -l                                |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | help:                        | git help log                                 |
-|                       |                              | man git-log                                  |
-|                       |                              | tldr git-log                                 |
-|-----------------------+------------------------------+----------------------------------------------|
-| 3.Recoding Chaneges   |                              |                                              |
-|                       | Staging area:                |                                              |
-|                       |                              | git add                                      |
-|                       |                              | git rm --cached                              |
-|                       | .inspecting:                 |                                              |
-|                       |                              | git status                                   |
-|                       |                              | git diff (--cached)                          |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | Commits                      |                                              |
-|                       |                              | git commit                                   |
-|                       | .inspecting                  |                                              |
-|                       |                              | git log                                      |
-|                       |                              | git log --oneline  <file>                    |
-|                       |                              | git log <since> ... <until>                  |
-|                       | Tagging commit               |                                              |
-|                       |                              | git tag -a v1.0  'stable version'            |
-|-----------------------+------------------------------+----------------------------------------------|
-| 4.Undoing Changes     | 1) Woriking directory        |                                              |
-|                       |                              |                                              |
-|                       |                              | git reset --hard HEAD                        |
-|                       |                              | git clean -f (git rid of unstaged files)     |
-|                       | .individual file:            |                                              |
-|                       |                              | git checkout HEAD <file> (most frequent)     |
-|-----------------------+------------------------------+----------------------------------------------|b
-|                       | 2) Staging area              |                                              |
-|                       |                              | git reset HEAD <file> (extra staged file)    |
-|                       |                              | (No --hard here)                             |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | 3) Commits                   |                                              |
-|                       | .resetting                   |                                              |
-|                       |                              | git reset HEAD~1                             |
-|                       | .reverting                   |                                              |
-|                       |                              | git revert <commit-id> (created new commit ) |
-|                       | .ameding                     |                                              |
-|                       |                              | git commit --amend                           |
-|-----------------------+------------------------------+----------------------------------------------|
-| 5.Branches            | 1) Manipulate brnaches       |                                              |
-|                       | .listing branches            |                                              |
-|                       |                              | git branch                                   |
-|                       | .creating branches           |                                              |
-|                       |                              | git branch <name>                            |
-|                       |                              | git checkout -b <name>                       |
-|                       |                              | .git/refs/heads/develop                      |
-|                       | .deleting branches           |                                              |
-|                       |                              | git branch -d, -D                            |
-|                       |                              |                                              |
-|                       | Checking out branches        |                                              |
-|                       |                              | git checkout  <branch>                       |
-|                       | .detached                    |                                              |
-|                       |                              | git checkout -b <new-branch-name>            |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | 2) Merging branches          |                                              |
-|                       | .fast-forward:               |                                              |
-|                       |                              | git checkout master                          |
-|                       |                              | git merge some-feature                       |
-|                       | .3-way merge:                |                                              |
-|                       |                              | same as the above                            |
-|                       | .merge conflicts             |                                              |
-|                       |                              | <<<<<<HEAD                                   |
-|                       |                              | ==================                           |
-|                       |                              | >>>>> some-feature                           |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | 3) Branches workflow         |                                              |
-|                       | .types of branches           |                                              |
-|                       |                              | permanent or topic                           |
-|                       | .permanent_branch            |                                              |
-|                       |                              | master(public ), develop,                    |
-|                       | .topic_branch                |                                              |
-|                       |                              | feature and hotfix                           |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | 4) Rebasing:                 |                                              |
-|                       |                              | git checkout some-feature                    |
-|                       |                              | git rebase master                            |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | .interactive_rebasing:       |                                              |
-|                       |                              | git rebase -i master                         |
-|                       |                              | (Notice for rewriting)                       |
-|-----------------------+------------------------------+----------------------------------------------|
-| 6.Remote Repositories |                              |                                              |
-|                       | 1) Manipulate remotes:       |                                              |
-|                       | .listing remotes:            |                                              |
-|                       |                              | git remote                                   |
-|                       |                              | git remote -v                                |
-|                       | .creating_remotes:           |                                              |
-|                       |                              | git remote add <name> <path-to-repo.         |
-|                       | .deleting_remotes:           |                                              |
-|                       |                              | git remote rm <remote-name>                  |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | 2) Remote branches:          |                                              |
-|                       | .fetching_remote_branches    |                                              |
-|                       |                              | git fetch <remote> <branch>                  |
-|                       |                              | git branch -r                                |
-|                       | .inspecting_remote_branches: |                                              |
-|                       |                              | git log origin/master                        |
-|                       | .merging/rebsing:            |                                              |
-|                       |                              | git checkout some-feature                    |
-|                       |                              | git fetch origin                             |
-|                       |                              | git merge origin/master                      |
-|                       |                              | (littered with meaninglesss merge commits)   |
-|                       |                              |                                              |
-|                       |                              | git checkout some-feature                    |
-|                       |                              | git fetch origin                             |
-|                       |                              | git rebase origin/master                     |
-|                       | .pulling:                    |                                              |
-|                       |                              | git pull origin/master (--rebase )           |
-|                       | .pushing:                    |                                              |
-|                       |                              | git push <remote> <branch>                   |
-|                       |                              |                                              |
-|-----------------------+------------------------------+----------------------------------------------|
-|                       | 3) Remote workflow:          |                                              |
-|                       | .bare_repository:            |                                              |
-|                       |                              | git init --bare <path>                       |
-|                       | .centralized_workflow:       |                                              |
-|                       |                              | git fetch origin master                      |
-|                       |                              | git rebase origin/master                     |
-|                       |                              | git push                                     |
-|                       | .integrator_workflow:        |                                              |
-|                       |                              | github的模式                                 |
-|-----------------------+------------------------------+----------------------------------------------|
-| Conclusion            |                              |                                              |
-|                       | 1.working directory          |                                              |
-|                       | 2.staging area               |                                              |
-|                       | 3.commit history             |                                              |
-|                       | 4.branches                   |                                              |
-|                       | 5.remotes                    |                                              |
-|-----------------------+------------------------------+----------------------------------------------|
-
-- detached
-Note: checking out '1a'.
-
-You are in 'detached HEAD' state. You can look around, make experimental
-changes and commit them, and you can discard any commits you make in this
-state without impacting any branches by performing another checkout.
-
-If you want to create a new branch to retain commits you create, you may
-do so (now or later) by using -b with the checkout command again. Example:
-
-  git checkout -b <new-branch-name>
-
-HEAD is now at 613ae49 Chapter 1: initial version (1a)
-
-<<<<<<< HEAD
-=======
-** Appendix C: Install Extensions
-*** Plantuml
-**** 安装
-- [[https://github.com/skuro/plantuml-mode][plantUML-mode-in-github]]
-#+BEGIN_SRC bash
-sudo apt install plantuml
-M-x package-install<RET>
-plantuml-mode<RET>
-#+END_SRC
-或者从 =.doom.d/init.el= 中去掉 =plantuml= 的Comments
-**** 配置
-- [[https://plantuml.com/download][plantuml-download]]
-下载"plantuml.jar"到相应文件夹.
-#+begin_src emacs-lisp :session sicp :lexical t
-;;PlantUML
-(setq org-plantuml-jar-path "~/.doom.d/extensions/plantuml.jar")
-(setq plantuml-jar-path "~/.doom.d/extensions/plantuml.jar")
-(setq plantuml-default-exec-mode 'jar)
-#+end_src
-
-#+RESULTS:
-: jar
-
-Note: 不要使用 =M-x plantuml-download-jar<RET>=
-下载的非最新版本.
-** Appendix D: Email Management
-*** Sending Mails From @qq.com
-**** 从QQ邮箱的设置中开启SMTP等服务
+#+TITLE: Appendix D: Email Management
+* Sending Mails From @qq.com
+** 从QQ邮箱的设置中开启SMTP等服务
 
 [[file:./images/qq邮箱设置.png]]
 
-**** Config SMTP
+** Config SMTP
 从.emacs中添加配置:
 #+begin_src emacs-lisp :session sicp :lexical t
 (setq message-send-mail-function 'smtpmail-send-it)
@@ -279,7 +21,7 @@ Note: 不要使用 =M-x plantuml-download-jar<RET>=
 (setq smtpmail-debug-verb t)
 #+end_src
 
-**** Authorization
+** Authorization
 短信获取qq邮箱的授权码后, 新建文件 =.authinfo=
 #+begin_src emacs-lisp :session email :lexical t
 machine smtp.qq.com  login abst.proc.do@qq.com password 授权码(比如abcd等)
@@ -291,7 +33,7 @@ machine smtp.qq.com  login abst.proc.do@qq.com password 授权码(比如abcd等)
 ;;(customize-variable 'auth-sources) ;; optional, do it once
 #+end_src
 
-**** Testing
+** Testing
 此时完整的配置文件为:
 #+begin_src emacs-lisp :session email :lexical t
 ;;Sending Email
@@ -323,7 +65,7 @@ C-c C-c (message-send-and-exit)
 [[file:./images/qq-receive-mail.png]]
 
 上述冗余配置能保证邮件发送百分百成功.
-**** Mail Commands
+** Mail Commands
 
 - C-c C-c
   Send the message, and bury the mail buffer (=message-send-and-exit=).
@@ -335,7 +77,7 @@ C-c C-c (message-send-and-exit)
   p- =parens=
   Use both address and full name, as in: 'king@grassland.com (Elvis Parsley)'.
 
-**** Summary
+** Summary
 先发出去邮件, 后面的操作便能水到渠成
 Emacs Manual的32.Sending-Mail有六个小节.
 
@@ -351,8 +93,8 @@ Emacs Manual的32.Sending-Mail有六个小节.
 - [[#325-mail-signature][32.5 Mail Signature]]
 - [[#326-mail-amusements][32.6 Mail Amusements]]
 
-*** Rmail
-**** Experience movemail
+* Rmail
+** Experience movemail
 Rmail的后端调用movemail, 因此先手工体验一般movemail
 #+BEGIN_SRC bash
 sudo apt-get install mailutils
@@ -375,7 +117,7 @@ movemail: number of processed messages: 1
 movemail: number of errors: 0 / 0
 #+END_SRC
 
-**** View RMAIL File
+** View RMAIL File
 此时查看Rmail文件
 
 #+BEGIN_SRC bash :results output
@@ -444,7 +186,7 @@ MIME-Version: 1.0
 
 [[file:./images/Reply-Mail.png]]
 
-**** Manually Rmail workflow
+** Manually Rmail workflow
 总结以上手工Rmail的工作流:
 由于配置 =.bashrc=
 #+BEGIN_SRC bash
@@ -455,7 +197,7 @@ alias rmail="movemail -v 'imaps://abst.proc.do:授权码@imap.qq.com:993' ~/RMAI
 1. 从shell中运行rmail, 更新收件箱 =~/RMAIL=,
 2. rmail-mode模式下查看 =~/RMAIL=
 
-**** Automatic Rmail
+** Automatic Rmail
 将Rmail workflow的第一步合并进第二步中,
 从配置中添加:
 #+begin_src emacs-lisp :session email :lexical t
@@ -476,12 +218,12 @@ Quit
 #+END_SRC
 #+ATTR_HTML: :width 500px
 [[file:./images/Automatic-Rmail.png]]
-**** Summary
+** Summary
 Sending Email与Rmail, 可以应用Emacs自如的收发邮件,
 但并不能有效的管理邮件.
 对邮件进行管理需要引入更加便利的自动化工具gnus
 
-*** Gnus: 1.Fundermental Configuration
+* Gnus: 1.Fundermental Configuration
 
 Gnus的基本配置很简单, 只需要几行代码
 新建文件 =~/.gnus= 然后填入以下代码
@@ -526,7 +268,7 @@ machine smtp.qq.com  login abst.proc.do@qq.com password 授权码
 *退出Gnus*
 
 在Group buffer中按键q退出gnus.
-*** Gnus: 2.Concepts
+* Gnus: 2.Concepts
 Gnus有三个基础概念, Group Buffer, Summary Buffer and Article Buffer
 分别对应邮件的 1)分类文件夹(收件箱) 2) 邮件列表 3) 邮件正文
 
@@ -548,15 +290,15 @@ Gnus有三个基础概念, Group Buffer, Summary Buffer and Article Buffer
 *Article Buffer*
 #+ATTR_HTML: :width 300px
 [[file:./images/gnus-article-buffer.png]] [[file:./images/mail-text.png]]
-*** Gnus: 3.Group Buffer
-**** Window Layout
+* Gnus: 3.Group Buffer
+** Window Layout
 M-x gnus默认"use-full-window", 会删掉当前的其他窗口而占据整个屏幕, 因为 =gnus-use-full-window= 默认设置为 =t=, 这会带来诸多不便.
 关闭"use-full-window"的模式
 #+begin_src emacs-lisp :session sicp :lexical t
 (setq gnus-use-full-window nil)
 #+end_src
 
-**** Visualize Groups
+** Visualize Groups
 Group Buffer默认只显示有未读邮件的Group,
 
 查看其他邮件组, 有四种方法
@@ -583,13 +325,13 @@ Group Buffer中按键 ^ (=gnus-group-enter-server-mode=),
 [[file:./images/gnus-group-buffer-server-1.png]] [[file:./images/gnus-group-buffer-server-2.png]]
 也可以一步进入Server Group Buffer: A A (=gnus-group-list-active=)
 
-**** Archive Messages
+** Archive Messages
 Gnus的默认配置, 生成 ="sent.%Y-%m"= 格式的 Send-Mail存档, 这与imap的Send-Messages重复, 因此关闭改功能
 #+begin_src emacs-lisp :session gnus :lexical t
 (setq gnus-message-archive-group nil)
 #+end_src
 
-**** New Group
+** New Group
 创建新的邮件组
 - G m :: Make a new group (=gnus-group-make-group=). Gnus will prompt you for a name, a method and possibly an address.
 比如新建Starred Group
@@ -601,7 +343,7 @@ Z R 更新 gnus, 然后 L, 便能查看新建的starred Group
 G p 之后, 添加一行
 =(visible . t)=
 
-**** Delete and Rename Group
+** Delete and Rename Group
 - G <DEL> :: gnus-group-delete-group
 删除当前的邮件组
 - b :: Find bogus groups and delete them (=gnus-group-check-bogus-groups=).
@@ -609,7 +351,7 @@ G p 之后, 添加一行
 
 - G r :: Rename the current group to something else (=gnus-group-rename-group=). This is valid only on some groups---mail groups mostly. This command might very well be quite slow on some back ends.
 
-**** Mark Groups
+** Mark Groups
 - c ::  Mark all unticked articles in this group as read (=gnus-group-catchup-current=). =gnus-group-catchup-group-hook= is called when catching up a group from the group buffer.
 - C :: Mark all articles in this group, even the ticked ones, as read (=gnus-group-catchup-current-all=).
 表组Group内所有邮件为已读
@@ -622,13 +364,13 @@ G p 之后, 添加一行
 - M w :: Mark all groups between point and mark (=gnus-group-mark-region=).
 - M b :: Mark all groups in the buffer (=gnus-group-mark-buffer=).
 - M r :: Mark all groups that match some regular expression (=gnus-group-mark-regexp=).
-**** Sorting Groups
+** Sorting Groups
 常用的排序方法:
 - G S a :: Sort the group buffer alphabetically by group name (=gnus-group-sort-groups-by-alphabet=).
 - G S m :: Sort the group buffer alphabetically by back end name
   (=gnus-group-sort-groups-by-method=).
 - G S n :: Sort the group buffer alphabetically by real (unprefixed) group name (=gnus-group-sort-groups-by-real-name=).
-**** Group Timestamp
+** Group Timestamp
 Trace最近一次打开group的时间戳.(add-hook 'gnus-select-group-hook 'gnus-group-set-timestamp
 It can be convenient to let Gnus keep track of when you last read a group. To set the ball rolling, you should add =gnus-group-set-timestamp= to =gnus-select-group-hook=:
 添加配置:
@@ -644,7 +386,7 @@ It can be convenient to let Gnus keep track of when you last read a group. To se
                "")))
 #+end_src
 
-**** Group Highlighting
+** Group Highlighting
 Gnus Manual中推荐的highlight配色配置,
 #+begin_src emacs-lisp :session gnus :lexical t
 (cond (window-system
@@ -668,8 +410,8 @@ Gnus Manual中推荐的highlight配色配置,
         ((zerop unread) . my-group-face-4)
         (t . my-group-face-5)))
 #+end_src
-*** Gnus: 4.Summary Buffer
-**** Display all
+* Gnus: 4.Summary Buffer
+** Display all
 Summary Buffer是Email list,
 "INBOX"默认只读取"未读"邮件, 没有未读邮件则为空, 此默认设置并不实用.
 从Group Buffer中的"inbox",操作 G p, 添加一行 =(display . all)=
@@ -684,7 +426,7 @@ Summary Buffer是Email list,
  (visible . t)
  (permanent-flags %* %Answered %Flagged %Deleted %Draft %Seen))
 #+end_src
-**** Delete Mails
+** Delete Mails
 Gnus删除邮件需要格外注意,
 首先设置,
 #+begin_src emacs-lisp :session gnus :lexical t
@@ -702,7 +444,7 @@ Summary-Buffer中操作 B m, 选定待删除的邮件移动到"Deleted Messages"
 #+ATTR_HTML: :width 600px
 [[file:./images/gnus-summary-buffer-delete.png]]
 
-**** Search Mails
+** Search Mails
 从Summary Buffer中查找邮件.
 M-s
     Search through all subsequent (raw) articles for a regexp (gnus-summary-search-article-forward).
@@ -717,7 +459,7 @@ M-&
 
 G G :: =nnir= is a Gnus interface to a number of tools for searching through mail and news repositories. Different backends (like =nnimap= and =nntp=) work with different tools (called engines in =nnir= lingo), but all use the same basic search interface.
 
-**** Frequent Commands
+** Frequent Commands
 *回复邮件*
 - S r
   r ::  Mail a reply to the author of the current article (=gnus-summary-reply=).
@@ -807,7 +549,7 @@ highlight的部分值得一看, 但是在第三部分article中.
 *3.23 Finding the Parent*
 
 - ^ :: If you'd like to read the parent of the current article, and it is not displayed in the summary buffer, you might still be able to.
-*** Gnus: 5.Article Buffer
+* Gnus: 5.Article Buffer
 "Article Buffer"是邮件的正文内容．
 
 *Hiding Headers*
@@ -821,7 +563,7 @@ highlight的部分值得一看, 但是在第三部分article中.
 #+begin_src emacs-lisp :session gnus :lexical t
 (setq gnus-blocked-images "ads")
 #+end_srcx
-*** Gnus: 6.Completed Configuration in Progress
+* Gnus: 6.Completed Configuration in Progress
 
 #+begin_src emacs-lisp :session gnus :lexical t
 ;;; Package --- gnus
@@ -954,7 +696,7 @@ highlight的部分值得一看, 但是在第三部分article中.
 ;;                    (picon 1.0))))
 
 #+end_src
-*** Gnus Easter Eggs
+* Gnus Easter Eggs
 读Gnus文档无味, 摘取其中有趣有料的句子.
 
 *3.12 Article Caching*

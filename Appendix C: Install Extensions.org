@@ -1,0 +1,26 @@
+#+TITLE: Appendix C: Install Extensions
+
+* Plantuml
+** 安装
+- [[https://github.com/skuro/plantuml-mode][plantUML-mode-in-github]]
+#+BEGIN_SRC bash
+sudo apt install plantuml
+M-x package-install<RET>
+plantuml-mode<RET>
+#+END_SRC
+或者从 =.doom.d/init.el= 中去掉 =plantuml= 的Comments
+** 配置
+- [[https://plantuml.com/download][plantuml-download]]
+下载"plantuml.jar"到相应文件夹.
+#+begin_src emacs-lisp :session sicp :lexical t
+;;PlantUML
+(setq org-plantuml-jar-path "~/.doom.d/extensions/plantuml.jar")
+(setq plantuml-jar-path "~/.doom.d/extensions/plantuml.jar")
+(setq plantuml-default-exec-mode 'jar)
+#+end_src
+
+#+RESULTS:
+: jar
+
+Note: 不要使用 =M-x plantuml-download-jar<RET>=
+下载的非最新版本.
