@@ -231,6 +231,15 @@ Tuesday    10 March 2020
 其中 =diary-sunrise= 与 =diary-sunset= 需要自定义:
 
 ** 自定义日出与日落时间序列
+
+*设置当地的坐标*
+#+begin_src emacs-lisp :session sicp :lexical t
+(setq calendar-latitude 40.0024) ;;lat, flat
+(setq calendar-longitude 116.2962) ;;long是经度
+#+end_src
+
+*Sunrise and Sunset*
+
 #+begin_src emacs-lisp :session agenda  :lexical t
 ;;Sunrise and Sunset
 ;;日出而作, 日落而息
@@ -292,22 +301,64 @@ Sunday      5 July 2020
 agenda中的日出日落不仅帮助界定有意义的时间范围, 而且构建个人与天体间的物理关系, 尤其是在雾霾严重, 少见星星月亮的城市.
 这种"随四时而动", 与自然融为一体的关系或许值得珍惜. (差点想说天人合一)
 (备注:这一段需要以后逐步完善, 想法没有很好的表述出来, 当早起看到agenda中显示sunrise与sunset, 而且作为计时锚点的时候, 感觉体内对时间的本能被激活)
-* 3.Calendar
+* 3.Interact with Calendar
+
+本章从agenda-view切入, 论述org作为"计划与管理"的地表最强工具的功能,
+第一节"agenda-time-grid"推荐了以3个小时为时间段, 八等分一天24小时的time-grid表格,  并对每个时间段命名;
+第二节"integrated with a Diary", 引入"自然时间"锚点sunrise-and-sunset, moon-phase, 与时间的最本质-天体的运行构建物理关联.
+第三节(本节)以及第四节将论述最核心的问题:Review
+第五节到第八节在agenda的基础上深入探讨org-todo的管理与规划的工作流．
+
+本节初步探讨如何提高review的效率, 即如何速度浏览agenda-view,以及快递定位某日的agenda-view.
+
+** 3.1.内置的Agenda-View Display
+
+Agenda提供四种视图模式, 便于快速的review.
+- org-agenda-day-view :: 快捷键 v d
+- org-agenda-week-view  ::  快捷键 v w
+- org-agenda-month-view  ::  快捷键 v m
+- org-agenda-year-view ::  快捷键 v y
+
+常用的是"day-view"与"week-view", 因为周回顾更频繁, 而"month-view"需要频繁操作page-down和page-up,不如分四次week-review.
+
+在一种agenda-view的模式下, 查看前后的日期或者时间段的方法:
+- org-agenda-earlier :: 快捷键 b (backwards)
+- org-agenda-later  :: 快捷键 f (forwards)
+- org-agenda-goto-today :: 快捷键 . (dot)
+- org-agenda-reset-view :: 快捷键 v SPC
+
+以上命令协助方便的查看当前视图前前后后的时间点(day)或者时间段(week), 若要查看特定的日期, 则颇为不便.
+比如要查看2019-08-01当日的主要活动, 操作backwards和forwards抵达目的日期比较耗费时间.
+
+作为解决方案, Emacs提供了function =org-agenda-goto-calendar= 与calenda互动.
+
+** 3.2.从"Calendar中操作"Agenda"
+
+Functions: =org-agenda-goto-calendar= 与 =org-agenda-goto-agenda= 架起calendar与agenda之间的桥梁, 凿穿二者之间的壁垒.
+快捷键的设置也秉持这一原则, 采用相同的字母c(calendar),
+Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日期的agenda界面.
+
+由此, 查看特定日期"2019-08-01"的活动日志的分步骤操作为:
+1. 在当前的agenda-day-view界面下按键c, 调出来calendar窗口
+2. 光标在日历中移动到目标日期"2019-08-01"
+3. 在光标处按键c, 调出目标的agenda界面.
+
+其中第一步和第三部很简单, 都是按键c, 关键是第二步移动光标到目标日期的日历操作.
+
+*** 3.2.1.日历的逻辑分割
+
 对"日历"的操作, 分为三个层次:
 - Day, Week 日/周/
 - Month, Season(3-months)
-- Year 
-大脑中构建思维模式.
-从calendar中, 串联起来org-agenda与emacs-manual的calendar.
+- Year
+思考过程也最好按照emacs-calendar设置的这三个清晰地层次.
 
-日历的基本操作与文本的操作一一对应.
+*** 3.2.2.文本命令与日历命令的对比:
 
-** 文本命令与日历命令的对比:
-The day and week commands are natural analogues of the usual Emacs commands for moving by characters and by lines. 
+日历中的motion与文本中的motion一一对应,
+
 基本思路是将Calendar作为文本处理.
-character与word不存在首尾的问题, 规律与问题都可以从比较中发现, 对比中
-会慢慢发现真相.
-快捷键有两点: 1) 前后移动 2) 首尾的问题.
+对应关系表格如下:
 |-------+---------------------+------------------------------------|
 | Keys  | Text                | Calendar                           |
 |-------+---------------------+------------------------------------|
@@ -349,6 +400,57 @@ character与word不存在首尾的问题, 规律与问题都可以从比较中�
 | M->   | end-of-buffer       | calendar-end-of-year               |
 |-------+---------------------+------------------------------------|
 
+此处再次印证了一个问题: Emacs不仅能提高工作效率, 而且能潜移默化改造大脑的思考模式.
+
+*** 3.2.3.便捷的命令
+- g d :: Move point to specified date (=calendar-goto-date=).
+
+- g D :: Move point to specified day of year (=calendar-goto-day-of-year=).
+
+- g w :: Move point to specified week of year (=calendar-iso-goto-week=).
+
+- o   :: Center calendar around specified month (=calendar-other-month=).
+
+- .   :: Move point to today's date (=calendar-goto-today=).
+
+** 3.3."Calendar"与"Agenda"合二而一
+上述的解决方案, 按键c显性的调用calendar, 有没有在逻辑上更加"丝滑"的方法呢?
+答案是: =org-agenda-goto-date= 快捷键"j".
+三步操作分解为:
+1. 在当前agenda中按键j
+2. 移动到目标日期
+3. 回车则直接跳转到目标日期的agenda
+此处应用的是"插入时间戳"的方法, 隐藏了显性的跳转, 逻辑上更加顺畅.
+
+这种"The date/time prompt"移动到目标日期的光标移动与直接在日历中操作稍有不同, 不同的原因是当前光标在mini-buffer中, 只能间接操作calendar.
+表格如下:
+|-------------+----------------------------------------|
+| (RET)       | Choose date at point in calendar.      |
+| (mouse-1)   | Select date by clicking on it.         |
+| (S-RIGHT)   | One day forward.                       |
+| (S-LEFT)    | One day backward.                      |
+| (S-DOWN)    | One week forward.                      |
+| (S-UP)      | One week backward.                     |
+| (M-S-RIGHT) | One month forward.                     |
+| (M-S-LEFT)  | One month backward.                    |
+| (>)         | Scroll calendar forward by one month.  |
+| (<)         | Scroll calendar backward by one month. |
+| (M-v)       | Scroll calendar forward by 3 months.   |
+| (C-v)       | Scroll calendar backward by 3 months.  |
+|-------------+----------------------------------------|
+
+还是三个清晰地逻辑单元:
+- Day, Week 日/周/
+- Month, Season(3-months)
+- Year
+
+* 4.分别记录事件,笔记与任务
+* 5.Event, Note, Task
+* 6.Workflow 
+* 参考资料
+# 描写日出的诗文资料
+* 问题
+Calendar中的问题.
 backward
 # 问题?
 backward-paragraph与forward-paragraph, 但是没有首尾的操作,
@@ -361,20 +463,3 @@ C-x 用得不频繁, 涉及大幅度动作的时候, 使用此命令.
 1) calendar作为text操作
 2) 掌控操作"时间", 或者日月星辰的感觉
 3) 简要讲, 大脑中再涉及时间问题的时候, 异常的清晰.
-** 便捷的命令
-- g d :: Move point to specified date (=calendar-goto-date=).
-
-- g D :: Move point to specified day of year (=calendar-goto-day-of-year=).
-
-- g w :: Move point to specified week of year (=calendar-iso-goto-week=).
-
-- o   :: Center calendar around specified month (=calendar-other-month=).
-
-- .   :: Move point to today's date (=calendar-goto-today=).
-# 短评: 此处比较常用.
-** 为什么要介绍日历的操作？
-因为要将"日历"与"Agenda"结合起来.
-
-* 4.分别记录事件,笔记与任务
-* 参考资料
-# 描写日出的诗文资料
