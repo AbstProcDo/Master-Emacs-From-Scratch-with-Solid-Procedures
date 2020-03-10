@@ -29,689 +29,19 @@ M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事�
 需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
 sequnces调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
 
-* 01.Semantic Keybinding
-
-Emacs从最源头处, 用Meta-Execte调用所有的function; 然后通过定义Ctrl的技术, 简化Meta的流程.
-
-正文从语义化快捷键入手, 辅助在5分钟之内永久记忆(Never have a second look), 20多个一级快捷键(高频), 30几个二级绑定键(中频), 闲看三级快捷键(低频); 以及按照功能, 按照目的, 按照插件分类的表格.
-答题区上表格和秒记方法.
-
-C-x, C-h的区别, 一级绑定, 将C-x中的x去掉, 只剩下
-从character讲起, meta的词源是higher,
-
-与vim的关键区别是绑定的键是有具体含义,可逻辑, 可推导.
-
- character, word, line, sentence, page, article.
-
-一级绑定之cursor光标的移动: (高频)
-在一级绑定中, C-x, M-x中的x(execute)省略, 简化为C-与M-x;
-光标操作的对象:
-character, word, line, sentence, (*paragragh),
-page, buffer.
-
-** 1. Character and Word
-C-f (M-x forward-char) 向前移动一个字符的位置
-C-b (M-x backword-char) 向后移动一个字符的位置
-char是最小的操作单元, char之上则是word, 回顾上文阐述的meta的词源含义是higher,因此Meta绑定相同的键, 范围要比Ctrl更大一点, 由此, 比char大一级的是word
-M-f (M-x forward-word) 向前移动一个单词的位置.
-M-b (M-x backword-word) 向后移动一个单词的位置.
-
-** 2. line and sentence.
-C-e (e for end) move to end of line,
-C-a (a for ahead) move to ahead of line
-同样的逻辑,Meta比Ctrl的范围高一个等级
-M-a move to ahead of the sentence
-M-e move to end of the sentence.
-
-以上两点为光标在水平方向的移动(horizontal), 与之相对应的纵向(Vertiallly)移动的操作.
-
-** 3. Vertical Movement between lines
-C-n (调用function next-line), 向下移动一行
-C-p (previous-line)
-接下来, 有意思的事情来了.
-由character和line操作可知, 绑定相同的键, Meta的作用范围总是比Ctrl更高一级, 但是此时查看:
-M-p
-M-n
-发现Emacs没有定义这两个key-sequnces, 根据前面的逻辑, M-p应该向上移动更多行, 至少比一行要多; Emacs竟然没有定义, 这真是千载难逢的良机.
-暂时按下不表, 先小结Ctrl的光标操作. Ctrl能操作的最大单位是line, 更大范围的光标动作交由Meta完成.
-
-** 4. Vertically Page Down and Up
-向上翻页M-v, v当然是vertical, 而Meta是higher, 往更高处纵向移动, 当然便是UP,
-那么向下呢? 既然Meta相对于Ctrl而higher, 反过来Ctrl则是Lower;
-因此向下翻页是C-v.
-此处的心思, 一级绑定, 始终用最少的动作, 最少的触发键, 如果绑定三个键, 则不需要Ctrl的参与.
-M-v-u(up), M-v-d(down)向下.
-M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏地翻页, 大多数时候, 这不是我们想要的. 我要半屏半屏的翻页.
-
-现在重新回到M-p与M-n, 绑定半屏翻页.
-
-#+begin_src emacs-lisp :session sicp :lexical t
-(defun scroll-half-page-down ()
-  "scroll down half the page"
-  (interactive)
-  (scroll-down (/ (window-body-height) 2)))
-
-(defun scroll-half-page-up ()
-  "scroll up half the page"
-  (interactive)
-  (scroll-up (/ (window-body-height) 2)))
-
-(global-set-key "\M-n" 'scroll-half-page-up)
-(global-set-key "\M-p" 'scroll-half-page-down)
-#+end_src
-
-#+BEGIN_QUOTE 备注
-因为设置了触控板(或者鼠标)Invert scroll direction(Natural Scrolling), 因此up与down是反着映射到next和previous的
-#+END_QUOTE
-
-5.Buffer
-M-<, to the biginning of the buffer
-M->, to the end of the buffer.
-# 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
-* 02.Emacs as an Editor
-前一章 [[01.semantic keybinding]], 初窥了Emacs简单易用的特性之一便是语义化键绑定,
-语义化包含两个方面:
-1) Character keys的语义化, 这一点明了易懂, n for next, p for previous; 而非j for next, k for previous.
-2) Control keys的语义化, 求根问底Meta的词源, 病以meta的higher(beyond)基石; 不仅可以不费力的记住Cursor操作, 依照同样的逻辑, 可以拆解全部的内置快捷键.
-
-移动Cursor的目的, 一则为浏览阅读, 二则为编辑做准备, 是编辑的前驱步骤.
-当聊起编辑器时候, 一个著名的段子"Emacs不是好的编辑器, 而是一个操作系统"; 如果追问一句"请问, 您对编辑器定义是什么?", 立刻会发现所谓编辑器圣战, 便是茶余饭后的小品或者群口相声, 以"段子", 调剂案牍劳累.
-
-"When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.", 编辑器的基本功能曲指可数.
-
-** 编辑器的基本功能:
-以行为单位,
-复制, 黏贴, 增删改查, 其中查是关键, 应该放在前面
-对文本的初始是最关键的一点, Linux基于文本流管理.
-
-+ 最基本
-  - 复制黏贴 (M-w, C-y)
-+ 增删改查
-  - insert (C-q quotation)
-  - delete(C M d delele), kill ring
-  - modify(undo, transpose, uppercase, lowercase, title,
-  - Search(Swiper…)
-+ Arguments
-  - Numeric arguents C-u
-  - Repeat C-x z
-
-+ Completion(yasnippet)
-  - indentation (M-i 缓解小指的负担
-  - white space(C-x C-o)
-  - Filling(global-visual-line-mode)
-  - Spelling-checking
-+ Special
-  - Register
-
-** 详细叙述delte
-键的绑定同样遵循语义化的原则, 比如Delete(killing)
-<delete>键(即backspace退格键, backword);
-与C-<del> 搭配是删除一个字符,
-与M-<del>则是倒退删除一个单词;
-与backwords对应的是forwards,(进格删除)
-C-d M-d分别进格删除一个字符和一个单词.
-
-Killing的范围比delete大;
-C-k是删除到行尾, M-k是删除到句尾, 跟前面一致. 以上是forwards进格删除,
-对行的backwardst退格删除 C-x <del>
-
-** Topic1: 调用直觉
-
-这么多的键绑定, 从语义化的理解是一方面, 更重要的一方面可能应该去找捷径, 比如调用直觉和由此带来的强烈满足感和成就感.
-
-编辑过程中对blank-lines的处理,
-
-C-x C-o调用(delete-blank-lines)
-
-C-x C-o的绑定键没有逻辑, o是个洞吗? 一个洞代表空行?
-
-Emacs Manual中很多这样的处理细分领域的绑定键, 头悬梁锥刺股的用下来, 对emacs的热情和兴趣早早磨光了.
-
-回到C-x C-o调用(delete-blank-lines)
-
-假设有这样四行
-
-#+BEGIN_QUOTE
-"The quick brown fox jumps over the lazy dog"
-
-
-"The quick brown fox jumps over the lazy dog"
-#+END_QUOTE
-
-当前的光标在第一行上的fox,后 发现两行文字中间的空行是多余的, 因此要删掉.
-
-需要动用人肉劳力这样做:
-
-    C-n 管标移动到下一行
-    连续两次C-k删除空行
-    然后凭借超强的记忆力(记住刚才是在fox的位置, 和导弹一般精确的点位控制回到fox后面.
-
-劳神费力.
-
-应用C-x C-o呢? 可以在第一行的任意位置上调用C-x C-o, 下面的空行会自动删除.
-
-怎样从直觉上理解呢?
-
-    光标在第一行的某个点上, 然后调用一个命令, 在光标之外的另外一个地方会立刻发生某件事情, 这就是远程控制呗;
-    更直觉一点, 这边是"意念移物"呗,
-
-由此从直觉里生发的成就感和兴趣会驱动我们应用更加复杂的命令和组合.
-
-P.S. 作为对"零秒" 这个标题党的补充.
-
-
-** Topic2: 对比Search功能的Emacs操作与命令行操作
-Emacs的优势是对数据和查询结果的便捷二次处理.
-比如想从宏观上了解下Emacs手册中中全部whitespace操作.
-[[file:images/2.目录界面.png]]
-
-可以从Terminal中完成
-#+BEGIN_SRC bash
-find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} +
-#+END_SRC
-[[file:images/2.terminal界面.png]]
-
-虽然可以看到结果, 但没法做简单的统计.
-即使加上nl
-#+BEGIN_SRC bash
-find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} + | nl
-#+END_SRC
-[[file:images/terminal界面2.png]]
-
-也只能大略了解到’whitespace’在整个文档中, 有95句话提到过.
-
-而在Emacs中执行同样的命令:
-C-x grep-find;
-
-则瞬间眼明心亮, 有95句话有一个或多个whitespace这个单词, 总计有151个. 而且在 Killing.org 这个文件中有6句话, 在 text.org 中有5句, 在 Display,org 中有17句话, 在 Program.org 中也有17句, 等等,
-
-[[file:images/emacs界面.png]]
-
-Emacs中执行命令的突出优势是简单方便的二次处理.
-
-*小结*
-
-目前的流程图 Meta --> Control ---> Cursor ---> Edit
-由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
-在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前,
-光速浏览File的基本操作(读取和保存)
-C-x C-f (M-x find-file) 找到并打开文件
-C-x C-r (r是read-only), 比如浏览自己的配置文件, 要避免无心修改掉东西.
-C-x C-s (s,save) 保存单个文件
-C-x s   保存全部文件, 保存全部文件功能更常用, 因此组合键也少.
-最后在个人配置上添加两行, 设置自动保存文件.
-
-#+begin_src emacs-lisp :session mm :lexical t
-(setq auto-save-visited-mode t)
-(auto-save-visited-mode +1)
-#+end_src
-以上完结, 马上进入精彩的部分.
-* 03.God's Eyes and Hands by Dired and Bookmarks
-** Dired初窥
-在EmacsManual目录下调出Dird后,
-快速略扫各个文件的主要内容.
-从配置中添加下面的代码
-#+begin_src emacs-lisp :session ss :lexical t
-(define-minor-mode dired-follow-mode "Diplay file at point in dired after a move."
-  :lighter " dired-f"
-  :global t
-  (if dired-follow-mode (advice-add 'dired-next-line
-                                    :after (lambda (arg)
-                                             (dired-display-file)))
-    (advice-remove 'dired-next-line (lambda (arg)
-                                      (dired-display-file)))))
-#+end_src
-M-x 调用 =dired-follow-mode=
-x
-在目录上C-n和C-p上下移动光标.
-
-#+ATTR_HTML: :width 500px
-[[file:images/pre-dired.gif]]
-
-** Dired操作归纳:
-
-1. Entering Dired: C-x d
-2. Navigation: C-n C-p
-3. Delete files: d, x, D
-4. Flagging many files at once:
-   1) # (file start with #)
-   2) ~ (flag all backup files whose name end with ~)
-   3) % d regexp (delete all match regex)
-
-5. Visiting Files
-   - f or e (visit current file)
-   - o (another window to display and switch fucus)
-   - C-o (visit but not switch focus)
-   - v (view-mode)
-   - ^ (dired-up)
-
-6. Dired Marks vs. Flags
-   - * * excutable files
-   - * m mark
-   - * @ symbolic link
-   - * / directory
-   - * u remove the current
-   - U remove all
-   - % m regex
-7. Operatons on files
-   - C copy
-   - D delete
-   - R rename
-   - H hardlink
-   - S symblic link
-   - Z, c
-8. Shell Commands in Dired
-   - 这次阅读最大的收获, 可以直接 & 和 X
-9. Transform files names
-   - % u Uppper-case
-   - % l lowercase
-10. File comparision
-   - dired-diff
-11. Subdirectory in Dired
-   - i
-12. Subdirectories switch in Dired
-   -
-13. Moving Over Subdirectories
-    -
-14. Hiding Subdirectories
-    -
-15. Updating the Dired Buffer
-    g
-16. Dired and find
-   find-name-dired
-17. Editing the dired Buffer
-    wdired
-18. View Images thumbnails
-    image-dired-display-thumb
-
-** Register操作归纳
-
-M-x view-register r
-# 以下所有的命令最后一个letter, 可以自定义为a-z等任何字母.
-1. Saving Positions in Registers
-   C-x r r (register r)
-   # 可以自定义为 C-x r a (能记住便好)
-   C-x r j r (register jump to r)
-2. Saving Text in Registers
-   C-x r s t (register save to r) "text"
-   # 修改为C-x r s t (t for text)
-   C-x r i t (regiester insert to r) "text"
-   M-x append-to-register t
-   M-x prepend-to-register t
-3. Saving Rectangles in Registers
-   C-x r r e (rectangle region to e);
-   # 此处省略一个r, 完整语义(C-x r r r e)
-   register rectangle region to r
-   C-x r i r (rectangle insert to r )
-4. Saving Window Configurations in Registers
-   C-x r w w (register window to r)
-   # 很好用的命令, 可以早上8点保存一个布局,晚上再看看, 临时记住的布局用winner-mode
-   C-x r f f (register frameset to f)
-   C-x r j f (jump)
-5. Keeping Numbers in Registers
-   No practical value.
-6. Keeping File Names in Registers
-   (set-register r '(file . name))
-   (set-register ?z '(file . "/gd/gnu/emacs/19.0/src/ChangeLog")
-   # prelude for bookmarks
-7. Keyboard Macro Registers
-   --
-8. Bookmarks
-   C-x r m (register bookmark for the current file)
-   C-x r m  a-name
-   C-x r M (not overwrite)
-   C-x r b bookmark (jump or write)
-   C-x r l (list all bookmarks)
-   M-x bookmark-save
-   M-x bookmark-load filename
-   M-x bookmark-write filename
-   M-x bookmark-delete bookmark
-   M-x bookmark-insert-location bookmark
-* 04.Emacs as a Notebook by Org
-** Document Structure
-- Headlines
-  A cleaner outline view
-- Visibility Cycling
-  S-TAB =org-global-cycle=
-  C-u C-u TAB (=org-set-startup-visibility=)
-  C-u C-u C-u TAB (=outline-show-all=)
-  # 替代反复设置fundermantal-mode的用法.
-  C-c C-k (=outline-show-branches=)
-  # 新学到一个方便的操作
-　C-c C-x b (=org-tree-to-indirect-buffer=)
-  # 不如直接使用narrow
-- Initial visibility
-#+BEGIN_EXAMPLE
-    #+STARTUP: overview
-    #+STARTUP: content
-    #+STARTUP: showall
-    #+STARTUP: showeverything
-#+END_EXAMPLE
-- Motion
-  (略)
-- Structure Editing
-  M-LEFT =org-do-promote=
-  M-RIGHT =org-do-demote=
-  M-S-LEFT =org-demote-subtree=
-  M-s-RIGHT =org-promote-subtree=
-- Sparse Tree
-  C-c / r
-  查询使用swiper
-- Plain List
-  kbd(M-RET) (=org-insert-heading=)
-  kbd(M-S-RET) (=org-insert-checkbox=)
-
-  C-c ^ 排序
-- Drawers
-  a =PROPERTIES= drawer
-- Blocks:
-  =#+BEGIN= ... =#+END=
-** Tables
-
-  - Built-in Table Editor
-    + C-c | :: org-table-create-or-convert-from-region
-  - Column Width and Alignment
-    + C-c C-c :: org-table-align
-    + M-LEFT and M-RIGHT :: org-table-move-column-right
-    + M-S-LEFT and M-S-RIGHT :: org-table-delete-column and org-table-insert-column
-    + M-UP and M-DOWN :: org-table-move-row-up and org-table-move-row-down
-    + S-UP and S-DOWN :: org-table-move-cell-up and org-table-move-cell-down
-    + M-S-UP :: org-table-kill-row
-    + M-S-DOWN :: org-table-insert-row
-    + C-c - :: org-table-insert-hline
-    + C-c RET :: org-table-hline-and-move
-    + C-c ^ :: org-table-sort-lines
-    + C-c +  :: org-table-sum
-    + S-RET :: org-table-copy-down √
-    + C-c TAB :: org-table-toggle-column-widt
-    + C-u C-c TAB :: org-table-shrink
-    + C-u C-u C-c TAB :: org-table-expand
-  - Column Groups
-    + <>  :: Column Groups
-  - The Orgtbl Minor Mode
-    + M-x orgtbl-mode ::
-  - The Spreadsheet
-    略
-  - Org Plot
-    略
-** Hyperlinks
-  + internal link :: =[[internal-link]]=
-  + file:projects.org::regex
-  + gnus:group
-  + shell:ls
-  + elisp:(find_file "elisp.org")
-  + elisp:org-agenda
-* 04.Case:如何"严肃"阅读一本书
-** 序
-本文为项目"步步为营, 零秒精通Emacs"的第四章"Emacs as a Notebook by Org"
-
-一本书读过之后, 当再次拿起来的时候, 仿佛读新书一样;
-读了, 看了, "劳民伤财"投入大量时间与精力, 但是记不住怎么办?
-本文试图解决这个问题,
-以SICP的第四章(Metalinguistic Abstraction)为例
-
-论述分为六个部分:
-1. 启动-绘制大纲, 拿着地图阅读;
-2. 过程控制, 利用org-clock以及标签, 在控制过程的同时, 为后续的复盘预备第一手的线索;
-3. 阅读管理, 正文阅读阐述如何应用标签提高阅读效率, 并为后续查询参阅提供好用的数据结构;
-4. 案例与习题, 讨论怎样索引和处理书中的案例与习题;
-5. Org的撒手锏;
-6. 收尾, 总结探讨提高技术水平的同时, 稳扎稳打从每次阅读中提升英语能力.
-附录: 参看书目
-
-** 启动-绘制大纲
-
-关于大纲目录的重要性, 引用王垠在"如何成为一个天才"中的一段话:
-#+BEGIN_QUOTE
-如果你看过John Nash 的传记《A Beautiful Mind》，就会发现他与其他人的不同.Nash看书只看封面和开头，把这书要讲的问题了解清楚之后，就自己动手解决. 最后，他完全依靠自己的“头脑暴力”创造出整本书的内容.
-#+END_QUOTE
-天才的能力或许难以企及, 天才的方法却可学可至.
-一本书拿过来, 先看封面和目录, 纸笔绘制出来;
-目录便是大纲结构, 投入10~30分钟的时间在大纲结构上, "头脑风暴"如果你在写这本书, 将会如何展开, 根据你的经验与想象, "编造"出来大致脉络, "编造", 无拘无束的"编造".
-益处有四:
-1. 梳理和回顾你的经验和知识结构;
-2. 编造的过程会滋生阅读的欲望, 因为某些部分造不出来;
-3. 当拿着"我"的思想与"作者"的思想对照之时, 阅读的过程已变为求证的过程;
-4. 两个思想互相碰撞, 有共鸣有拍案, 不仅会事半功倍的提高阅读效率; 还能更深入的掌握书中的精妙之处.
-退一步, 如果一点想法都没有, 半句话也编不出来, 那最好将背诵下来, 待到"厕上枕上马上", 从脑子里拿出来慢慢反刍咀嚼, 驱动潜意识这种神奇的力量开始工作.
-
-纸笔绘制的方法有助于记忆, 而且可以放在手边作为地图参阅.
-
-*** 用emacs-org参阅大纲结构:
-**** 方法一: C-n S(shift)-tab
-控制目录显示的深度,比如C-2 S-tab显示到2级目录,
-#+ATTR_HTML: :width 300px
-[[file:images/启动-显示到二级目录.png]]
-方法的优点是可以自定义控制目录显示的深度
-
-**** 方法二:
-直接应用S-tab或者C-u Tab轮巡
-  ,-> OVERVIEW -> CONTENTS -> SHOW ALL --.
-  '--------------------------------------'
-重复操作一次则显示在不同的结构
-
-**** 方法三:
-TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成目录
-#+ATTR_HTML: :width 300px
-[[file:images/启动-toc-2.png]]
-
-**** 方法四
-推荐的方案,纸笔绘制, 放在手边参阅.
-[[file:images/sicp-04.metalinguistic.jpeg]]
-** 过程控制
-*** Clock-in and Clocxk-out
-当前章节下调用  =M-x org-clock-in=,
-- 一方面可以计时,
-- 再者则随时提醒当前所处的位置和任务, 及时跳转到其他的buffer中, 也会看到, 比如从4.4.1 Deductive Information Retrieval中激发了clock-in, 则即使在这篇文章的编辑页面, 依然能看到当下的任务, 随时提醒你回去执行.
-#+ATTR_HTML: :width 500px
-[[file:images/过程-clock-in.png]]
-- clock-in置顶当前任务, 为后文"阅读管理"添加标签提供便利.
-
-*** 随手建立todo任务
-比如阅读过程中,发现svg的图片格式在black模式下, 认读需要眼睛对到屏幕上仔细得瞧个清楚, 因此设置任务将inline的图片逐步去掉, 修改成文本格式.
-#+ATTR_HTML: :width 500px
-[[file:images/过程-设置todo.png]]
-任务完成后变更todo为done
-
-*** 提出问题?
-过程控制中最重要的一点, 初次阅读的时候, 有困惑的地方, 不理解的地方, 尤其是与你在第一步"编造"和"想象"的内容不一致的地方, 标注成"问题?", 因为是自己的笔记, 只要稍微有一丝疑问, 马上标出来, 我觉着这是宝贵的财富.
-一方面, 如果不标注, 过5分钟, 会忘记刚才在想什么
-另一方面, 当一年后在读这本书的时候, 可以了解当时的水平, 当时的思考脉络.
-问题统一设置成 =问题?= 的格式, 如此, 不仅是在正文的行首, 或者和在代码的内部, 都能方便查到; 又不会多余查到正常使用的"问题"这个词汇.
-#+ATTR_HTML: :width 500px
-[[file:images/过程-问题.png]]
-问题解决后, 在后面标注v,v当做是对号.
-[[file:images/过程-问题v.png]]
-如图, 刚才的12个问题解决了7个, 剩下的可能需要发到stackoverflow上.
-
-*** 小结：
-过程控制使用了todo, 问题标签．
-后文的＂阅读管理＂中探讨, 使用filter知识点的标签 #得到-概念 #得到-语法 #得到-行文(学习到了文章的结构) #得到-关联(关联到过往的经验) #得到-应用(对后续对概念对知识点应用的思); #短评(没有想好归类的,使用短评) #洞见 #洞见-关联 #洞见-应用 #拍案 #词汇 #总结
-等等,
-使用"问题?"等标签的优点:
-一是: 为后续查询提供结构化的关键词
-二是: 可扩展性, 一本书, 二读, 三读, 四读, 可以在既有的标签规则下, 添加新的想法.
-
-** 阅读管理
-金圣叹点评"水浒传", 也是为他深入理解文章,
-阅读过程中, 给评注设置标签有三个作用:
-1. 分类记录, 不然写得评注很多, 复盘回顾则眉毛胡子一把抓
-2. 从自己的角度, 将文章重新格式化, 正文的目录是作者的结构, 标签可以按照自己的想法构建.
-3. 为二读, 三读提供结构化的线索.
-
-*** 短评
-短评是不分类的标签, 可以意识流, 读到哪里, 有想法立刻写下来.
-无拘无束, 不给大脑是否要分类, 分类到哪里的负担.
-待到二读, 三读的时候再适当"短评"的内容归类, "短评"为后面的动作提供原材料.
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-短评.png]]
-
-*** 洞见
-读着读着, 对作者的阐述生发共鸣, 或者比"绘制大纲"阶段中"编造"的内容阐述的精彩, 又或者在胸中困顿许久没想明白的点, 在此处豁然开朗.
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-洞见.png]]
-举例比如 assignment and definition这一段, 从evaluator的角度, 赋值(assignment)与定义(definition)的本质是一样的, 都是set!, 这也完全符合直觉.
-此处标注为洞见, 是因为刚从python入门编程的时候, 学习赋值与函数定义.
-#+begin_src ipython :session SICP :results output
-a = 9
-def foo(x): return x * x
-#+end_src
-很容易直觉到或者看到这里的"def"与"="是一样的, 都是给一个变量赋值.
-刚学python的时候, 将这个想法分享到微信群组, 招惹来汹涌的嘲笑, 各种跳大神纷纷登场.
-上面的这一段, 也写进去, 标签是 =#洞见-关联= 关联到既往的经验中.
-与 =洞见-关联= 标签相对应的是 =洞见-应用=, 既然有了这个洞见, 日后怎样应用?
-
-*** 拍案
-"拍案"是"洞见"的升级, 给感情发挥的空间, 没有规则, 就是突然醍醐灌顶,拍案叫绝.
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-洞见.png]]
-
-比如这一章的开头, 作者引述的一段话
-#+BEGIN_QUOTE
-  ... It's in words that the magic is---Abracadabra, Open Sesame, and the rest---but the magic words in one story aren't magical in the next. The real magic is to understand which words work, and when, and for what; the trick is to learn the trick.
-# 拍案-起讲, 总是如此直白的掰开道理, 知微见著.
-#+END_QUOTE
-
-起讲"metalinguistic"之前, 作者引述这样浅显直白又颇具启发的用例.
-当然与"洞见"一样, 后面在阅读的时候也加上"拍案-关联", "拍案-应用"标签,
-
-小结:
-从短评, 洞见, 到拍案, 都是自己的思路, 后面的"得到"标签标注知识点.
-
-*** 得到
-采用"得到"标签, 是因为比"知识点"少一个字.
-**** 得到-概念:
-标注文中新阐述的概念.
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-概念.png]]
-
-比如文中的一个角度对CS的定义
-#+BEGIN_QUOTE
- Seen from this perspective, the technology for coping with large-scale computer systems merges with the technology for building new computer languages, and computer science itself becomes no more (and no less) than the discipline of constructing appropriate descriptive languages.
-#+END_QUOTE
-**** 得到-语法：
-标注语言的语法
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-语法.png]]
-上图标注if-predicate, 是因为我的潜意识里, if总是两个predicates.
-
-**** 得到-八股
-从文章中学习到的行文技巧, 起承转合, 类比比喻等等.
-而八股文有着严谨的起承转合的结构.
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-八股.png]]
-
-再看第三章的第一段,承接前两章然后引出下文.
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-八股2.png]]
-
-**** 得到:
-新的知识点, 没想好归类, 直接用得到.
-以上, 搜"# 得到"的时候, 可以
-
-*** 总结标签:
-此处略过, 最好每一节都有一个总结.
-
-*** 词汇:
-此处承接"尾声"部分, 积累词汇与表达, "积土成山, 风雨兴焉"
-利用org的规则, 词汇标注有两种方式.
-其一:
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-词汇.png]]
-比如本章节中的两个单词, evaluate与apply.
-eval便是输入expression, 输出value;
-拆解evaluate这个单词,
-evaluate = ex(out) + value
-将value拿出来就是evaluate, 与eval的过程百分百匹配; 直觉可以从这样的"跬步"中慢慢建立起来.
-apply就献丑了.
-其二:
-应用 ~vacabulary~ 标注单词
-#+ATTR_HTML: :width 300px
-[[file:images/阅读-词汇2.png]]
-标注了14个词汇.
-
-
-*** 阅读管理小结:
-1. 短评, 基础的原材料标签, 有启发有想法随时记下来, 作为后续分类的基础;
-2. 洞见, 有共鸣, 有豁然开朗的地方
-3. 拍案, 醍醐灌顶, 就像高呼几声的地方
-4. 得到, 知识点
-5. 总结
-6. 词汇,
-7. 关联与应用放到相应的标签后面.
-** 案例与习题
-** 收尾
-* 05.Emacs as a Agenda by Org
-# 总结
-关键概念摘要,
-types与workflow, 只有Workflow用得上,
-priorities的概念.
-todo里面需要补充的一项是efforts
-** 05.Items
-  - 5.1.Basic TODO Functionality
-  - C-c C-t Cycling
-  - S-RIGHT
-  - C-c / t sparse tree
-  - S-M-RET insert new todo
-  - 5.2.Extended Use of TODO Keywords
-  - Workflow states
-  - keywords as types
-  - 5.3.Progress Logging
-  - habits
-  - 5.4.Priorities
-  - C-c \,  :: org-priority
-  - S-UP  org-priority-up
-  - 5.5.Breaking Down Tasks into Subtasks
-  - Subtasks [0/0]  C-c C-c
-  - 5.6.Checkboxes
-  - lightweight
-  - [ ] [-] [X] 三种状态
-** 06.Tags
-  + 只有一项查询需要注意, tag search
-** 07.Properties and Columns
-  + Property Syntax
-    C-c C-x p
-  + Property Search
-    Columns的部分没有什么用处.
-** 08.Dates and Times
-  + 8.1.Timestamps
-    基本概念便是, appointment, event,
-    active and inactive,
-  + 8.2.Creating Timestamps
-    C-c !
-    C-c .
-    org-evaluate-time-range
-  + 8.3.Deadlines and Scheduling
-    DEADLINE
-    SCHEDULED
-    org-check-deadlines
-    org-check-before-date
-    org-check-after-date
-    repeat tasks
-  + 8.4.Clocking Work Time
-    没有实质的内容,
-    org-resolve-clocks
-  + 8.5.Effort Estimates　
-    org-clock-modify-effort-estimate
-** 09.Refiling and Archiving
-  + Refile and Copy
-  + Archiving
-** 10.Capture and Attachments
-  + Capture
-  + Attachments
-** 11.Agenda Views
-  + 11.1.Agendva Files
-    C-' :: org-cycle-agenda-files
-  + 11.2.The Agenda Dispatcher
-    m :: mark
-  + 11.3.The Built-in Agenda Views
-# 没有多少实质的东西.
-* 06.Org your life all-in-one as  book manager, database manager, memory manager etc
-* 07.Programming
-* 08.Assistance to Programming
-* 09.Literate Programming
-
-* Appendix A: Ask and Harvest Answers
+* Contents
+** 01.Semantic Keybinding
+** 02.Emacs as an Editor
+** 03.God's Eyes and Hands by Dired and Bookmarks
+** 04.Emacs as a Notebook by Org
+** 04.Case:如何"严肃"阅读一本书
+** 05.Emacs as a Agenda by Org
+** 06.Org your life all-in-one as  book manager, database manager, memory manager etc
+** 07.Programming
+** 08.Assistance to Programming
+** 09.Literate Programming
+
+** Appendix A: Ask and Harvest Answers
 StackOverflow突破10k, 抛一个问题, 提问还是搜索?
 答案:
 只提问不搜索, 原因如下:
@@ -727,7 +57,7 @@ StackOverflow突破10k, 抛一个问题, 提问还是搜索?
 回答的新题
 1. 作为个人的查漏补缺, 只回答自己感兴趣的问题, 这一条也可以作为提问者的心态.
 
-* Appendix B: Git Version Control
+** Appendix B: Git Version Control
 
 |-----------------------+------------------------------+----------------------------------------------|
 | Objects               | Features                     | Actions:                                     |
@@ -903,9 +233,9 @@ HEAD is now at 613ae49 Chapter 1: initial version (1a)
 <<<<<<< HEAD
 =======
 
-* Appendix C: Install  Extensions
-** Plantuml
-*** 安装
+** Appendix C: Install  Extensions
+*** Plantuml
+**** 安装
 - [[https://github.com/skuro/plantuml-mode][plantUML-mode-in-github]]
 #+BEGIN_SRC bash
 sudo apt install plantuml
@@ -913,7 +243,7 @@ M-x package-install<RET>
 plantuml-mode<RET>
 #+END_SRC
 或者从 =.doom.d/init.el= 中去掉 =plantuml= 的Comments
-*** 配置
+**** 配置
 - [[https://plantuml.com/download][plantuml-download]]
 下载"plantuml.jar"到相应文件夹.
 #+begin_src emacs-lisp :session sicp :lexical t
@@ -929,13 +259,13 @@ plantuml-mode<RET>
 Note: 不要使用 =M-x plantuml-download-jar<RET>=
 下载的非最新版本.
 
-* Appendix D: Email Management
-** Sending Mails From @qq.com
-*** 从QQ邮箱的设置中开启SMTP等服务
+** Appendix D: Email Management
+*** Sending Mails From @qq.com
+**** 从QQ邮箱的设置中开启SMTP等服务
 
 [[file:./images/qq邮箱设置.png]]
 
-*** Config SMTP
+**** Config SMTP
 从.emacs中添加配置:
 #+begin_src emacs-lisp :session sicp :lexical t
 (setq message-send-mail-function 'smtpmail-send-it)
@@ -952,7 +282,7 @@ Note: 不要使用 =M-x plantuml-download-jar<RET>=
 (setq smtpmail-debug-verb t)
 #+end_src
 
-*** Authorization
+**** Authorization
 短信获取qq邮箱的授权码后, 新建文件 =.authinfo=
 #+begin_src emacs-lisp :session email :lexical t
 machine smtp.qq.com  login abst.proc.do@qq.com password 授权码(比如abcd等)
@@ -964,7 +294,7 @@ machine smtp.qq.com  login abst.proc.do@qq.com password 授权码(比如abcd等)
 ;;(customize-variable 'auth-sources) ;; optional, do it once
 #+end_src
 
-*** Testing
+**** Testing
 此时完整的配置文件为:
 #+begin_src emacs-lisp :session email :lexical t
 ;;Sending Email
@@ -996,7 +326,7 @@ C-c C-c (message-send-and-exit)
 [[file:./images/qq-receive-mail.png]]
 
 上述冗余配置能保证邮件发送百分百成功.
-*** Mail Commands
+**** Mail Commands
 
 - C-c C-c
   Send the message, and bury the mail buffer (=message-send-and-exit=).
@@ -1008,7 +338,7 @@ C-c C-c (message-send-and-exit)
   p- =parens=
   Use both address and full name, as in: 'king@grassland.com (Elvis Parsley)'.
 
-*** Summary
+**** Summary
 先发出去邮件, 后面的操作便能水到渠成
 Emacs Manual的32.Sending-Mail有六个小节.
 
@@ -1024,8 +354,8 @@ Emacs Manual的32.Sending-Mail有六个小节.
 - [[#325-mail-signature][32.5 Mail Signature]]
 - [[#326-mail-amusements][32.6 Mail Amusements]]
 
-** Rmail
-*** Experience movemail
+*** Rmail
+**** Experience movemail
 Rmail的后端调用movemail, 因此先手工体验一般movemail
 #+BEGIN_SRC bash
 sudo apt-get install mailutils
@@ -1048,7 +378,7 @@ movemail: number of processed messages: 1
 movemail: number of errors: 0 / 0
 #+END_SRC
 
-*** View RMAIL File
+**** View RMAIL File
 此时查看Rmail文件
 
 #+BEGIN_SRC bash :results output
@@ -1117,7 +447,7 @@ MIME-Version: 1.0
 
 [[file:./images/Reply-Mail.png]]
 
-*** Manually Rmail workflow
+**** Manually Rmail workflow
 总结以上手工Rmail的工作流:
 由于配置 =.bashrc=
 #+BEGIN_SRC bash
@@ -1128,7 +458,7 @@ alias rmail="movemail -v 'imaps://abst.proc.do:授权码@imap.qq.com:993' ~/RMAI
 1. 从shell中运行rmail, 更新收件箱 =~/RMAIL=,
 2. rmail-mode模式下查看 =~/RMAIL=
 
-*** Automatic Rmail
+**** Automatic Rmail
 将Rmail workflow的第一步合并进第二步中,
 从配置中添加:
 #+begin_src emacs-lisp :session email :lexical t
@@ -1149,12 +479,12 @@ Quit
 #+END_SRC
 #+ATTR_HTML: :width 500px
 [[file:./images/Automatic-Rmail.png]]
-*** Summary
+**** Summary
 Sending Email与Rmail, 可以应用Emacs自如的收发邮件,
 但并不能有效的管理邮件.
 对邮件进行管理需要引入更加便利的自动化工具gnus
 
-** Gnus: 1.Fundermental Configuration
+*** Gnus: 1.Fundermental Configuration
 
 Gnus的基本配置很简单, 只需要几行代码
 新建文件 =~/.gnus= 然后填入以下代码
@@ -1199,7 +529,7 @@ machine smtp.qq.com  login abst.proc.do@qq.com password 授权码
 *退出Gnus*
 
 在Group buffer中按键q退出gnus.
-** Gnus: 2.Concepts
+*** Gnus: 2.Concepts
 Gnus有三个基础概念, Group Buffer, Summary Buffer and Article Buffer
 分别对应邮件的 1)分类文件夹(收件箱) 2) 邮件列表 3) 邮件正文
 
@@ -1221,15 +551,15 @@ Gnus有三个基础概念, Group Buffer, Summary Buffer and Article Buffer
 *Article Buffer*
 #+ATTR_HTML: :width 300px
 [[file:./images/gnus-article-buffer.png]] [[file:./images/mail-text.png]]
-** Gnus: 3.Group Buffer
-*** Window Layout
+*** Gnus: 3.Group Buffer
+**** Window Layout
 M-x gnus默认"use-full-window", 会删掉当前的其他窗口而占据整个屏幕, 因为 =gnus-use-full-window= 默认设置为 =t=, 这会带来诸多不便.
 关闭"use-full-window"的模式
 #+begin_src emacs-lisp :session sicp :lexical t
 (setq gnus-use-full-window nil)
 #+end_src
 
-*** Visualize Groups
+**** Visualize Groups
 Group Buffer默认只显示有未读邮件的Group,
 
 查看其他邮件组, 有四种方法
@@ -1256,13 +586,13 @@ Group Buffer中按键 ^ (=gnus-group-enter-server-mode=),
 [[file:./images/gnus-group-buffer-server-1.png]] [[file:./images/gnus-group-buffer-server-2.png]]
 也可以一步进入Server Group Buffer: A A (=gnus-group-list-active=)
 
-*** Archive Messages
+**** Archive Messages
 Gnus的默认配置, 生成 ="sent.%Y-%m"= 格式的 Send-Mail存档, 这与imap的Send-Messages重复, 因此关闭改功能
 #+begin_src emacs-lisp :session gnus :lexical t
 (setq gnus-message-archive-group nil)
 #+end_src
 
-*** New Group
+**** New Group
 创建新的邮件组
 - G m :: Make a new group (=gnus-group-make-group=). Gnus will prompt you for a name, a method and possibly an address.
 比如新建Starred Group
@@ -1274,7 +604,7 @@ Z R 更新 gnus, 然后 L, 便能查看新建的starred Group
 G p 之后, 添加一行
 =(visible . t)=
 
-*** Delete and Rename Group
+**** Delete and Rename Group
 - G <DEL> :: gnus-group-delete-group
 删除当前的邮件组
 - b :: Find bogus groups and delete them (=gnus-group-check-bogus-groups=).
@@ -1282,7 +612,7 @@ G p 之后, 添加一行
 
 - G r :: Rename the current group to something else (=gnus-group-rename-group=). This is valid only on some groups---mail groups mostly. This command might very well be quite slow on some back ends.
 
-*** Mark Groups
+**** Mark Groups
 - c ::  Mark all unticked articles in this group as read (=gnus-group-catchup-current=). =gnus-group-catchup-group-hook= is called when catching up a group from the group buffer.
 - C :: Mark all articles in this group, even the ticked ones, as read (=gnus-group-catchup-current-all=).
 表组Group内所有邮件为已读
@@ -1295,13 +625,13 @@ G p 之后, 添加一行
 - M w :: Mark all groups between point and mark (=gnus-group-mark-region=).
 - M b :: Mark all groups in the buffer (=gnus-group-mark-buffer=).
 - M r :: Mark all groups that match some regular expression (=gnus-group-mark-regexp=).
-*** Sorting Groups
+**** Sorting Groups
 常用的排序方法:
 - G S a :: Sort the group buffer alphabetically by group name (=gnus-group-sort-groups-by-alphabet=).
 - G S m :: Sort the group buffer alphabetically by back end name
   (=gnus-group-sort-groups-by-method=).
 - G S n :: Sort the group buffer alphabetically by real (unprefixed) group name (=gnus-group-sort-groups-by-real-name=).
-*** Group Timestamp
+**** Group Timestamp
 Trace最近一次打开group的时间戳.(add-hook 'gnus-select-group-hook 'gnus-group-set-timestamp
 It can be convenient to let Gnus keep track of when you last read a group. To set the ball rolling, you should add =gnus-group-set-timestamp= to =gnus-select-group-hook=:
 添加配置:
@@ -1317,7 +647,7 @@ It can be convenient to let Gnus keep track of when you last read a group. To se
                "")))
 #+end_src
 
-*** Group Highlighting
+**** Group Highlighting
 Gnus Manual中推荐的highlight配色配置,
 #+begin_src emacs-lisp :session gnus :lexical t
 (cond (window-system
@@ -1341,8 +671,8 @@ Gnus Manual中推荐的highlight配色配置,
         ((zerop unread) . my-group-face-4)
         (t . my-group-face-5)))
 #+end_src
-** Gnus: 4.Summary Buffer
-*** Display all
+*** Gnus: 4.Summary Buffer
+**** Display all
 Summary Buffer是Email list,
 "INBOX"默认只读取"未读"邮件, 没有未读邮件则为空, 此默认设置并不实用.
 从Group Buffer中的"inbox",操作 G p, 添加一行 =(display . all)=
@@ -1357,7 +687,7 @@ Summary Buffer是Email list,
  (visible . t)
  (permanent-flags %* %Answered %Flagged %Deleted %Draft %Seen))
 #+end_src
-*** Delete Mails
+**** Delete Mails
 Gnus删除邮件需要格外注意,
 首先设置,
 #+begin_src emacs-lisp :session gnus :lexical t
@@ -1375,7 +705,7 @@ Summary-Buffer中操作 B m, 选定待删除的邮件移动到"Deleted Messages"
 #+ATTR_HTML: :width 600px
 [[file:./images/gnus-summary-buffer-delete.png]]
 
-*** Search Mails
+**** Search Mails
 从Summary Buffer中查找邮件.
 M-s
     Search through all subsequent (raw) articles for a regexp (gnus-summary-search-article-forward).
@@ -1390,7 +720,7 @@ M-&
 
 G G :: =nnir= is a Gnus interface to a number of tools for searching through mail and news repositories. Different backends (like =nnimap= and =nntp=) work with different tools (called engines in =nnir= lingo), but all use the same basic search interface.
 
-*** Frequent Commands
+**** Frequent Commands
 *回复邮件*
 - S r
   r ::  Mail a reply to the author of the current article (=gnus-summary-reply=).
@@ -1480,7 +810,7 @@ highlight的部分值得一看, 但是在第三部分article中.
 *3.23 Finding the Parent*
 
 - ^ :: If you'd like to read the parent of the current article, and it is not displayed in the summary buffer, you might still be able to.
-** Gnus: 5.Article Buffer
+*** Gnus: 5.Article Buffer
 "Article Buffer"是邮件的正文内容．
 
 *Hiding Headers*
@@ -1494,7 +824,7 @@ highlight的部分值得一看, 但是在第三部分article中.
 #+begin_src emacs-lisp :session gnus :lexical t
 (setq gnus-blocked-images "ads")
 #+end_srcx
-** Gnus: 6.Completed Configuration in Progress
+*** Gnus: 6.Completed Configuration in Progress
 
 #+begin_src emacs-lisp :session gnus :lexical t
 ;;; Package --- gnus
@@ -1627,7 +957,7 @@ highlight的部分值得一看, 但是在第三部分article中.
 ;;                    (picon 1.0))))
 
 #+end_src
-** Gnus Easter Eggs
+*** Gnus Easter Eggs
 读Gnus文档无味, 摘取其中有趣有料的句子.
 
 *3.12 Article Caching*
