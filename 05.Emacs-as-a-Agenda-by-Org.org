@@ -315,7 +315,11 @@ agenda中的日出日落不仅帮助界定有意义的时间范围, 而且构建
 
 Agenda提供四种视图模式, 便于快速的review.
 - org-agenda-day-view :: 快捷键 v d
+#+ATTR_HTML: :width 300px
+[[file:images/org-day-view.png]]
 - org-agenda-week-view  ::  快捷键 v w
+#+ATTR_HTML: :width 300px
+[[file:images/org-week-view.png]]
 - org-agenda-month-view  ::  快捷键 v m
 - org-agenda-year-view ::  快捷键 v y
 
@@ -414,6 +418,7 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 - .   :: Move point to today's date (=calendar-goto-today=).
 
 ** 3.3."Calendar"与"Agenda"合二而一
+
 上述的解决方案, 按键c显性的调用calendar, 有没有在逻辑上更加"丝滑"的方法呢?
 答案是: =org-agenda-goto-date= 快捷键"j".
 三步操作分解为:
@@ -421,9 +426,12 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 2. 移动到目标日期
 3. 回车则直接跳转到目标日期的agenda
 此处应用的是"插入时间戳"的方法, 隐藏了显性的跳转, 逻辑上更加顺畅.
+#+ATTR_HTML: :width 300px
+[[file:images/org-agenda-jump.png]]
 
 这种"The date/time prompt"移动到目标日期的光标移动与直接在日历中操作稍有不同, 不同的原因是当前光标在mini-buffer中, 只能间接操作calendar.
 表格如下:
+
 |-------------+----------------------------------------|
 | (RET)       | Choose date at point in calendar.      |
 | (mouse-1)   | Select date by clicking on it.         |
@@ -446,7 +454,7 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 
 * 4.分别记录事件,笔记与任务
 * 5.Event, Note, Task
-* 6.Workflow 
+* 6.Workflow
 * 参考资料
 # 描写日出的诗文资料
 * 问题
