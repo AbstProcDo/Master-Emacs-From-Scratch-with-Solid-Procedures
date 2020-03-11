@@ -453,8 +453,72 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 - Year
 
 * 4.分别记录事件,笔记与任务
-* 5.Event, Note, Task
+* 5.Event, Note and Task
+** Diary Template
+日记模板划分为四个区域:
+1. 日记, 如"方方日记"那样
+2. 计划, Heading设置为Procedures
+3. 事件, Events, 周边的主要事件, 比如部门聚餐.
+4. 任务, Tasks, 记录当日的收集的任务.
+#+ATTR_HTML: :width 500px
+[[file:images/05.Emacs-as-a-agenda-日记模板.png]]
+
+** Org's Capture System
+*** Capture Event
+公司早会之后, 同事"李子轩"问我借走了一直圆珠笔, 于是随手记录该事件.
+
+"M-x org-caputre"触发capture-template Buffer.
+#+ATTR_HTML: :width 500px
+[[file:images/05.Emacs-as-a-agenda-capture-buffer.png]]
+
+按键"e", 选择"Event"
+#+ATTR_HTML: :width 500px
+[[file:images/05.Emacs-as-a-agenda-capture-event.png]]
+如上图所示, emacs-org自动捕捉记录的event到当日的事件Heading下面, 输入完毕后按键"C-c C-c"
+
+此时查看Agenda, 便一目了然.
+#+ATTR_HTML: :width 500px
+[[file:images/04.Emacs-as-a-agenda-event-agenda.png]]
+"圆珠笔"是早上8:33顺走的, 真万难抵赖.
+
+*** Capture notes and ideas
+"神来之笔"的想法, 不仅应该及时地记录下来, 还应该打上准确的时间戳以记录想法产生的具体时间.
+
+重复上述"Capture Event"的操作, 按键"n", 选择note.
+#+ATTR_HTML: :width 500px
+[[file:images/05.Emacs-as-a-agenda-capture-note.png]]
+查看Agenda,
+#+ATTR_HTML: :width 500px
+[[file:images/05.Emacs-as-a-agenda-idea-agenda-view.png]]
+
+
+每晚睡前Review之时, 一眼便能看到在早上"8:48"产生了一个"神来之笔"的想法.
+
+*** Capture Task
+任务处理是org-mode最核心的功能, 添加任务的方法与前两项相同.
+
+从agenda-dispatcher选择todo list, 标记任务状态为"STRT"并开始计时.
+
+此时再回到agenda-view
+#+ATTR_HTML: :width 500px
+[[file:images/05.Emacs-as-a-agenda-task-agenda-view.png]]
+
+
+** Diary Archive
+日记文件"todo.today.org"记录本周七天的活动.
+满一周后归档到"diary-by-month"文件夹中
+
+#+BEGIN_EXAMPLE
+$ ls diary-by-months/  | grep 2020
+2020-01.org
+2020-02.org
+2020-03.org
+#+END_EXAMPLE
+
+
 * 6.Workflow
+* 大岗计划
+先写一章如何应用然后再
 * 参考资料
 # 描写日出的诗文资料
 * 问题
