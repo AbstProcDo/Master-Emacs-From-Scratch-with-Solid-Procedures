@@ -132,9 +132,21 @@ Sunday      8 March 2020
 #+END_EXAMPLE
 配置如下:
 #+begin_src emacs-lisp :session agenda :lexical t
-(setq org-agenda-time-grid (quote (((daily today require-timed)
-                                    (300 600 900 1200 1500 1800 2100 2400)
-                                    "......" "----------------"))))
+;;---------------------------------------------
+;;org-agenda-time-grid
+;;--------------------------------------------
+(setq org-agenda-time-grid (quote ((daily today require-timed)
+                                   (300
+                                    600
+                                    900
+                                    1200
+                                    1500
+                                    1800
+                                    2100
+                                    2400)
+                                   "......"
+                                   "-----------------------------------------------------"
+                                   )))
 #+end_src
 
 *思维概念*
