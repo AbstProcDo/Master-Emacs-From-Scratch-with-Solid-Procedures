@@ -1,6 +1,5 @@
 #+TITLE: Master Emacs
 * 00.Preface
-
 步步为营即一步一个脚印, "零秒"乃调用直觉力, 非物理概念上的“零秒”；
 # 八股文的结构.
 一个以讹传讹的观念"Emacs很难且耗费时间", 标题"零秒"有意打消对Emacs学习的成见. 通过点出Emacs中的关键点的方式, 心有灵犀一点通, 举一反三, 一通百通. 而不必案牍劳形, 悬梁刺股.
@@ -396,6 +395,8 @@ M-x view-register r
    M-x bookmark-delete bookmark
    M-x bookmark-insert-location bookmark
 
+** Plan
+重新写dired,
 * Contents
 ** 01.Semantic Keybinding
 ** 02.Emacs as an Editor
