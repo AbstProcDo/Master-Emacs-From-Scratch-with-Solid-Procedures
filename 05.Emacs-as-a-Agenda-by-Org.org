@@ -1,6 +1,6 @@
 #+TITLE: 05.Emacs as a Agenda by Org
 * 05.Emacs as a Agenda by Orgs
-* 归纳基本操作
+* Summarize Operations
 # 总结
 关键概念摘要,
 types与workflow, 只有Workflow用得上,
@@ -69,7 +69,7 @@ todo里面需要补充的一项是efforts
     m :: mark
   + 11.3.The Built-in Agenda Views
 # 没有多少实质的东西.
-* Diary的配置
+* Diary's Configuration
 # elisp基本配置
 #+begin_src emacs-lisp :session agenda :lexical t
 (setq org-agenda-include-diary t)
@@ -78,6 +78,13 @@ todo里面需要补充的一项是efforts
 #+end_src
 
 * 1.Agenda Time Grid
+** 设置org-agenda-files
+首先从配置中指定 =org-agenda-files=
+#+begin_src emacs-lisp :tangle yes
+(setq org-agenda-files '("~/Documents/OrgMode/ORG/diary-by-months/" ;; 2020-01-10 10:45:25
+                         "~/Documents/OrgMode/ORG/src/" ;;2019-06-18 13:37:12
+))
+#+end_src
 ** 默认agenda-time-grid的不足之处
 Emacs-agenda的Time Grid, 默认设置每两个小时为一个时间段.
 开启方法:
@@ -463,6 +470,24 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 - Day, Week 日/周/
 - Month, Season(3-months)
 - Year
+** 3.4.Personalize Agenda View
+
+#+begin_src emacs-lisp :tangle yes
+(general-advice-add 'org-agenda :after
+            (lambda (_)
+              (when (equal (buffer-name)
+                           "*Org Agenda*")
+                (calendar)
+                (other-window 1))))
+
+(general-advice-add 'org-agenda-quit :before
+            (lambda ()
+              (let ((window (get-buffer-window calendar-buffer)))
+                (when (and window (not (one-window-p window)))
+                  (delete-window window)))))
+#+end_src
+
+#+RESULTS:
 
 * 4.分别记录事件,笔记与任务
 * 5.Event, Note and Task
@@ -515,7 +540,6 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 #+ATTR_HTML: :width 500px
 [[file:images/05.Emacs-as-a-agenda-task-agenda-view.png]]
 
-
 ** Diary Archive
 日记文件"todo.today.org"记录本周七天的活动.
 满一周后归档到"diary-by-month"文件夹中
@@ -527,12 +551,47 @@ $ ls diary-by-months/  | grep 2020
 2020-03.org
 #+END_EXAMPLE
 
-
 * 6.Workflow
-* 大岗计划
+* 7.Agenda Remote Control
+=k c=
+You can also call =org-capture= in a special way from the agenda, using the {{{kbd(k c)}}} key combination. With this access, any timestamps inserted by the selected capture template defaults to the date at point in the agenda, rather than to the current date.
+* 大纲计划
 先写一章如何应用然后再
 * 参考资料
 # 描写日出的诗文资料
+* 附录
+在第三节"3.Interact with Calendar"介绍了agenda与calendar互动的方法.
+展示附带Calendar的agenda, 需要两步操作:
+1. M-x org-agenda 或者 C-c a 调出来, agenda-veiw的界面
+#+ATTR_HTML: :width: 300px
+[[file:images/agenda-view-standard.png]]
+2. 然后按键"c"调用Calendar
+#+ATTR_HTML: :width 300px
+[[file:images/org-agenda-with-calendar.png]]
+
+以上两步操作可以合并为一步, 代码如下:
+#+begin_src emacs-lisp :tangle yes
+;;integrated with Calendar
+(general-advice-add 'org-agenda :after
+                    (lambda (_)
+                      (when (equal (buffer-name)
+                                   "*Org Agenda*")
+                        (calendar)
+                        (calendar-mark-holidays)
+                        (other-window 1))))
+
+(general-advice-add 'org-agenda-quit :before
+                    (lambda ()
+                      (let ((window (get-buffer-window calendar-buffer)))
+                        (when (and window (not (one-window-p window)))
+                          (delete-window window)))))
+#+end_src
+
+以上代码添加进配置文件之后,
+
+C-c a a (M-x org-agenda) 将会打开"带calendar"界面的agenda-view, 按键"q"退出agenda-view.
+
+
 * 问题
 Calendar中的问题.
 backward
