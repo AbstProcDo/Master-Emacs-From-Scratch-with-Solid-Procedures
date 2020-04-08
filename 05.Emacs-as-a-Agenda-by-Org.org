@@ -329,6 +329,12 @@ agenda中的日出日落不仅帮助界定有意义的时间范围, 而且构建
 第五节到第八节在agenda的基础上深入探讨org-todo的管理与规划的工作流．
 
 本节初步探讨如何提高review的效率, 即如何速度浏览agenda-view,以及快递定位某日的agenda-view.
+#+begin_src emacs-lisp :tangle yes
+(buffer-file-name)
+#+end_src
+
+#+RESULTS:
+: /home/gaowei/Public/04.Master-Emacs-From-Scratch-with-Solid-Procedures/05.Emacs-as-a-Agenda-by-Org.org
 
 ** 3.1.内置的Agenda-View Display
 
@@ -436,6 +442,16 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 
 - .   :: Move point to today's date (=calendar-goto-today=).
 
+calendar-count-days-region
+C-c C-y (org-evaluate-time-range)
+- [[https://emacs.stackexchange.com/questions/23893/counting-the-number-of-days-that-have-passed-since-a-certain-date][org-evaluate-time-range]]
+- [[https://emacs.stackexchange.com/questions/56339/designate-a-speficied-day-of-20-days-later/56343#56343][Insert a future date]]
+  + org-read-date Documentation
+
+
+
+
+  
 ** 3.3."Calendar"与"Agenda"合二而一
 
 上述的解决方案, 按键c显性的调用calendar, 有没有在逻辑上更加"丝滑"的方法呢?
@@ -590,7 +606,6 @@ You can also call =org-capture= in a special way from the agenda, using the {{{k
 以上代码添加进配置文件之后,
 
 C-c a a (M-x org-agenda) 将会打开"带calendar"界面的agenda-view, 按键"q"退出agenda-view.
-
 
 * 问题
 Calendar中的问题.

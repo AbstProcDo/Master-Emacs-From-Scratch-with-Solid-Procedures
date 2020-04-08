@@ -1,4 +1,4 @@
-#+TITLE: 04.Case如何严肃阅读一本书
+#+TITLE: 04.Read-a-Book-In-a-Serioius-Way
 
 * 序
 本文为项目"步步为营, 零秒精通Emacs"的第四章"Emacs as a Notebook by Org"
@@ -39,7 +39,7 @@
 *** 方法一: C-n S(shift)-tab
 控制目录显示的深度,比如C-2 S-tab显示到2级目录,
 #+ATTR_HTML: :width 300px
-[[file:images/启动-显示到二级目录.png]]
+[[file:../images/启动-显示到二级目录.png]]
 方法的优点是可以自定义控制目录显示的深度
 
 *** 方法二:
@@ -51,24 +51,24 @@
 *** 方法三:
 TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成目录
 #+ATTR_HTML: :width 300px
-[[file:images/启动-toc-2.png]]
+[[file:../images/启动-toc-2.png]]
 
 *** 方法四
 推荐的方案,纸笔绘制, 放在手边参阅.
-[[file:images/sicp-04.metalinguistic.jpeg]]
+[[file:../images/sicp-04.metalinguistic.jpeg]]
 * 过程控制
 ** Clock-in and Clocxk-out
 当前章节下调用  =M-x org-clock-in=,
 - 一方面可以计时,
 - 再者则随时提醒当前所处的位置和任务, 及时跳转到其他的buffer中, 也会看到, 比如从4.4.1 Deductive Information Retrieval中激发了clock-in, 则即使在这篇文章的编辑页面, 依然能看到当下的任务, 随时提醒你回去执行.
 #+ATTR_HTML: :width 500px
-[[file:images/过程-clock-in.png]]
+[[file:../images/过程-clock-in.png]]
 - clock-in置顶当前任务, 为后文"阅读管理"添加标签提供便利.
 
 ** 随手建立todo任务
 比如阅读过程中,发现svg的图片格式在black模式下, 认读需要眼睛对到屏幕上仔细得瞧个清楚, 因此设置任务将inline的图片逐步去掉, 修改成文本格式.
 #+ATTR_HTML: :width 500px
-[[file:images/过程-设置todo.png]]
+[[file:../images/过程-设置todo.png]]
 任务完成后变更todo为done
 
 ** 提出问题?
@@ -77,9 +77,9 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 另一方面, 当一年后在读这本书的时候, 可以了解当时的水平, 当时的思考脉络.
 问题统一设置成 =问题?= 的格式, 如此, 不仅是在正文的行首, 或者和在代码的内部, 都能方便查到; 又不会多余查到正常使用的"问题"这个词汇.
 #+ATTR_HTML: :width 500px
-[[file:images/过程-问题.png]]
+[[file:../images/过程-问题.png]]
 问题解决后, 在后面标注v,v当做是对号.
-[[file:images/过程-问题v.png]]
+[[file:../images/过程-问题v.png]]
 如图, 刚才的12个问题解决了7个, 剩下的可能需要发到stackoverflow上.
 
 ** 小结：
@@ -102,12 +102,12 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 无拘无束, 不给大脑是否要分类, 分类到哪里的负担.
 待到二读, 三读的时候再适当"短评"的内容归类, "短评"为后面的动作提供原材料.
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-短评.png]]
+[[file:../images/阅读-短评.png]]
 
 ** 洞见
 读着读着, 对作者的阐述生发共鸣, 或者比"绘制大纲"阶段中"编造"的内容阐述的精彩, 又或者在胸中困顿许久没想明白的点, 在此处豁然开朗.
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-洞见.png]]
+[[file:../images/阅读-洞见.png]]
 举例比如 assignment and definition这一段, 从evaluator的角度, 赋值(assignment)与定义(definition)的本质是一样的, 都是set!, 这也完全符合直觉.
 此处标注为洞见, 是因为刚从python入门编程的时候, 学习赋值与函数定义.
 #+begin_src ipython :session SICP :results output
@@ -122,7 +122,7 @@ def foo(x): return x * x
 ** 拍案
 "拍案"是"洞见"的升级, 给感情发挥的空间, 没有规则, 就是突然醍醐灌顶,拍案叫绝.
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-洞见.png]]
+[[file:../images/阅读-洞见.png]]
 
 比如这一章的开头, 作者引述的一段话
 #+BEGIN_QUOTE
@@ -141,7 +141,7 @@ def foo(x): return x * x
 *** 得到-概念:
 标注文中新阐述的概念.
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-概念.png]]
+[[file:../images/阅读-得到-概念.png]]
 
 比如文中的一个角度对CS的定义
 #+BEGIN_QUOTE
@@ -150,18 +150,18 @@ def foo(x): return x * x
 *** 得到-语法：
 标注语言的语法
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-语法.png]]
+[[file:../images/阅读-得到-语法.png]]
 上图标注if-predicate, 是因为我的潜意识里, if总是两个predicates.
 
 *** 得到-八股
 从文章中学习到的行文技巧, 起承转合, 类比比喻等等.
 而八股文有着严谨的起承转合的结构.
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-八股.png]]
+[[file:../images/阅读-得到-八股.png]]
 
 再看第三章的第一段,承接前两章然后引出下文.
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-得到-八股2.png]]
+[[file:../images/阅读-得到-八股2.png]]
 
 *** 得到:
 新的知识点, 没想好归类, 直接用得到.
@@ -175,7 +175,7 @@ def foo(x): return x * x
 利用org的规则, 词汇标注有两种方式.
 其一:
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-词汇.png]]
+[[file:../images/阅读-词汇.png]]
 比如本章节中的两个单词, evaluate与apply.
 eval便是输入expression, 输出value;
 拆解evaluate这个单词,
@@ -185,8 +185,9 @@ apply就献丑了.
 其二:
 应用 ~vacabulary~ 标注单词
 #+ATTR_HTML: :width 300px
-[[file:images/阅读-词汇2.png]]
+[[file:../images/阅读-词汇2.png]]
 标注了14个词汇.
+
 
 ** 阅读管理小结:
 1. 短评, 基础的原材料标签, 有启发有想法随时记下来, 作为后续分类的基础;
@@ -197,9 +198,196 @@ apply就献丑了.
 6. 词汇,
 7. 关联与应用放到相应的标签后面.
 * 案例与习题
-# 短评: 此处竟然是空着的? 
+SICP习题过多, 目前的处理方法是建索引, 梳理思路.
+org可以给代码块,图片等命名,格式为=#+name=
+
+例如书中的案例:
+#+name: case-4.1.2-self-evaluating
+  #+BEGIN_SRC scheme :session sicp
+      (define (self-evaluating? exp)
+        (cond ((number? exp) true)
+              ((string? exp) true)
+              (else false)))
+  #+END_SRC
+"#+name:" + "case-" + 小节序号"4.1.1" + "函数名"
+
+书中的案例分散在各处, 刚上手开读, 不太可能过目不忘, 而读下文回想上文,巨耗脑力;
+如果持续使用C-s随机跳转, 思路会搅得杂乱无章;
+
+解决的方法是命名代码块, 自定义索引.
+
+** 梳理思路
+
+建立索引后, 可以从mini-buffer中查看局部的框架
+
+#+ATTR_HTML: :width 300px
+[[file:../images/案例-swiper.png]]
+
+也可以调用grep查看, 尤其是复盘的时候, 可以只看着grep的清单, 尝试重新构建出来.
+
+#+ATTR_HTML: :width 300px
+[[file:../images/案例-grep.png]]
+
+** 跳转查询
+
+比如当读到`define analyze`的时候突然忘记了`self-evaluating`的定义
+#+begin_src scheme :session sicp
+(define (analyze exp)
+  (cond ((self-evaluating? exp)
+         (analyze-self-evaluating exp))
+        ((quoted? exp)
+         (analyze-quoted exp))
+        ((variable? exp)
+         (analyze-variable exp))
+        ((assignment? exp)
+...
+#+end_src
+#+ATTR_HTML: :width 300px
+[[file:../images/案例-跳转查询.png]]
+从结构中能清楚地看到"目标位置"是在大纲目录下的4.1.2中,
+如果直接搜索"define (self-eval", 则第一眼看不到大纲.
+mini-buffer内的中操作:C-n C-p
+如果点击去查看细节, 结束之后按键 =C-u C-@= 会重新回到 =(define (analyz)= 这个初始位置.
+
+** 习题
+如果直接查看"Exercise"
+#+ATTR_HTML: :width 300px
+[[file:../images/案例-习题概览.png]]
+了解到大概有80个习题和粗略的进度.
+但也仅此而已, 看不到一道习题隶属哪个章节, 没有整合进大纲结构中.
+
+可以给习题解答的代码设置name, 比如
+
+#+name: case-4.1.2-ex4.4-eval-or
+#+begin_src scheme :session sicp :lexical t
+(define (eval-or exps env)
+    (cond ((null? exps)
+            #f)
+          ((true? (eval (first-exp exps) env))
+            (eval-or (rest-exp exps) env))
+          (else
+            #f)
+#+end_src
+
+此时在查看"case-4.1.2"的时候, 习题与案例连成一体, 都在"4.1.2 Representing Expressions"之下.
+#+ATTR_HTML: :width 300px
+[[file:../images/案例-习题命名.png]]
+
+
+** Clock-in
+
+案例与习题命名的格式是"case-4.1.2",
+在阅读过程中, 挪用脑力记忆住"4.1.2"这个点位, 或者上下移动光标查看, 不太可取.
+在过程控制中, 首要先打开Clock-in,此时可以派上用场. 脑力过于发达可以在大的节点上clock-in比如"4.1", 我是在颗粒度更高的小节点"4.1.2"上clock-in, clock-out.
+
+** 案例与习题小结
+
+案例与习题是洒落一地的珠子,
+初次阅读在代码之间来回跳转参阅, 劳神费力, 建立索引是将珠子串起来, 梳理思路和参阅.
+比如本章中的两个基础定义 =eval= and =apply=
+分别建立索引"#+name: case-4.1.1-apply-core"和"#+name: case-4.1.1-eval-core", 可以通缩C-s "case eval core"准确的一步定位. 如果用查询"define (eval)", 则需要消耗点脑力, 组合regex规则过滤掉其他备选项, 而此时大脑正在全神贯注处理当下问题, 最好不要被分神打扰.
+
+* Org的撒手锏
+1. ros即时插入图片
+观察SICP视频的同时, 可以即时截屏插入到笔记中.
+安装ros插件
+#+ATTR_HTML: :width 500px
+[[file:../images/撒手锏01.png]]
+
+如图所示, M-x调用ros之后, 从左边截屏, 图片将会直接插入到笔记中.
+虽然简单, 但却极大地提高效率, 因此也放在撒手锏这里.
+
+2. 绘制思维导图
+在"01.启动-绘制大纲"的方法三中, 介绍过使用自动建立Table of Content的方法
+#+ATTR_HTML: :width 300px
+[[file:../images/撒手锏-思维导图.png]]
+
+Org的撒手锏之二可以将其转成思维导图
+#+ATTR_HTML: :width 500px
+
+[[file:../../Documents/OrgMode/ORG/images/metalinguistic.png]]
+
+需要做一点作业就是将上图的table of content用regex简单成以下格式:
+#+BEGIN_SRC plantuml :file ../images/metalinguistic.png
+@startmindmap
+- 4.Metalinguistic Abstraction
+-- 4.1 The Metacircular Evaluator
+--- 4.1.1 The Core of the Evaluator
+---- Eval
+---- Apply
+---- 1.Procedure arguments
+---- 2.Conditionals
+---- 3.Sequences
+---- 4.Assignments and definitions
+---- Derived expressions
+--- 4.1.2 Representing Expressions
+---- pre
+---- Derived expressions
+--- 4.1.3 Evaluator Data Structures
+---- Testing of predicates
+---- Representing procedures
+---- Operations on Environments
+--- 4.1.4 Rnning the Evaluator as a Program
+--- 4.1.5 Data As Programs
+--- 4.1.6 Internal Definitions
+--- 4.1.7 Separating Syntactic Analysis from Execution
+-- 4.2 Variations on a Scheme --- Lazy Evaluation
+--- 4.2.1 Normal Order and Applicative Order
+--- 4.2.2 An Interpreter with Lazy Evaluation
+---- Modifying the evaluator
+---- Representing thunks
+--- 4.2.3 Streams as Lazy Lists
+++ 4.3 Variations on a Scheme +++ Nondeterministic Computing
++++ 4.3.1 Amb and Search
+++++ Driver loop
++++ 4.3.2 Examples of Nondeterministic Programs
+++++ Logic Puzzles
+++++ Parsing natural language
++++ 4.3.3 Implementing the =Amb= Evaluator
+++++ Execution procedures and continuations
+++++ Structure of the evaluator
+++++ Simple expressions
+++++ Conditionals and sequences
+++++ Definitions and assignments
+++++ Procedure applications
+++++ Evaluating =amb= expressions
+++++ Driver loop
+++++ Footnotes
+++ 4.4 Logic Programming
++++ 4.4.1 Deductive Information Retrieval
+++++ A sample data base
+++++ Simple queries
+++++ Compound queries
+++++ Rules
+++++ Logic as programs
++++ 4.4.2 How the Query System Works
+++++ Pattern matching
+++++ Streams of frames
+++++ Compound queries
+++++ Unification
+++++ Applying rules
+++++ Simple queries
+++++ The query evaluator and the driver loop
++++ 4.4.3 Is Logic Programming Mathematical Logic?
+++++ Infinite loops
+++++ Problems with =not=
+++++ 4.4.4 Implementing the Query System
+++++ 4.4.4.1 The Driver Loop and Instantiation
+++++ 4.4.4.2 The Evaluator
+++++ 4.4.4.3 Finding Assertions by Pattern Matching
+++++ 4.4.4.4 Rules and Unification
+++++ 4.4.4.5 Maintaining the Data Base
+++++ 4.4.4.6 Stream Operations
+++++ 4.4.4.7 Query Syntax Procedures
+++++ 4.4.4.8 Frames and Bindings
+
+@endmindmap
+#+END_SRC
+
+#+RESULTS:
+#+ATTR_HTML: :width 1500px
+[[file:../images/metalinguistic.png]]
+
+此时调用C-c C-c将会自动生成上述的思维导图
+
 * 收尾
-* Conventions
-练习题的分隔符号:
-C-u 78 -
-C-u 78 +

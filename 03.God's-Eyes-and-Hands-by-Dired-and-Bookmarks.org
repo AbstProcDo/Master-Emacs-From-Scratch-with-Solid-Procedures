@@ -120,3 +120,9 @@ M-x view-register r
    M-x bookmark-write filename
    M-x bookmark-delete bookmark
    M-x bookmark-insert-location bookmark
+* 重新改写
+书同文车同轨
+一法度衡石丈尺。车同轨。书同文字。”
+史记·秦始皇本纪》：“一法度衡石丈尺。车同轨。书同文字。”
+全局搜索文本文件内的所有内容。
+秦始皇的功劳
