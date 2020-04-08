@@ -73,5 +73,3 @@
   + shell:ls
   + elisp:(find_file "elisp.org")
   + elisp:org-agenda
-
-

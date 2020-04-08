@@ -3,9 +3,9 @@
 - [[#引言][0.引言]]
 - [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
 - [[file:02.Emacs-As-an-Editor.org][2.Emacs As an Editor]]
--[[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][ 3.God's Eyes by Dired]]
+- [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
 - [[file:04.Emacs-as-a-Notebook-by-Org.org][4.Read a Book In a Serious Way]]
-- [[file:05.Emacs-as-a-Agenda-by-Org.org][5.macs as a Agenda by Org]]
+- [[file:05.Emacs-as-a-Agenda-by-Org.org][5.Emacs as a Agenda by Org]]
 --------------------------------
 - [[file:Appendix A: Ask and Harvest Answers.org][Appendix A: Ask but not Search]]
 - [[file:Appendix B: Git Version Control.org][Appendix B: Git Version Control]]
