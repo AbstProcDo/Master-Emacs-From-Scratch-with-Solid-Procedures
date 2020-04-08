@@ -48,15 +48,3 @@
 此时再回到agenda-view
 #+ATTR_HTML: :width 500px
 [[file:images/05.Emacs-as-a-agenda-task-agenda-view.png]]
-
-
-** Diary Archive
-日记文件"todo.today.org"记录本周七天的活动.
-满一周后归档到"diary-by-month"文件夹中
-
-#+BEGIN_EXAMPLE
-$ ls diary-by-months/  | grep 2020
-2020-01.org
-2020-02.org
-2020-03.org
-#+END_EXAMPLE
