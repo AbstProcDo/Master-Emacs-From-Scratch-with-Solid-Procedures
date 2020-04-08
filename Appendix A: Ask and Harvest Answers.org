@@ -1,4 +1,4 @@
-#+TITLE: Appendix A: Ask and Harvest Answers
+#+TITLE: Appendix A: Ask but not Search
 StackOverflow突破10k, 抛一个问题, 提问还是搜索?
 答案:
 只提问不搜索, 原因如下:

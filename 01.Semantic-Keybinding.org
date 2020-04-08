@@ -90,7 +90,7 @@ M->, to the end of the buffer.
   - C-x C-p :: Put point and mark around this page (or another page) (=mark-page=).
 
   - C-x l :: Count the lines in this page (=count-lines-page=).
-* 7. 键位布置
+* 7.键位布置
 建议键位调整为:
 #+BEGIN_EXAMPLE
 Alt(option) ----> Ctrl ----> Space <----Ctrl <----Alt

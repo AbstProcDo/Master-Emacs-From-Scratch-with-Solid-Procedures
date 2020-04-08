@@ -1,5 +1,4 @@
 #+TITLE: 04.Read-a-Book-In-a-Serioius-Way
-
 * 序
 本文为项目"步步为营, 零秒精通Emacs"的第四章"Emacs as a Notebook by Org"
 
@@ -188,7 +187,6 @@ apply就献丑了.
 [[file:../images/阅读-词汇2.png]]
 标注了14个词汇.
 
-
 ** 阅读管理小结:
 1. 短评, 基础的原材料标签, 有启发有想法随时记下来, 作为后续分类的基础;
 2. 洞见, 有共鸣, 有豁然开朗的地方
@@ -273,7 +271,6 @@ mini-buffer内的中操作:C-n C-p
 #+ATTR_HTML: :width 300px
 [[file:../images/案例-习题命名.png]]
 
-
 ** Clock-in
 
 案例与习题命名的格式是"case-4.1.2",
@@ -303,8 +300,7 @@ mini-buffer内的中操作:C-n C-p
 [[file:../images/撒手锏-思维导图.png]]
 
 Org的撒手锏之二可以将其转成思维导图
-#+ATTR_HTML: :width 500px
-
+#+ATTR_HTML: :width 1000px
 [[file:../../Documents/OrgMode/ORG/images/metalinguistic.png]]
 
 需要做一点作业就是将上图的table of content用regex简单成以下格式:
@@ -380,10 +376,8 @@ Org的撒手锏之二可以将其转成思维导图
 ++++ 4.4.4.6 Stream Operations
 ++++ 4.4.4.7 Query Syntax Procedures
 ++++ 4.4.4.8 Frames and Bindings
-
 @endmindmap
 #+END_SRC
-
 #+RESULTS:
 #+ATTR_HTML: :width 1500px
 [[file:../images/metalinguistic.png]]
