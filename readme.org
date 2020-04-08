@@ -6,7 +6,7 @@
 - [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
 - [[file:04.Emacs-as-a-Notebook-by-Org.org][4.Read a Book In a Serious Way]]
 - [[file:05.Emacs-as-a-Agenda-by-Org.org][5.Emacs as a Agenda by Org]]
---------------------------------
+
 - [[file:Appendix A: Ask and Harvest Answers.org][Appendix A: Ask but not Search]]
 - [[file:Appendix B: Git Version Control.org][Appendix B: Git Version Control]]
 - [[file:Appendix C: Install Extensions.org][Appendix C: Install Extensions]]
@@ -49,4 +49,4 @@ M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事�
 
 * 求打赏
 #+ATTR_HTML: :width 200px
-[[file:../images/支付宝收款码.png]] [[file:../images/微信收款码.png]]
+[[file:./images/支付宝收款码.png]] [[file:./images/微信收款码.png]]
