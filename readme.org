@@ -11,7 +11,7 @@
 - [[file:07.Programming.org][7.Programming]]
 - [[file:08.Assitance-to-Programming.org][8.Assitance to Programming]]
 - [[file:09.Literature-Programming.org][9.Literature Programming]]
-+ *Appendix*
+
 - [[file:Appendix A: Ask and Harvest Answers.org][Appendix A: Ask but not Search]]
 - [[file:Appendix B: Git Version Control.org][Appendix B: Git Version Control]]
 - [[file:Appendix C: Install Extensions.org][Appendix C: Install Extensions]]
@@ -52,6 +52,6 @@ M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事�
 需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
 以上调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
 
-* 求打赏
+* 打赏
 #+ATTR_HTML: :width 200px
 [[file:./images/支付宝收款码.png]] [[file:./images/微信收款码.png]]
