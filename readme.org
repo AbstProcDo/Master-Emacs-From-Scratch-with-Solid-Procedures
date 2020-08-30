@@ -4,7 +4,7 @@
 - [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
 - [[file:02.Emacs-As-an-Editor.org][2.Emacs As an Editor]]
 - [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
-- [[file:04.Emacs-as-a-Notebook-by-Org.org][4.Read a Book In a Serious Way]]
+- [[file:04.Read-a-Book-In-a-Serioius-Way.org][4.Read a Book In a Serious Way]]
 - [[file:05.Emacs-as-a-Agenda-by-Org.org][5.Emacs as a Agenda by Org]]
 + *Chapters in Progress*
 - [[file:06.Org-Your-Life-All-in-One.org][6.Org Your Life All in One]]
