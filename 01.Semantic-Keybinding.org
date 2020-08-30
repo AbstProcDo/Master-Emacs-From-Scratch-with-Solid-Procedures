@@ -1,53 +1,51 @@
 #+TITLE: 01.Semantic-Keybinding
 
-Emacs从最源头处, 用Meta-Execute调用所有的function; 然后通过定义Ctrl的技术, 简化Meta-Execute的流程.
+Emacs从最源头处, 首先用M(Meta)-x(Execute)调用所有的function。然后更进一步，以Control这一个键替代M-x这两个键，并将M-x调用的函数名，简化为其首字母。比如向前移动一个字符的冗余实现过程为：M-x forward-char, 简化为C-f。C（Control）对应M（Meta）-x，而字符f为函数forward-char的首字母。
 
-正文从快捷键移动光标入手, 从词源和语义出发, 帮助快速且永久性记住常用的快捷键.
+换言之，我们单单从从词源和语义出发, 就能快速且永久性记住常用的快捷键.
 
-
-在最高频的快捷键绑定中, C-x, M-x中的x(execute)省略, 简化为C-与M-;
-而光标操作的对象:
+在最高频的快捷键绑定中, C-x, M-x中的x(execute)省略, 简化为C-与M-。本节我们将接着阐述光标的基本动作，其操作的对象为：
 character, word, line, sentence, (*paragragh), page, buffer.
 
-* 1.Character and Word
+* 1.字符与单词 (Character and Word)
 
 C-f (M-x forward-char) 向前移动一个字符的位置
 C-b (M-x backword-char) 向后移动一个字符的位置
-char是最小的操作单元, char之上则是word, 回顾上文阐述的meta的词源含义是higher,因此Meta绑定相同的键, 范围要比Ctrl更大一点, 由此, 比char大一级的是word
+char 是最小的操作单元, char之上则是word, 回顾上文阐述的meta的词源含义是higher,因此Meta绑定相同的键, 范围要比Ctrl更大一点, 由此, 比char大一级的是word
 M-f (M-x forward-word) 向前移动一个单词的位置.
-M-b (M-x backword-word) 向后移动一个单词的位置.
+M-b (M-x backword -word) 向后移动一个单词的位置.
 
-* 2.Line and Sentence
+* 2.行与句子(Line and Sentence)
 
-C-e (e for end) move to end of line,
-C-a (a for ahead) move to ahead of line
+C-e (e for end) 移动到行尾
+C-a (a for ahead) 移动到行首
+
 同样的逻辑,Meta比Ctrl的范围高一个等级
-M-a move to ahead of the sentence
-M-e move to end of the sentence.
+M-a 光标移动到句首
+M-e 光标移动到句末
 
 以上两点为光标在水平方向的移动(horizontal), 与之相对应的纵向(Vertiallly)移动的操作.
 
-* 3.Vertical Movement between lines
+* 3.纵向的移动 (Vertical Movement)
 C-n (调用function next-line), 向下移动一行
 C-p (previous-line)
 接下来, 有意思的事情来了.
 由character和line操作可知, 绑定相同的键, Meta的作用范围总是比Ctrl更高一级, 但是如果此时查看:
-M-p
-M-n
+: M-p
+: M-n
 发现Emacs没有定义这两个key-sequnces, 根据前面的逻辑, M-p应该向上移动更多行, 至少比一行要多; Emacs竟然没有定义, 这真是千载难逢的良机.
 此节按下不表, 先小结Ctrl的光标操作. Ctrl能操作的最大单位是line, 更大范围的光标动作交由Meta完成.
 
-* 4.Vertically Page Down and Up
+* 4.纵向的翻页(Vertically Page Down and Up)
 
 向上翻页M-v, v当然是vertical, 而Meta是higher, 往更高处纵向移动, 当然便是UP; 
 那么向下呢? 既然Meta相对于Ctrl而higher, 反过来Ctrl则是Lower;
 因此向下翻页是C-v.
 此处的心思, 一级绑定, 始终用最少的动作, 最少的触发键, 如果绑定三个键, 则不需要Ctrl的参与.
-M-v-u(up), M-v-d(down)向下.
-M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏地翻页, 大多数时候, 这不是我们想要的. 更常用的操作是半屏半屏的翻页.
+比如设置三键组合M-v-u(up), M-v-d(down)向下，如此设置比较双键组合尚显冗余。
+然而，M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏地翻页, 大多数时候, 这不是我们想要的. 更常用的操作是半屏半屏的翻页.
 
 现在重新回到M-p与M-n, 绑定半屏翻页.
-
 #+begin_src emacs-lisp :session sicp :lexical t
 (defun scroll-half-page-down ()
   "scroll down half the page"
@@ -67,31 +65,26 @@ M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏�
 因为设置了触控板(或者鼠标)Invert scroll direction(Natural Scrolling), 因此up与down是反着映射到next和previous的
 #+END_QUOTE
 
-* 5.Buffer
+* 5.缓冲区(Buffer)
+M-< 移动到buffer头部
+M-> 移动到Buffer的尾部
+只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
 
-M-<, to the biginning of the buffer
-M->, to the end of the buffer.
-# 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
-# 短评: 这个命令都快忘记了.
-* 6.Logical Segment
+* 6.逻辑分割（Logical Segments)
 - *Paragraph*
   - M-{ ::  Move back to previous paragraph beginning (=backward-paragraph=).
-
   - M-} :: Move forward to next paragraph end (=forward-paragraph=).
-
   - M-h :: Put point and mark around this or next paragraph (=mark-paragraph=).
 - *Pages*
   - M-x ::  what-page Display the page number of point, and the line number within that page.
-
   - C-x [ :: Move point to previous page boundary (=backward-page=).
   # 短评：如果不是操作calendar还真不能发现呢.
   - C-x ] :: Move point to next page boundary (=forward-page=).
-
   - C-x C-p :: Put point and mark around this page (or another page) (=mark-page=).
-
   - C-x l :: Count the lines in this page (=count-lines-page=).
+
 * 7.键位布置
 建议键位调整为:
 #+BEGIN_EXAMPLE
-Alt(option) ----> Ctrl ----> Space <----Ctrl <----Alt
+Alt(option) --> Ctrl --> Space <-- Ctrl <--Alt
 #+END_EXAMPLE

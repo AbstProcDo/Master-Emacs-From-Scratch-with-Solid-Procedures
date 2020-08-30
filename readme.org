@@ -18,6 +18,7 @@
 - [[file:Appendix D: Email Management.org][Appendix D: Email Management]]
 
 * 0.引言
+
 步步为营即一步一个脚印, "零秒"乃调用直觉力, 非物理概念上的“零秒”；
 # 八股文的结构.
 一个以讹传讹的观念"Emacs很难且耗费时间", 标题"零秒"有意打消对Emacs学习的成见. 通过点出Emacs中的关键点的方式, 心有灵犀一点通, 举一反三, 一通百通. 而不必案牍劳形, 悬梁刺股.
@@ -52,6 +53,3 @@ M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事�
 需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
 以上调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
 
-* 打赏
-#+ATTR_HTML: :width 200px
-[[file:./images/支付宝收款码.png]] [[file:./images/微信收款码.png]]
