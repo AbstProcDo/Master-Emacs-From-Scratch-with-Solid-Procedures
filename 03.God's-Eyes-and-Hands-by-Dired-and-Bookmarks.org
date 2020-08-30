@@ -1,5 +1,4 @@
-#+TITLE: 03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks
-* 03.God's Eyes and Hands by Dired and Bookmarks
+* 03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks
 * Dired初窥
 在EmacsManual目录下调出Dird后,
 快速略扫各个文件的主要内容.

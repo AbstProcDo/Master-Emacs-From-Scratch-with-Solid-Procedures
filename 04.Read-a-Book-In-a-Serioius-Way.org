@@ -42,7 +42,7 @@
 方法的优点是可以自定义控制目录显示的深度
 
 *** 方法二:
-直接应用S-tab或者C-u Tab轮巡
+p直接应用S-tab或者C-u Tab轮巡
   ,-> OVERVIEW -> CONTENTS -> SHOW ALL --.
   '--------------------------------------'
 重复操作一次则显示在不同的结构
@@ -50,7 +50,7 @@
 *** 方法三:
 TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成目录
 #+ATTR_HTML: :width 300px
-[[file:../images/启动-toc-2.png]]
+[[file:./images/启动-toc-2.png]]
 
 *** 方法四
 推荐的方案,纸笔绘制, 放在手边参阅.
@@ -61,13 +61,13 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 - 一方面可以计时,
 - 再者则随时提醒当前所处的位置和任务, 及时跳转到其他的buffer中, 也会看到, 比如从4.4.1 Deductive Information Retrieval中激发了clock-in, 则即使在这篇文章的编辑页面, 依然能看到当下的任务, 随时提醒你回去执行.
 #+ATTR_HTML: :width 500px
-[[file:../images/过程-clock-in.png]]
+[[file:./images/过程-clock-in.png]]
 - clock-in置顶当前任务, 为后文"阅读管理"添加标签提供便利.
 
 ** 随手建立todo任务
 比如阅读过程中,发现svg的图片格式在black模式下, 认读需要眼睛对到屏幕上仔细得瞧个清楚, 因此设置任务将inline的图片逐步去掉, 修改成文本格式.
 #+ATTR_HTML: :width 500px
-[[file:../images/过程-设置todo.png]]
+[[file:./images/过程-设置todo.png]]
 任务完成后变更todo为done
 
 ** 提出问题?
@@ -76,9 +76,9 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 另一方面, 当一年后在读这本书的时候, 可以了解当时的水平, 当时的思考脉络.
 问题统一设置成 =问题?= 的格式, 如此, 不仅是在正文的行首, 或者和在代码的内部, 都能方便查到; 又不会多余查到正常使用的"问题"这个词汇.
 #+ATTR_HTML: :width 500px
-[[file:../images/过程-问题.png]]
+[[file:./images/过程-问题.png]]
 问题解决后, 在后面标注v,v当做是对号.
-[[file:../images/过程-问题v.png]]
+[[file:./images/过程-问题v.png]]
 如图, 刚才的12个问题解决了7个, 剩下的可能需要发到stackoverflow上.
 
 ** 小结：
@@ -121,7 +121,7 @@ def foo(x): return x * x
 ** 拍案
 "拍案"是"洞见"的升级, 给感情发挥的空间, 没有规则, 就是突然醍醐灌顶,拍案叫绝.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-洞见.png]]
+[[file:./images/阅读-洞见.png]]
 
 比如这一章的开头, 作者引述的一段话
 #+BEGIN_QUOTE
@@ -140,7 +140,7 @@ def foo(x): return x * x
 *** 得到-概念:
 标注文中新阐述的概念.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-概念.png]]
+[[file:./images/阅读-得到-概念.png]]
 
 比如文中的一个角度对CS的定义
 #+BEGIN_QUOTE
@@ -149,18 +149,18 @@ def foo(x): return x * x
 *** 得到-语法：
 标注语言的语法
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-语法.png]]
+[[file:./images/阅读-得到-语法.png]]
 上图标注if-predicate, 是因为我的潜意识里, if总是两个predicates.
 
 *** 得到-八股
 从文章中学习到的行文技巧, 起承转合, 类比比喻等等.
 而八股文有着严谨的起承转合的结构.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-八股.png]]
+[[file:./images/阅读-得到-八股.png]]
 
 再看第三章的第一段,承接前两章然后引出下文.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-得到-八股2.png]]
+[[file:./images/阅读-得到-八股2.png]]
 
 *** 得到:
 新的知识点, 没想好归类, 直接用得到.
@@ -219,12 +219,12 @@ org可以给代码块,图片等命名,格式为=#+name=
 建立索引后, 可以从mini-buffer中查看局部的框架
 
 #+ATTR_HTML: :width 300px
-[[file:../images/案例-swiper.png]]
+[[file:./images/案例-swiper.png]]
 
 也可以调用grep查看, 尤其是复盘的时候, 可以只看着grep的清单, 尝试重新构建出来.
 
 #+ATTR_HTML: :width 300px
-[[file:../images/案例-grep.png]]
+[[file:./images/案例-grep.png]]
 
 ** 跳转查询
 
@@ -241,7 +241,7 @@ org可以给代码块,图片等命名,格式为=#+name=
 ...
 #+end_src
 #+ATTR_HTML: :width 300px
-[[file:../images/案例-跳转查询.png]]
+[[file:./images/案例-跳转查询.png]]
 从结构中能清楚地看到"目标位置"是在大纲目录下的4.1.2中,
 如果直接搜索"define (self-eval", 则第一眼看不到大纲.
 mini-buffer内的中操作:C-n C-p
@@ -250,7 +250,7 @@ mini-buffer内的中操作:C-n C-p
 ** 习题
 如果直接查看"Exercise"
 #+ATTR_HTML: :width 300px
-[[file:../images/案例-习题概览.png]]
+[[file:./images/案例-习题概览.png]]
 了解到大概有80个习题和粗略的进度.
 但也仅此而已, 看不到一道习题隶属哪个章节, 没有整合进大纲结构中.
 
@@ -269,7 +269,7 @@ mini-buffer内的中操作:C-n C-p
 
 此时在查看"case-4.1.2"的时候, 习题与案例连成一体, 都在"4.1.2 Representing Expressions"之下.
 #+ATTR_HTML: :width 300px
-[[file:../images/案例-习题命名.png]]
+[[file:./images/案例-习题命名.png]]
 
 ** Clock-in
 
@@ -289,7 +289,7 @@ mini-buffer内的中操作:C-n C-p
 观察SICP视频的同时, 可以即时截屏插入到笔记中.
 安装ros插件
 #+ATTR_HTML: :width 500px
-[[file:../images/撒手锏01.png]]
+[[file:./images/撒手锏01.png]]
 
 如图所示, M-x调用ros之后, 从左边截屏, 图片将会直接插入到笔记中.
 虽然简单, 但却极大地提高效率, 因此也放在撒手锏这里.
@@ -297,10 +297,10 @@ mini-buffer内的中操作:C-n C-p
 2. 绘制思维导图
 在"01.启动-绘制大纲"的方法三中, 介绍过使用自动建立Table of Content的方法
 #+ATTR_HTML: :width 300px
-[[file:../images/撒手锏-思维导图.png]]
+[[file:./images/撒手锏-思维导图.png]]
 
 Org的撒手锏之二可以将其转成思维导图
-#+ATTR_HTML: :width 1000px
+#+ATTR_HTML: :width 500px
 [[file:../../Documents/OrgMode/ORG/images/metalinguistic.png]]
 
 需要做一点作业就是将上图的table of content用regex简单成以下格式:
@@ -380,8 +380,82 @@ Org的撒手锏之二可以将其转成思维导图
 #+END_SRC
 #+RESULTS:
 #+ATTR_HTML: :width 1500px
-[[file:../images/metalinguistic.png]]
+[[file:./images/metalinguistic.png]]
 
 此时调用C-c C-c将会自动生成上述的思维导图
 
-* 收尾
+* Emacs as a Notebook by Org
+** Document Structure
+- Headlines
+  A cleaner outline view
+- Visibility Cycling
+  S-TAB =org-global-cycle=
+  C-u C-u TAB (=org-set-startup-visibility=)
+  C-u C-u C-u TAB (=outline-show-all=)
+  # 替代反复设置fundermantal-mode的用法.
+  C-c C-k (=outline-show-branches=)
+  # 新学到一个方便的操作
+　C-c C-x b (=org-tree-to-indirect-buffer=)
+  # 不如直接使用narrow
+- Initial visibility
+#+BEGIN_EXAMPLE
+    #+STARTUP: overview
+    #+STARTUP: content
+    #+STARTUP: showall
+    #+STARTUP: showeverything
+#+END_EXAMPLE
+- Motion
+  (略)
+- Structure Editing
+  M-LEFT =org-do-promote=
+  M-RIGHT =org-do-demote=
+  M-S-LEFT =org-demote-subtree=
+  M-s-RIGHT =org-promote-subtree=
+- Sparse Tree
+  C-c / r
+  查询使用swiper
+- Plain List
+  kbd(M-RET) (=org-insert-heading=)
+  kbd(M-S-RET) (=org-insert-checkbox=)
+
+  C-c ^ 排序
+- Drawers
+  a =PROPERTIES= drawer
+- Blocks:
+  =#+BEGIN= ... =#+END=
+** Tables
+
+  - Built-in Table Editor
+    + C-c | :: org-table-create-or-convert-from-region
+  - Column Width and Alignment
+    + C-c C-c :: org-table-align
+    + M-LEFT and M-RIGHT :: org-table-move-column-right
+    + M-S-LEFT and M-S-RIGHT :: org-table-delete-column and org-table-insert-column
+    + M-UP and M-DOWN :: org-table-move-row-up and org-table-move-row-down
+    + S-UP and S-DOWN :: org-table-move-cell-up and org-table-move-cell-down
+    + M-S-UP :: org-table-kill-row
+    + M-S-DOWN :: org-table-insert-row
+    + C-c - :: org-table-insert-hline
+    + C-c RET :: org-table-hline-and-move
+    + C-c ^ :: org-table-sort-lines
+    + C-c +  :: org-table-sum
+    + S-RET :: org-table-copy-down √
+    + C-c TAB :: org-table-toggle-column-widt
+    + C-u C-c TAB :: org-table-shrink
+    + C-u C-u C-c TAB :: org-table-expand
+  - Column Groups
+    + <>  :: Column Groups
+  - The Orgtbl Minor Mode
+    + M-x orgtbl-mode ::
+  - The Spreadsheet
+    略
+  - Org Plot
+    略
+** Hyperlinks
+  + internal link :: =[[internal-link]]=
+  + file:projects.org::regex
+  + gnus:group
+  + shell:ls
+  + elisp:(find_file "elisp.org")
+  + elisp:org-agenda
+

@@ -95,8 +95,3 @@ M->, to the end of the buffer.
 #+BEGIN_EXAMPLE
 Alt(option) ----> Ctrl ----> Space <----Ctrl <----Alt
 #+END_EXAMPLE
-
-* 想法
-对backward, forward, scroll的新理解
-行内的位移是backwards与forwards
-而上下行的移动则是scroll.
