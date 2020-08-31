@@ -1,81 +1,5 @@
 #+TITLE: 05.Emacs as a Agenda by Org
-* 05.Emacs as a Agenda by Orgs
-* Summarize Operations
-# 总结
-关键概念摘要,
-types与workflow, 只有Workflow用得上,
-priorities的概念.
-todo里面需要补充的一项是efforts
-** 05.Items
-  - 5.1.Basic TODO Functionality
-  - C-c C-t Cycling
-  - S-RIGHT
-  - C-c / t sparse tree
-  - S-M-RET insert new todo
-  - 5.2.Extended Use of TODO Keywords
-  - Workflow states
-  - keywords as types
-  - 5.3.Progress Logging
-  - habits
-  - 5.4.Priorities
-  - C-c \,  :: org-priority
-  - S-UP  org-priority-up
-  - 5.5.Breaking Down Tasks into Subtasks
-  - Subtasks [0/0]  C-c C-c
-  - 5.6.Checkboxes
-  - lightweight
-  - [ ] [-] [X] 三种状态
-** 06.Tags
-  + 只有一项查询需要注意, tag search
-** 07.Properties and Columns
-:PROPERTIES:
-:Effort:   30
-:END:
 
-  + Property Syntax
-    C-c C-x p
-  + Property Search
-    Columns的部分没有什么用处.
-** 08.Dates and Times
-  + 8.1.Timestamps
-    基本概念便是, appointment, event,
-    active and inactive,
-  + 8.2.Creating Timestamps
-    C-c !
-    C-c .
-    org-evaluate-time-range
-  + 8.3.Deadlines and Scheduling
-    DEADLINE
-    SCHEDULED
-    org-check-deadlines
-    org-check-before-date
-    org-check-after-date
-    repeat tasks
-  + 8.4.Clocking Work Time
-    没有实质的内容,
-    org-resolve-clocks
-  + 8.5.Effort Estimates　
-    org-clock-modify-effort-estimate
-** 09.Refiling and Archiving
-  + Refile and Copy
-  + Archiving
-** 10.Capture and Attachments
-  + Capture
-  + Attachments
-** 11.Agenda Views
-  + 11.1.Agendva Files
-    C-' :: org-cycle-agenda-files
-  + 11.2.The Agenda Dispatcher
-    m :: mark
-  + 11.3.The Built-in Agenda Views
-# 没有多少实质的东西.
-* Diary's Configuration
-# elisp基本配置
-#+begin_src emacs-lisp :session agenda :lexical t
-(setq org-agenda-include-diary t)
-(setq org-agenda-diary-file "~/Documents/OrgMode/ORG/src/standard-diary") ;;2020-03-02 10:47:06
-(setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
-#+end_src
 
 * 1.Agenda Time Grid
 ** 设置org-agenda-files
@@ -621,3 +545,79 @@ C-x 用得不频繁, 涉及大幅度动作的时候, 使用此命令.
 1) calendar作为text操作
 2) 掌控操作"时间", 或者日月星辰的感觉
 3) 简要讲, 大脑中再涉及时间问题的时候, 异常的清晰.
+* Summarize Operations
+# 总结
+关键概念摘要,
+types与workflow, 只有Workflow用得上,
+priorities的概念.
+todo里面需要补充的一项是efforts
+** 05.Items
+  - 5.1.Basic TODO Functionality
+  - C-c C-t Cycling
+  - S-RIGHT
+  - C-c / t sparse tree
+  - S-M-RET insert new todo
+  - 5.2.Extended Use of TODO Keywords
+  - Workflow states
+  - keywords as types
+  - 5.3.Progress Logging
+  - habits
+  - 5.4.Priorities
+  - C-c \,  :: org-priority
+  - S-UP  org-priority-up
+  - 5.5.Breaking Down Tasks into Subtasks
+  - Subtasks [0/0]  C-c C-c
+  - 5.6.Checkboxes
+  - lightweight
+  - [ ] [-] [X] 三种状态
+** 06.Tags
+  + 只有一项查询需要注意, tag search
+** 07.Properties and Columns
+:PROPERTIES:
+:Effort:   30
+:END:
+
+  + Property Syntax
+    C-c C-x p
+  + Property Search
+    Columns的部分没有什么用处.
+** 08.Dates and Times
+  + 8.1.Timestamps
+    基本概念便是, appointment, event,
+    active and inactive,
+  + 8.2.Creating Timestamps
+    C-c !
+    C-c .
+    org-evaluate-time-range
+  + 8.3.Deadlines and Scheduling
+    DEADLINE
+    SCHEDULED
+    org-check-deadlines
+    org-check-before-date
+    org-check-after-date
+    repeat tasks
+  + 8.4.Clocking Work Time
+    没有实质的内容,
+    org-resolve-clocks
+  + 8.5.Effort Estimates　
+    org-clock-modify-effort-estimate
+** 09.Refiling and Archiving
+  + Refile and Copy
+  + Archiving
+** 10.Capture and Attachments
+  + Capture
+  + Attachments
+** 11.Agenda Views
+  + 11.1.Agendva Files
+    C-' :: org-cycle-agenda-files
+  + 11.2.The Agenda Dispatcher
+    m :: mark
+  + 11.3.The Built-in Agenda Views
+# 没有多少实质的东西.
+* Diary's Configuration
+# elisp基本配置
+#+begin_src emacs-lisp :session agenda :lexical t
+(setq org-agenda-include-diary t)
+(setq org-agenda-diary-file "~/Documents/OrgMode/ORG/src/standard-diary") ;;2020-03-02 10:47:06
+(setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
+#+end_src
