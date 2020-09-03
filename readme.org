@@ -1,4 +1,4 @@
-x#+TITLE: 步步为营，零秒精通 Emacs
+#+TITLE: 步步为营，零秒精通 Emacs
 * 目录
 - [[#引言][0.引言]]
 - [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
@@ -12,11 +12,11 @@ x#+TITLE: 步步为营，零秒精通 Emacs
 - [[file:08.Assitance-to-Programming.org][8.Assitance to Programming]]
 - [[file:09.Literature-Programming.org][9.Literature Programming]]
 
-- [[file:Appendix-A.Ask and Harvest Answers.org][Appendix A: Ask but not Search]]
-- [[file:Appendix-B.Git Version Control.org][Appendix B: Git Version Control]]
-- [[file:Appendix-C.Install Extensions.org][Appendix C: Install Extensions]]
-- [[file:Appendix-D.Email Management.org][Appendix D: Email Management]]
-- [[file:Appendix-D.Install-Emacs-On-Windows.md][Appendix E:Install-Emacs-On-Windows]]
+- [[file:Appendix-A.Ask-and-Harvest-Answers.org][Appendix A: Ask but not Search]]
+- [[file:Appendix-B.Git-Version-Control.org][Appendix B: Git Version Control]]
+- [[file:Appendix-C.Install-Extensions.org][Appendix C: Install Extensions]]
+- [[file:Appendix-D.Email-Management.org][Appendix D: Email Management]]
+- [[file:Appendix-E.Guidelines-to-employ-Emacs-On-Windows.md][Appendix E:Install-Emacs-On-Windows]]
 
 * 0.引言
 步步为营即一步一个脚印, "零秒"乃调用直觉力, 非物理概念上的“零秒”；
