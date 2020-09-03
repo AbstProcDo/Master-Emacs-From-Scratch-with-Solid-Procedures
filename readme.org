@@ -1,23 +1,4 @@
 #+TITLE: 步步为营，零秒精通 Emacs
-* 目录
-- [[#引言][0.引言]]
-- [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
-- [[file:02.Emacs-As-an-Editor.org][2.Emacs As an Editor]]
-- [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
-- [[file:04.Read-a-Book-In-a-Serioius-Way.org][4.Read a Book In a Serious Way]]
-- [[file:05.Emacs-as-a-Agenda-by-Org.org][5.Emacs as a Agenda by Org]]
-+ *Chapters in Progress*
-- [[file:06.Org-Your-Life-All-in-One.org][6.Org Your Life All in One]]
-- [[file:07.Programming.org][7.Programming]]
-- [[file:08.Assitance-to-Programming.org][8.Assitance to Programming]]
-- [[file:09.Literature-Programming.org][9.Literature Programming]]
-
-- [[file:Appendix-A.Ask-and-Harvest-Answers.org][Appendix A: Ask but not Search]]
-- [[file:Appendix-B.Git-Version-Control.org][Appendix B: Git Version Control]]
-- [[file:Appendix-C.Install-Extensions.org][Appendix C: Install Extensions]]
-- [[file:Appendix-D.Email-Management.org][Appendix D: Email Management]]
-- [[file:Appendix-E.Guidelines-to-employ-Emacs-On-Windows.md][Appendix E:Install-Emacs-On-Windows]]
-
 * 0.引言
 步步为营即一步一个脚印, "零秒"乃调用直觉力, 非物理概念上的“零秒”；
 # 八股文的结构.
@@ -53,3 +34,20 @@ M-x (x for execucte), 在此之后, 便可以天马行空的查询要做的事�
 需要键入十一个字符 Ctrl策略, 可以C-x C-f. 只需要键入4个字符.
 以上调用functions的过程, 称之为Command. Command=Contrl, 由此也能反过来看到选择Ctrl键也是语义绑定.
 
+* 目录
+- [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
+- [[file:02.Emacs-As-an-Editor.org][2.Emacs As an Editor]]
+- [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
+- [[file:04.Read-a-Book-In-a-Serioius-Way.org][4.Read a Book In a Serious Way]]
+- [[file:05.Emacs-as-a-Agenda-by-Org.org][5.Emacs as a Agenda by Org]]
++ *Chapters in Progress*
+- [[file:06.Org-Your-Life-All-in-One.org][6.Org Your Life All in One]]
+- [[file:07.Programming.org][7.Programming]]
+- [[file:08.Assitance-to-Programming.org][8.Assitance to Programming]]
+- [[file:09.Literature-Programming.org][9.Literature Programming]]
++ *Appendix*
+- [[file:Appendix-A.Ask-and-Harvest-Answers.org][Appendix A: Ask but not Search]]
+- [[file:Appendix-B.Git-Version-Control.org][Appendix B: Git Version Control]]
+- [[file:Appendix-C.Install-Extensions.org][Appendix C: Install Extensions]]
+- [[file:Appendix-D.Email-Management.org][Appendix D: Email Management]]
+- [[file:Appendix-E.Guidelines-to-employ-Emacs-On-Windows.md][Appendix E:Install-Emacs-On-Windows]]
