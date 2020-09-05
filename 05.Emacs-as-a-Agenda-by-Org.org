@@ -1,6 +1,5 @@
 #+TITLE: 05.Emacs as a Agenda by Org
 
-
 * 1.Agenda Time Grid
 ** 设置org-agenda-files
 首先从配置中指定 =org-agenda-files=
