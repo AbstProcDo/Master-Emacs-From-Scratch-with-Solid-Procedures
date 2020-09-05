@@ -11,7 +11,6 @@
 是为序.
 
 ** 如此简单的 Emacs
-
 Emacs的简单，一言以蔽之，只是一个Meta键而已。
 Meta键(键盘上的option/alter键)
 Meta的词源含义是higher，beyond,没有最高,只有更高。
@@ -50,4 +49,6 @@ M-x (x for execucte)，在此之后，便可以天马行空的查询要做的事
 - [[file:Appendix-B.Git-Version-Control.org][Appendix B: Git Version Control]]
 - [[file:Appendix-C.Install-Extensions.org][Appendix C: Install Extensions]]
 - [[file:Appendix-D.Email-Management.org][Appendix D: Email Management]]
-- [[file:Appendix-E.Guidelines-to-employ-Emacs-On-Windows.md][Appendix E:Install-Emacs-On-Windows]]
+- [[file:Appendix-E.Guidelines-to-employ-Emacs-On-Windows.md][Appendix E: Install-Emacs-On-Windows]]
+- [[file:Appendix-H-Orgmode-Outline-Solutions.md][Appendix H: Orgmode outline solutions]]
+- [[file:How-to-take-smart-notes.org][Appendix G: How to take smart notes]]
