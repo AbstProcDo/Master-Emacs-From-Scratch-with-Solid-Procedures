@@ -1,4 +1,4 @@
-#+TITLE: 05.Emacs as a Agenda by Org
+#+TITLE: 05.Emacs as a Agenda by ORG
 
 * 1.Agenda Time Grid
 ** 设置org-agenda-files
