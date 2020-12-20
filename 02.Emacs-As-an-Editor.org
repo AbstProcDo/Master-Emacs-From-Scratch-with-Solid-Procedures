@@ -22,11 +22,11 @@
   - delete(C M d delele), kill ring
   - modify(undo, transpose, uppercase, lowercase, title,
   - Search(Swiper…)
-+ Arguments
++ Arguments参数
   - Numeric arguents C-u
   - Repeat C-x z
 
-+ Completion(yasnippet)
++ Completion(yasnippet) 补全
   - indentation (M-i 缓解小指的负担
   - white space(C-x C-o)
   - Filling(global-visual-line-mode)
@@ -60,7 +60,6 @@ C-x <del> 对句子的退格删除.
 举例编辑过程中对blank-lines的处理,
 
 C-x C-o调用(delete-blank-lines)
-
 C-x C-o的绑定键没有逻辑, o是个洞吗? 一个洞代表空行?
 
 Emacs Manual中很多类似的高颗粒度的绑定键, 头悬梁锥刺股的背下来, 对emacs的热情和兴趣或许早早磨光了.
@@ -101,7 +100,7 @@ Emacs的优势之一是便捷地对数据和查询结果的作二次处理.
 比如想从宏观上了解下Emacs手册中中全部whitespace操作.
 [[file:images/2.目录界面.png]]
 
-传统的操作方法, 可以从Terminal中完成
+传统的操作方法, 可以从Terminal中完成。
 #+BEGIN_SRC bash
 find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} +
 #+END_SRC
@@ -123,7 +122,7 @@ C-x grep-find;
 
 [[file:images/emacs界面.png]]
 
-Emacs中执行命令的突出优势是对数据便捷的二次加工处理.
+
 
 * 小结
 
