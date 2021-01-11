@@ -1,7 +1,7 @@
 * 03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks
 * Dired初窥
 在EmacsManual目录下调出Dird后,
-快速略扫各个文件的主要内容.
+.快速略扫各个文件的主要内容
 从配置中添加下面的代码
 #+begin_src emacs-lisp :session ss :lexical t
 (define-minor-mode dired-follow-mode "Diplay file at point in dired after a move."
@@ -14,7 +14,7 @@
                                       (dired-display-file)))))
 #+end_src
 M-x 调用 =dired-follow-mode=
-x
+
 在目录上C-n和C-p上下移动光标.
 
 #+ATTR_HTML: :width 500px
@@ -84,30 +84,37 @@ M-x view-register r
    C-x r r (register r)
    # 可以自定义为 C-x r a (能记住便好)
    C-x r j r (register jump to r)
+
 2. Saving Text in Registers
    C-x r s t (register save to r) "text"
    # 修改为C-x r s t (t for text)
    C-x r i t (regiester insert to r) "text"
    M-x append-to-register t
    M-x prepend-to-register t
+
 3. Saving Rectangles in Registers
    C-x r r e (rectangle region to e);
    # 此处省略一个r, 完整语义(C-x r r r e)
    register rectangle region to r
    C-x r i r (rectangle insert to r )
+
 4. Saving Window Configurations in Registers
    C-x r w w (register window to r)
    # 很好用的命令, 可以早上8点保存一个布局,晚上再看看, 临时记住的布局用winner-mode
    C-x r f f (register frameset to f)
    C-x r j f (jump)
+
 5. Keeping Numbers in Registers
    No practical value.
+
 6. Keeping File Names in Registers
    (set-register r '(file . name))
    (set-register ?z '(file . "/gd/gnu/emacs/19.0/src/ChangeLog")
    # prelude for bookmarks
+
 7. Keyboard Macro Registers
    --
+
 8. Bookmarks
    C-x r m (register bookmark for the current file)
    C-x r m  a-name

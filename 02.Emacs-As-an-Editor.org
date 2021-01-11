@@ -1,5 +1,6 @@
 #+TITLE: 02.Emacs as an Editor
 
+
 前一章 [[01.semantic keybinding]], 初窥了Emacs简单易用的特性之一便是语义化键绑定,
 
 语义化包含两个方面:
@@ -22,6 +23,7 @@
   - delete(C M d delele), kill ring
   - modify(undo, transpose, uppercase, lowercase, title,
   - Search(Swiper…)
+# 此处的顺序需要更改，search, insert, modify, and delete
 + Arguments参数
   - Numeric arguents C-u
   - Repeat C-x z
@@ -31,6 +33,7 @@
   - white space(C-x C-o)
   - Filling(global-visual-line-mode)
   - Spelling-checking
+
 + Special
   - Register
 
@@ -70,7 +73,6 @@ Emacs Manual中很多类似的高颗粒度的绑定键, 头悬梁锥刺股的背
 
 #+BEGIN_QUOTE
 "The quick brown fox jumps over the lazy dog"
-
 
 "The quick brown fox jumps over the lazy dog"
 #+END_QUOTE
