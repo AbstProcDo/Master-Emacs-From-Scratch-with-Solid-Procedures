@@ -1,5 +1,4 @@
 #+TITLE: 05.Emacs as a Agenda by ORG
-
 * 1.Agenda Time Grid
 ** 设置org-agenda-files
 首先从配置中指定 =org-agenda-files=
@@ -257,7 +256,7 @@ agenda中的日出日落不仅帮助界定有意义的时间范围, 而且构建
 #+end_src
 
 #+RESULTS:
-: /home/gaowei/Public/04.Master-Emacs-From-Scratch-with-Solid-Procedures/05.Emacs-as-a-Agenda-by-Org.org
+: /mnt/c/Users/gaowei/Public/Master-Emacs-From-Scrach-with-Solid-Procedures/05.Emacs-as-Agenda-by-Org.org
 
 ** 3.1.内置的Agenda-View Display
 
@@ -374,7 +373,6 @@ C-c C-y (org-evaluate-time-range)
 
 
 
-  
 ** 3.3."Calendar"与"Agenda"合二而一
 
 上述的解决方案, 按键c显性的调用calendar, 有没有在逻辑上更加"丝滑"的方法呢?

@@ -1,6 +1,5 @@
 #+TITLE: 02.Emacs as an Editor
 
-
 前一章 [[01.semantic keybinding]], 初窥了Emacs简单易用的特性之一便是语义化键绑定,
 
 语义化包含两个方面:
@@ -19,42 +18,43 @@
 + 最基本
   - 复制黏贴 (M-w, C-y)
 + 增删改查
-  - insert (C-q quotation)
-  - delete(C M d delele), kill ring
-  - modify(undo, transpose, uppercase, lowercase, title,
+  - insert (C-q quotation) create
+    直接写入
   - Search(Swiper…)
-# 此处的顺序需要更改，search, insert, modify, and delete
+    写完之后就查询
+
+  - modify(undo, transpose, uppercase, lowercase, title,
+    modify或者set，又或者称之为correction，emacs的始祖是teco，text edit and correction
+    # 此处的顺序需要更改，search, insert, modify, and delete
+  - delete(C M d delele), kill ring
+    将delete放置于最后。
+
 + Arguments参数
   - Numeric arguents C-u
   - Repeat C-x z
-
+# 问题？为什么z是repeat，可能因为是折叠的。
 + Completion(yasnippet) 补全
   - indentation (M-i 缓解小指的负担
   - white space(C-x C-o)
   - Filling(global-visual-line-mode)
   - Spelling-checking
+    # todo：spelling-checking比较复杂，需要采取后续动作。
 
 + Special
   - Register
 
 * 2.2.拆解"<DELETE>"
 
-键的绑定同样遵循语义化的原则, 比如delete(killing)
-<delete>键(即backspace退格键, backword);
-C-<del> 后退删除一个字符,
-与M-<del>则是后退删除一个单词;
-与backwords相对应的是forwards,(进格删除)
-C-d M-d分别进格删除一个字符和一个单词,
-总结: <delete>键绑定的是后退删除, 语义字母"d"绑定的则是进格删除.
-# 短评: 一段时间不浏览, 还是能忘记, 不再使用.
-删除的动作除了<delete>之外, Emacs还特有一个"killing".
-Killing的范围比delete大, 分别绑定"C-"和"M-"实现以下语义: 
+键的绑定同样遵循语义化的原则, 比如delete(killing) <delete>键(即backspace退格键, backword);
+C-<del> 后退删除一个字符, M-<del>则是后退删除一个单词;
+backwords相对应的是forwards,(进格删除) C-d M-d分别进格删除一个字符和一个单词,
+总结: <delete>键绑定的是后退backwords删除, 语义字母"d"绑定的则是进格forwards删除.
+# 短评: 一段时间不浏览, 还是能忘记, 不再使用,
+
+删除的动作除了<delete>之外, Emacs还特有一个Killing的范围比delete大, 分别绑定"C-"和"M-"实现以下语义:
 - C-k是删除到行尾,
 - M-k是删除到句尾, 跟前面一致.
-以上是forwards进格删除,
-对行的backwards退格删除
-C-x <del> 对句子的退格删除.
-没有对"句子"退格删除的操作.
+以上是forwards进格删除, 对行的backwards退格删除是C-x <del> 对句子的退格删除，没有对"句子"退格删除的操作.
 
 * 2.3.调用直觉
 
@@ -70,7 +70,6 @@ Emacs Manual中很多类似的高颗粒度的绑定键, 头悬梁锥刺股的背
 回到C-x C-o调用(delete-blank-lines)
 
 假设有这样四行
-
 #+BEGIN_QUOTE
 "The quick brown fox jumps over the lazy dog"
 
@@ -78,7 +77,6 @@ Emacs Manual中很多类似的高颗粒度的绑定键, 头悬梁锥刺股的背
 #+END_QUOTE
 
 当前的光标在第一行上的fox, 发现中间空行是多余的, 要将其删掉.
-
 需要动用人肉劳力这样做:
 
     1. C-n 管标移动到下一行
@@ -100,12 +98,14 @@ Emacs Manual中很多类似的高颗粒度的绑定键, 头悬梁锥刺股的背
 
 Emacs的优势之一是便捷地对数据和查询结果的作二次处理.
 比如想从宏观上了解下Emacs手册中中全部whitespace操作.
+#+attr_html: :width 500px
 [[file:images/2.目录界面.png]]
 
 传统的操作方法, 可以从Terminal中完成。
 #+BEGIN_SRC bash
 find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} +
 #+END_SRC
+#+attr_html: :width 500px
 [[file:images/2.terminal界面.png]]
 
 如图所示, 虽然可以看到结果, 但没法做简单的统计.
@@ -113,6 +113,7 @@ find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} +
 #+BEGIN_SRC bash
 find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} + | nl
 #+END_SRC
+#+attr_html: :width 500px
 [[file:images/terminal界面2.png]]
 
 也只能大略了解到’whitespace’在整个文档中, 有95句话提到过.
@@ -121,17 +122,13 @@ find . -type f -exec grep --color -inH --null -e  "whitespace" \{\} + | nl
 C-x grep-find;
 
 下图的结果瞬间眼明心亮, 有95句话有一个或多个whitespace这个单词, 总计有151个. 而且在 Killing.org 这个文件中有6句话, 在 text.org 中有5句, 在 Display,org 中有17句话, 在 Program.org 中也有17句, 等等,
-
+#+attr_html: :width 500px
 [[file:images/emacs界面.png]]
-
-
 
 * 小结
 
-目前的流程图 Meta --> Control ---> Cursor ---> Edit
-由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
-在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前,
-光速浏览File的基本操作(读取和保存)
+目前的思路流程图 Meta --> Control ---> Cursor ---> Edit，由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
+在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前, 光速浏览File的基本操作(读取和保存)
 C-x C-f (M-x find-file) 找到并打开文件
 C-x C-r (r是read-only), 比如浏览自己的配置文件, 要避免无心修改掉东西.
 C-x C-s (s,save) 保存单个文件

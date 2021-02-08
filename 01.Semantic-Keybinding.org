@@ -8,6 +8,7 @@ Emacs从最源头处,
 
 在最高频的快捷键绑定中, C-x, M-x中的x(execute)省略, 简化为C-与M-。本节我们将接着阐述光标的基本动作，其操作的对象为：
 character, word, line, sentence, (*paragragh), page, buffer.
+# 操作的对象
 
 * 1.字符与单词 (Character and Word)
 
@@ -49,18 +50,19 @@ C-p (previous-line)
 
 现在重新回到M-p与M-n, 绑定半屏翻页.
 #+begin_src emacs-lisp :session sicp :lexical t
-(defun scroll-half-page-down ()
-  "scroll down half the page"
+(defun previous-multilines ()
+  "scroll down multiple lines"
   (interactive)
-  (scroll-down (/ (window-body-height) 2)))
+  (scroll-down (/ (window-body-height) 3)))
 
-(defun scroll-half-page-up ()
-  "scroll up half the page"
+
+(defun next-multilines ()
+  "scroll up multiple lines"
   (interactive)
-  (scroll-up (/ (window-body-height) 2)))
+  (scroll-up (/ (window-body-height) 3)))
 
-(global-set-key "\M-n" 'scroll-half-page-up)
-(global-set-key "\M-p" 'scroll-half-page-down)
+(global-set-key "\M-n" 'next-multilines) ;;custom
+(global-set-key "\M-p" 'previous-multilines) ;;custom
 #+end_src
 
 #+BEGIN_QUOTE 备注
@@ -90,3 +92,4 @@ M-> 移动到Buffer的尾部
 #+BEGIN_EXAMPLE
 Alt(option) --> Ctrl --> Space <-- Ctrl <--Alt
 #+END_EXAMPLE
+不管是在哪一种键盘上，都要保持此键位布置。

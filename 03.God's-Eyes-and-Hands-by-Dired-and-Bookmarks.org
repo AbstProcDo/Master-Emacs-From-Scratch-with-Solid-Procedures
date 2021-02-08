@@ -22,7 +22,7 @@ M-x 调用 =dired-follow-mode=
 
 * Dired操作归纳:
 
-1. Entering Dired: C-x d
+1. Entering Dired: C-x d<
 2. Navigation: C-n C-p
 3. Delete files: d, x, D
 4. Flagging many files at once:
@@ -31,7 +31,7 @@ M-x 调用 =dired-follow-mode=
    3) % d regexp (delete all match regex)
 
 5. Visiting Files
-   - f or e (visit current file)
+   - f or e (visit current file)f
    - o (another window to display and switch fucus)
    - C-o (visit but not switch focus)
    - v (view-mode)
