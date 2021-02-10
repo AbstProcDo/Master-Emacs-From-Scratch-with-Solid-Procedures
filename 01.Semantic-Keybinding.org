@@ -1,10 +1,10 @@
 #+TITLE: 01.Semantic-Keybinding
 
 Emacs从最源头处,
-首先用M(Meta)-x(Execute)调用所有的function。然后更进一步，以Control这一个键替代M-x这两个键，并将M-x调用的函数名，简化为其首字母。
-比如向前移动一个字符的冗余实现过程为：M-x forward-char, 简化为C-f。C（Control）对应M（Meta）-x，而字符f为函数forward-char的首字母。
+首先用 M(Meta)-x(Execute) 调用所有的function。然后更进一步，以Control单键取代M-x双键，并将M-x调用的函数名，简化为其首字母。
+比如向前移动一个字符的冗余实现过程为：M-x forward-char, 而按照简化的逻辑则变为C-f。C（Control）对应 M（Meta）-x，而字符f为函数forward-char的首字母。
 
-换言之，我们单单从从词源和语义出发, 就能快速且永久性记住常用的快捷键.
+换言之，我们只须单单从词源和语义出发, 就能快速且永久性记住常用的快捷键.
 
 在最高频的快捷键绑定中, C-x, M-x中的x(execute)省略, 简化为C-与M-。本节我们将接着阐述光标的基本动作，其操作的对象为：
 character, word, line, sentence, (*paragragh), page, buffer.

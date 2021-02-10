@@ -13,12 +13,7 @@
 ** 如此简单的 Emacs
 Emacs的简单，一言以蔽之，只是一个Meta键而已。
 Meta键(键盘上的option/alter键)
-Meta的词源含义是higher，beyond,没有最高,只有更高。
-中文译为"元"，发端处，源头处。
-So Meta is Source，and it relates to source code。
-Meta关联Source-Code，在Source-Code中，Function又是的一等公民。
-Emacs的简单策略便是将Meta键绑定到Function上。
-M-x (x for execucte)，在此之后，便可以天马行空的查询要做的事情,
+Meta的词源含义是higher，beyond,没有最高,只有更高。 中文译为"元"，发端处，源头处。因此Meta是 Source，Meta关联Source-Code。而在Source-Code中，Function又是的一等公民。 Emacs的简单策略便是将Meta键绑定到Function这项source-code上，即触发按键M-x (x for execucte) 调用函数。在此之后，便可以天马行空的查询要做的事情,
 比如插入当前的日期:
 #+ATTR_HTML: :width 500px
 [[file:images/00.preface-current-date.png]]
@@ -30,10 +25,11 @@ M-x (x for execucte)，在此之后，便可以天马行空的查询要做的事
 比如从目录中打开一个文件，可以M-x find-file,
 #+ATTR_HTML: :width 500px
 [[file:images/00.preface-find-file.png]]
-需要键入十一个字符 Ctrl策略，可以C-x C-f. 只需要键入4个字符。
-以上调用functions的过程，称之为Command。 Command=Contrl，由此也能反过来看到选择Ctrl键也是语义绑定。
+这项操作需要键入11个字符 Ctrl策略. 然而倘若按键 C-x C-f. 只需要键入4个字符。于是作为Emacs实现高效的核心策略，用按键的“字符调用函数”取代“函数名调用”。
+更简单的例子，比如“向前移动一个字符”。完整的实现方式为 M-x forward-character，而在引入了Ctrl策略之后，只需要C-f。此处C简化了M-x，字符f则是函数forward-character的首字母。
+以上用Control调用functions的方式，称之为Command。Command=Contrl，由此也能反过来看到选择Ctrl键也是语义绑定。
 
-* 目录
+* TODO 目录
 - [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
 - [[file:02.Emacs-As-an-Editor.org][2.Emacs As an Editor]]
 - [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
