@@ -38,7 +38,7 @@
 *** 方法一: C-n S(shift)-tab
 控制目录显示的深度,比如C-2 S-tab显示到2级目录,
 #+ATTR_HTML: :width 300px
-[[file:../images/启动-显示到二级目录.png]]
+[[file:./images/启动-显示到二级目录.png]]
 方法的优点是可以自定义控制目录显示的深度
 
 *** 方法二:
@@ -54,7 +54,8 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 
 *** 方法四
 推荐的方案,纸笔绘制, 放在手边参阅.
-[[file:../images/sicp-04.metalinguistic.jpeg]]
+#+attr_html: :width 500px
+[[file:./images/sicp-04.metalinguistic.jpeg]]
 * 过程控制
 ** Clock-in and Clock-out
 当前章节下调用  =M-x org-clock-in=,
@@ -101,12 +102,12 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 无拘无束, 不给大脑是否要分类, 分类到哪里的负担.
 待到二读, 三读的时候再适当"短评"的内容归类, "短评"为后面的动作提供原材料.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-短评.png]]
+[[file:./images/阅读-短评.png]]
 
 ** 洞见
 读着读着, 对作者的阐述生发共鸣, 或者比"绘制大纲"阶段中"编造"的内容阐述的精彩, 又或者在胸中困顿许久没想明白的点, 在此处豁然开朗.
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-洞见.png]]
+[[file:./images/阅读-洞见.png]]
 举例比如 assignment and definition这一段, 从evaluator的角度, 赋值(assignment)与定义(definition)的本质是一样的, 都是set!, 这也完全符合直觉.
 此处标注为洞见, 是因为刚从python入门编程的时候, 学习赋值与函数定义.
 #+begin_src ipython :session SICP :results output
@@ -174,7 +175,7 @@ def foo(x): return x * x
 利用org的规则, 词汇标注有两种方式.
 其一:
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-词汇.png]]
+[[file:./images/阅读-词汇.png]]
 比如本章节中的两个单词, evaluate与apply.
 eval便是输入expression, 输出value;
 拆解evaluate这个单词,
@@ -184,7 +185,7 @@ apply就献丑了.
 其二:
 应用 ~vacabulary~ 标注单词
 #+ATTR_HTML: :width 300px
-[[file:../images/阅读-词汇2.png]]
+[[file:./images/阅读-词汇2.png]]
 标注了14个词汇.
 
 ** 阅读管理小结:
@@ -295,16 +296,18 @@ mini-buffer内的中操作:C-n C-p
 虽然简单, 但却极大地提高效率, 因此也放在撒手锏这里.
 
 2. 绘制思维导图
-在"01.启动-绘制大纲"的方法三中, 介绍过使用[[../images/04.Read-a-Book-In-a-Serioius-Way.org_20210114_113055.png]]自动建立Table of Content的方法
-#+ATTR_HTML: :width 300px
-[[file:./images/撒手锏-思维导图.png]]
+在"01.启动-绘制大纲"的方法三中, 介绍过使用自动建立Table of Content的方法
+#+attr_html: :width 300px
+[[file:images/01.draw-toc.png]]
+
+
 
 Org的撒手锏之二可以将其转成思维导图
 #+ATTR_HTML: :width 500px
-[[file:../../Documents/OrgMode/ORG/images/metalinguistic.png]]
+[[file:images/撒手锏-思维导图.png]]
 
 需要做一点作业就是将上图的table of content用regex简单成以下格式:
-#+BEGIN_SRC plantuml :file ../images/metalinguistic.png
+#+BEGIN_SRC plantuml :file ./images/metalinguistic.png
 @startmindmap
 - 4.Metalinguistic Abstraction
 -- 4.1 The Metacircular Evaluator
@@ -379,7 +382,7 @@ Org的撒手锏之二可以将其转成思维导图
 @endmindmap
 #+END_SRC
 #+RESULTS:
-#+ATTR_HTML: :width 1500px
+#+ATTR_HTML: :width 500px
 [[file:./images/metalinguistic.png]]
 
 此时调用C-c C-c将会自动生成上述的思维导图
