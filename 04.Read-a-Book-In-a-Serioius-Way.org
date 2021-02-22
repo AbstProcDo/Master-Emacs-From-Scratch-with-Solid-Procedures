@@ -101,7 +101,7 @@ TOC结构, 安装doom-emacs后, 在任意位置, 应用:toc:便能自动生成�
 短评是不分类的标签, 可以意识流, 读到哪里, 有想法立刻写下来.
 无拘无束, 不给大脑是否要分类, 分类到哪里的负担.
 待到二读, 三读的时候再适当"短评"的内容归类, "短评"为后面的动作提供原材料.
-#+ATTR_HTML: :width 300px
+#+ATTR_HTML: :width 500px
 [[file:./images/阅读-短评.png]]
 
 ** 洞见
@@ -382,7 +382,7 @@ Org的撒手锏之二可以将其转成思维导图
 @endmindmap
 #+END_SRC
 #+RESULTS:
-#+ATTR_HTML: :width 500px
+#+ATTR_HTML: :width 800px
 [[file:./images/metalinguistic.png]]
 
 此时调用C-c C-c将会自动生成上述的思维导图

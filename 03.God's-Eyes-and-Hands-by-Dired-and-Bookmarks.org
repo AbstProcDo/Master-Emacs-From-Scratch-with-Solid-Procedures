@@ -1,5 +1,135 @@
 * 03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks
-* Dired初窥
+
+项目 步步为营，零秒精通Emacs 的第三章“03.God’s-Eyes-and-Hands-by-Dired-and-Bookmarks” 宕延半年多，迟迟写出来。因为始终没有思路，怎样写好司空见惯简单，而往往不见其革命性突破的Dired。
+
+我希望别人从这篇文章的视角审视dired的时候，会第一时间发出“哇！”的一声。就如每时每刻的呼吸，在幼儿园的某一天，我们突然知道“哇，原来空气存在”。
+
+Take everything for granted 的朋友请务必忍耐不要留言。
+
+亘古以来，有机世界与无机世界之间有一道无法跨越的鸿沟。上帝吹入生命而成有机，而矿物则是没有“活力”的无机物。因此，无机物与有机物毫不相干，无机物只能制造无机物，似乎正如石头原料只能制造出更加精美的石头，却万万不能生产出“天价猪肉”。
+
+然而，公元1828年，上帝改变了主意，人类跨越天堑。
+
+* 1.跨越鸿沟
+
+1828年数九寒冬的腊月里，德国的青年化学家维勒兴奋地告知老师，他从无机物中制得了有机物尿素的消息。这一刻，横亘千年的传说就此打破，人类大步一跃跨过“生命体”与“非生命体”之间的鸿沟，“连石头都要欢呼起来了（路加福音 19:40 ）”。
+
+第一节将要讲述发生在“古老”的编辑器Emacs的Dired身上，同样的一个“惊心动魄”的迈过天堑的故事。
+
+在Emacs里按键C-x d就能调用dired函数打开的界面：
+#+attr_html: :width 500px
+[[file:images/跨越鸿沟01.png]]
+
+呈现出来的是我们熟悉的“ls”命令的输出。
+#+attr_html: :width 500px
+[[file:images/跨越鸿沟02.png]]
+
+
+Linux系统继承的哲学理念，一切皆为文件，文件为万物接口。
+
+#+begin_quote
+Write programs to handle text streams, because that is a universal interface.
+#+end_quote
+
+* 2.一切皆为文件
+
+一切皆为文件，文本数据流（而非二进制数据流）为通用接口是grep，ripgrep等全局搜索工具起作用的基础。
+
+#+attr_html: :width 500px
+[[file:images/一切皆为文件01.png]]
+
+同时计算机中的每个零部件都可触可摸，可视可见，调用ls命令查看所有设备的属性：
+#+attr_html: :width 500px
+[[file:images/一切皆为文件02.png]]
+
+将输入到stdout的信息redirect到其他地方：
+
+: report error to null 2> /dev/null
+
+在展开下文的论述之前，此处引出一个很有意思的问题，我们如何用查看stdout或者stdin的属性？
+
+#+begin_src shell
+$ ls 0  1 2
+ls: cannot access '0': No such file or directory
+ls: cannot access '1': No such file or directory
+ls: cannot access '2': No such file or directory
+#+end_src
+
+倘若用ls命令，则当场报错给人脸色看。
+
+查阅stdin与stdout的属性，须回到/dev目录下：
+
+#+begin_src shell
+$ ls -al /dev/fd/*
+ls: cannot access '/dev/fd/255': No such file or directory
+ls: cannot access '/dev/fd/3': No such file or directory
+lrwx------ 1 gaowei gaowei 64 Sep  9 06:21 /dev/fd/0 -> /dev/pts/0
+lrwx------ 1 gaowei gaowei 64 Sep  9 06:21 /dev/fd/1 -> /dev/pts/0
+lrwx------ 1 gaowei gaowei 64 Sep  9 06:21 /dev/fd/2 -> /dev/pts/0
+#+end_src
+
+从结果可知，三者全有读写权限。然而写入其中的内容却无法存储。比如从命令行中下面的输出：
+[[file:images/一切皆为文件04.png]]
+
+打印到屏幕上之后，stdout文件并不保存任何内容，如果要把用户名“gaowei”修改为”me“，只能将上面的输出复制粘贴到编辑器中，或者用其他命令行工具重新输出一遍，stdout文件本身并不保存任何信息。
+
+原因何在呢？
+#+begin_src shell
+$ less /dev/fd/1
+/dev/fd/1 is not a regular file (use -f to see it)
+#+end_src
+
+如报错所言， /dev/fd/1 非功能完整的 regular file。
+
+linux的理念，一切皆为文件。然而，所有文件并非生而平等，” All files are equal, but some files are more equal than others“。这是本文的第一道鸿沟。虽然需求仅仅是简单地对输出的内容直接做编辑，但想法与实现之间却隔着一道无形的高墙。
+
+*
+
+* 3.屏幕里的林志玲
+
+虽然任务简单，仅仅将“ls”输出的结果替换用户名发出去。 但是stdout的固有属性，并不保存信息，因而尚不能直接编辑。
+
+换言之，不能将“ls”命令输出的结果本身，作为自己的文本内容。这之间隔着屏幕似乎有一道鸿沟。就如只能从透过屏幕看到“林志玲”，却不能哪怕伸手进屏幕跟她握握手，“可远观而不可亵玩”。
+
+#+attr_html: :width 300px
+[[file:images/一切皆为文件03.jpeg]]
+
+
+简单的需求能够用简单的命令解决，比如用sed修改输出结果：
+
+#+begin_src shell
+PS C:\Users\gaowei\.emacs.d> ls.exe -al | head.exe | sed.exe "s/gaowei/me/g"
+total 77
+drwxr-xr-x 15 me Administrators  4096 Sep  4 16:54 .
+drwxr-xr-x 49 me Administrators 12288 Sep  9 13:54 ..
+drwxr-xr-x  2 me Administrators     0 Sep  4 16:54 .cache
+drwxr-xr-x  7 me Administrators  4096 Sep  4 21:26 .git
+drwxr-xr-x  5 me Administrators  4096 Aug 26 12:22 .github
+-rw-r--r--  1 me Administrators   478 Aug 26 12:22 .gitignore
+drwxr-xr-x  6 me Administrators  4096 Sep  9 10:49 .local
+-rw-r--r--  1 me Administrators  1109 Aug 26 12:22 LICENSE
+-rw-r--r--  1 me Administrators 13554 Aug 26 12:22 README.md
+#+end_src
+
+sed命令变更了输出结果，也仅止步于此，并不变更文件的真实用户属性。
+
+这容易理解，sed对输出的变更，是"表面文章“。就如，用力搅动海面的波涛，怎么可能引致海底的地震呢？
+
+想一下，日常变更用户属性，变更文件名的工作流，真很气繁琐。
+
+* 4.电光火石的一瞬间
+
+“兴趣”是马力最强劲的火车头，一旦被激发启动开来，拉动直觉，智力和体力，滚滚向前，一路绝尘而去，秒超他人数十年之功，并非妄谈（不然炫耀两个手指打方向盘的满大街都是的老司机岂不都能成舒马赫）。
+
+电光火石的一瞬间是，在dired中按键C-c C-e调用 (wdired-change-to-wdired-mode)。此时界面转为直接编辑的文本模式，并能应用所有编辑命令（比如regex等）。
+
+#+attr_html: :width 500px
+[[file:images/一切皆为文件05.png]]
+
+Emacs中有几个被称之为“核弹级应用”的操作，都用的与此相同的逻辑。
+
+* 5.Dired操作总结
+** Dired初窥
 在EmacsManual目录下调出Dird后,
 .快速略扫各个文件的主要内容
 从配置中添加下面的代码
@@ -20,7 +150,7 @@ M-x 调用 =dired-follow-mode=
 #+ATTR_HTML: :width 500px
 [[file:images/pre-dired.gif]]
 
-* Dired操作归纳:
+** Dired操作归纳:
 
 1. Entering Dired: C-x d<
 2. Navigation: C-n C-p
@@ -76,7 +206,7 @@ M-x 调用 =dired-follow-mode=
 18. View Images thumbnails
     image-dired-display-thumb
 
-* Register操作归纳
+** Register操作归纳
 
 M-x view-register r
 # 以下所有的命令最后一个letter, 可以自定义为a-z等任何字母.
@@ -126,9 +256,3 @@ M-x view-register r
    M-x bookmark-write filename
    M-x bookmark-delete bookmark
    M-x bookmark-insert-location bookmark
-* 重新改写
-书同文车同轨
-一法度衡石丈尺。车同轨。书同文字。”
-史记·秦始皇本纪》：“一法度衡石丈尺。车同轨。书同文字。”
-全局搜索文本文件内的所有内容。
-秦始皇的功劳
