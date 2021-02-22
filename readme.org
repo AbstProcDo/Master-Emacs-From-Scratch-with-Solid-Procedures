@@ -34,9 +34,9 @@ Meta的词源含义是higher，beyond,没有最高,只有更高。 中文译为"
 - [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
 - [[file:02.Emacs-As-an-Editor.org][2.Emacs As an Editor]]
 - [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
-- 4.The Structure of Emacs
+- [[file:04.The.Structure.of.Emacs.org][4.The Structure of Emacs]]
 - [[file:04.Read-a-Book-In-a-Serioius-Way.org][5.Read a Book In a Serious Way]]
-- [[file:05.Emacs-as-a-Agenda-by-Org.org][6.Emacs as a Agenda by Org]]
+- [[file:06.Emacs-as-Agenda-by-Org.org][6.Emacs as a Agenda by Org]]
 - *Chapters in Progress*
 - [[file:06.Org-Your-Life-All-in-One.org][7.Org Your Life All in One]]
 - [[file:07.Programming.org][8.Programming]]
