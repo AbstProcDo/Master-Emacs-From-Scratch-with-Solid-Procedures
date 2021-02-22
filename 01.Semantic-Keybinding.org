@@ -70,6 +70,7 @@ C-p (previous-line)
 #+END_QUOTE
 
 * 5.缓冲区(Buffer)
+
 M-< 移动到buffer头部
 M-> 移动到Buffer的尾部
 只要记着ctrl只管到line, 其余全部都是Higher的Meta的工作.
@@ -88,8 +89,28 @@ M-> 移动到Buffer的尾部
   - C-x l :: Count the lines in this page (=count-lines-page=).
 
 * 7.键位布置
+
 建议键位调整为:
 #+BEGIN_EXAMPLE
 Alt(option) --> Ctrl --> Space <-- Ctrl <--Alt
 #+END_EXAMPLE
 不管是在哪一种键盘上，都要保持此键位布置。
+
+* 8.基本概念
+
+Emacs对光标Cursor有着特殊的命名即Point。选中的一块区域称之为region。而region的两端，一端为Point，而另外一端则为Mark。
+
+基本操作总结如下：
+
+#+NAME: FIGURE 8-8. Commands to set mark and define a region.
+|---------+---------------------------------|
+| Command | Descripion                      |
+|---------+---------------------------------|
+| C-@     | Set mark                        |
+| C-Spc   | same as C-@                     |
+| C-x C-x | Interchange mark and point      |
+| M-@     | set mark after next word        |
+| M-h     | region around paragraph         |
+| C-x h   | Put region around entire buffer |
+|---------+---------------------------------|
+其中，M-h往往会忘掉。

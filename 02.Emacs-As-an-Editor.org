@@ -12,12 +12,13 @@
 "When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.", 编辑器的基本功能曲指可数.
 
 * 2.1.编辑器的基本功能:
+
 编辑工作以"行"为基本单位,
 复制, 黏贴, 增删改查, 而"查"是个中关键, 应该放在前面.
 
 + 最基本
-  - 复制黏贴 (M-w, C-y)
-+ 增删改查
+  - 复制黏贴 (M-w, C-y) kill-ring
++ 增查改删
   - insert (C-q quotation) create
     直接写入
   - Search(Swiper…)
@@ -25,7 +26,10 @@
 
   - modify(undo, transpose, uppercase, lowercase, title,
     modify或者set，又或者称之为correction，emacs的始祖是teco，text edit and correction
-    # 此处的顺序需要更改，search, insert, modify, and delete
+    修改只有case和transpoe以及undo这san项操作。
+    # 此处的顺序需要更改，insert, search, modify, and delete
+    M-t for words，C-x C-t for consecutive lines
+
   - delete(C M d delele), kill ring
     将delete放置于最后。
 
@@ -43,18 +47,25 @@
 + Special
   - Register
 
-* 2.2.拆解"<DELETE>"
+* 2.2.拆解 Backspace 与 Kill
 
-键的绑定同样遵循语义化的原则, 比如delete(killing) <delete>键(即backspace退格键, backword);
-C-<del> 后退删除一个字符, M-<del>则是后退删除一个单词;
+键的绑定同样遵循语义化的原则, 比如删除的 <backspace>，
+C-<backspace> 退格删除一个字, M-<backspace>则是后退删除一个单词，因为backspace对应backwords.
+（Macbook上没有backspace键，可以将delete擦掉，改成backspace）
+
 backwords相对应的是forwards,(进格删除) C-d M-d分别进格删除一个字符和一个单词,
-总结: <delete>键绑定的是后退backwords删除, 语义字母"d"绑定的则是进格forwards删除.
+语义字母"d"绑定的则是进格forwards删除.
 # 短评: 一段时间不浏览, 还是能忘记, 不再使用,
 
-删除的动作除了<delete>之外, Emacs还特有一个Killing的范围比delete大, 分别绑定"C-"和"M-"实现以下语义:
+删除的动作除了<backspace>之外, Emacs还特有一个Killing的范围比delete大,
+分别绑定"C-"和"M-"实现以下语义:
 - C-k是删除到行尾,
 - M-k是删除到句尾, 跟前面一致.
-以上是forwards进格删除, 对行的backwards退格删除是C-x <del> 对句子的退格删除，没有对"句子"退格删除的操作.
+
+以上是forwards进格删除, 对行的backwards退格删除是C-x <backspace> 对句子的退格删除，没有对"句子"退格删除的操作.
+
+只有Backspace键是语义化的backword，其余都是forward。
+最后，忘掉delete键，d 就是语义化的 delete。多余的delete键会引发逻辑上混乱。
 
 * 2.3.调用直觉
 
