@@ -50,3 +50,8 @@ Meta的词源含义是higher，beyond,没有最高,只有更高。 中文译为"
 - [[file:Appendix-E.Guidelines-to-employ-Emacs-On-Windows.md][Appendix E: Install-Emacs-On-Windows]]
 - [[file:Appendix-H-Orgmode-Outline-Solutions.md][Appendix H: Orgmode outline solutions]]
 - [[file:How-to-take-smart-notes.org][Appendix G: How to take smart notes]]
+
+* TODO List
+- Emacs Help Facility
+- Emacs中的意念控制总结
+- Windows使用wsl版本的emacs

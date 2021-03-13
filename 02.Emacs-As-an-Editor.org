@@ -16,9 +16,10 @@
 编辑工作以"行"为基本单位,
 复制, 黏贴, 增删改查, 而"查"是个中关键, 应该放在前面.
 
-+ 最基本
++ 最基本(复制粘贴以及删除操作)
   - 复制黏贴 (M-w, C-y) kill-ring
 + 增查改删
+
   - insert (C-q quotation) create
     直接写入
   - Search(Swiper…)
@@ -26,7 +27,7 @@
 
   - modify(undo, transpose, uppercase, lowercase, title,
     modify或者set，又或者称之为correction，emacs的始祖是teco，text edit and correction
-    修改只有case和transpoe以及undo这san项操作。
+    修改只有case和transpoe以及undo这三项操作。
     # 此处的顺序需要更改，insert, search, modify, and delete
     M-t for words，C-x C-t for consecutive lines
 
@@ -105,7 +106,7 @@ Emacs Manual中很多类似的高颗粒度的绑定键, 头悬梁锥刺股的背
 
 由此从直觉里生发的成就感和兴趣会驱动我们应用更加复杂的命令和组合, 从而更高效地"零秒"应用和掌握Emacs.
 
-* 2.4.对比Search功能的Emacs操作与命令行操作
+* 2.4.对比 Search 功能的 Emacs 操作与命令行操作
 
 Emacs的优势之一是便捷地对数据和查询结果的作二次处理.
 比如想从宏观上了解下Emacs手册中中全部whitespace操作.
@@ -138,7 +139,9 @@ C-x grep-find;
 
 * 小结
 
-目前的思路流程图 Meta --> Control ---> Cursor ---> Edit，由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
+目前的思路流程图
+Meta --> Control ---> Cursor ---> Edit，
+由Meta的词源语义出发分析Emacs的快捷键绑定, 引入Ctrl键简化输入过程, 光标的移动作为edit的前置步骤, 以find-grep查询收尾基本的编辑功能.
 在切入到God's Eyes(Dired) and God's Hands(Booksmarks)之前, 光速浏览File的基本操作(读取和保存)
 C-x C-f (M-x find-file) 找到并打开文件
 C-x C-r (r是read-only), 比如浏览自己的配置文件, 要避免无心修改掉东西.

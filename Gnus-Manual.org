@@ -11702,10 +11702,6 @@ Ol' Charles Reznikoff said it pretty well, so I leave the floor to him:
   #+END_EXAMPLE
 
 * 11 Appendices
-   :PROPERTIES:
-   :CUSTOM_ID: appendices
-   :CLASS: chapter
-   :END:
 
 - [[#XEmacs][XEmacs]]: Requirements for installing under XEmacs.
 - [[#History][History]]: How Gnus got where it is today.
@@ -11718,7 +11714,6 @@ Ol' Charles Reznikoff said it pretty well, so I leave the floor to him:
 - [[#Frequently-Asked-Questions][Frequently Asked Questions]]: The Gnus FAQ
 
 
-
 ** 11.1 XEmacs
     :PROPERTIES:
     :CUSTOM_ID: xemacs
@@ -11726,7 +11721,6 @@ Ol' Charles Reznikoff said it pretty well, so I leave the floor to him:
     :END:
 
  XEmacs is distributed as a collection of packages. You should install whatever packages the Gnus XEmacs package requires. The current requirements are ‘gnus', ‘mail-lib', ‘xemacs-base', ‘eterm', ‘sh-script', ‘net-utils', ‘os-utils', ‘dired', ‘mh-e', ‘sieve', ‘ps-print', ‘pgg', ‘mailcrypt', ‘ecrypto', and ‘sasl'.
-
 
 ** 11.2 History
     :PROPERTIES:

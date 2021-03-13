@@ -1,5 +1,14 @@
 #+TITLE: Appendix C: Install Extensions
 
+* Customize Package
+1. load-path
+: (add-to-list 'load-path "~/.doom.d/my-config")
+2. require package
+: (require 'primate-org-babel)
+3. provide package
+: (provide 'primate-org-agenda)
+每个package的最末都要加上这一行。
+
 * Plantuml
 ** 安装
 - [[https://github.com/skuro/plantuml-mode][plantUML-mode-in-github]]

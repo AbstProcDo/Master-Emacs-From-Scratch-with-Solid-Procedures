@@ -14,3 +14,6 @@
 
 * Mode line
 * Echo Area and Minibuffer
+* 意念控制
+C-x 4 b
+other-window
