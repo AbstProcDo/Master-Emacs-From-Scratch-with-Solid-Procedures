@@ -1,4 +1,4 @@
-#+TITLE: 05.Emacs as a Agenda by ORG
+#+TITLE: 05.Emacs as an Agenda by ORG
 * 1.Agenda Time Grid
 ** 设置org-agenda-files
 首先从配置中指定 =org-agenda-files=
@@ -251,12 +251,6 @@ agenda中的日出日落不仅帮助界定有意义的时间范围, 而且构建
 第五节到第八节在agenda的基础上深入探讨org-todo的管理与规划的工作流．
 
 本节初步探讨如何提高review的效率, 即如何速度浏览agenda-view,以及快递定位某日的agenda-view.
-#+begin_src emacs-lisp :tangle yes
-(buffer-file-name)
-#+end_src
-
-#+RESULTS:
-: /mnt/c/Users/gaowei/Public/Master-Emacs-From-Scrach-with-Solid-Procedures/05.Emacs-as-Agenda-by-Org.org
 
 ** 3.1.内置的Agenda-View Display
 
@@ -370,9 +364,6 @@ C-c C-y (org-evaluate-time-range)
 - [[https://emacs.stackexchange.com/questions/56339/designate-a-speficied-day-of-20-days-later/56343#56343][Insert a future date]]
   + org-read-date Documentation
 
-
-
-
 ** 3.3."Calendar"与"Agenda"合二而一
 
 上述的解决方案, 按键c显性的调用calendar, 有没有在逻辑上更加"丝滑"的方法呢?
@@ -426,8 +417,7 @@ C-c C-y (org-evaluate-time-range)
 
 #+RESULTS:
 
-* 4.分别记录事件,笔记与任务
-* 5.Event, Note and Task
+* 4.Event, Note and Task
 ** Diary Template
 日记模板划分为四个区域:
 1. 日记, 如"方方日记"那样
@@ -465,7 +455,6 @@ C-c C-y (org-evaluate-time-range)
 #+ATTR_HTML: :width 500px
 [[file:images/05.Emacs-as-a-agenda-idea-agenda-view.png]]
 
-
 每晚睡前Review之时, 一眼便能看到在早上"8:48"产生了一个"神来之笔"的想法.
 
 *** Capture Task
@@ -488,133 +477,47 @@ $ ls diary-by-months/  | grep 2020
 2020-03.org
 #+END_EXAMPLE
 
-* 6.Workflow
-* 7.Agenda Remote Control
+* 5.Agenda Remote Control
 =k c=
 You can also call =org-capture= in a special way from the agenda, using the {{{kbd(k c)}}} key combination. With this access, any timestamps inserted by the selected capture template defaults to the date at point in the agenda, rather than to the current date.
-* 大纲计划
-先写一章如何应用然后再
-* 参考资料
-# 描写日出的诗文资料
-* 附录
-在第三节"3.Interact with Calendar"介绍了agenda与calendar互动的方法.
-展示附带Calendar的agenda, 需要两步操作:
-1. M-x org-agenda 或者 C-c a 调出来, agenda-veiw的界面
-#+ATTR_HTML: :width: 300px
-[[file:images/agenda-view-standard.png]]
-2. 然后按键"c"调用Calendar
-#+ATTR_HTML: :width 300px
-[[file:images/org-agenda-with-calendar.png]]
 
-以上两步操作可以合并为一步, 代码如下:
+* 6.Refined Workflow
+
+** 1.设置“天干地支”纪年法
+
 #+begin_src emacs-lisp :tangle yes
-;;integrated with Calendar
-(general-advice-add 'org-agenda :after
-                    (lambda (_)
-                      (when (equal (buffer-name)
-                                   "*Org Agenda*")
-                        (calendar)
-                        (calendar-mark-holidays)
-                        (other-window 1))))
-
-(general-advice-add 'org-agenda-quit :before
-                    (lambda ()
-                      (let ((window (get-buffer-window calendar-buffer)))
-                        (when (and window (not (one-window-p window)))
-                          (delete-window window)))))
+(setq calendar-chinese-celestial-stem ["甲" "乙" "丙" "丁" "戊" "己" "庚" "辛" "壬" "癸"])
+(setq calendar-chinese-terrestrial-branch ["子" "丑" "寅" "卯" "辰" "巳" "午" "未" "申" "酉" "戌" "亥"])
+#+end_src
+** 2.重命名 category
+#+begin_src emacs-lisp :tangle yes
+#+CATEGORY: Today
 #+end_src
 
-以上代码添加进配置文件之后,
+** 3.配置agenda头部展示农历和阳历
 
-C-c a a (M-x org-agenda) 将会打开"带calendar"界面的agenda-view, 按键"q"退出agenda-view.
+#+begin_src emacs-lisp :tangle yes
+(setq org-agenda-format-date 'org-agenda-format-date-aligned)
 
-* 问题
-Calendar中的问题.
-backward
-# 问题?
-backward-paragraph与forward-paragraph, 但是没有首尾的操作,
-是因为backward与forward是按照"段首".
-# 问题?
-C-x 用得不频繁, 涉及大幅度动作的时候, 使用此命令.
-
-# 思考
-从概念上总结完calendar的基本操作之后, 大脑豁然开朗,
-1) calendar作为text操作
-2) 掌控操作"时间", 或者日月星辰的感觉
-3) 简要讲, 大脑中再涉及时间问题的时候, 异常的清晰.
-* Summarize Operations
-# 总结
-关键概念摘要,
-types与workflow, 只有Workflow用得上,
-priorities的概念.
-todo里面需要补充的一项是efforts
-** 05.Items
-  - 5.1.Basic TODO Functionality
-  - C-c C-t Cycling
-  - S-RIGHT
-  - C-c / t sparse tree
-  - S-M-RET insert new todo
-  - 5.2.Extended Use of TODO Keywords
-  - Workflow states
-  - keywords as types
-  - 5.3.Progress Logging
-  - habits
-  - 5.4.Priorities
-  - C-c \,  :: org-priority
-  - S-UP  org-priority-up
-  - 5.5.Breaking Down Tasks into Subtasks
-  - Subtasks [0/0]  C-c C-c
-  - 5.6.Checkboxes
-  - lightweight
-  - [ ] [-] [X] 三种状态
-** 06.Tags
-  + 只有一项查询需要注意, tag search
-** 07.Properties and Columns
-:PROPERTIES:
-:Effort:   30
-:END:
-
-  + Property Syntax
-    C-c C-x p
-  + Property Search
-    Columns的部分没有什么用处.
-** 08.Dates and Times
-  + 8.1.Timestamps
-    基本概念便是, appointment, event,
-    active and inactive,
-  + 8.2.Creating Timestamps
-    C-c !
-    C-c .
-    org-evaluate-time-range
-  + 8.3.Deadlines and Scheduling
-    DEADLINE
-    SCHEDULED
-    org-check-deadlines
-    org-check-before-date
-    org-check-after-date
-    repeat tasks
-  + 8.4.Clocking Work Time
-    没有实质的内容,
-    org-resolve-clocks
-  + 8.5.Effort Estimates　
-    org-clock-modify-effort-estimate
-** 09.Refiling and Archiving
-  + Refile and Copy
-  + Archiving
-** 10.Capture and Attachments
-  + Capture
-  + Attachments
-** 11.Agenda Views
-  + 11.1.Agendva Files
-    C-' :: org-cycle-agenda-files
-  + 11.2.The Agenda Dispatcher
-    m :: mark
-  + 11.3.The Built-in Agenda Views
-# 没有多少实质的东西.
-* Diary's Configuration
-# elisp基本配置
-#+begin_src emacs-lisp :session agenda :lexical t
-(setq org-agenda-include-diary t)
-(setq org-agenda-diary-file "~/Documents/OrgMode/ORG/src/standard-diary") ;;2020-03-02 10:47:06
-(setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
+(defun org-agenda-format-date-aligned (date)
+  "Format a DATE string for display in the daily/weekly agenda, or timeline.
+      This function makes sure that dates are aligned for easy reading."
+  (require 'cal-iso)
+  (let* ((dayname (aref cal-china-x-days
+                        (calendar-day-of-week date)))
+         (day (cadr date))
+         (month (car date))
+         (year (nth 2 date))
+         (cn-date (calendar-chinese-from-absolute (calendar-absolute-from-gregorian date)))
+         (cn-month (cl-caddr cn-date))
+         (cn-day (cl-cadddr cn-date))
+         (cn-month-string (concat (aref cal-china-x-month-name
+                                        (1- (floor cn-month)))
+                                  (if (integerp cn-month)
+                                      ""
+                                    "(闰月)")))
+         (cn-day-string (aref cal-china-x-day-name
+                              (1- cn-day))))
+    (format "%04d-%02d-%02d 周%s %s%s" year month
+            day dayname cn-month-string cn-day-string)))
 #+end_src

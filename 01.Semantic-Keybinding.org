@@ -49,6 +49,7 @@ C-p (previous-line)
 然而，M-v与C-v辅助便利地向上和向下翻页, 问题是他们是整屏, 整屏地翻页, 大多数时候, 这不是我们想要的. 更常用的操作是半屏半屏的翻页.
 
 现在重新回到M-p与M-n, 绑定半屏翻页.
+
 #+begin_src emacs-lisp :session sicp :lexical t
 (defun previous-multilines ()
   "scroll down multiple lines"
