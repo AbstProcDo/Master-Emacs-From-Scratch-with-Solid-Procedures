@@ -1,7 +1,6 @@
 #+TITLE: 04.The.Structure.of.Emacs
 
 得心应手的使用emacs，一是从functions入手，二是从这些functions操作对象入手。
-
 * Frame and Windows
 * Buffer and Files
 #+begin_src elisp :results output
@@ -14,6 +13,4 @@
 
 * Mode line
 * Echo Area and Minibuffer
-* 意念控制
-C-x 4 b
-other-window
+* 文本对象
