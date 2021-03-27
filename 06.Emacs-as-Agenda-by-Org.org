@@ -312,7 +312,7 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 | C-b   | backward-char       | calendar-backward-day              |
 |-------+---------------------+------------------------------------|
 |       | *word*              |                                    |
-| M-f   | forward-word        | 突破月份的限制的scroll.            |
+| M-f   | forward-word        | break month limit to move around   |
 | M-b   | backward-word       |                                    |
 |-------+---------------------+------------------------------------|
 |       | *line*              | *week*                             |
