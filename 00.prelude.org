@@ -1,7 +1,7 @@
 
 Emacs is simple and its universe starts from M-x.
 #+attr_html: :width 500px
-[[file:images/image-20210327211227862.png]]
+[[file:images/big-bang01.png]]
 
 
 * So simple Emacs: Meta Key
