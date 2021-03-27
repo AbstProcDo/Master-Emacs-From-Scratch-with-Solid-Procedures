@@ -1,4 +1,5 @@
-# Prelude
+* Prelude
+
 Emacs is simple and its universe starts from M-x.
 #+attr_html: :width 500px
 [[file:images/big-bang01.png]]
