@@ -1,15 +1,15 @@
-
+# Prelude
 Emacs is simple and its universe starts from M-x.
 #+attr_html: :width 500px
 [[file:images/big-bang01.png]]
 
 
-* So simple Emacs: Meta Key
+* 1.So simple Emacs: Meta Key
 
 Emacs' elegance and simplicity, in a nutshell, is just a Meta key.
-Meta key is option or alter key on the keyboard. In etymology, Meta is higher, beyond. Therefore, we could understand Meta as Source, then Meta is associated with Source Code.
+Meta is option or alter key on the keyboard. In etymology, Meta means higher, beyond. Therefore, we could understand Meta as Source, and associated it with source-code.
 
-In Source Code, function is the first-class citizen. The simple strategy of Emacs is to bind the Meta key (which has source meaning in etymology) to the source-code or function. So we trigger  the button M-x (x for execute) to invoke  the function.
+In Source Code, function is the first-class citizen. The simple strategy of Emacs is to bind the Meta key (which has source meaning in etymology) to the source-code or function. Then we could trigger the keys M-x (x for execute) to invoke  the function.
 
 Start form M-x, you can do whatever you desire, such as inserting the current date:
 
@@ -17,12 +17,11 @@ Start form M-x, you can do whatever you desire, such as inserting the current da
 [[file:images/00.preface-current-date.png]]
 
 
-Until now, the design of Emacs in the strategic level have been finished.
-The only remaining things are in tactical level about how to implement functions which M-x invoke.
+Until now, all the designing works of Emacs in the strategic level have been finished. The only remaining things are in tactical level about how to implement functions which M-x invokes.
 
-* The primary strategy of Emacs: Introduce the Ctrl key
+* 2.The primary strategy of Emacs: Introduce the Ctrl key
 
-Take an example  to open a file from a directory, you can M-x find-file,
+Take an example to open a file from a directory, you can M-x find-file,
 
 #+attr_html: :width 500px
 [[file:images/00.preface-find-file.png]]
