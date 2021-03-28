@@ -1,14 +1,21 @@
 * Prelude
 
-Emacs is simple and its universe starts from M-x.
+Prejudices say: "Emacs is just hard to learn".
+
+This minor project try to break the prejuice and denote how could take least efforts to learn Emacs.
+
+This series blogs were written originally in Chinese from 2020 and have  acculuated around 190 stars.
+
+Emacs is simple and its universe big-bang from M-x.
+
 #+attr_html: :width 500px
-[[file:images/big-bang01.png]]
+[[file:images/big-bang02.png]]
 
 
 * 1.So simple Emacs: Meta Key
 
 Emacs' elegance and simplicity, in a nutshell, is just a Meta key.
-Meta is option or alter key on the keyboard. In etymology, Meta means higher, beyond. Therefore, we could understand Meta as Source, and associated it with source-code.
+Meta is option or alter key on the keyboard. In etymology, Meta means "higher, beyond". Therefore, as spring flows from higher source,  we could understand Meta as Source, and associated it with source-code.
 
 In Source Code, function is the first-class citizen. The simple strategy of Emacs is to bind the Meta key (which has source meaning in etymology) to the source-code or function. Then we could trigger the keys M-x (x for execute) to invoke  the function.
 
