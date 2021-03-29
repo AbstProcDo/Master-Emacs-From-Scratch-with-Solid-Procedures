@@ -1,20 +1,4 @@
-* Navigation
-- [[file:readme-cn.org][中文版 Chinese Version]]
--
-- [[file:01.semantic-keybinding-en.org][01.Semantic Keybindings]]
-- -----------------------------------------------
-- The successive chapters are in translating.....
-- 02.Emacs as an editor
-- 03.God's eys and hands by Dired
-- 04*.The Structure of Emacs(Chinese version in progress)
-- 05.Read a book in a serious way
-- 06.Emacs as an Agenda by Org
-- 07.Improve org workflow
-- 08.Programming
-- 09.Assistance to programming
-- 10.Literature Programming
-- Appendix A ~ H
-
+#+TITLE: 00 Prelude
 * 0.Prelude
 
 Prejudices say: "Emacs is just hard to learn". Such prejudices undermine Emacs' popularity.
@@ -27,7 +11,6 @@ Emacs is simple and its universe big-bang from M-x.
 
 #+attr_html: :width 500px
 [[file:images/big-bang02.png]]
-
 * 1.So simple Emacs: Meta Key
 
 Emacs' elegance and simplicity, in a nutshell, is just a Meta key.
