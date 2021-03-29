@@ -1,53 +1,60 @@
-#+TITLE: 步步为营，零秒精通 Emacs
-* 0.引言
-步步为营即一步一个脚印， "零秒"乃调用直觉力，非物理概念上的“零秒”。
-# 八股文的结构.
-一个以讹传讹的观念"Emacs很难且耗费时间"，标题"零秒"有意打破对Emacs学习的成见。 通过点出Emacs中的关键点的方式： 心有灵犀一点通，举一反三，一通百通。而不必案牍劳形， 悬梁刺股。
+* Navigation
+- [[file:readme-cn.org][中文版 Chinese Version]]
+- [[0.Prelude]]
+- [[file:01.semantic-keybinding-en.org][01.Semantic Keybindings]]
+- -----------------------------------------------
+- The successive chapters are in translating.....
+- 02.Emacs as an editor
+- 03.God's eys and hands by Dired
+- 04*.The Structure of Emacs(Chinese version in progress)
+- 05.Read a book in a serious way
+- 06.Emacs as an Agenda by Org
+- 07.Improve org workflow
+- 08.Programming
+- 09.Assistance to programming
+- 10.Literature Programming
+- Appendix A ~ H
 
-曾国藩的战术“结硬寨，打呆仗”，初时很慢，待工事渐成，则坚不可摧。同时努力学习SICP的策略，首先抛出点滴星火，再看时，则已成燎原之势。
+* 0.Prelude
 
-本项目以直觉力为基础，步步为营，稳扎稳打，构筑Emacs技能。
+Prejudices say: "Emacs is just hard to learn". Such prejudices undermine Emacs' popularity.
 
-是为序.
+This minor project try to break the prejuice and denote how could take least efforts and suffering  to learn Emacs.
 
-** 如此简单的 Emacs：Meta键
+This series blogs were written originally in Chinese from 2020 and have  acculuated around 190 stars.
 
-Emacs的简单，一言以蔽之，只是一个Meta键而已。
-Meta键(键盘上的option/alter键)
-Meta的词源含义是higher，beyond,没有最高,只有更高。 中文译为"元"，发端处，源头处。因此Meta是 Source，Meta关联Source-Code。而在Source-Code中，Function又是的一等公民。 Emacs的简单策略便是将Meta键绑定到Function这项source-code上，即触发按键M-x (x for execucte) 调用函数。在此之后，便可以天马行空的查询要做的事情,
-比如插入当前的日期:
-#+ATTR_HTML: :width 500px
+Emacs is simple and its universe big-bang from M-x.
+
+#+attr_html: :width 500px
+[[file:images/big-bang02.png]]
+
+* 1.So simple Emacs: Meta Key
+
+Emacs' elegance and simplicity, in a nutshell, is just a Meta key.
+Meta is option or alter key on the keyboard. In etymology, Meta means "higher, beyond". Therefore, as spring flows from higher source,  we could understand Meta as Source, and associated it with source-code.
+
+In Source Code, function is the first-class citizen. The simple strategy of Emacs is to bind the Meta key (which has source meaning in etymology) to the source-code or function. Then we could trigger the keys M-x (x for execute) to invoke  the function.
+
+Start form M-x, you can do whatever you desire, such as inserting the current date:
+
+#+attr_html: :width 500px
 [[file:images/00.preface-current-date.png]]
 
-至此，Emacs从战略层面上的所有事情便结束了， 剩下的事情仅仅是战术层面上的高效问题与缝缝补补的实现。
 
-** Emacs的首要策略: 引入Ctrl键
+Until now, all the designing works of Emacs in the strategic level have been finished. The only remaining things are in tactical level about how to implement functions which M-x invokes.
 
-比如从目录中打开一个文件，可以M-x find-file,
-#+ATTR_HTML: :width 500px
+* 2.The primary strategy of Emacs: Introduce the Ctrl key
+
+Take an example to open a file from a directory, you can M-x find-file,
+
+#+attr_html: :width 500px
 [[file:images/00.preface-find-file.png]]
-这项操作需要键入11个字符 Ctrl策略. 然而倘若按键 C-x C-f. 只需要键入4个字符。于是作为Emacs实现高效的核心策略，用按键的“字符调用函数”取代“函数名调用”。
-更简单的例子，比如“向前移动一个字符”。完整的实现方式为 M-x forward-character，而在引入了Ctrl策略之后，只需要C-f。此处C简化了M-x，字符f则是函数forward-character的首字母。
-以上用Control调用functions的方式，称之为Command。Command=Contrl，由此也能反过来看到选择Ctrl键也是语义绑定。
 
-* TODO 目录
-- [[file:01.Semantic-Keybinding.org][1.Semantic Keybinding]]
-- [[file:02.Emacs-As-an-Editor.org][2.Emacs As an Editor]]
-- [[file:03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks.org][3.God's Hands by Dired]]
-- [[file:05.Read-a-Book-In-a-Serioius-Way.org][5.Read a Book In a Serious Way]]
-- [[file:06.Emacs-as-Agenda-by-Org.org][6.Emacs as a Agenda by Org]]
-- [[file:07.Improve-Org-Workflow.org][7.Imporve your Org workflow]]
-- *Chapters in Progress*
-- [[file:04.The-Structure-of-Emacs.org][4.The Structure of Emacs]]
-- [[file:07.Programming.org][8.Programming]]
-- [[file:08.Assitance-to-Programming.org][9.Assitance to Programming]]
-- [[file:09.Literature-Programming.org][10.Literature Programming]]
-- *Appendix*
-- [[file:Appendix-A.Ask-and-Harvest-Answers.org][Appendix A: Ask but not Search]]
-- [[file:Appendix-B.Git-Version-Control.org][Appendix B: Git Version Control]]
-- [[file:Appendix-C.Install-Extensions.org][Appendix C: Install Extensions]]
-- [[file:Appendix-D.Email-Management.org][Appendix D: Email Management]]
-- [[file:Appendix-E.Guidelines-to-employ-Emacs-On-Windows.md][Appendix E: Install-Emacs-On-Windows]]
-- [[file:Appendix-H-Orgmode-Outline-Solutions.md][Appendix H: Orgmode outline solutions]]
-- [[file:How-to-take-smart-notes.org][Appendix G: How to take smart notes]]
+With M-x, we have to type 11 characters to get such a task done.
+In contrast, we only type 4 characters as C-x C-f with Ctrl key. As we see, to achieve high efficiency, Emacs's primary strategy is to replace "call function by full name" with the "call function by characters".
 
+A simpler example, such as "move one character forward". The complete implementation is M-x forward-character. But after the introduction of the Ctrl strategy, only the characters of C-f is required.
+
+Since C (Ctrl) simplifies M-x, and the character f is the first letter of the function forward-character.
+
+The above method of calling functions with Control is called Command. Command is equivalent to Contrl, we find that choosing  Ctrl as command is also a semantic binding just as choosing Meta as source-code.
