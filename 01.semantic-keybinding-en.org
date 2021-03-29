@@ -1,0 +1,160 @@
+#+TITLE: 01.Semantic-Keybinding
+
+From the [[file:00.prelude.org][prelude]], Emacs big-bang its universe simply from =M-x=. It invoke interactive functions with M(Meta)-x(Execute).
+
+Then it go one more step, replaces the double keys of  =M-x= with the single key of =Ctrl=, and even further truncates function's name to its initial letter.
+
+Now instead of redundant  =M-x forward-char=, we straightforwardly strike =C-f= to move cursor forward a character.
+
+The logic here is obvious: C (Ctrl) substitutes for M (Meta)-x, while f for forward-char.
+
+We pause a moment here to organize our thoughts.
+
+1) Key "Meta" has source meaning in etymology, so it is applied to invoke full-name functions,
+2) Key "Ctrl" corresponds to "Command"
+3) Key "f" is abbreviated for "forward-character"
+
+So differs from Vim, we could easily conclude that Emacs was designed to bind keys semantically.
+
+With such semantic key bindings, we could manipulate Emacs smoothly as veterans even without remembering one key binding.
+
+The subsequent sessions starts to the cursor movement semantically from:
+
+1) Character and Word
+2) Line and Sentence
+3) Vertical movement
+4) Vertically Page down and up
+5) Buffer
+6) Logic Text Unit
+7) Keys layout
+8) Concepts
+
+* 1. Character and Word
+
+C-f (M-x forward-char) Move cursor forward a character
+
+C-b (M-x backward-char) Move cursor backward a character
+
+Character is the minimal unit to operate, and beyond character is word. Now we recall the etymology of "Meta" which means "higher and beyond".
+
+So "Meta" domains more scope than "Ctrl", if they bind identical keys, then we have:
+
+M-f (M-x forward-word) Move cursor forward a word (higher than character)
+
+M-b (M-x backward -word) Move cursor backward a word
+
+* 2.Line and Sentence
+
+C-e (e for end) Move cursor to end end of line
+
+C-a (a for ahead) Move cursor to ahead of line
+
+Again with same logic, "Meta" is in charge more than "Ctrl". A sentence might extend to multiple lines so it is larger than line.
+
+M-e Move cursor to end of sentence
+
+M-a Move cursor to ahead of sentence
+
+The above sections are all about move cursor horizontally.
+Corresponding to them are vertical movements.
+
+* 3.Vertical Movement
+
+C-n (M-x next-line) Move cursor to next line
+
+C-p (M-x previous-line) Move cursor to previous line
+
+How about "M-n" and "M-p" which are expected to govern more territory.
+
+The truth is that vanilla Emacs does not define them, and leave us a golden opportunity.
+
+We'll come back for the opportunity later.
+
+* 4.Vertically Page Down and Up
+
+M-v Scroll one page up
+C-v Scroll one page down
+
+It's apparent that a "V" in "M-v" means "vertical". We also be aware that Meta is higher.So Meta-Vertical is to move vertically higher up.
+
+In contrast to Meta as higher, we choose Ctrl which domains less area as lower. So Ctrl-Vertical is to move cursor vertically lower down.
+
+When having a second thinking on such bindings, we might find it more semantically clear if bind triple keys as "M-v-u(up)" and "M-v-d(down)" than the above double key bindings.
+
+The idea behind is that triple keys-sequence are redundant and time-consuming. We utilize less keys to get more jobs done.
+
+"M-v" and "C-v" help us scroll by the whole page. However, what we want usually is to scroll half page or multiple lines.
+
+Now we restore to "M-p" and "M-n" in [[3.Vertical Movement]] which should control more than single line as "C-p" and "C-n":
+
+Therefore, we define functions of "previous-multilines" and "next-multilines" and bind them to "M-p" and "M-n".
+
+
+#+begin_src emacs-lisp :session sicp :lexical t
+(defun previous-multilines ()
+  "scroll down multiple lines"
+  (interactive)
+  (scroll-down (/ (window-body-height) 3)))
+
+(defun next-multilines ()
+  "scroll up multiple lines"
+  (interactive)
+  (scroll-up (/ (window-body-height) 3)))
+
+(global-set-key "\M-n" 'next-multilines) ;;custom
+(global-set-key "\M-p" 'previous-multilines) ;;custom
+#+end_src
+
+#+BEGIN_QUOTE Notice
+I configure "Invert scroll direction(Natural Scrolling)" in touch-pad and mouse , so "up and down" are reversely map to "next and previous".
+#+END_QUOTE
+
+* 5. Buffer
+
+M-< (Move cursor to the beginning of the buffer)
+
+M-> (Move cursor to the end of the buffer)
+
+Please notice that the power of "Ctrl" just stretch up to "line", and all the left higher segments(sentence, paragraph etc) are dominated by "Meta".
+
+* 6. Text Unit
+
+- *Paragraph*
+  - M-{ ::  Move back to previous paragraph beginning (=backward-paragraph=).
+  - M-} :: Move forward to next paragraph end (=forward-paragraph=).
+  - M-h :: Put point and mark around this or next paragraph (=mark-paragraph=).
+- *Pages*
+  - M-x ::  what-page Display the page number of point, and the line number within that page.
+  - C-x [ :: Move point to previous page boundary (=backward-page=).
+  - C-x ] :: Move point to next page boundary (=forward-page=).
+  - C-x C-p :: Put point and mark around this page (or another page) (=mark-page=).
+  - C-x l :: Count the lines in this page (=count-lines-page=).
+
+* 7. Keys Layout
+
+Suppose to lay keys as:
+#+BEGIN_EXAMPLE
+Alt(option) --> Ctrl --> Space <-- Ctrl <--Alt
+#+END_EXAMPLE
+
+Keep the layout on whatever keyboard.
+
+* 8.Fundamental Concepts
+
+In Emacs, we call cursor a special name as "point", and the selected area as "region". "Point" is starting end of the region while "Mark" is the end point.
+
+#+NAME: FIGURE 8-8. Commands to set mark and define a region.
+|---------+---------------------------------|
+| Command | Description                      |
+|---------+---------------------------------|
+| C-@     | Set mark                        |
+| C-Spc   | same as C-@                     |
+| C-x C-x | Interchange mark and point      |
+| M-@     | set mark after next word        |
+| M-h     | region around paragraph         |
+| C-x h   | Put region around entire buffer |
+|---------+---------------------------------|
+
+* 9.Summary
+
+Emacs starts everything from M-x, then employ "Ctrl" to facilitate it and expand it universe with semantic key-bindings.
