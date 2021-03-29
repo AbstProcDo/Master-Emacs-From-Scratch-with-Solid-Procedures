@@ -1,6 +1,6 @@
 * Navigation
 - [[file:readme-cn.org][中文版 Chinese Version]]
--
+- [[file:00.prelude.org][00.Prelude]]
 - [[file:01.semantic-keybinding-en.org][01.Semantic Keybindings]]
 - -----------------------------------------------
 - The successive chapters are in translating.....
