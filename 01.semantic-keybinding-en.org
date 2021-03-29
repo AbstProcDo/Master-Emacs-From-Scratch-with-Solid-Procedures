@@ -1,7 +1,7 @@
 #+TITLE: 01.Semantic-Keybinding
 
 #+attr_html: :width 500px
-[[file:./images/semantic01-Small.png]]
+[[file:./images/semantic-keybindings01.png]]
 
 From the [[file:00.prelude.org][prelude]], Emacs big-bang its universe simply from =M-x=. It invoke interactive functions with M(Meta)-x(Execute).
 
