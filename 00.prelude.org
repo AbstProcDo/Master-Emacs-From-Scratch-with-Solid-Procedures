@@ -5,7 +5,7 @@ Prejudices say: "Emacs is just hard to learn". Such prejudices undermine Emacs' 
 
 This minor project try to break the prejudice and denote how could take least efforts and suffering  to learn Emacs.
 
-This series blogs were written originally in Chinese from 2020 and have  acculmuated around 190 stars.
+This series blogs were written originally in Chinese from 2020 and have  accumulated around 190 stars.
 
 Emacs is simple and its universe big-bang from M-x.
 
