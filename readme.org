@@ -1,5 +1,5 @@
-* Navigation
-- [[file:readme-cn.org][中文版 Chinese Version]]
+* Master Emacs with Solid Procedures
+- [[file:readme-cn.org][Chinese Version 中文版]]
 - [[file:00.prelude.org][00.Prelude]]
 - [[file:01.semantic-keybinding-en.org][01.Semantic Keybindings]]
 - -----------------------------------------------
