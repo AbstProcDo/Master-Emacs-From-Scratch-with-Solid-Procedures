@@ -1,20 +1,4 @@
 * Master Emacs with Solid Procedures
-- [[file:readme-cn.org][Chinese Version 中文版]]
-- [[file:00.prelude.org][00.Prelude]]
-- [[file:01.semantic-keybinding-en.org][01.Semantic Keybindings]]
-- -----------------------------------------------
-- The successive chapters are in translating.....
-- 02.Emacs as an editor
-- 03.God's eyes and hands by Dired
-- 04*.The Structure of Emacs(Chinese version in progress)
-- 05.Read a book in a serious way
-- 06.Emacs as an Agenda by Org
-- 07.Improve org workflow
-- 08.Programming
-- 09.Assistance to programming
-- 10.Literature Programming
-- Appendix A ~ H
-
 * 0.Prelude
 
 Prejudices say: "Emacs is just hard to learn". Such prejudices undermine Emacs' popularity.
@@ -61,3 +45,20 @@ A simpler example, such as "move one character forward". The complete implementa
 Since C (Ctrl) simplifies M-x, and the character f is the first letter of the function forward-character.
 
 The above method of calling functions with Control is called Command. Command is equivalent to Contrl, we find that choosing  Ctrl as command is also a semantic binding just as choosing Meta as source-code.
+
+* 3.Contents
+- [[file:readme-cn.org][Chinese Version 中文版]]
+- [[file:00.prelude.org][00.Prelude]]
+- [[file:01.semantic-keybinding-en.org][01.Semantic Keybindings]]
+- -----------------------------------------------
+- The successive chapters are in translating.....
+- 02.Emacs as an editor
+- 03.God's eyes and hands by Dired
+- 04*.The Structure of Emacs(Chinese version in progress)
+- 05.Read a book in a serious way
+- 06.Emacs as an Agenda by Org
+- 07.Improve org workflow
+- 08.Programming
+- 09.Assistance to programming
+- 10.Literature Programming
+- Appendix A ~ H
