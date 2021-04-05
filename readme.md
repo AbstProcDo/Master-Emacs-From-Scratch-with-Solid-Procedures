@@ -44,7 +44,7 @@ The above method of calling functions with Control is called Command. Command is
 - [00.Prelude](00.prelude.org)
 - [01.Semantic Keybindings](01.semantic-keybinding-en.org)
 
-  ------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 - The successive chapters are in translating.....
 - 02.Emacs as an editor
