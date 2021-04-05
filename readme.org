@@ -1,0 +1,36 @@
+* Master Emacs with Solid Procedures
+* 1.Prelude
+
+Prejudices say: "Emacs is just hard to learn". Such prejudices undermine Emacs' popularity.
+
+This minor project try to break the prejudice and denote how could take least efforts and suffering  to learn Emacs.
+
+#+begin_quote
+This series blogs were written originally in Chinese, so translating might take nights.
+#+end_quote
+
+
+Emacs is simple and its universe big-bang from M-x.
+
+#+attr_html: :width 500px
+[[file:images/big-bang02.png]]
+
+* 2.Progress
+- [[file:readme-cn.org][Chinese Version 中文版]]
+- [[file:00.prelude.org][00.Prelude]]
+- [[file:01.semantic-keybinding-en.org][01.Semantic Keybindings]]
+- -----------------------------------------------
+- The successive chapters are in translating.....
+- 02.Emacs as an editor
+- 03.God's eyes and hands by Dired
+- 04*.The Structure of Emacs(Chinese version in progress)
+- 05.Read a book in a serious way
+- 06.Emacs as an Agenda by Org
+- 07.Improve org workflow
+- 08.Programming
+- 09.Assistance to programming
+- 10.Literature Programming
+- Appendix A ~ H
+
+
+<a href="https://www.buymeacoffee.com/gaoweiwa" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
