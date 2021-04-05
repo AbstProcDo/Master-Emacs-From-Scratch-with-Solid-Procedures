@@ -1,8 +1,5 @@
 #+TITLE: 01.Semantic-Keybinding
 
-#+attr_html: :width 500px
-[[file:./images/semantic-keybindings01.png]]
-
 From the [[file:00.prelude.org][prelude]], Emacs big-bang its universe simply from =M-x=. It invoke interactive functions with M(Meta)-x(Execute).
 
 Then it go one more step, replaces the double keys of  =M-x= with the single key of =Ctrl=, and even further truncates function's name to its initial letter.
@@ -32,7 +29,7 @@ The subsequent sessions starts to the cursor movement semantically from:
 7) Keys layout
 8) Concepts
 
-* 1. Character and Word
+* 1.Character and Word
 
 C-f (M-x forward-char) Move cursor forward a character
 
@@ -112,7 +109,7 @@ Therefore, we define functions of "previous-multilines" and "next-multilines" an
 I configure "Invert scroll direction(Natural Scrolling)" in touch-pad and mouse , so "up and down" are reversely map to "next and previous".
 #+END_QUOTE
 
-* 5. Buffer
+* 5.Buffer
 
 M-< (Move cursor to the beginning of the buffer)
 
@@ -120,7 +117,7 @@ M-> (Move cursor to the end of the buffer)
 
 Please notice that the power of "Ctrl" just stretch up to "line", and all the left higher segments(sentence, paragraph etc) are dominated by "Meta".
 
-* 6. Text Unit
+* 6.Text Unit
 
 - *Paragraph*
   - M-{ ::  Move back to previous paragraph beginning (=backward-paragraph=).
@@ -133,7 +130,7 @@ Please notice that the power of "Ctrl" just stretch up to "line", and all the le
   - C-x C-p :: Put point and mark around this page (or another page) (=mark-page=).
   - C-x l :: Count the lines in this page (=count-lines-page=).
 
-* 7. Keys Layout
+* 7.Keys Layout
 
 Suppose to lay keys as:
 #+BEGIN_EXAMPLE
