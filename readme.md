@@ -10,7 +10,7 @@ This minor project try to break the prejudice and denote how could take least ef
 
 Emacs is simple and its universe big-bang from M-x.
 
-<img src="images/big-bang02.png" alt="image" width="500" >
+<img src="images/big-bang02.png" alt="image" width="400" >
 
 # 1.So simple Emacs: Meta Key
 
