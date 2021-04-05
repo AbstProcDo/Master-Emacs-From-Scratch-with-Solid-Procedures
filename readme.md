@@ -1,6 +1,5 @@
 # Master Emacs with Solid Procedures
 
-
 # 0.Prelude
 
 Prejudices say: \"Emacs is just hard to learn\". Such prejudices undermine Emacs\' popularity.
@@ -13,7 +12,7 @@ Emacs is simple and its universe big-bang from M-x.
 
 <img src="images/big-bang02.png" alt="image" width="500" >
 
-# 1 So simple Emacs: Meta Key
+# 1.So simple Emacs: Meta Key
 
 Emacs\' elegance and simplicity, in a nutshell, is just a Meta key. Meta is option or alter key on the keyboard. In etymology, Meta means "higher, beyond\". Therefore, as spring flows from higher source, we could understand Meta as Source, and associated it with source-code.
 
@@ -39,7 +38,7 @@ Since C (Ctrl) simplifies M-x, and the character f is the first letter of the fu
 
 The above method of calling functions with Control is called Command. Command is equivalent to Ctrl, we find that choosing Ctrl as command is also a semantic binding just as choosing Meta as source-code.
 
-# 3. Contents
+# 3.Contents
 
 - [Chinese Version 中文版](readme-cn.org)
 - [00.Prelude](00.prelude.org)
@@ -60,7 +59,7 @@ The above method of calling functions with Control is called Command. Command is
 -   Appendix A \~ H
 
 
-<a href="https://www.buymeacoffee.com/gaoweiwa" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+<a href="https://www.buymeacoffee.com/gaoweiwa" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> and thank you.
 
 
 
