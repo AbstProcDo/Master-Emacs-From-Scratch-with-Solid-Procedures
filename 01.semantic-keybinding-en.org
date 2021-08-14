@@ -32,7 +32,6 @@ The subsequent sessions starts to the cursor movement semantically from:
 * 1.Character and Word
 
 C-f (M-x forward-char) Move cursor forward a character
-
 C-b (M-x backward-char) Move cursor backward a character
 
 Character is the minimal unit to operate, and beyond character is word. Now we recall the etymology of "Meta" which means "higher and beyond".
@@ -40,19 +39,16 @@ Character is the minimal unit to operate, and beyond character is word. Now we r
 So "Meta" domains more scope than "Ctrl", if they bind identical keys, then we have:
 
 M-f (M-x forward-word) Move cursor forward a word (higher than character)
-
 M-b (M-x backward -word) Move cursor backward a word
 
 * 2.Line and Sentence
 
 C-e (e for end) Move cursor to end end of line
-
 C-a (a for ahead) Move cursor to ahead of line
 
 Again with same logic, "Meta" is in charge more than "Ctrl". A sentence might extend to multiple lines so it is larger than line.
 
 M-e Move cursor to end of sentence
-
 M-a Move cursor to ahead of sentence
 
 The above sections are all about move cursor horizontally.
@@ -61,7 +57,6 @@ Corresponding to them are vertical movements.
 * 3.Vertical Movement
 
 C-n (M-x next-line) Move cursor to next line
-
 C-p (M-x previous-line) Move cursor to previous line
 
 How about "M-n" and "M-p" which are expected to govern more territory.
@@ -112,7 +107,6 @@ I configure "Invert scroll direction(Natural Scrolling)" in touch-pad and mouse 
 * 5.Buffer
 
 M-< (Move cursor to the beginning of the buffer)
-
 M-> (Move cursor to the end of the buffer)
 
 Please notice that the power of "Ctrl" just stretch up to "line", and all the left higher segments(sentence, paragraph etc) are dominated by "Meta".

@@ -1,0 +1,412 @@
+# Mastering Eshell
+
+By *Mickey Petersen*
+
+![img](images/fleuron2.gif)
+
+There are several shells for Emacs,  but none can match the versatility and integration with Emacs like  Eshell. Eshell is a shell written entirely in Emacs-Lisp, and it  replicates most of the features and commands from GNU CoreUtils and the  Bourne-like shells. So by re-writing common commands like `ls` and `cp` in Emacs-Lisp, Eshell will function identically on any environment Emacs itself runs on.
+
+Unfortunately, there is a problem: Eshell is woefully underdocumented – a rare sight  in GNU Emacs – so I’ve compiled this guide to help people make full use  of what Eshell has to offer.
+
+## Overview
+
+Unlike the other shells in Emacs, Eshell does not inherit from *comint-mode*, the default mode for interacting with inferior processes in Emacs. But  because Eshell is not an inferior process, it does not have to use  comint; but while that may seem like a good thing, it does mean that  hooks and routines written for *comint-mode* won’t work with Eshell.
+
+However, almost all the Emacs commands common to *comint-mode* are reimplemented natively in Eshell – and most share the same keybinds – but there are a few new advances that haven’t been ported over to  Eshell, like the spiffy `comint-history-isearch-backward-regexp` in Emacs 23.2, bound to `M-r`.
+
+Eshell works well on any platform Emacs itself runs on, as Eshell interacts  with a common middleware (namely the Emacs-Lisp/C source library) and  that middleware will in turn communicate with your OS on how to go about copying files and what have you. That middleware support enables Eshell to take advantage of [TRAMP](http://www.gnu.org/software/tramp/) as well.
+
+Given Emacs’ UNIX origin, Eshell emulates traditional UNIX shells like *bash* and the GNU toolchain. This is good news if you are using Windows and  cannot be bothered fidgeting with cygwin, or if you require a completely portable Emacs with few or no external dependencies.
+
+And actually, the Windows support in Eshell is a lot better, in many ways, than cygwin’s bash. You do not have the `/cygdrive/c` crud to contend with, as Eshell natively supports Windows/MS-DOS drive paths (so `cd D:` and `D:` both work equally well.)
+
+Despite all the advantages offered by Eshell, there are some points I want to make that seem to confuse some people:
+
+1. Eshell is *not* a terminal emulator. It does not talk to a shell, for it *is* the shell. Everything it does – from displaying stuff on the screen, to fetching the contents of a directory – it does through Emacs, and Emacs in turn talks to your operating system.
+2. Because of the way  Eshell talks to other processes (asynchronous ones especially) there may be issues with the way it buffers text and how interrupts work.
+3. Eshell does not support interactive (or “visual” in Eshell parlance) programs, like *top*, directly; you must tell Eshell to launch them in a separate `ansi-term` instance instead.
+4. It is not *bash* or *zsh* or even *csh*; do not treat it as such, even though it is heavily inspired by them. To use Eshell effectively you should treat it as if you are using a  completely alien shell.
+
+## Commands
+
+Eshell is capable of invoking almost any elisp function loaded in Emacs. That  sort of flexibility is unmatched; there are no shells out there capable  of approximating what Eshell can do. In fact, this functionality is  heavily used (and encouraged!) by Eshell. If you want to open the file `foobar.txt` in Emacs you simply invoke `find-file foobar.txt` and Eshell will map that to the elisp call `(find-file "foobar.txt")` and open the file for you.
+
+### Technical Details
+
+All commands evaluated by Eshell have an *evaluation order*, which is an ordered list your command must pass through to determine  what part of Eshell handles it. If there is nothing on the list that  wants to evaluate your command, you will be told your command is  invalid.
+
+Assuming you want to execute the command `cp`, the evaluation order is:
+
+1. A full filepath (e.g. `/bin/cp`) runs `cp` in `/bin`
+2. Look for the command prefix, `eshell-explicit-command-char` (default is `*`), and if it is found then look for the command in the search path.
+3. Look for a shell-defined alias (`alias` command)
+4. Look for `cp` in the search path, `$PATH` (or `eshell-path-env`)
+5. Look for a Lisp function named `cp` or the elisp function `eshell/cp`
+
+The variable `eshell-prefer-lisp-functions` makes internal elisp calls take priority over external calls. What that means is when it’s set to `t` Eshell will look for an elisp function *first*, instead of *last*. If the command prefix is specified, though, this directive is ignored.
+
+### Built-In Commands
+
+Eshell has a handful of commands written in Emacs-Lisp that closely emulate a  large subset of what the real GNU Coreutils (or your favorite shell)  has. Those commands are called “Alias functions.”
+
+EShell only implements a subset of the functionality provided by the real  commands, but if you pass an unknown argument to Eshell it will defer to the *real* commandline tool (if it is installed) automatically.
+
+Here’s what Eshell currently re-implements in elisp:
+
+`cat`, `cp`, `ls`, `cd`, `export`, `dirs`, `du`, `echo`, `env`, `kill`, `ln`, `mkdir`, `mv`, `alias`, `popd`, `pushd`, `pwd`, `rm`, `rmdir`, `time`, `umask`.
+
+There is a big emphasis on adhering to the original GNU functionality, so the fact they are emulated is unlikely to cause you any trouble.
+
+### Command Interception
+
+Eshell has a cool mechanism where certain commands are *intercepted* and passed on to Emacs proper. This enables you to invoke a command like `man ls` and have Emacs’s built-in `man` formatter handle it instead. This functionality is especially important for interactive commands (as they will not work properly in Eshell) as  Eshell would not be able to call them otherwise.
+
+But where the feature really shines is with complex commands like `grep`, or `diff` as Emacs comes with awesome grep and diff tools built in. This feature alone shows the power of Eshell.
+
+The following commands are redirected to Emacs proper:
+
+`agrep`, `diff`, `egrep`, `fgrep`, `glimpse`, `grep`, `info`, `jobs`, `locate`, `man`, `occur`, `su`, `sudo`, `whoami`.
+
+The commands `su`, `sudo` and `whoami` are TRAMP aware commands (in Emacs 23.2), so if you are connected to a remote shell they work as expected.
+
+### Subshells
+
+You can use `$()` to in-line elisp calls and use their output as arguments, in much the  same way as you would in bash. The only caveat here is you cannot use  the backquote (backtick) to spawn a subshell, but that syntax was never  universally supported anyway. It’s also possible (though I would not  recommend it, for there are cases where it does not work) to use a  standard elisp form like this: `(form ...)` – so the same as the subshell syntax I explained before, but without the `$`.
+
+### Useful Elisp Commands
+
+Eshell comes with a selection of helper functions that make your day-to-day  life just **. That, combined with the power to invoke almost any elisp  function, means you have incredible flexibility and control over your  shell. Some of the commands I’ve listed in the table below were written  for Eshell specifically, and the rest are elisp commands I find useful.
+
+I’ve compiled a table of elisp functions (some are made for Eshell; others are not.)
+
+- `listify ARGS`
+
+  Parses an argument string into elisp list notation and prints it to the  screen. It’s clever enough to handle both MS-DOS/Windows and POSIX-style argument syntax.
+
+- `addpath PATH`
+
+  Adds the argument, which must be a path, to the `$PATH` environment variable. If no argument is specified the existing paths are pretty-printed to the screen.
+
+- `unset ENV-VAR`
+
+  Unsets an existing environment variable
+
+- `find-file FILE`
+
+  Finds the file FILE and opens it in Emacs. This function is TRAMP aware and will therefore work remotely.
+
+- `dired DIRECTORY`
+
+  Opens a dired buffer in DIRECTORY.
+
+- `calc-eval EXPR`
+
+  Runs EXPR through the Emacs calculator.
+
+- `upcase STR`/`downcase STR`
+
+  Converts STR to upper- or lowercase.
+
+- `vc-dir DIRECTORY`
+
+  Reports the status of a version controlled directory (equivalent to the `status` command in most VCS)
+
+- `ediff-files FILE1 FILE2`
+
+  Diffs FILE1 and FILE2 using ediff, Emacs’ diff engine.
+
+If you’re an Eshell user and you use elisp commands not listed in the table above, post a comment and let tell me what it is.
+
+### Aliasing
+
+Aliasing in Eshell works in much the same way as it does in other mainstream  shells, except you can freely mix elisp and Eshell commands. The command `alias` takes an `alias-name` and a `definition`. The `definition` must be surrounded by *single quotes*. You can use the usual argument references known from other shells: `$1` for the first argument, `$2` for the second, …, or `$*` to use all arguments, or omit them entirely as Eshell will magically  append them on to the end of a command if they weren’t referenced in the definition.
+
+To delete an alias, simply leave out the `definition` argument and it will be removed automagically. To list all the aliases, leave out both arguments.
+
+Eshell will write the alias definitions to `eshell-aliases-file`, which in turn is governed by the `Eshell-directory-name` and that put together means your alias file will be put in `~/.Eshell/alias` by default. This is done every time you alter an alias.
+
+Another useful thing to know is the *auto-correcting aliasing*. If you type an invalid command too many times (governed by `eshell-bad-command-tolerance`, which is 3 by default) Eshell will offer to alias it to its intended  command for you. If you don’t like that, you can bump up the  aforementioned variable to a large number.
+
+#### Useful Examples
+
+Let’s map the cumbersome command `find-file` to the more manageable `ff`:
+
+```
+alias ff 'find-file $1'
+```
+
+And let’s map `dired` to `d`:
+
+```
+alias d 'dired $1'
+```
+
+### Visual Commands
+
+Some commands are too complex to be displayed by Eshell directly, and require special handling. An example would be `top`, a program that won’t work with a dumb terminal. To support these commands Eshell will run a `term` session when you invoke a command Eshell considers visual.
+
+To modify the list of visual commands, you can alter `eshell-visual-commands`.
+
+## Command History
+
+Eshell comes with a feature-rich command history facility. Because Eshell does not use `comint-mode` it does not have *all* the history features available to it, but most of them are reimplemented.
+
+- `M-r / M-s`
+
+  Search backwards or forwards for a command by regexp
+
+- `M-p / M-n`
+
+  Goes backwards or forwards in the command history list
+
+- `C-p / C-n`
+
+  Jump to the previous or next command position in Eshell
+
+- `C-c M-r / C-c M-s`
+
+  Jumps to the previous or next command that shares the command currently used  as input. So it jumps to other instances of the command `foo` if that is the current input.
+
+Unfortunately, the new-and-improved `comint-history-isearch-backward-regexp` (bound to `M-r` in comint) doesn’t work in Eshell because it not inherit from `comint` (and therefore misses out on upgrades.).
+
+### History Interaction
+
+Like bash and other shells, Eshell has support for history modification and  interaction. It’s probably easier to refer you to the bash info manual  for detailed information on how the history interaction works. I’ve  included a small table below that describes most of the history syntax  Eshell supports.
+
+- `!!`
+
+  Repeats the last command
+
+- `!ls`
+
+  Repeats the last command **beginning** with `ls`
+
+- `!?ls`
+
+  Repeats the last command **containing** `ls`
+
+- `!ls:n`
+
+  Extract the *nth* argument from the last command **beginning** with `ls`
+
+- `!ls<tab>`
+
+  Using *pcomplete*, show completion results matches `ls`
+
+- `^old^new`
+
+  Quick substitution. Using the last command, replace`old` with `new` and run it again. Appears to be buggy.
+
+- `$_`
+
+  Returns the last parameter in the last executed command.
+
+Eshell also has some support for bash history modifiers (like `!!:s/old/new/`) and [the bash reference on history interaction](http://www.gnu.org/software/bash/manual/bash.html#History-Interaction) would be a good place to brush up on that.
+
+## Commandline Interaction
+
+### The Eshell Prompt
+
+You can customize the Eshell prompt by modifying `eshell-prompt-function`, a variable that takes a function that defines what the prompt should  contain. By relegating prompt configuration to elisp you can do just  about anything you like with it. The only problem is, of course, that  Eshell will need to be told *what* the prompt “looks” like, so you must also edit the variable `eshell-prompt-regexp` so Eshell knows what the prompt is.
+
+### The Commandline
+
+Eshell supports `\` to escape newlines and supports rudimentary multi-line input that way. Another way of doing multi-line *literal strings* is with single quotes: begin a single quote and hit enter, and you are  free to enter text until the closing quote delimiter is encountered. If  you use double quotes Eshell will expand subshell commands and do  variable expansion.
+
+Due to the way Eshell  works, you can even go back and modify the text you entered, in quotes.  This is very handy as you can go back and change stuff you don’t like,  and get it right the first time.
+
+### Useful Keybindings
+
+Eshell comes equipped with a couple of quality-of-life improvements that make interacting with Emacs and Eshell a lot easier.
+
+- `C-c M-b`
+
+  Inserts the printed buffer name at point
+
+- `C-c M-i`
+
+  Inserts the printed process name at point
+
+- `C-c M-v`
+
+  Inserts an environment variable name at point
+
+- `C-c M-d`
+
+  Toggles between direct input and delayed input (send on RET).
+
+Useful for some programs that don’t work correctly with buffered input.
+
+## Argument Predicates
+
+Argument predicates are a cool way of quickly filtering lists of files or even  elisp lists. The predicate syntax is based on the one used in zsh, so if you are familiar with argument predication in zsh, you can apply most  of your knowledge to Eshells’ version.
+
+Unlike most other areas of Eshell, argument predicates are documented in Eshell itself. You can access the help files by typing `eshell-display-predicate-help` or `eshell-display-modifier-help`.
+
+Filtering globbed lists of files is very useful, as it saves you the hassle of using tools like `find` or abusing `ls` to do your thing.
+
+The help file is fairly spartan and only serves as a simple reference, so  I’ve included a small guide here; but actually, the only real way to  learn something as flexible as argument predication is simply by trial  and error.
+
+### Syntax Reference
+
+I’ve opted not to reprint the sizeable list of predicates and modifiers, as  the Eshell manual (see the commands above) do a good enough job of  explaining how they work.
+
+### Globbing
+
+Globbing in Eshell follow the same rules as it does in most other common shells: it is the shell that does the expansion of globs and *it* passes the expanded list of matches on to commands like `ls`. That’s why when you use `find` and `xargs` together it’s critical that you pass `-print0` to `find`, and `-0` to `xargs`. If you don’t, filenames with obscure characters or spaces in them may  trip up xargs; by using the NUL character as a separator ensures  tokenization takes place correctly as the NUL character is an invalid  character (along with `/`) in files.
+
+### Elisp Lists
+
+Eshell’s “lists” are actually elisp lists in their printed form as well as  internally. That makes life a lot simpler if you think about it, as  Eshell can paw off list handling to elisp, which is something Lisp does  well.
+
+Simplest glob example is `echo *`, which echos a list of all the wildcard matches in the current  directory. Because – as I just mentioned above – wildcard expansion  takes place *inline*, I can immediately apply a modifier to the `*` wildcard above.
+
+Let’s uppercase the globbed result set:
+
+```
+/ $ echo *(:U)
+("BAR" "BIN/" "DEV/" "ETC/" "FOO" "HOME/" "LIB/" "TMP/" "USR/" "VAR/")
+```
+
+Notice how I used `()` immediately following the glob pattern. The brackets are what makes  argument modifiers or predicates possible. Modifiers are things that *modify* (big surprise!) the resulting list. Modifier commands always begin with `:`, and predicates do not.
+
+Another example, but this time I filter directories using a predicate:
+
+```
+/ $ echo *(^/)
+("bar" "foo")
+```
+
+The circumflex, `^`, in this case, like in regular expressions, is negation. The `/` means “directories” only.
+
+But I don’t have to use globs to apply modifiers or predicates to lists:
+
+```
+/ $ echo ("foo" "bar" "baz" "foo")(:gs/foo/blarg/)
+("blarg" "bar" "baz" "blarg")
+```
+
+This time I replaced all occurrences of *foo* with *blarg*. Observe that the syntax is identical, except instead of using globs to get a list of files, I used a list of my own choosing.
+
+The advantages provided by argument predicates and modifiers will greatly  reduce commandline clutter as the predicates cover permissions,  ownership, file attributes, and much more.
+
+### Adding New Modifiers and Predicates
+
+You can even add your own predicates (`eshell-predicate-alist`) or modifiers (`eshell-modifier-alist`):
+
+```
+(add-to-list 'eshell-modifier-alist '(?X . '(lambda (lst) (mapcar 'rot13 lst))))
+```
+
+Here I’ve bound `X` to `rot13`, the substitution cipher:
+
+```
+/ $ echo ("foo" "bar" "baz")(:X)
+("sbb" "one" "onm")
+```
+
+## Plan 9 Smart Shell
+
+Eshell comes with a pared-down facsimile of Plan 9’s terminal, called *the Eshell smart display*. The smart display is meant to improve the write-run-revise cycle all  commandline hackers go through. It works by not letting the point follow the output of a command you execute, like a normal terminal would.  Instead, the point is kept on the line of the command you executed,  letting you revise it easily without having to use `M-p` and `M-n` or the history modification commands.
+
+If smart display is enabled it will also let you review the output of long-running commands by using `SPC` to move down a page and `BACKSPACE` to move up a page. If any other key is pressed it will jump the end of  the buffer, essentially acting in the same way as if smart display  wasn’t enabled.
+
+Essentially, if Eshell detects that you want to *review* the last executed command, it will help you do so; if, on the other  hand, you do not then Eshell will jump to the end of the buffer instead. It’s pretty clever about it, and there are switches you can toggle to  fine-tune the behavior.
+
+Where the smart  display really shines is that it lets you modify the command you just  executed by using the movement keys – like you normally would – to  change the command, say to fix a typo or tweak an argument.
+
+The smart display can also be set not to use this extended “edit mode” if  the command returns successfully, and without displaying output, like `chown` for instance. This is how I prefer it.
+
+To enable it put this in your .emacs file:
+
+```
+(require 'eshell)
+(require 'em-smart)
+(setq eshell-where-to-jump 'begin)
+(setq eshell-review-quick-commands nil)
+(setq eshell-smart-space-goes-to-end t)
+```
+
+If Eshell has already initialized (that is, you’ve already launched an  instance of Eshell in Emacs) then evaluating the changes above will not  work. You must switch to the Eshell buffer and type `M-: (shell-smart-initialize)` (or restart Emacs.)
+
+The smart display is a pretty useful feature and it won’t get in your way  once you’re used to it. Simply typing in new commands will make Eshell  jump to the end of buffer as if the point was already there.
+
+## Redirection
+
+Redirection in Eshell works in much the same way as it does in other shells. The  key difference is that Eshell has to emulate the pseudo-devices as they  may not be present (or may not be present in the same form) on platforms such as Windows where `/dev/null` is actually `NUL`.
+
+Another caveat is that Eshell does not support *input* redirection, though it does support output redirection. To skirt around the lack of input redirection you should use pipes instead.
+
+Redirection to stdout, stdin and stderr work as you would expect, and you can send  things to multiple targets as well, which is very nice.
+
+### To Emacs
+
+Because Eshell has to reimplement pseudo-devices internally it is not at the  mercy of dealing with just UNIX device files – it is actually capable of implementing its own pseudo-devices.
+
+A good example would be redirection to a buffer of your choosing, and that can be done with the following syntax:
+
+```
+/ $ cat mylog.log >> #<buffer *scratch*>
+```
+
+The keybind I mentioned before `C-c M-b` will insert the printed name of a buffer.
+
+You can also output straight to an elisp symbol (but be careful you don’t fry the wrong settings):
+
+```
+/ $ echo foo bar baz > #'myvar
+/ $ echo $(cadr myvar)
+bar
+```
+
+If you set `eshell-buffer-shorthand` to `t` you can use the shorthand `#'*scratch*` instead, but it means you will not be able to redirect straight to elisp symbols.
+
+### To Pseudo-Devices
+
+Eshell reimplements the following pseudo-devices:
+
+- `/dev/eshell`
+
+  Prints the output interactively to Eshell.
+
+- `/dev/null`
+
+  Sends the output to the NULL device.
+
+- `/dev/clip`
+
+  Sends the output to the clipboard.
+
+- `/dev/kill`
+
+  Sends the output to the kill ring.
+
+The usual redirection rules like overwrite (`>`) and append (`>>`) apply here.
+
+### To custom virtual targets
+
+You can design your own virtual targets by modifying `eshell-virtual-targets`, an alist that takes the name of the pseudo-device you want to create, and a function that takes one parameter, `mode`, that determines if it’s `overwrite`, `append` or `insert`.
+
+## TRAMP
+
+Eshell now supports TRAMP natively, which means commands like `su`, `sudo` and `whoami` now query the remote system if the directory Eshell is in is *remote*.
+
+To use the TRAMP functionality simply enter the same TRAMP command string you’d use in `C-x C-f` and off it goes. The TRAMP support in Eshell can be a bit flakey, but it *does* give you a remote shell courtesy of TRAMP. You don’t have to limit your TRAMP use to *remote* shells, as TRAMP is also capable of using `sudo` and `su` for local use.
+
+I’ll cover TRAMP in greater detail in a separate article, but the [official manual](http://www.gnu.org/software/tramp/) is a good place to start.
+
+## Startup Scripts
+
+Like most shells, Eshell supports both login and profile/rc shell scripts.  The full filepaths for both are stored in the variables `eshell-login-script` and `eshell-rc-script`, but by default the files `login` and `profile` are stored in `~/.eshell/`.
+
+It bears mention that the comment syntax is `#`.
+
+## More Customization…
+
+Eshell has hundreds of options you can tweak to your liking. To configure Eshell, type `M-x customize-group RET eshell RET`.
+
+## Conclusion
+
+Phew. I think I’ve covered all major areas of Eshell, and I hope it paints it in a good light. Eshell is remarkably versatile thanks to its tight  integration with Emacs. It’s not a full-on replacement for bash and your favorite terminal emulator, but it’ll do most of the commandline stuff  we all inevitably end up doing. If you use a lot of interactive programs then Eshell is probably not very useful, as it has to spawn a separate  term instance for every visual program you run.
+
+Eshell has TRAMP support, custom pseudo-devices, a pocket-sized elisp REPL and lots of useful utility commands like being able to `find-file` or `dired` any directory or file you’re in, and that makes it a trusty tool in my toolbox.

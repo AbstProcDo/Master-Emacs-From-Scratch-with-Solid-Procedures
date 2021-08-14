@@ -34,7 +34,7 @@
 |                       | Staging area:                |                                              |
 |                       |                              | git add                                      |
 |                       |                              | git rm --cached                              |
-|                       | .inspecting:                 |                                              |
+|                       | .inspecting:                 |                                              |t
 |                       |                              | git status                                   |
 |                       |                              | git diff (--cached)                          |
 |-----------------------+------------------------------+----------------------------------------------|

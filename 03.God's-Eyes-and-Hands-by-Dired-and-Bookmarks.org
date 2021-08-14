@@ -243,7 +243,7 @@ M-x view-register r
    # prelude for bookmarks
 
 7. Keyboard Macro Registers
-   --
+
 
 8. Bookmarks
    C-x r m (register bookmark for the current file)
