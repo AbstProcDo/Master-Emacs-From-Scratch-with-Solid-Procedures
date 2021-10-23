@@ -1,0 +1,109 @@
+#+TITLE: Think With Emacs
+For: Beginner to intermediate Emacs users (non-technical backgrounds are okay) who want to use it for organizing what they know/think and learning more
+Outcome: People can use this incredibly powerful although somewhat intimidatingly technical tool to aid their learning
+Possible collaborator: Bill Zimmerly
+
+* The basics
+Objective: Get people from 0 to 1
+– Writing conventions used in this book
+– How to install Emacs
+– Basic concepts and keyboard shortcuts
+– Some customization
+#+Caption: How learn Emacs Keyboards Shortcuts
+#+attr_html: :width 790px
+[[file:How-to-Learn-Emacs-v2-Large.png]]
+
+#+caption: Learn Emacs Keyboards
+#+attr_html: :width 790px
+[[file:20130830-Emacs-Newbie-How-to-Learn-Emacs-Keyboard-Shortcuts.png]]
+
+#+attr_html: :width 790px
+[[file:The-Grumpy-Guide-How-to-Learn-Emacs-Keyboard-Shortcuts2.png]]
+
+#+attr_html: :width 790px
+[[file:Map-for-getting-the-hang-of-Emacs-movement-emacs-map-guide.png]]
+
+* Writing
+Objective: Help people get the hang of using Emacs as a text editor
+Introduce structured writing with Org
+
+– Writing
+– Outlines
+– Lists
+– Tables
+– Links
+– Finding your way around
+
+– Practical applications
+– Planning your projects
+– Exploring decisions
+
+* Sharing
+Objective: Quick win – helping people export their work into a form that other people can understand
+
+– Exporting to HTML
+– Exporting to other formats (LaTeX?)
+
+* Remembering and organizing
+Objective: Capture those quick thoughts
+
+Capturing thoughts
+Organizing your thoughts
+Tags
+Archiving
+
+Practical examples:
+– Keeping track of ideas
+– Reading books
+– Remembering solutions to problems
+
+* Planning your life
+– Using Org for planning
+– Reminders
+– Regular reminders
+– GTD and other ways of working
+
+– Organizing your notes – thinking in terms of contexts, projects,
+etc.
+
+* Working with numbers
+– Why use Emacs instead of a calculator?
+– Quick calculations using Emacs Lisp
+– Org spreadsheet
+– Calc
+
+* Saving time with shortcuts
+– Making your own keyboard shortcuts
+– Keyboard macros
+
+#+attr_html: :width 790px
+[[file:2013-12-12-Plan-The-Lazy-Persons-Guide-to-Saving-Time-with-Emacs.png]]
+
+* Configuring Emacs
+– Customize
+– Your configuration file
+
+* Going beyond
+Inspirational writing to encourage more use.
+
+How and why Emacs becomes the center of many power users’ computer activity.
+
+* Extending Emacs
+– Finding the source
+– A quick primer on Emacs Lisp
+– Interactively understanding code with Edebug
+– Writing your own
+#+attr_html: :width 790px
+[[file:2013-12-12-Plan-Getting-started-with-Emacs-Lisp.png]]
+
+* Org Mode for Emacs
+
+#+attr_html: :width 790px
+[[file:2014-01-07-Map-for-learning-Org-Mode-for-Emacs2.png]]
+
+* Free Softwares
+
+#+attr_html: :width 500px
+[[file:free-software01.png]]
+
+说得好哇，bit by bit, we grow.

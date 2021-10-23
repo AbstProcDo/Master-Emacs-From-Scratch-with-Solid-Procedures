@@ -26,7 +26,7 @@ Here's a quick example of how to get bash working in Windows:
 因此，我要腾出时间来去学习学习eshell的用法。
 * Terminal（vterm）
 vterm已经成为在Linux终端的主流。
-* shell windows中获得一个linux环境
+* Shell windows中获得一个linux环境
 <2021-06-09 Wed 22:41>
 (setenv "ESHELL" "bash")
 同时呢，修改 wls中的bashrc

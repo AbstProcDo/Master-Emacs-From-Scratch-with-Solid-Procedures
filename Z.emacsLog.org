@@ -48,3 +48,7 @@ https://emacs.stackexchange.com/questions/26978/eshell-will-enter-text-is-read-o
 iconv -f utf-8 -t ascii//TRANSLIT
 * 主题使用历史
  发现work主题也很好，绿色的背景赏心悦目。
+* regex选择后复制
+M-x occur
+* 快捷的选择元素
+请教下，按ctrl+f 是向前移动一个字符，ctrl+e 移动到行尾。 加上shift键盘之后，ctrl+shift+f 是向前移动一个字符并选中，ctrl+shift+e向前移动到行尾并选中。刚刚发现这么好用的功能。但是查不到他们调用的命令。都是characer-forward. 怎么查呀？ctrl+shift+f 向前移动并选中，mark-point是从哪里加上去的？
