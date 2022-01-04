@@ -18,8 +18,8 @@
 
 + 最基本(复制粘贴以及删除操作)
   - 复制黏贴 (M-w, C-y) kill-ring
-+ 增查改删
 
++ 增查改删
   - insert (C-q quotation) create
     直接写入
   - Search(Swiper…)
