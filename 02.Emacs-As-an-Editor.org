@@ -48,7 +48,7 @@
 + Special
   - Register
 
-* 2.2.拆解 Backspace 与 Kill
+* 2.2.拆解Backspace与 Kill
 
 键的绑定同样遵循语义化的原则, 比如删除的 <backspace>，
 C-<backspace> 退格删除一个字, M-<backspace>则是后退删除一个单词，因为backspace对应backwords.

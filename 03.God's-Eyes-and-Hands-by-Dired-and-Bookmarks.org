@@ -1,8 +1,8 @@
-* 03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks
+#+TITLE: 03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks
 
-项目 步步为营，零秒精通Emacs 的第三章“03.God’s-Eyes-and-Hands-by-Dired-and-Bookmarks” 宕延半年多，迟迟写出来。因为始终没有思路，怎样写好司空见惯简单，而往往不见其革命性突破的Dired。
+项目“步步为营，零秒精通Emacs”的第三章“03.God’s-Eyes-and-Hands-by-Dired-and-Bookmarks”宕延半年多，迟迟写出来。因为始终没有思路，怎样写好司空见惯简单，而往往不见其革命性突破的Dired。
 
-我希望别人从这篇文章的视角审视dired的时候，会第一时间发出“哇！”的一声。就如每时每刻的呼吸，在幼儿园的某一天，我们突然知道“哇，原来空气存在”。
+我希望别人从这篇文章的视角审视dired的时候，会第一时间发出“哇！”的一声。就如每时每刻的呼吸，在幼儿园的某一天，我们突然知道“哇，原来空气存在！”。
 
 Take everything for granted 的朋友请务必忍耐不要留言。
 
@@ -14,7 +14,7 @@ Take everything for granted 的朋友请务必忍耐不要留言。
 
 1828年数九寒冬的腊月里，德国的青年化学家维勒兴奋地告知老师，他从无机物中制得了有机物尿素的消息。这一刻，横亘千年的传说就此打破，人类大步一跃跨过“生命体”与“非生命体”之间的鸿沟，“连石头都要欢呼起来了（路加福音 19:40 ）”。
 
-第一节将要讲述发生在“古老”的编辑器Emacs的Dired身上，同样的一个“惊心动魄”的迈过天堑的故事。
+这一节将要讲述发生在“古老”的编辑器Emacs的Dired身上，同样的一个“惊心动魄”的迈过天堑的故事。
 
 在Emacs里按键C-x d就能调用dired函数打开的界面：
 #+attr_html: :width 500px

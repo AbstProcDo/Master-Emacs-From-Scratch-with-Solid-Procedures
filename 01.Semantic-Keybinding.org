@@ -2,7 +2,7 @@
 
 Emacs从最源头处,
 首先用 M(Meta)-x(Execute) 调用所有的function。然后更进一步，以Control单键取代M-x双键，并将M-x调用的函数名，简化为其首字母。
-比如向前移动一个字符的冗余实现过程为：M-x forward-char, 而按照简化的逻辑则变为C-f。C（Control）对应 M（Meta）-x，而字符f为函数forward-char的首字母。
+比如向前移动一个字符的冗余实现过程为：M-x forward-char, 而按照简化的逻辑则变为C-f。C (Control)对应 M( Meta)-x，而字符f为函数forward-char的首字母。
 
 换言之，我们只须单单从词源和语义出发, 就能快速且永久性记住常用的快捷键.
 
@@ -69,7 +69,6 @@ C-p (previous-line)
 #+BEGIN_QUOTE 备注
 因为设置了触控板(或者鼠标)Invert scroll direction(Natural Scrolling), 因此up与down是反着映射到next和previous的
 #+END_QUOTE
-
 
 
 * 5.缓冲区(Buffer)
