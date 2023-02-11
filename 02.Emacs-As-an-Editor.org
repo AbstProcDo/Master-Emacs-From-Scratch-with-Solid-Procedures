@@ -48,7 +48,7 @@
 + Special
   - Register
 
-* 2.2.拆解Backspace与 Kill
+* 2.2.拆解Backspace与Kill
 
 键的绑定同样遵循语义化的原则, 比如删除的 <backspace>，
 C-<backspace> 退格删除一个字, M-<backspace>则是后退删除一个单词，因为backspace对应backwords.
@@ -106,7 +106,7 @@ Emacs Manual中很多类似的高颗粒度的绑定键, 头悬梁锥刺股的背
 
 由此从直觉里生发的成就感和兴趣会驱动我们应用更加复杂的命令和组合, 从而更高效地"零秒"应用和掌握Emacs.
 
-* 2.4.对比 Search 功能的 Emacs 操作与命令行操作
+* 2.4.对比Search功能的Emacs操作与命令行操作
 
 Emacs的优势之一是便捷地对数据和查询结果的作二次处理.
 比如想从宏观上了解下Emacs手册中中全部whitespace操作.

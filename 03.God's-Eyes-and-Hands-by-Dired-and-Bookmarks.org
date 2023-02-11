@@ -39,6 +39,7 @@ Write programs to handle text streams, because that is a universal interface.
 [[file:images/一切皆为文件01.png]]
 
 同时计算机中的每个零部件都可触可摸，可视可见，调用ls命令查看所有设备的属性：
+
 #+attr_html: :width 500px
 [[file:images/一切皆为文件02.png]]
 
@@ -69,6 +70,7 @@ lrwx------ 1 gaowei gaowei 64 Sep  9 06:21 /dev/fd/2 -> /dev/pts/0
 #+end_src
 
 从结果可知，三者全有读写权限。然而写入其中的内容却无法存储。比如从命令行中下面的输出：
+
 [[file:images/一切皆为文件04.png]]
 
 打印到屏幕上之后，stdout文件并不保存任何内容，如果要把用户名“gaowei”修改为”me“，只能将上面的输出复制粘贴到编辑器中，或者用其他命令行工具重新输出一遍，stdout文件本身并不保存任何信息。
@@ -81,9 +83,7 @@ $ less /dev/fd/1
 
 如报错所言， /dev/fd/1 非功能完整的 regular file。
 
-linux的理念，一切皆为文件。然而，所有文件并非生而平等，” All files are equal, but some files are more equal than others“。这是本文的第一道鸿沟。虽然需求仅仅是简单地对输出的内容直接做编辑，但想法与实现之间却隔着一道无形的高墙。
-
-*
+linux的理念，一切皆为文件。然而，所有文件并非生而平等，"All files are equal, but some files are more equal than others"。这是本文的第一道鸿沟。虽然需求仅仅是简单地对输出的内容直接做编辑，但想法与实现之间却隔着一道无形的高墙。
 
 * 3.屏幕里的林志玲
 

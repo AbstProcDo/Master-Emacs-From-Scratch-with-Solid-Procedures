@@ -112,6 +112,7 @@ Sunday      8 March 2020
 3) 也可以是两个紧挨着的12小时的四分图.
 
 * 2.Integrated with a Diary
+
 在agenda-time-grid上, 添加四个时间锚点,
 - 日出日落
 - 月相
@@ -138,6 +139,7 @@ Tuesday    10 March 2020
 #+END_EXAMPLE
 
 ** 2.1 "日月之行, 若出其里"
+
 单纯的agenda-time-grid单薄而孤独, 仅仅是列出来8个时间序列, 孑然一身, 与万事万物没有一丝牵割与联系.
 引入日出日落和月相的时刻到agenda-time-grid中, agenda-view瞬间活了起来, 不再只是孤立的表格文本, 而是与天地四时构建了物理关联.
 
@@ -148,15 +150,22 @@ Tuesday    10 March 2020
 心驰神往之间, 描绘的正是是将sunrise-and-sunset整合进agenda-time-grid的功能.
 
 ** 2.2 整合diary到org-agenda
+
 整合diary-file到org-agenda中的配置:
+
 #+begin_src emacs-lisp :session agenda :lexical t
 (setq org-agenda-include-diary t)
 (setq org-agenda-diary-file "~/Documents/OrgMode/ORG/src/standard-diary") ;;2020-03-02 10:47:06
 (setq diary-file "~/Documents/OrgMode/ORG/src/standard-diary")
 #+end_src
+
+
 我的diary-file放置在"~/Documents/OrgMode/ORG/src/standard-diary"
+
 ** 2.3 Diary的基本内容
+
 写入内容:
+
 #+BEGIN_EXAMPLE
 ;;Day info
 ;; 日出而作, 日落而息
@@ -174,6 +183,7 @@ Tuesday    10 March 2020
 ** 2.4 自定义日出与日落时间序列
 
 *设置当地的坐标*
+
 #+begin_src emacs-lisp :session sicp :lexical t
 (setq calendar-latitude 40.0024) ;;lat, flat
 (setq calendar-longitude 116.2962) ;;long是经度
@@ -242,6 +252,7 @@ Sunday      5 July 2020
 agenda中的日出日落不仅帮助界定有意义的时间范围, 而且构建个人与天体间的物理关系, 尤其是在雾霾严重, 少见星星月亮的城市.
 这种"随四时而动", 与自然融为一体的关系或许值得珍惜. (差点想说天人合一)
 (备注:这一段需要以后逐步完善, 想法没有很好的表述出来, 当早起看到agenda中显示sunrise与sunset, 而且作为计时锚点的时候, 感觉体内对时间的本能被激活)
+
 * 3.Interact with Calendar
 
 本章从agenda-view切入, 论述org作为"计划与管理"的地表最强工具的功能,
@@ -304,6 +315,7 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 
 基本思路是将Calendar作为文本处理.
 对应关系表格如下:
+
 |-------+---------------------+------------------------------------|
 | Keys  | Text                | Calendar                           |
 |-------+---------------------+------------------------------------|
@@ -349,6 +361,7 @@ Agenda中按键"c"调出calendar界面, Calendar中按键"c"调出来目标日�
 其中的概念便是，buffer与page对应的都是year。
 
 *** 3.2.3.便捷的命令
+
 - g d :: Move point to specified date (=calendar-goto-date=).
 
 - g D :: Move point to specified day of year (=calendar-goto-day-of-year=).
@@ -369,31 +382,33 @@ C-c C-y (org-evaluate-time-range)
 
 上述的解决方案, 按键c显性的调用calendar, 有没有在逻辑上更加"丝滑"的方法呢?
 答案是: =org-agenda-goto-date= 快捷键"j".
+
 三步操作分解为:
 1. 在当前agenda中按键j
 2. 移动到目标日期
 3. 回车则直接跳转到目标日期的agenda
 此处应用的是"插入时间戳"的方法, 隐藏了显性的跳转, 逻辑上更加顺畅.
+
 #+ATTR_HTML: :width 300px
 [[file:images/org-agenda-jump.png]]
 
 这种"The date/time prompt"移动到目标日期的光标移动与直接在日历中操作稍有不同, 不同的原因是当前光标在mini-buffer中, 只能间接操作calendar.
 表格如下:
 
-|-------------+----------------------------------------|
-| (RET)       | Choose date at point in calendar.      |
-| (mouse-1)   | Select date by clicking on it.         |
-| (S-RIGHT)   | One day forward.                       |
-| (S-LEFT)    | One day backward.                      |
-| (S-DOWN)    | One week forward.                      |
-| (S-UP)      | One week backward.                     |
-| (M-S-RIGHT) | One month forward.                     |
-| (M-S-LEFT)  | One month backward.                    |
-| (>)         | Scroll calendar forward by one month.  |
-| (<)         | Scroll calendar backward by one month. |
-| (M-v)       | Scroll calendar forward by 3 months.   |
-| (C-v)       | Scroll calendar backward by 3 months.  |
-|-------------+----------------------------------------|
+|---------------+----------------------------------------|
+| (RET)         | Choose date at point in calendar.      |
+| (mouse-1)     | Select date by clicking on it.         |
+| (S-RIGHT)     | One day forward.                       |
+| (S-LEFT)      | One day backward.                      |
+| (S-DOWN)      | One week forward.                      |
+| (S-UP)        | One week backward.                     |
+| (M-S-RIGHT)   | One month forward.                     |
+| (M-S-LEFT)    | One month backward.                    |
+| (>)           | Scroll calendar forward by one month.  |
+| (<)           | Scroll calendar backward by one month. |
+| (M-v)         | Scroll calendar forward by 3 months.   |
+| (C-v)         | Scroll calendar backward by 3 months.  |
+|---------------+----------------------------------------|
 
 还是三个清晰地逻辑单元:
 - Day, Week 日/周/
@@ -422,12 +437,14 @@ C-c C-y (org-evaluate-time-range)
 
 * 4.Event, Note and Task
 ** 4.1 Diary Template
+
 日记模板划分为四个区域:
 1. 日记, 如"方方日记"那样
 2. 计划, Heading设置为Procedures
 3. 事件, Events, 周边的主要事件, 比如部门聚餐.
 4. 任务, Tasks, 记录当日的收集的任务.
-#+ATTR_HTML: :width 500px
+
+#+ATTR_HTML: :width 380px
 [[file:images/05.Emacs-as-a-agenda-日记模板.png]]
 
 ** 4.2 Org's Capture System
@@ -435,41 +452,48 @@ C-c C-y (org-evaluate-time-range)
 公司早会之后, 同事"李子轩"问我借走了一直圆珠笔, 于是随手记录该事件.
 
 "M-x org-caputre"触发capture-template Buffer.
-#+ATTR_HTML: :width 500px
+#+ATTR_HTML: :width 380px
 [[file:images/05.Emacs-as-a-agenda-capture-buffer.png]]
 
 按键"e", 选择"Event"
-#+ATTR_HTML: :width 500px
+#+ATTR_HTML: :width 380px
 [[file:images/05.Emacs-as-a-agenda-capture-event.png]]
 如上图所示, emacs-org自动捕捉记录的event到当日的事件Heading下面, 输入完毕后按键"C-c C-c"
 
+: [2023-02-11 Sat 15:05]
+: 事件用heading记录太过于隆重了。
+
 此时查看Agenda, 便一目了然.
-#+ATTR_HTML: :width 500px
+#+ATTR_HTML: :width 380px
 [[file:images/04.Emacs-as-a-agenda-event-agenda.png]]
 "圆珠笔"是早上8:33顺走的, 真万难抵赖.
 
 *** 4.2.2 Capture notes and ideas
+
 "神来之笔"的想法, 不仅应该及时地记录下来, 还应该打上准确的时间戳以记录想法产生的具体时间.
 
 重复上述"Capture Event"的操作, 按键"n", 选择note.
-#+ATTR_HTML: :width 500px
+
+#+ATTR_HTML: :width 380px
 [[file:images/05.Emacs-as-a-agenda-capture-note.png]]
 查看Agenda,
-#+ATTR_HTML: :width 500px
+#+ATTR_HTML: :width 380px
 [[file:images/05.Emacs-as-a-agenda-idea-agenda-view.png]]
 
 每晚睡前Review之时, 一眼便能看到在早上"8:48"产生了一个"神来之笔"的想法.
 
 *** 4.2.3 Capture Task
+
 任务处理是org-mode最核心的功能, 添加任务的方法与前两项相同.
 
 从agenda-dispatcher选择todo list, 标记任务状态为"STRT"并开始计时.
 
 此时再回到agenda-view
-#+ATTR_HTML: :width 500px
+#+ATTR_HTML: :width 380px
 [[file:images/05.Emacs-as-a-agenda-task-agenda-view.png]]
 
 ** 4.3 Diary Archive
+
 日记文件"todo.today.org"记录本周七天的活动.
 满一周后归档到"diary-by-month"文件夹中
 
@@ -481,6 +505,7 @@ $ ls diary-by-months/  | grep 2020
 #+END_EXAMPLE
 
 * 5.Agenda Remote Control
+
 =k c=
 You can also call =org-capture= in a special way from the agenda, using the {{{kbd(k c)}}} key combination. With this access, any timestamps inserted by the selected capture template defaults to the date at point in the agenda, rather than to the current date.
 
