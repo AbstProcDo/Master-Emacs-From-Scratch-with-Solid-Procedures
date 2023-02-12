@@ -1,0 +1,89 @@
+#+TITLE: Emacs有哪些核弹级的功能与应用可以当作我们布道的弹药库？ 
+
+多年以后，面对台下五彩斑斓的Jetbrain和Vscode用户，这位曾经的资深的vim追随者将会回想起在本论坛里见识Emacs核弹级应用的这个遥远的下午（北京时间）。
+
+* 一、第一枚核弹
+
+几个月前读到下面的帖子，内心的激荡似乎至今余波未平。
+
+#+begin_quote
+  counsel-rg 出结果之后，按 C-c C-o 进入 ivy-occur，然后按 w
+  进入编辑模式，然后 M-x % 批量替换，然后 C-x C-s 保存。
+#+end_quote
+
+#+begin_quote
+  这是大招。被称为核武器级别的技巧([[https://sam217pa.github.io/2016/09/11/nuclear-power-editing-via-ivy-and-ag/]])。值得深入钻研。可以见
+  [[https://blog.binchen.org/posts/emacs-is-easy-if-you-read-code.html]]
+  研究相关的occur的技术。
+#+end_quote
+
+冲破当时思维藩篱的有三点启发：
+
+** 第一点： counsel-rg 搜索结果的mini-buffer，不能全屏展示。
+
+[[file:images/nucleartools.image-4.png]] 
+
+在 mini-buffer 中 按键 C-0
+1，什么都不会发生，这个痛点困扰许久。不曾想，ivy-occur轻松解决。
+
+按键 C-c C-o
+之后，mini-buffer立刻悬停住，当时停在下面的界面中，端玩了好久。这是一种怎样的体验呢？你想象一下“大闹天宫”中的蟠桃园，孙悟空朝着前来采摘蟠桃的七仙女，口揭咒语，念一声“定！”，接着这只没教养的野猴子飞身上去，将这七位神仙姐姐挨个挨个，仔仔细细瞧得个清楚，看得个明白。
+
+[[file:images/nucleartools.image-3.png]]
+
+然后，便可以 C-0 1 全屏。
+ [[file:images/nucleartools.image-2.png]]
+
+** 第二点：竟然能对搜索结果二次编辑，在mini-buffer窗口中按键 w h或者 C-x
+C-q 调用 =ivy-wgrep-change				  -to-wgrep-mode=，能够直接对结果作修改。
+
+[[file:images/nucleartools.image-1.png]]
+
+以我有限的认知，感觉似乎一道闪电劈下，无机的机械体与有机的生命体之间的界限彻底打破，上一回类似的感受还是在dired中用这个模式的那一刻。
+
+#+begin_quote
+项目：
+[[https://github.com/AbstProcDo/Master-Emacs-From-Scrach-with-Solid-Procedures][步步为营，零秒精通Emacs]] 的第三章“03.God's-Eyes-and-Hands-by-Dired-and-Bookmarks”
+宕延半年多，迟迟写出来。因为始终没有思路，怎样写好司空见惯简单，而往往不见其革命性突破的Dired。
+
+我希望别人从这篇文章的视角审视dired的时候，会第一时间发出“哇！”的一声。就如每时每刻的呼吸，在幼儿园的某一天，我们突然知道“哇，原来空气存在”。
+Take everything for granted 的朋友请务必忍耐不要留言。
+
+亘古以来，有机世界与无机世界之间有一道无法跨越的鸿沟。上帝吹入生命而成有机，而矿物则是没有“活力”的无机物。因此，无机物与有机物毫不相干，无机物只能制造无机物，似乎正如石头原料只能制造出更加精美的石头，却万万不能生产出“天价猪肉”。
+  然而，公元1828年，上帝改变了主意，人类跨越天堑。 1.跨越鸿沟
+#+end_quote
+
+** 第三点，在编辑模式下，执行 replace-regex替换。
+
+[[file:images/nucleartools.image.png]]
+
+搜索出来的结果立即完成替换。这一点，平淡无奇，常见常用，我可能就此复制粘帖出来，用在别处。
+
+神奇的是，当 C-c C-c 保存之后，所有源文件中的关键词同时被修改好。
+
+这一点震撼，就如我从上海黄浦江口，舀了一瓢水喝，哪曾想，竟然影响到万里之外宁夏的三江源地区干涸了。
+
+以上三点，就是个人对multi-editing这项核弹级应用，彼时彼刻的直觉感受。
+
+这一项能在对Emacs传道布教的时候用到，一拿出手，核弹之下，灰飞烟灭，焦土不存。
+
+* 二、第二枚核弹
+
+前两天读到另外的帖子，[[https://emacs-china.org/u/dr_ming][cite/t:@Dr_Ming]]
+的[[https://emacs-china.org/t/windows-emacs-wsl2-gui/16514/6][分析对比windows原装的emacs与wsl2上运行的GUI版本 -
+#6，来自 DR_MING 13]] [[https://emacs-china.org/u/dr_ming][cite/t:@Dr_Ming]]
+的很简单，对我的核弹轰炸余波，现在还嗡嗡作响。
+
+* 三、求更多核弹轰炸
+  
+基于以上两枚核弹，请教诸位，您觉得，您正在用的 emacs
+功能，哪些是核弹级别的呢？
+
+只要你自己觉得就行，哪怕 1+1 =2，简要说明下理由，咱也感激不尽。
+
+这些收集起来的核弹，日后就是我们布道的弹药库。
+
+另外，感谢捧场，Master-Emacs这个小小的repo眼看着要破200stars了。
+
+[[https://github.githubassets.com/favicons/favicon.svg]]
+[[https://github.com/AbstProcDo/Master-Emacs-From-Scratch-with-Solid-Procedures][GitHub]]

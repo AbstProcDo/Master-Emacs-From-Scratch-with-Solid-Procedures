@@ -24,7 +24,7 @@ Here's a quick example of how to get bash working in Windows:
 * eshell
 用eshell的时候更像是在编程呀，更能够训练编程思维。
 因此，我要腾出时间来去学习学习eshell的用法。
-* Terminal（vterm）
+* Terminal(vterm)
 vterm已经成为在Linux终端的主流。
 * Shell windows中获得一个linux环境
 <2021-06-09 Wed 22:41>
