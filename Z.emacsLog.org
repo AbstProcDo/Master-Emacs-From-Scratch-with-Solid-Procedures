@@ -1,3 +1,0 @@
-#+TITLE: Z Emacs Log
-* Emacs的文章
-https://karthinks.com/software/avy-can-do-anything/#remembering-to-avy
