@@ -1,0 +1,56 @@
+#+title: Casting spells in PlantUML 
+as a wizard in org babel to translate words to graph
+
+I have been experimenting with PlantUML in Org Babel recently, and it has greatly enhanced my ability to visualize concepts mentally. During post-meal walks, I often engage in mental planning exercises, such as sketching Gantt charts. However, my deficient drawing abilities consistently impede my progress, particularly when it comes to mentally manipulating lines, arrows, and objects. Since discovering PlantUML, the visualization skills have steadily improved, thanks to its intuitive text-to-graph syntax.
+
+When reading "Marcovaldo: Or, The Seasons in the City" before bedtime for sleep aid, I spend a significant amount of time immersed in its pleasing pages, sometimes without a clear sense of progress. In such instances, I draw a Gantt chart to gain a visual representation of the slow progress.
+
+#+BEGIN_SRC plantuml :file images/reading-progress.png
+@startgantt
+!theme mono
+Project starts 2023-10-02
+[Reading Marcovaldo] lasts 2 weeks and 4 days and is 30% completed
+printscale daily zoom 2
+@endgantt
+#+END_SRC
+
+#+RESULTS:
+[[file:images/reading-progress.png]]
+
+This chart illustrates that the book is being read slowly, and at the current pace, it will take another three weeks to complete.
+
+PlantUML's Gantt chart is expressive, it mimic task bars as [ ] , specify durations with the "lasts" keyword, and "complete" to indicate progress with percentages. This helps to construct mental diagrams and translate thoughts or words into visual representations effortlessly, eliminating the need for manual drawing of lines, arrows, and objects. This feature is particularly beneficial for individuals with limited drawing skills.
+
+PlantUML's Gantt chart functionality goes beyond planning in days, months, and other timeframes. It can also be adapted to manage a single day effectively. Although the smallest unit in PlantUML is a day, it can be flexibly adjusted to represent hours within a day. This means that a Gantt chart spanning 24 days can be used to represent 24 hours each.
+
+#+BEGIN_SRC plantuml :file images/plan-a-day.png
+  @startgantt
+  !theme mono
+  [Sleeping] starts on D+0 and lasts 5 day
+
+  then [Wakeup@05:45] as [Wake] happens on D+5 
+  then [Breakfast] lasts 1 day  and display on same row as [Sleeping]
+  then [Morning-Tasks] starts D+8 and lasts 3 days
+  then [Lunch] starts on D+11 and lasts 1 day and display on same row as [Breakfast]
+  then [Afternoon-Tasks] as [Afternoon] lasts 5 days and is 50% completed
+  then [Dinner] starts on D+17 and lasts 1 day and display on same row as [Lunch] 
+  then [Evening-Tasks] lasts 4 days
+  then [Bedtime@22:45] happens on D+21 and display on same row as [Wake]
+  then [Sleep] lasts 1 day and display on same row as [Sleeping]
+
+  Separator just at [Sleeping]'s end
+  'Separator just at [Dinner]'s end
+  Separator just at [Evening-Tasks]'s end
+  printscale daily zoom 1.8
+  'highlight today
+  today is 14 days after start and is colored in lightgray
+  'Label on first column and right aligned
+
+  hide footbox
+  @endgantt
+#+END_SRC
+
+#+RESULTS:
+[[file:images/plan-a-day.png]]
+
+Just like a wizard casting spells in PlantUML, you can conjure a vivid visualization of the complete panorama of a day in mind. Whether during walks, bedtime, or while commuting on the subway, by consistently practicing and leveraging the unique features of PlantUML, you will unlock the untapped mental prowess for visualization and creativity.
