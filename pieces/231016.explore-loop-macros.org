@@ -1,0 +1,32 @@
+#+title: Exploring Loop Macros
+#+date: [2023-10-16 Mon]
+
+
+While a for-loop is a straightforward construct in other programming languages, the loop macro, despite its power, can present challenges due to its intricacy. I find myself frustrated by its complexity.
+
+However, its conceptual abstractions are intriguing. Take, for example, the following code snippet:
+
+#+begin_src elisp
+(loop for i below 10 sum i)
+#+end_src
+
+#+RESULTS:
+: 45
+
+The utilization of the term "below" in this context is particularly striking. Contrastingly, in languages like JavaScript, I typically read "i < 10" as "i less than 10," pronouncing the two words "less than" in order to read the "<" symbol.
+
+The act of reading "<" as "less than" momentarily interrupts my cognitive flow between the two words. The loop macro condenses it as a single word, "below," allowing me to pronounce "i < 10" more succinctly and smoothly, without interruption. Another viable alternative could be "under."
+
+Moreover, the expression \`1 <= i <= 10\` can be read as "from 1 to 10."
+
+#+begin_src elisp
+(loop for i from 1 to 10 sum i)
+#+end_src
+
+#+RESULTS:
+: 55
+
+It enhance code readability mentally and streamline cognitive processing.
+
+** Comments:
+

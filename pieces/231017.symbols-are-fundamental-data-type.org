@@ -1,0 +1,20 @@
+#+title: It's symbols not strings 
+are fundamental data type, an insight from read.
+#+date: [2023-10-17 Tue]
+
+
+In elisp, symbols serve as fundamental data structures that are more foundational compared to strings. This distinction often caused confusion for me until my encounter with the read function.
+
+#+begin_src elisp
+ ~ $ (type-of (read))
+ symbol
+#+end_src
+
+The fact that the read function yields symbols instead of strings from user-input was a delightful revelation. This discovery convinces me that the fundamental nature of symbols in elisp when compared to strings.
+
+** Featured Comments
+
+[[https://www.reddit.com/r/emacs/comments/179k9lp/its_symbols_not_strings_are_fundamental_data_type/][It's symbols not strings are fundamental data type, an insight from read.]]
+
+
+

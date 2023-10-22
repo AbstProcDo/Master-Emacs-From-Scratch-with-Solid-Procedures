@@ -1,0 +1,45 @@
+#+title: Tried plantuml for drawing and it amazing on org babel
+#+date: [2023-10-18 Wed]
+
+I am not skilled in drawing, but after trying PlantUML, I found that I can create visual representations directly using code. This has greatly aided my spatial imagination.
+
+Take, for example, the usecases diagram:
+
+#+begin_src plantuml :file images/plantuml-arrow.png
+@startuml
+:user: -right-> (Right)
+:user: -up-> (Up)
+@enduml
+#+end_src
+
+#+RESULTS:
+[[file:images/plantuml-arrow.png]]
+
+
+With the use of directional terms like "up" and "right," you can intuitively draw the diagram as shown. it lowers barrier for non-artists - no drawing ability needed and focuses thought process on structural elements and relationships.
+
+When immersed in text, our spatial imagination can often become less active. For example, when trying to imagine the hierarchical structure of an article such as org-mode, our mental representation tends to be more like a bullet structure in an editor, rather than a graphical tree structure.
+
+PlantUML addresses the challenge of limited spatial imagination by providing an intuitive text-graph syntax. One notable feature is the Work Breakdown Structure (WBS) functionality.
+
+Consider the following example:
+
+#+begin_src plantuml :file images/plantuml-wbs01.png
+@startwbs
+!theme mono
+    * Emacs
+    ** Text Editing
+    ** Note taking
+    ** File Manager
+    ** Literature Programming
+@endwbs
+#+end_src
+
+#+RESULTS:
+[[file:images/plantuml-wbs01.png]]
+
+
+The WBS feature in PlantUML facilitates the effortless transformation of a vertical structure into a horizontal representation. This allows me to mentally interpret and visualize the PlantUML code, automatically converting the vertical structure into a spatially-oriented horizontal structure in mind. Consequently, it effectively resolves the issue of my limited visual imagination and improving it continually.
+
+** Comments
+

@@ -1,0 +1,33 @@
+#+title: Tried gnuplot which plot only require basic math
+#+date: [2023-10-22 Sun]
+
+I tried gnuplot and amazed by its performance. It allows you to directly plot mathematical formulas into graphs with just one single line of math equation.
+
+#+BEGIN_SRC gnuplot :file images/trigon01.png
+plot [-10:10] sin(x),atan(x),cos(atan(x))
+#+END_SRC
+
+#+RESULTS:
+[[file:images/trigon01.png]]
+
+
+when set arguments, it might requires one more line:
+
+#+BEGIN_SRC gnuplot :file images/sd01.png
+g(x) = exp(-0.5*(x/s)**2)/s
+plot s=1 g(x), s=2 g(x), s=3 g(x)
+#+END_SRC
+
+#+RESULTS:
+[[file:images/sd01.png]]
+
+
+I feel frustrated, how I wish could acquainted with such a tool a decade ago while grappling with the challenges of visualizing mathematical formulas.
+
+** Reddit Comments
+@yantar92 推荐"Gnuplot in Action"
+
+#+attr_html: :width 180px
+[[./images/org.downloads/2023-10-22_11-28-41_scort_2023-10-22_11-28-20.png]]
+
+

@@ -1,0 +1,27 @@
+#+title: nil or 'nil once worried me
+#+date: [2023-10-15 Sun]
+
+Once I saw nil or 'nil from some (setq ..), it usually worried me.
+
+The barely nil appears to be a variable name no more than \`foo bar zoo\` and there shoud be a value it points to.The quoted 'nil seems to be a data or a value in data mode and there might exist a name it is given.it looks no difference with symbols as 'nilll 'nilllllll or 'nillllllllll as data.
+
+Every time see them, I find myself hesitating, uncertain and disturbing.
+
+This picture tells they are identical and comfort me to get an insight that lisp is much more pragmatic in evovling by patching up.
+
+As a result, I stop worring its theoretical consistency and confidently proceed with using \`nil\`.
+
+
+#+attr_html: :width 380px
+[[./images/org.downloads/2023-10-22_11-51-22_oq1wa15f.png]]
+
+
+The wizard book SICP states it as:
+
+#+begin_quote
+Lisp was not the product of a concerted design effort. Instead, it evolved informally in an experimental manner in response to users' needs and to pragmatic implementation considerations.
+#+end_quote
+
+
+** Featured Comment 
+
